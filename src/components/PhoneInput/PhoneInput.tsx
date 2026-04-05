@@ -1,0 +1,55 @@
+'use client';
+
+import classNames from 'classnames';
+import React, { useEffect, useState } from 'react';
+import { PhoneInput as PhoneInputEl, PhoneInputProps } from 'react-international-phone';
+// @ts-ignore
+import 'react-international-phone/style.css';
+import { detectCountry } from '@/utils/detectCountry';
+
+function PhoneInput({
+  error,
+  externalLabel,
+  ...props
+}: PhoneInputProps & {
+  error?: boolean;
+  externalLabel?: string;
+}) {
+  const [detectedCountry, setDetectedCountry] = useState<string>('us');
+
+  useEffect(() => {
+    try {
+      const country = detectCountry();
+      setDetectedCountry(country);
+    } catch (e) {
+      console.warn('Failed to detect country, using US as fallback:', e);
+      setDetectedCountry('us');
+    }
+  }, []);
+
+  return (
+    <div className="flex flex-col gap-6px">
+      {externalLabel && (
+        <label htmlFor={props.name} className="text-12 font-bold leading-18 text-white_1">
+          {externalLabel}
+        </label>
+      )}
+      <PhoneInputEl
+        countrySelectorStyleProps={{
+          buttonClassName: classNames('!p-12px', {
+            '!border-error': error,
+          }),
+        }}
+        inputClassName={classNames('w-full', {
+          '!border-error': error,
+        })}
+        className="w-full relative "
+        defaultCountry={detectedCountry as any}
+        key={error ? 'error' : 'no-error'}
+        {...props}
+      />
+    </div>
+  );
+}
+
+export default PhoneInput;

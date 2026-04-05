@@ -1,0 +1,155 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Colors */
+  --color-black_1: #070715;
+  --color-black_2: #20202D;
+  --color-black_3: #393944;
+  --color-black_4: #51515B;
+  --color-grey_1: #6A6A73;
+  --color-grey_2: #83838A;
+  --color-grey_3: #9C9CA1;
+  --color-grey_4: #B5B5B9;
+  --color-white_1: #CDCDD0;
+  --color-white_2: #E6E6E8;
+  --color-white_3: #F3F3F3;
+  --color-white_4: #F8F8F8;
+  --color-white: #FFFFFF;
+  --color-pr_purple: #6D3EF1;
+  --color-sec_purple: #B69FF8;
+  --color-pr_blue: #292A94;
+  --color-sec_blue: #9494C9;
+  --color-error: #992D2D;
+  --color-warning: #C6A328;
+  --color-success: #58A61B;
+  --color-shape_stroke_1_part_one: #0C0C1E;
+  --color-shape_stroke_1_part_two: #221546;
+  --color-shape_stroke_2_part_one: #1F1F38;
+  --color-shape_stroke_2_part_two: #2F1E5E;
+  --color-backdrop: rgba(0, 0, 0, 0.56);
+  --color-backdrop_2: rgba(255, 255, 255, 0.04);
+  --color-back_load: rgba(7, 7, 15, 0.05);
+
+  /* Font families */
+  --font-orbitron: var(--font-orbitron), serif;
+  --font-roboto: var(--font-roboto), serif;
+  --font-manrope: var(--font-manrope), serif;
+
+  /* Font sizes */
+  --text-64: 64px;
+  --text-48: 48px;
+  --text-40: 40px;
+  --text-32: 32px;
+  --text-28: 28px;
+  --text-18: 18px;
+  --text-16: 16px;
+  --text-14: 14px;
+  --text-12: 12px;
+  --text-10: 10px;
+
+  /* Line heights */
+  --leading-80: 80px;
+  --leading-64: 64px;
+  --leading-56: 56px;
+  --leading-48: 48px;
+  --leading-40: 40px;
+  --leading-36: 36px;
+  --leading-32: 32px;
+  --leading-28: 28px;
+  --leading-24: 24px;
+  --leading-18: 18px;
+  --leading-16: 16px;
+
+  /* Spacing */
+  --spacing-0px: 0px;
+  --spacing-4px: 4px;
+  --spacing-6px: 6px;
+  --spacing-7px: 7px;
+  --spacing-8px: 8px;
+  --spacing-10px: 10px;
+  --spacing-11px: 11px;
+  --spacing-12px: 12px;
+  --spacing-15px: 15px;
+  --spacing-16px: 16px;
+  --spacing-20px: 20px;
+  --spacing-23px: 23px;
+  --spacing-24px: 24px;
+  --spacing-30px: 30px;
+  --spacing-32px: 32px;
+  --spacing-40px: 40px;
+  --spacing-48px: 48px;
+  --spacing-52px: 52px;
+  --spacing-56px: 56px;
+  --spacing-60px: 60px;
+  --spacing-62px: 62px;
+  --spacing-64px: 64px;
+  --spacing-72px: 72px;
+  --spacing-88px: 88px;
+  --spacing-117px: 117px;
+  --spacing-157px: 157px;
+
+  /* Breakpoints */
+  --breakpoint-ls: 320px;
+  --breakpoint-es: 380px;
+  --breakpoint-xs: 500px;
+  --breakpoint-mds: 600px;
+  --breakpoint-sm: 768px;
+  --breakpoint-sl: 1025px;
+  --breakpoint-xl: 1024px;
+  --breakpoint-md: 1100px;
+  --breakpoint-lg: 1300px;
+  --breakpoint-2xl: 1440px;
+  --breakpoint-xh: 1600px;
+  --breakpoint-3xl: 1920px;
+
+  /* Box shadows */
+  --shadow-3xl: 0px 0px 16px 0px rgba(109, 62, 241, 0.24);
+  --shadow-4xl: 0px -8px 24px 0px rgba(255, 255, 255, 0.04);
+  --shadow-5xl: 0px 0px 4px 0px rgba(109, 62, 241, 0.64);
+  --shadow-6xl: 0px 0px 16px rgba(109, 62, 241, 0.56);
+
+  /* Drop shadows */
+  --drop-shadow-3xl: -1px 1px 1px rgba(17, 17, 30, 1);
+
+  /* Border radius */
+  --radius-circle: 50px;
+  --radius-40px: 40px;
+  --radius-24px: 24px;
+  --radius-16px: 16px;
+  --radius-8px: 8px;
+  --radius-50%: 50%;
+  --radius-halfRound: 40px 40px 0px 0px;
+
+  /* Border widths */
+  --border-width-1: 1px;
+  --border-width-2: 2px;
+  --border-width-5: 5px;
+  --border-width-6: 6px;
+
+  /* Z-index */
+  --z-5: 5;
+  --z-10: 10;
+  --z-20: 20;
+  --z-30: 30;
+  --z-40: 40;
+  --z-50: 50;
+
+  /* Inset */
+  --inset-0px: 0px;
+  --inset-8px: 8px;
+  --inset-24px: 24px;
+  --inset-43px: 43px;
+  --inset-70px: 70px;
+
+  /* Aspect ratios */
+  --aspect-204: 204;
+  --aspect-240: 240;
+  --aspect-258: 258;
+  --aspect-288: 288;
+  --aspect-327: 327;
+  --aspect-339: 339;
+  --aspect-343: 343;
+  --aspect-384: 384;
+  --aspect-528: 528;
+  --aspect-704: 704;
+}

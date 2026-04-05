@@ -1,0 +1,21 @@
+[18:29:21.396] [INFO] storybook v10.3.4
+[18:29:22.955] [DEBUG] Getting package.json info for /Users/andrejstrigalev/Desktop/projects/SagTech/landing/sagtech-ui/package.json...
+[18:29:22.981] [INFO] Storybook collects completely anonymous usage telemetry. We use it to shape Storybook's roadmap and prioritize features. You can learn more, including how to opt out, at https://storybook.js.org/telemetry
+[18:29:23.289] [DEBUG] Serving static files from public at /
+[18:29:23.289] [INFO] Starting...
+[18:29:23.363] [DEBUG] Starting preview..
+[18:29:23.379] [DEBUG] Using tsconfig paths for react-docgen
+[18:29:23.379] [ERROR] Failed to build the preview
+[18:29:23.380] [ERROR] [38;2;241;97;97mReferenceError: __dirname is not defined[39m
+    at Object.viteFinal (file://./.storybook/main.ts:17:25)
+    at file://./node_modules/.pnpm/storybook@10.3.4_@testing-library+dom@10.4.1_prettier@3.8.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/_node-chunks/chunk-3LP2BDDH.js:10114:36
+    at async createViteServer (file://./node_modules/.pnpm/@storybook+builder-vite@10.3.4_esbuild@0.27.7_rollup@4.60.1_storybook@10.3.4_@testing-l_60cdb17832283274972d9bcecf8c4d8b/node_modules/@storybook/builder-vite/dist/index.js:1532:21)
+    at async Module.start (file://./node_modules/.pnpm/@storybook+builder-vite@10.3.4_esbuild@0.27.7_rollup@4.60.1_storybook@10.3.4_@testing-l_60cdb17832283274972d9bcecf8c4d8b/node_modules/@storybook/builder-vite/dist/index.js:1557:17)
+    at async storybookDevServer (file://./node_modules/.pnpm/storybook@10.3.4_@testing-library+dom@10.4.1_prettier@3.8.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/core-server/index.js:7503:83)
+    at async buildOrThrow (file://./node_modules/.pnpm/storybook@10.3.4_@testing-library+dom@10.4.1_prettier@3.8.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/core-server/index.js:4508:12)
+    at async buildDevStandalone (file://./node_modules/.pnpm/storybook@10.3.4_@testing-library+dom@10.4.1_prettier@3.8.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/core-server/index.js:8033:41)
+    at async withTelemetry (file://./node_modules/.pnpm/storybook@10.3.4_@testing-library+dom@10.4.1_prettier@3.8.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/_node-chunks/chunk-HUYNFPPD.js:225:12)
+    at async dev (file://./node_modules/.pnpm/storybook@10.3.4_@testing-library+dom@10.4.1_prettier@3.8.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/bin/core.js:2736:3)
+    at async _Command.<anonymous> (file://./node_modules/.pnpm/storybook@10.3.4_@testing-library+dom@10.4.1_prettier@3.8.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/bin/core.js:2806:92)
+[18:29:23.381] [WARN] Broken build, fix the error above.
+You may need to refresh the browser.

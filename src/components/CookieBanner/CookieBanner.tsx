@@ -1,0 +1,108 @@
+'use client';
+
+import { useState } from 'react';
+import cn from 'classnames';
+import Button from '@/components/Button/Button';
+import Typography from '@/components/Typography/Typography';
+
+export interface CookieBannerProps {
+  title?: string;
+  description?: string;
+  acceptText?: string;
+  declineText?: string;
+  privacyHref?: string;
+  privacyLabel?: string;
+  cookieName?: string;
+  cookieMaxAge?: number;
+  onAccept?: () => void;
+  onDecline?: () => void;
+}
+
+function setCookieValue(name: string, value: string, maxAge: number) {
+  document.cookie = `${name}=${value}; path=/; max-age=${maxAge}; SameSite=Lax`;
+}
+
+export default function CookieBanner({
+  title = 'We use cookies',
+  description = 'This website uses cookies to ensure you get the best experience on our website.',
+  acceptText = 'Accept',
+  declineText = 'Decline',
+  privacyHref = '/privacy',
+  privacyLabel = 'Privacy Policy',
+  cookieName = 'consent',
+  cookieMaxAge = 365 * 24 * 60 * 60,
+  onAccept,
+  onDecline,
+}: CookieBannerProps) {
+  const [isHidden, setHidden] = useState<boolean>(false);
+
+  const acceptConsent = () => {
+    setCookieValue(cookieName, 'true', cookieMaxAge);
+    setHidden(true);
+    onAccept?.();
+  };
+
+  const declineConsent = () => {
+    setCookieValue(cookieName, 'false', cookieMaxAge);
+    setHidden(true);
+    onDecline?.();
+  };
+
+  return (
+    <div
+      className={cn(
+        'fixed bottom-[0px] left-[0px] right-[0px] z-[100] w-full transition-transform',
+        isHidden && 'translate-y-full',
+      )}
+    >
+      <div
+        className={cn(
+          'rounded-halfRound bg-pr_purple px-16px py-24px sm:px-40px',
+          !isHidden && 'shadow-6xl',
+          isHidden && 'shadow-none',
+        )}
+      >
+        <div className="text-center">
+          <h1 className="text-16 font-semibold leading-24 text-white_4">{title}</h1>
+          <p className="mt-4px text-14 font-medium leading-24 text-grey_4">
+            {description}
+            {privacyHref && (
+              <>
+                {' '}
+                Read our&nbsp;
+                <a href={privacyHref}>
+                  <span className="underline text-white_4">{privacyLabel}</span>
+                </a>
+              </>
+            )}
+          </p>
+        </div>
+        <div className="mt-16px flex items-center justify-center gap-8px">
+          <Button
+            useIcon={false}
+            variant="primary"
+            hoverOff
+            type="submit"
+            buttonSize="small"
+            loadingType={false}
+            onClick={acceptConsent}
+            classes="bg-white_4 button"
+            changeColor
+          >
+            <Typography text={acceptText} type="Buttons" className="!text-14" color="text-pr_purple" />
+          </Button>
+          <Button
+            onClick={declineConsent}
+            useIcon={false}
+            variant="secondary"
+            type="submit"
+            buttonSize="small"
+            classes="button h-[32px]"
+          >
+            <Typography text={declineText} type="Buttons" className="!text-14" color="text-white_4" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}

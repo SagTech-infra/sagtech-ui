@@ -1,0 +1,51 @@
+/* Input autofill fix styles for dark backgrounds */
+
+:root {
+  --react-international-phone-height: 56px;
+  --react-international-phone-border-radius: 12px;
+  --react-international-phone-font-size: 16px;
+  --react-international-phone-background-color: #070715;
+  --react-international-phone-border-color: rgb(109 62 241);
+  --react-international-phone-selected-dropdown-item-background-color: rgb(55, 55, 55);
+  --react-international-phone-country-selector-background-color-hover: rgb(55, 55, 55);
+  --react-international-phone-text-color: white;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: rgb(248 248 248) !important;
+  -webkit-box-shadow: 0 0 0px 1000px #070715 inset !important;
+  box-shadow: 0 0 0px 1000px #070715 inset !important;
+  border: 1px solid rgb(109 62 241) !important;
+  color: rgb(248 248 248) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+input:-webkit-autofill::first-line,
+textarea:-webkit-autofill::first-line,
+select:-webkit-autofill::first-line {
+  font-size: 16px !important;
+  color: rgb(248 248 248) !important;
+  -webkit-text-fill-color: rgb(248 248 248) !important;
+}
+
+.react-international-phone-input:-webkit-autofill,
+.react-international-phone-input:-webkit-autofill:hover,
+.react-international-phone-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: rgb(181 181 185) !important;
+  -webkit-box-shadow: 0 0 0px 1000px #070715 inset !important;
+  box-shadow: 0 0 0px 1000px #070715 inset !important;
+  border: 1px solid rgb(109 62 241) !important;
+}
+
+.react-international-phone-input:focus:-webkit-autofill {
+  -webkit-text-fill-color: rgb(248 248 248) !important;
+}

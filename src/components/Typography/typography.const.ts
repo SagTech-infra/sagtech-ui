@@ -1,0 +1,27 @@
+const typographyConst = {
+  h1: 'font-orbitron text-40 sm:text-48 2xl:text-64 font-bold leading-56 sm:leading-64 2xl:leading-80 uppercase',
+  h2: 'font-orbitron text-32 sm:text-40 2xl:text-48 font-bold leading-48 sm:leading-56 2xl:leading-64 uppercase',
+  h3: 'font-manrope text-28 2xl:text-32 font-bold leading-40 2xl:leading-48',
+  h4: 'font-manrope text-16 2xl:text-18 font-semibold leading-24',
+  bodyXL: 'font-orbitron text-28 sm:text-32 font-bold leading-36 sm:leading-40',
+  bodyL: 'font-manrope text-14 2xl:text-16 font-medium leading-28 2xl:leading-32',
+  bodyM: 'font-manrope text-14 font-medium leading-28',
+  bodyS: 'font-manrope text-14 font-medium leading-24 2xl:leading-28',
+  bodyXS: 'font-manrope text-14 font-medium leading-24 sm:leading-28',
+  labels: 'font-manrope text-14 sm:text-16 font-semibold leading-24',
+  labelsS: 'font-manrope text-14 2xl:text-16 font-semibold leading-24',
+  info: 'font-manrope text-12 font-medium leading-16',
+  infoBold: 'font-manrope text-12 font-bold leading-18',
+  buttons: 'font-manrope text-16 font-bold leading-24',
+  buttonsSemibold: 'font-manrope text-16 font-semibold leading-24',
+  buttonsS: 'font-manrope text-14 font-semibold leading-24',
+  buttonsSBold: 'font-manrope text-14 font-bold leading-24',
+  buttonsBold: 'font-manrope text-14 font-medium sm:font-bold leading-24',
+  m3HeadlineSmall: 'font-roboto text-[24px] leading-32',
+  metricsTitle: 'font-manrope text-[24px] leading-48 font-bold',
+  metricsXL: 'font-orbitron text-48 font-bold leading-64 uppercase',
+  tabInfoTitle: 'font-manrope text-32 font-bold leading-48',
+  heroSubtitle: 'font-manrope text-20 font-bold leading-24',
+};
+
+export default typographyConst;
