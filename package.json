@@ -24,14 +24,20 @@
     "README.md"
   ],
   "publishConfig": {
-    "access": "restricted"
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SagTech-infra/sagtech-ui.git"
   },
   "scripts": {
     "dev": "storybook dev -p 6006",
     "build": "tsup",
     "build-storybook": "storybook build",
     "lint": "eslint src/",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm build"
   },
   "peerDependencies": {
     "classnames": "^2.3.0",
