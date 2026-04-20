@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: 20
           registry-url: https://npm.pkg.github.com
-          scope: '@sagtech'
+          scope: '@sagtech-infra'
           cache: pnpm
 
       - name: Verify tag matches package.json version
