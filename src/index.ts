@@ -1,3 +1,21 @@
+// Providers
+export {
+  SagtechUIProvider,
+  UIComponentsContext,
+  useImageComponent,
+  useLinkComponent,
+  DefaultImageShim,
+  DefaultLinkShim,
+} from './providers';
+export type {
+  SagtechUIProviderProps,
+  UIComponentsContextValue,
+  UIImageComponent,
+  UIImageProps,
+  UILinkComponent,
+  UILinkProps,
+} from './providers';
+
 // Hooks
 export {
   useWindowSize,

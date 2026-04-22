@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Point from './Point';
+import { SagtechUIProvider, type UIImageComponent } from '@/providers';
 
 const meta = {
   title: 'Data Display/Point',
@@ -79,5 +80,24 @@ export const CircleVariants: Story = {
       <Point text="White circle" type="BodyS" textColor="text-white_4" icon={false} circleColor="bg-white_4" />
       <Point text="Grey circle" type="BodyS" textColor="text-grey_4" icon={false} circleColor="bg-grey_4" />
     </div>
+  ),
+};
+
+const OutlinedImage: UIImageComponent = ({ src, alt, width, height }) => (
+  <img
+    src={typeof src === 'string' ? src : ''}
+    alt={alt}
+    width={width as number | undefined}
+    height={height as number | undefined}
+    style={{ outline: '2px dashed #6D3EF1', padding: 2 }}
+  />
+);
+
+export const WithCustomProvider: Story = {
+  name: 'With SagtechUIProvider override',
+  render: () => (
+    <SagtechUIProvider imageComponent={OutlinedImage}>
+      <Point text="Icon rendered via custom component" type="BodyM" textColor="text-grey_4" iconName="users" />
+    </SagtechUIProvider>
   ),
 };

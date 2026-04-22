@@ -37,6 +37,8 @@
     "build-storybook": "storybook build",
     "lint": "eslint src/",
     "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "prepublishOnly": "pnpm build"
   },
   "peerDependencies": {
@@ -47,6 +49,9 @@
     "react-dom": "^19.0.0"
   },
   "peerDependenciesMeta": {
+    "next": {
+      "optional": true
+    },
     "swiper": {
       "optional": true
     },
@@ -71,12 +76,15 @@
     "@storybook/react-vite": "^10.3.4",
     "@tailwindcss/postcss": "^4.2.2",
     "@tailwindcss/vite": "^4.2.2",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "apexcharts": "^5.10.4",
     "classnames": "^2.5.1",
     "eslint": "^10.2.0",
     "framer-motion": "^12.38.0",
+    "happy-dom": "^15.11.7",
     "libphonenumber-js": "^1.12.41",
     "next": "^16.2.2",
     "postcss": "^8.5.8",
@@ -91,7 +99,8 @@
     "tailwindcss": "^4.2.2",
     "tsup": "^8.5.1",
     "typescript": "^6.0.2",
-    "vite": "^8.0.3"
+    "vite": "^8.0.3",
+    "vitest": "^2.1.8"
   },
   "packageManager": "pnpm@10.28.1",
   "pnpm": {

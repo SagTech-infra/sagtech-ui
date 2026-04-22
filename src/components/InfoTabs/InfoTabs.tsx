@@ -1,12 +1,12 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
 import { useState, Fragment } from 'react';
 import Typography from '@/components/Typography/Typography';
 import CardWrapper from '@/components/CardWrapper/CardWrapper';
 import Button from '@/components/Button/Button';
 import { Icon } from '@/components/Icon/Icon';
+import { useImageComponent } from '@/providers';
 import type { InfoTab } from './types';
 
 interface Props {
@@ -16,6 +16,7 @@ interface Props {
 }
 
 export default function InfoTabs({ title, list, renderModal }: Props) {
+  const Image = useImageComponent();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState({
     title: list[0]?.title || '',

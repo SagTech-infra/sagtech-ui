@@ -1,7 +1,7 @@
 import classnames from 'classnames';
-import Image from 'next/image';
 import type { VariantTypoTagsStyles } from '@/components/Typography/types';
 import Typography from '@/components/Typography/Typography';
+import { useImageComponent } from '@/providers';
 import type { VariantTypoColorsText, VariantTypoColorsCircle, VariantTypoIconName } from './types';
 
 interface PointTypes {
@@ -26,6 +26,7 @@ function Point({
   icon = true,
   iconName = 'users',
 }: PointTypes) {
+  const Image = useImageComponent();
   const stylesTypography = classnames({
     'max-w-[35vw] sm:max-w-[30vw]': isWrapText,
     'max-w-full': isWrapText === false,

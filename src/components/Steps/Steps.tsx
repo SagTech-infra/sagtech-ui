@@ -1,7 +1,7 @@
 import classNames from 'classnames';
-import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import Typography from '@/components/Typography/Typography';
+import { useImageComponent } from '@/providers';
 
 interface StepsProps {
   stepsList: Array<{ title: string; description: string; icon?: string }>;
@@ -9,6 +9,7 @@ interface StepsProps {
 }
 
 export default function Steps({ stepsList, isPhases = false }: StepsProps) {
+  const Image = useImageComponent();
   const [progress, setProgress] = useState(0);
   const [listHeight, setListHeight] = useState(0);
   const [lastStepDescriptionHeight, setLastStepDescriptionHeight] = useState(0);

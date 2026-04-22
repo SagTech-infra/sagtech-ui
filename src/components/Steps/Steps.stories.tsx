@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Steps from './Steps';
+import { SagtechUIProvider, type UIImageComponent } from '@/providers';
 
 const meta = {
   title: 'Data Display/Steps',
@@ -55,4 +56,28 @@ export const Phases: Story = {
       { title: 'Phase 4: Optimize', description: 'Performance optimization and refinement.' },
     ],
   },
+};
+
+const OutlinedImage: UIImageComponent = ({ src, alt, width, height }) => (
+  <img
+    src={typeof src === 'string' ? src : ''}
+    alt={alt}
+    width={width as number | undefined}
+    height={height as number | undefined}
+    style={{ outline: '2px dashed #6D3EF1', padding: 2 }}
+  />
+);
+
+export const WithCustomProvider: Story = {
+  name: 'With SagtechUIProvider override',
+  render: () => (
+    <SagtechUIProvider imageComponent={OutlinedImage}>
+      <Steps
+        stepsList={[
+          { title: 'Team Setup', description: 'Custom imageComponent applied.', icon: 'users' },
+          { title: 'Timeline', description: 'Icons use the provider slot.', icon: 'calendar' },
+        ]}
+      />
+    </SagtechUIProvider>
+  ),
 };

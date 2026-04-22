@@ -1,6 +1,8 @@
+'use client';
+
 import classNames from 'classnames';
 import React, { useMemo } from 'react';
-import Link from 'next/link';
+import { useLinkComponent } from '@/providers';
 import cardWrapperConst from './cardwrapper.const';
 import type { VariantTypoRounded, VariantTypoStoke } from './types';
 
@@ -14,6 +16,7 @@ interface CardWrapperTypes {
 }
 
 function CardWrapper({ className, children, rounded = '24', stoke = '2', href, hrefClickEvent }: CardWrapperTypes) {
+  const Link = useLinkComponent();
   const stoke1 = stoke === '1';
   const stoke2 = stoke === '2';
   const rounded0 = rounded === '0';

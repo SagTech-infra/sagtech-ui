@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import CardWrapper from './CardWrapper';
+import { SagtechUIProvider, type UILinkComponent } from '@/providers';
 
 const meta = {
   title: 'Layout/CardWrapper',
@@ -105,5 +106,29 @@ export const AllVariants: Story = {
         <div style={{ padding: '24px', color: 'white' }}>Stroke 2, Rounded 12</div>
       </CardWrapper>
     </div>
+  ),
+};
+
+const OutlinedLink: UILinkComponent = ({ href, children, className }) => (
+  <a
+    href={href}
+    className={className}
+    style={{ outline: '2px dashed #58A61B', display: 'inline-block' }}
+  >
+    {children}
+  </a>
+);
+
+export const WithCustomProvider: Story = {
+  name: 'With SagtechUIProvider override',
+  render: () => (
+    <SagtechUIProvider linkComponent={OutlinedLink}>
+      <CardWrapper href="#sagtech-provider" rounded="24" stoke="2">
+        <div style={{ padding: '32px', color: 'white' }}>
+          <h3>Clickable card</h3>
+          <p>Link rendered via the custom linkComponent slot</p>
+        </div>
+      </CardWrapper>
+    </SagtechUIProvider>
   ),
 };
