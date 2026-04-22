@@ -144,6 +144,13 @@ export type { PopoverProps } from './components/Popover/Popover';
 export { default as Tabs } from './components/Tabs/Tabs';
 export { default as Table } from './components/Table/Table';
 export type { TableProps, Column } from './components/Table/Table';
+export { default as DataTable } from './components/DataTable/DataTable';
+export type {
+  DataTableProps,
+  DataTableColumn,
+  SortDirection,
+  SortState,
+} from './components/DataTable/types';
 export { default as Pagination } from './components/Pagination/Pagination';
 export type { PaginationProps } from './components/Pagination/Pagination';
 export { default as StatCard } from './components/StatCard/StatCard';
