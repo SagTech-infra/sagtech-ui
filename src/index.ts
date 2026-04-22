@@ -64,6 +64,12 @@ export { default as Attachment } from './components/Attachment/Attachment';
 export { default as PhoneInput } from './components/PhoneInput/PhoneInput';
 export { default as SelectInput } from './components/SelectInput/SelectInput';
 export type { SelectOption } from './components/SelectInput/types';
+export { default as Combobox } from './components/Combobox/Combobox';
+export type {
+  ComboboxOption,
+  ComboboxProps,
+  ComboboxCommonProps,
+} from './components/Combobox/types';
 export { default as RadioGroup } from './components/RadioGroup/RadioGroup';
 export type { RadioGroupProps, RadioOption } from './components/RadioGroup/RadioGroup';
 export { default as DatePicker } from './components/DatePicker/DatePicker';
