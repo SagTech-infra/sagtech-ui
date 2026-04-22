@@ -148,6 +148,16 @@ export type { CookieBannerProps } from './components/CookieBanner/CookieBanner';
 export { Notification } from './components/Notification/Notification';
 export { default as NotificationWrapper } from './components/Notification/NotificationWrapper';
 export { NotificationContext } from './components/Notification/NotificationContext';
+export { Toaster, toast, toastStore } from './components/Toast';
+export type {
+  ToasterProps,
+  ToasterPosition,
+  ToastApi,
+  ToastAction,
+  ToastData,
+  ToastOptions,
+  ToastVariant,
+} from './components/Toast';
 export { default as SliderArrow } from './components/SliderArrow/SliderArrow';
 
 export { default as LineChart } from './components/LineChart/LineChart';

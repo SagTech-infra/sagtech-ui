@@ -34,16 +34,21 @@ describe('DateRangePicker', () => {
     expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 
+  function findCurrentMonthDay(label: string) {
+    const matches = screen.getAllByRole('button').filter((b) => b.textContent === label);
+    // Non-disabled current-month day buttons keep the default cursor-pointer class;
+    // pick the first enabled one.
+    const current = matches.find((b) => !b.hasAttribute('disabled'));
+    if (!current) throw new Error(`No clickable day button with label "${label}"`);
+    return current;
+  }
+
   it('selects start then end date and calls onChange in order', () => {
     const spy = vi.fn();
     render(<Host onChange={spy} />);
     fireEvent.click(screen.getByRole('button', { name: /select range/i }));
 
-    const dayButtons = screen.getAllByRole('button', { name: /^\d+$/ });
-    const day5 = dayButtons.find((b) => b.textContent === '5')!;
-    const day12 = dayButtons.find((b) => b.textContent === '12')!;
-
-    fireEvent.click(day5);
+    fireEvent.click(findCurrentMonthDay('5'));
     expect(spy).toHaveBeenLastCalledWith(
       expect.objectContaining({
         from: expect.any(Date),
@@ -51,7 +56,7 @@ describe('DateRangePicker', () => {
       }),
     );
 
-    fireEvent.click(day12);
+    fireEvent.click(findCurrentMonthDay('12'));
     const last = spy.mock.calls.at(-1)![0] as DateRange;
     expect(last.from).toBeInstanceOf(Date);
     expect(last.to).toBeInstanceOf(Date);
@@ -64,9 +69,8 @@ describe('DateRangePicker', () => {
     render(<Host onChange={spy} />);
     fireEvent.click(screen.getByRole('button', { name: /select range/i }));
 
-    const dayButtons = screen.getAllByRole('button', { name: /^\d+$/ });
-    fireEvent.click(dayButtons.find((b) => b.textContent === '15')!);
-    fireEvent.click(dayButtons.find((b) => b.textContent === '5')!);
+    fireEvent.click(findCurrentMonthDay('15'));
+    fireEvent.click(findCurrentMonthDay('5'));
 
     const last = spy.mock.calls.at(-1)![0] as DateRange;
     expect(last.from!.getDate()).toBe(5);
@@ -92,10 +96,12 @@ describe('DateRangePicker', () => {
   it('navigates months with prev/next arrows', () => {
     render(<Host />);
     fireEvent.click(screen.getAllByRole('button')[0]);
-    const dialog = screen.getByRole('dialog');
-    const beforeLabel = dialog.querySelector('span.font-semibold')!.textContent;
+    const getLabel = () =>
+      screen.getByRole('dialog').querySelector('span.font-semibold')!.textContent;
+    const before = getLabel();
     fireEvent.click(screen.getByLabelText('Next month'));
-    const afterLabel = dialog.querySelector('span.font-semibold')!.textContent;
-    expect(afterLabel).not.toBe(beforeLabel);
+    expect(getLabel()).not.toBe(before);
+    fireEvent.click(screen.getByLabelText('Previous month'));
+    expect(getLabel()).toBe(before);
   });
 });
