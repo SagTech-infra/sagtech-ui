@@ -74,6 +74,8 @@ export { default as RadioGroup } from './components/RadioGroup/RadioGroup';
 export type { RadioGroupProps, RadioOption } from './components/RadioGroup/RadioGroup';
 export { default as DatePicker } from './components/DatePicker/DatePicker';
 export type { DatePickerProps } from './components/DatePicker/DatePicker';
+export { default as DateRangePicker } from './components/DatePicker/DateRangePicker';
+export type { DateRangePickerProps, DateRange } from './components/DatePicker/DateRangePicker';
 export { default as Dropzone } from './components/Dropzone/Dropzone';
 export type { DropzoneProps } from './components/Dropzone/Dropzone';
 export { default as DropdownMenu } from './components/DropdownMenu/DropdownMenu';

@@ -5,6 +5,15 @@ import classNames from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
 import useOutsideClick from '@/hooks/useOutsideClick';
 import { mergeRefs } from '@/utils/mergeRefs';
+import {
+  WEEKDAYS,
+  formatDisplayDate,
+  formatMonthLabel,
+  getCalendarDays,
+  isSameDay,
+  isToday,
+  type CalendarDay,
+} from './calendar';
 
 export interface DatePickerProps {
   value?: Date;
@@ -19,106 +28,10 @@ export interface DatePickerProps {
   ref?: Ref<HTMLDivElement>;
 }
 
-const WEEKDAYS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
-
 const dropdownVariants = {
   open: { opacity: 1, y: 0 },
   closed: { opacity: 0, y: -4 },
 };
-
-function formatDisplayDate(date: Date): string {
-  return date.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  });
-}
-
-function getDaysInMonth(year: number, month: number): number {
-  return new Date(year, month + 1, 0).getDate();
-}
-
-function getFirstDayOfMonth(year: number, month: number): number {
-  const day = new Date(year, month, 1).getDay();
-  // Convert Sunday=0 to Monday-based (0=Mon, 6=Sun)
-  return day === 0 ? 6 : day - 1;
-}
-
-function isSameDay(a: Date, b: Date): boolean {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  );
-}
-
-function isToday(date: Date): boolean {
-  return isSameDay(date, new Date());
-}
-
-function isDateDisabled(date: Date, minDate?: Date, maxDate?: Date): boolean {
-  if (minDate) {
-    const min = new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
-    if (date < min) return true;
-  }
-  if (maxDate) {
-    const max = new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate());
-    if (date > max) return true;
-  }
-  return false;
-}
-
-interface CalendarDay {
-  date: Date;
-  isCurrentMonth: boolean;
-  isDisabled: boolean;
-}
-
-function getCalendarDays(year: number, month: number, minDate?: Date, maxDate?: Date): CalendarDay[] {
-  const days: CalendarDay[] = [];
-  const daysInMonth = getDaysInMonth(year, month);
-  const firstDay = getFirstDayOfMonth(year, month);
-
-  // Previous month days
-  const prevMonth = month === 0 ? 11 : month - 1;
-  const prevYear = month === 0 ? year - 1 : year;
-  const daysInPrevMonth = getDaysInMonth(prevYear, prevMonth);
-
-  for (let i = firstDay - 1; i >= 0; i--) {
-    const date = new Date(prevYear, prevMonth, daysInPrevMonth - i);
-    days.push({
-      date,
-      isCurrentMonth: false,
-      isDisabled: isDateDisabled(date, minDate, maxDate),
-    });
-  }
-
-  // Current month days
-  for (let d = 1; d <= daysInMonth; d++) {
-    const date = new Date(year, month, d);
-    days.push({
-      date,
-      isCurrentMonth: true,
-      isDisabled: isDateDisabled(date, minDate, maxDate),
-    });
-  }
-
-  // Next month days to fill grid
-  const remaining = 42 - days.length;
-  const nextMonth = month === 11 ? 0 : month + 1;
-  const nextYear = month === 11 ? year + 1 : year;
-
-  for (let d = 1; d <= remaining; d++) {
-    const date = new Date(nextYear, nextMonth, d);
-    days.push({
-      date,
-      isCurrentMonth: false,
-      isDisabled: isDateDisabled(date, minDate, maxDate),
-    });
-  }
-
-  return days;
-}
 
 function CalendarIcon() {
   return (
@@ -200,10 +113,10 @@ export default function DatePicker({
     [viewYear, viewMonth, minDate, maxDate],
   );
 
-  const monthLabel = useMemo(() => {
-    const d = new Date(viewYear, viewMonth);
-    return d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-  }, [viewYear, viewMonth]);
+  const monthLabel = useMemo(
+    () => formatMonthLabel(viewYear, viewMonth),
+    [viewYear, viewMonth],
+  );
 
   const handlePrevMonth = useCallback(() => {
     setViewMonth((prev) => {
