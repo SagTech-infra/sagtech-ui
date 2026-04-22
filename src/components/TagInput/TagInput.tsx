@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useCallback, useRef, type KeyboardEvent, type ChangeEvent } from 'react';
+import { useState, useCallback, useRef, type KeyboardEvent, type ChangeEvent, type Ref } from 'react';
 import classNames from 'classnames';
+import { mergeRefs } from '@/utils/mergeRefs';
 
 export interface TagInputProps {
   value: string[];
@@ -11,6 +12,7 @@ export interface TagInputProps {
   disabled?: boolean;
   error?: string;
   className?: string;
+  ref?: Ref<HTMLInputElement>;
 }
 
 export default function TagInput({
@@ -21,6 +23,7 @@ export default function TagInput({
   disabled = false,
   error,
   className,
+  ref,
 }: TagInputProps) {
   const [inputValue, setInputValue] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -135,7 +138,7 @@ export default function TagInput({
 
         {!isMaxReached && !disabled && (
           <input
-            ref={inputRef}
+            ref={mergeRefs(inputRef, ref)}
             type="text"
             value={inputValue}
             onChange={handleChange}

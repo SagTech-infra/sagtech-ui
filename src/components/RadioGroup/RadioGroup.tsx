@@ -1,6 +1,6 @@
 'use client';
 
-import { useId } from 'react';
+import { useId, type Ref } from 'react';
 import classNames from 'classnames';
 
 export interface RadioOption {
@@ -19,6 +19,7 @@ export interface RadioGroupProps {
   size?: 'sm' | 'md';
   error?: string;
   className?: string;
+  ref?: Ref<HTMLDivElement>;
 }
 
 const circleSizeMap = {
@@ -45,11 +46,12 @@ export default function RadioGroup({
   size = 'md',
   error,
   className,
+  ref,
 }: RadioGroupProps) {
   const groupId = useId();
 
   return (
-    <div className={className}>
+    <div ref={ref} className={className}>
       <div
         role="radiogroup"
         className={classNames({

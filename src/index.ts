@@ -42,6 +42,7 @@ export {
   validateLink,
   validatePhone,
   Portal,
+  mergeRefs,
 } from './utils';
 
 // Components — Foundations

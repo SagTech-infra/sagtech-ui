@@ -10,10 +10,12 @@ import { detectCountry } from '@/utils/detectCountry';
 function PhoneInput({
   error,
   externalLabel,
+  ref,
   ...props
 }: PhoneInputProps & {
   error?: boolean;
   externalLabel?: string;
+  ref?: React.Ref<HTMLDivElement>;
 }) {
   const [detectedCountry, setDetectedCountry] = useState<string>('us');
 
@@ -28,7 +30,7 @@ function PhoneInput({
   }, []);
 
   return (
-    <div className="flex flex-col gap-6px">
+    <div ref={ref} className="flex flex-col gap-6px">
       {externalLabel && (
         <label htmlFor={props.name} className="text-12 font-bold leading-18 text-white_1">
           {externalLabel}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useId } from 'react';
+import { useId, type Ref } from 'react';
 import classNames from 'classnames';
 
 export interface ToggleProps {
@@ -9,6 +9,7 @@ export interface ToggleProps {
   disabled?: boolean;
   size?: 'sm' | 'md';
   label?: string;
+  ref?: Ref<HTMLButtonElement>;
 }
 
 const trackSizeMap = {
@@ -32,6 +33,7 @@ export default function Toggle({
   disabled = false,
   size = 'md',
   label,
+  ref,
 }: ToggleProps) {
   const id = useId();
 
@@ -50,6 +52,7 @@ export default function Toggle({
       })}
     >
       <button
+        ref={ref}
         id={id}
         type="button"
         role="switch"

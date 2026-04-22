@@ -1,4 +1,4 @@
-import React, { type TextareaHTMLAttributes, type DetailedHTMLProps, useMemo } from 'react';
+import React, { type TextareaHTMLAttributes, type DetailedHTMLProps, type Ref, useMemo } from 'react';
 import classNames from 'classnames';
 import textAreaStyles from './textarea.const';
 
@@ -9,6 +9,7 @@ interface TextAreaProps
   disabled?: boolean;
   errorMessage?: string;
   isError?: boolean;
+  ref?: Ref<HTMLTextAreaElement>;
 }
 
 export function TextArea({
@@ -18,6 +19,7 @@ export function TextArea({
   disabled,
   isError,
   errorMessage,
+  ref,
   ...rest
 }: TextAreaProps) {
   const textareaStyles = useMemo(
@@ -36,6 +38,7 @@ export function TextArea({
   return (
     <div>
       <textarea
+        ref={ref}
         value={value}
         className={`${textareaStyles} ${classes !== undefined ? classes : ''}`}
         disabled={disabled}

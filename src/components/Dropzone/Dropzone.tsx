@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, type Ref } from 'react';
 import classNames from 'classnames';
+import { mergeRefs } from '@/utils/mergeRefs';
 
 export interface DropzoneProps {
   onDrop: (files: File[]) => void;
@@ -10,6 +11,7 @@ export interface DropzoneProps {
   maxSize?: number;
   disabled?: boolean;
   className?: string;
+  ref?: Ref<HTMLInputElement>;
 }
 
 function formatFileSize(bytes: number): string {
@@ -115,6 +117,7 @@ export default function Dropzone({
   maxSize,
   disabled = false,
   className,
+  ref,
 }: DropzoneProps) {
   const [isDragOver, setIsDragOver] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
@@ -229,7 +232,7 @@ export default function Dropzone({
       </div>
 
       <input
-        ref={inputRef}
+        ref={mergeRefs(inputRef, ref)}
         type="file"
         accept={accept}
         multiple={!maxFiles || maxFiles > 1}

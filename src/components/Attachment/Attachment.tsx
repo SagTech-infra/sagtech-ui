@@ -34,6 +34,7 @@ export function Attachment({
   errorMessage,
   getFiles,
   title = 'Attach file',
+  ref,
   ...rest
 }: AttachmentTypes) {
   const [hover, setHover] = useState(false);
@@ -109,6 +110,7 @@ export function Attachment({
         >
           <Icon icon="attach" size={24} color={iconColors} />
           <input
+            ref={ref}
             id="input-file"
             onChange={(e) => handleFileChange(e)}
             multiple={multiple}

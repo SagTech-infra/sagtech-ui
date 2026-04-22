@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, type Ref } from 'react';
 import classNames from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
 import useOutsideClick from '@/hooks/useOutsideClick';
+import { mergeRefs } from '@/utils/mergeRefs';
 
 export interface DatePickerProps {
   value?: Date;
@@ -15,6 +16,7 @@ export interface DatePickerProps {
   error?: string;
   label?: string;
   className?: string;
+  ref?: Ref<HTMLDivElement>;
 }
 
 const WEEKDAYS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
@@ -185,12 +187,13 @@ export default function DatePicker({
   error,
   label,
   className,
+  ref,
 }: DatePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [viewYear, setViewYear] = useState(() => (value ? value.getFullYear() : new Date().getFullYear()));
   const [viewMonth, setViewMonth] = useState(() => (value ? value.getMonth() : new Date().getMonth()));
 
-  const ref = useOutsideClick<HTMLDivElement>(() => setIsOpen(false));
+  const outsideRef = useOutsideClick<HTMLDivElement>(() => setIsOpen(false));
 
   const days = useMemo(
     () => getCalendarDays(viewYear, viewMonth, minDate, maxDate),
@@ -238,7 +241,7 @@ export default function DatePicker({
   }, [disabled]);
 
   return (
-    <div className={classNames('flex flex-col gap-6px', className)} ref={ref}>
+    <div className={classNames('flex flex-col gap-6px', className)} ref={mergeRefs(outsideRef, ref)}>
       {label && (
         <label className="text-12 font-bold leading-18 text-white_4">{label}</label>
       )}
