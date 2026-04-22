@@ -91,6 +91,19 @@ export { default as Timeline } from './components/Timeline/Timeline';
 
 // Components — Layout
 export { Modal } from './components/Modal/Modal';
+export {
+  ConfirmDialog,
+  ConfirmProvider,
+  useConfirm,
+  ConfirmContext,
+} from './components/Confirm';
+export type {
+  ConfirmDialogProps,
+  ConfirmProviderProps,
+  ConfirmFn,
+  ConfirmOptions,
+  ConfirmVariant,
+} from './components/Confirm';
 export { default as CardWrapper } from './components/CardWrapper/CardWrapper';
 export { default as SectionTag } from './components/SectionTag/SectionTag';
 export { default as Sidebar } from './components/Sidebar/Sidebar';
