@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import SelectInput from './SelectInput';
 import type { SelectOption } from './types';
 
@@ -28,16 +29,14 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  name: 'Controlled (value / onChange)',
   render: function DefaultSelect() {
     const [value, setValue] = useState('');
-
     return (
       <SelectInput
         options={sampleOptions}
         value={value}
-        onSelect={setValue}
-        register={(() => ({})) as any}
-        name={'framework' as any}
+        onChange={setValue}
         placeholder="Select a framework"
       />
     );
@@ -47,14 +46,11 @@ export const Default: Story = {
 export const WithSelectedValue: Story = {
   render: function SelectedSelect() {
     const [value, setValue] = useState('react');
-
     return (
       <SelectInput
         options={sampleOptions}
         value={value}
-        onSelect={setValue}
-        register={(() => ({})) as any}
-        name={'framework' as any}
+        onChange={setValue}
         placeholder="Select a framework"
       />
     );
@@ -64,20 +60,15 @@ export const WithSelectedValue: Story = {
 export const Multiple: Story = {
   render: function MultipleSelect() {
     const [values, setValues] = useState<string[]>([]);
-
-    const handleSelect = (val: string) => {
+    const toggle = (val: string) =>
       setValues((prev) =>
         prev.includes(val) ? prev.filter((v) => v !== val) : [...prev, val],
       );
-    };
-
     return (
       <SelectInput
         options={sampleOptions}
         value={values}
-        onSelect={handleSelect}
-        register={(() => ({})) as any}
-        name={'frameworks' as any}
+        onChange={toggle}
         placeholder="Select frameworks"
         multiple
       />
@@ -88,16 +79,52 @@ export const Multiple: Story = {
 export const ValueAsPlaceholder: Story = {
   render: function PlaceholderSelect() {
     const [value, setValue] = useState('react');
-
     return (
       <SelectInput
         options={sampleOptions}
         value={value}
-        onSelect={setValue}
-        register={(() => ({})) as any}
-        name={'framework' as any}
+        onChange={setValue}
         placeholder="Select a framework"
         valueAsPlaceholder
+      />
+    );
+  },
+};
+
+export const Disabled: Story = {
+  render: function DisabledSelect() {
+    const [value] = useState('react');
+    return (
+      <SelectInput
+        options={sampleOptions}
+        value={value}
+        onChange={() => {}}
+        placeholder="Select a framework"
+        disabled
+      />
+    );
+  },
+};
+
+interface FormValues {
+  framework: string;
+}
+
+export const WithReactHookForm: Story = {
+  name: 'With react-hook-form (legacy register + name)',
+  render: function RhfSelect() {
+    const { register, watch, setValue } = useForm<FormValues>({
+      defaultValues: { framework: 'react' },
+    });
+    const value = watch('framework');
+    return (
+      <SelectInput
+        options={sampleOptions}
+        value={value}
+        register={register}
+        name="framework"
+        onChange={(v) => setValue('framework', v)}
+        placeholder="Select a framework"
       />
     );
   },
