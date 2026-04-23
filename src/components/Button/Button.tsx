@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useMemo } from 'react';
 import type { MouseEventHandler, ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
 import { Icon } from '@/components/Icon/Icon';
@@ -10,7 +12,7 @@ export interface ButtonTypes
   loadingType?: boolean;
   text?: string;
   buttonSize?: 'small' | 'large' | 'tabSize';
-  variant?: 'primary' | 'secondary' | 'tabButton' | 'tabButtonWhite';
+  variant?: 'primary' | 'secondary' | 'danger' | 'tabButton' | 'tabButtonWhite';
   useIcon?: boolean;
   stateOfButton?: 'default' | 'active';
   classes?: string;
@@ -61,7 +63,9 @@ export default function Button({
     <button
       type={type}
       className={`${classes} ${buttonClasses}`}
-      disabled={disabled}
+      disabled={disabled || loadingType}
+      aria-busy={loadingType || undefined}
+      aria-disabled={disabled || loadingType || undefined}
       onClick={onClick}
       {...rest}
     >
@@ -84,9 +88,11 @@ export default function Button({
         </svg>
       )}
       {iconComponent}
-      <Typography type={typeText} color="text-white" className="hidde-paragraph">
-        {text}
-      </Typography>
+      {text && (
+        <Typography type={typeText} color="text-white" className="hidde-paragraph">
+          {text}
+        </Typography>
+      )}
     </button>
   );
 }

@@ -30,7 +30,7 @@ export function Notification({
 }: NotificationTypes) {
   return (
     <div
-      role="contentinfo"
+      role="alert"
       className={`${notificationConsts.basicStyles} pointer-events-auto h-full w-[359px] sm:w-[392px]`}
     >
       <div className="mr-16px">

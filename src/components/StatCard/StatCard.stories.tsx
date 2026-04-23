@@ -141,7 +141,7 @@ export const Grid: Story = {
   decorators: [
     (Story, context) => (
       <div className="bg-black_1 p-24px rounded-16px max-w-[720px]">
-        <div className="grid grid-cols-2 gap-16px">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-16px">
           <StatCard
             label="Total Revenue"
             value="$48,520"

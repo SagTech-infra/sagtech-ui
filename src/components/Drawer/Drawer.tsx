@@ -71,7 +71,8 @@ export default function Drawer({
         <>
           {showOverlay && (
             <motion.div
-              className="fixed inset-0 z-[100] bg-backdrop"
+              className="fixed inset-0 bg-backdrop"
+              style={{ zIndex: 4000 }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -82,7 +83,7 @@ export default function Drawer({
 
           <motion.aside
             className={classNames(
-              'fixed top-0 z-[200] h-full bg-black_1 flex flex-col',
+              'fixed top-0 h-full bg-black_1 flex flex-col',
               {
                 'right-0 border-l border-black_3': position === 'right',
                 'left-0 border-r border-black_3': position === 'left',
@@ -90,7 +91,7 @@ export default function Drawer({
               width ? undefined : 'w-[400px]',
               className,
             )}
-            style={width ? { width } : undefined}
+            style={{ zIndex: 4001, ...(width ? { width } : {}) }}
             variants={slideVariants}
             initial="hidden"
             animate="visible"

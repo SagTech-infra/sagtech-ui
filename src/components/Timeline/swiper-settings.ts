@@ -1,4 +1,6 @@
-const settings: any = {
+import type { SwiperOptions } from 'swiper/types';
+
+const settings: SwiperOptions = {
   centeredSlides: false,
   slidesPerView: 'auto',
   width: 610,

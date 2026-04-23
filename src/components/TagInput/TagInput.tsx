@@ -89,8 +89,9 @@ export default function TagInput({
       <div
         onClick={handleContainerClick}
         className={classNames(
-          'bg-black_1 border rounded-16px min-h-[56px] px-16px py-8px flex flex-wrap items-center gap-8px font-manrope transition-colors',
+          'bg-black_1 border border-solid rounded-16px min-h-[56px] px-16px py-8px flex flex-wrap items-center gap-8px font-manrope transition-colors',
           {
+            'border-grey_2': disabled,
             'border-pr_purple': !error && !disabled,
             'ring-2 ring-pr_purple/30': isFocused && !error && !disabled,
             'border-error ring-2 ring-error/30': error && isFocused,

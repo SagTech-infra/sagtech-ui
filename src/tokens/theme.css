@@ -126,13 +126,25 @@
   --border-width-5: 5px;
   --border-width-6: 6px;
 
-  /* Z-index */
+  /* Z-index — numeric utility scale */
   --z-5: 5;
   --z-10: 10;
   --z-20: 20;
   --z-30: 30;
   --z-40: 40;
   --z-50: 50;
+
+  /* Z-index — semantic overlay scale.
+     Layers are separated by 1000 so each one can stack 100 nested instances
+     (each instance bumps z by 10) before colliding with the next layer. */
+  --z-dropdown: 1000;
+  --z-popover: 2000;
+  --z-modal-backdrop: 3000;
+  --z-modal: 3001;
+  --z-drawer-backdrop: 4000;
+  --z-drawer: 4001;
+  --z-toast: 5000;
+  --z-tooltip: 6000;
 
   /* Inset */
   --inset-0px: 0px;

@@ -1,4 +1,4 @@
-export type VariantTypoTags = 'h1' | 'h2' | 'h3' | 'h4' | 'p' | 'span';
+export type VariantTypoTags = 'h1' | 'h2' | 'h3' | 'h4' | 'p' | 'span' | 'label';
 
 export type VariantTypoTagsStyles =
   | 'BodyXL'
@@ -19,7 +19,12 @@ export type VariantTypoTagsStyles =
   | 'MetricsTitle'
   | 'MetricsXL'
   | 'TabInfoTitle'
-  | 'HeroSubtitle';
+  | 'HeroSubtitle'
+  | 'DisplayXL'
+  | 'DisplayL'
+  | 'SectionTitleL'
+  | 'SectionTitleM'
+  | 'SectionTitleS';
 
 export type VariantTypoColors =
   | 'text-black_1'

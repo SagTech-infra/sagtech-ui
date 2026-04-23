@@ -4,7 +4,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Autoplay } from 'swiper/modules';
 import { Swiper, type SwiperRef, SwiperSlide } from 'swiper/react';
-// @ts-ignore
 import 'swiper/css';
 import settings from './swiper-settings';
 import defaultStyles from './styles';
@@ -106,8 +105,6 @@ export function Timeline({
         className={`${defaultStyles.coverImg}
          ${imgName && index === imgName.length - 1 ? 'relative' : ''}
           ${classes !== undefined ? classes : ''} ${currentSlide === index ? 'z-[10]' : 'z-[5]'}`}
-        // eslint-disable-next-line react/no-array-index-key
-        key={index}
       >
         {React.cloneElement(child as React.ReactElement<any>, {
           className: `${defaultStyles.img}`,

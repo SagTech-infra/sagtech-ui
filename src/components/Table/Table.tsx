@@ -6,13 +6,13 @@ import classNames from 'classnames';
 export interface Column<T> {
   key: string;
   label: string;
-  render?: (value: any, row: T) => React.ReactNode;
+  render?: (value: unknown, row: T) => React.ReactNode;
   sortable?: boolean;
   width?: string;
   align?: 'left' | 'center' | 'right';
 }
 
-export interface TableProps<T extends Record<string, any>> {
+export interface TableProps<T extends Record<string, unknown>> {
   columns: Column<T>[];
   data: T[];
   onRowClick?: (row: T) => void;
@@ -65,7 +65,7 @@ function SortIcon({ active, direction }: { active: boolean; direction?: 'asc' | 
   );
 }
 
-export default function Table<T extends Record<string, any>>({
+export default function Table<T extends Record<string, unknown>>({
   columns,
   data,
   onRowClick,
@@ -176,7 +176,7 @@ export default function Table<T extends Record<string, any>>({
                     <td
                       key={col.key}
                       className={classNames(
-                        'font-manrope text-14',
+                        'font-manrope text-14 overflow-visible',
                         alignClasses[col.align ?? 'left'],
                         {
                           'py-12px px-20px': compact,
@@ -185,6 +185,7 @@ export default function Table<T extends Record<string, any>>({
                           'text-grey_4': ci !== 0,
                         },
                       )}
+                      style={col.width ? { width: col.width } : undefined}
                     >
                       {col.render ? col.render(row[col.key], row) : String(row[col.key] ?? '')}
                     </td>

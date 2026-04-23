@@ -1,10 +1,10 @@
-type Props = {
-  width?: number;
-  height?: number;
-  className?: string;
-};
+import type { SVGProps } from 'react';
 
-export default function DashboardIcon({ width = 32, height = 32, className }: Props) {
+export default function DashboardIcon({
+  width = 32,
+  height = 32,
+  ...rest
+}: SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -12,11 +12,11 @@ export default function DashboardIcon({ width = 32, height = 32, className }: Pr
       height={height}
       viewBox="0 0 32 32"
       fill="none"
-      className={className}
+      {...rest}
     >
       <path
         d="M17.3333 28V14.6667H28V28H17.3333ZM4 17.3333V4H14.6667V17.3333H4ZM12 14.6667V6.66667H6.66667V14.6667H12ZM4 28V20H14.6667V28H4ZM6.66667 25.3333H12V22.6667H6.66667V25.3333ZM20 25.3333H25.3333V17.3333H20V25.3333ZM17.3333 4H28V12H17.3333V4ZM20 6.66667V9.33333H25.3333V6.66667H20Z"
-        fill="white"
+        fill="currentColor"
       />
     </svg>
   );

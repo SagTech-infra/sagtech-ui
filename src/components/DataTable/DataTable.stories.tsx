@@ -27,18 +27,19 @@ const columns: DataTableColumn<Row>[] = [
     key: 'status',
     header: 'Status',
     sortable: true,
-    render: (row) => (
-      <Badge
-        text={row.status}
-        type={
-          row.status === 'active'
-            ? 'success'
-            : row.status === 'paused'
-              ? 'warning'
-              : 'default'
-        }
-      />
-    ),
+    render: (row) => {
+      const color =
+        row.status === 'active'
+          ? 'success'
+          : row.status === 'paused'
+            ? 'warning'
+            : 'grey';
+      return (
+        <Badge variant="subtle" color={color} size="sm" dot>
+          {row.status}
+        </Badge>
+      );
+    },
   },
   { key: 'created', header: 'Created', sortable: true, align: 'right' },
 ];

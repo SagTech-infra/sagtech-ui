@@ -1,4 +1,6 @@
-import React, { type InputHTMLAttributes, type DetailedHTMLProps, useMemo } from 'react';
+'use client';
+
+import React, { type InputHTMLAttributes, type DetailedHTMLProps, useId, useMemo } from 'react';
 import classNames from 'classnames';
 import inputConsts from './input.const';
 
@@ -24,8 +26,13 @@ export default function Input({
   isError,
   inputClasses,
   externalLabel,
+  id,
   ...rest
 }: InputTypes) {
+  const reactId = useId();
+  const inputId = id ?? rest.name ?? reactId;
+  const errorId = `${inputId}-error`;
+
   const inputStyles = useMemo(
     () =>
       classNames({
@@ -43,7 +50,7 @@ export default function Input({
   return (
     <div className="flex flex-col gap-6px">
       {externalLabel && (
-        <label htmlFor={rest.name} className="text-12 font-bold leading-18 text-white_1">
+        <label htmlFor={inputId} className="text-12 font-bold leading-18 text-white_1">
           {externalLabel}
         </label>
       )}
@@ -54,15 +61,19 @@ export default function Input({
           </span>
         )}
         <input
-          id={rest.name}
+          id={inputId}
           value={value}
           className={`${inputStyles} ${inputClasses}`}
           disabled={disabled}
+          aria-invalid={isError || undefined}
+          aria-describedby={isError && errorMessage ? errorId : undefined}
           {...rest}
         />
       </div>
       {isError && (
-        <p className="px-24px pt-4px text-12 font-medium leading-16 text-error">{errorMessage}</p>
+        <p id={errorId} className="px-24px pt-4px text-12 font-medium leading-16 text-error">
+          {errorMessage}
+        </p>
       )}
     </div>
   );

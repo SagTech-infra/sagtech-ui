@@ -50,5 +50,3 @@ export function TextArea({
     </div>
   );
 }
-
-export default TextArea;

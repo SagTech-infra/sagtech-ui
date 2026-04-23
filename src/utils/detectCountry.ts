@@ -1,5 +1,7 @@
 'use client';
 
+import type { CountryIso2 } from 'react-international-phone';
+
 export const detectCountryByTimezone = (): string => {
   try {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -112,18 +114,18 @@ const SUPPORTED_COUNTRIES = [
   'tm', 'ug', 'ua', 'ae', 'gb', 'us', 'uy', 'uz', 'vu', 've', 'vn', 'ye', 'zm', 'zw',
 ];
 
-export const detectCountry = (): string => {
+export const detectCountry = (): CountryIso2 => {
   try {
     // Try timezone first
     const timezoneCountry = detectCountryByTimezone();
     if (timezoneCountry !== 'us' && SUPPORTED_COUNTRIES.includes(timezoneCountry)) {
-      return timezoneCountry;
+      return timezoneCountry as CountryIso2;
     }
 
     // Then by language
     const languageCountry = detectCountryByLanguage();
     if (SUPPORTED_COUNTRIES.includes(languageCountry)) {
-      return languageCountry;
+      return languageCountry as CountryIso2;
     }
 
     // Fallback to US

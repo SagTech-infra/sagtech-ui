@@ -352,6 +352,7 @@ function Combobox<V extends string = string>(props: ComboboxProps<V>) {
         className={classNames(
           'w-full flex items-center justify-between bg-black_1 border border-solid rounded-16px h-[56px] px-24px text-left font-manrope text-14 transition-colors gap-8px',
           {
+            'border-grey_2': disabled,
             'border-pr_purple': !error && !disabled,
             'border-error': error,
             'cursor-pointer hover:border-sec_purple': !disabled,

@@ -86,7 +86,16 @@ const FileIcon = (
 const LogoIcon = (
   <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
     <rect width="28" height="28" rx="6" fill="#6D3EF1" />
-    <text x="6" y="20" fill="white" fontSize="16" fontWeight="bold" fontFamily="sans-serif">
+    <text
+      x="14"
+      y="14"
+      fill="white"
+      fontSize="16"
+      fontWeight="bold"
+      fontFamily="sans-serif"
+      textAnchor="middle"
+      dominantBaseline="central"
+    >
       S
     </text>
   </svg>
@@ -218,7 +227,9 @@ export const Interactive: Story = {
         collapsed={collapsed}
         onToggleCollapse={() => setCollapsed((prev) => !prev)}
         header={
-          <div className="flex items-center gap-12px overflow-hidden">
+          <div
+            className={`flex items-center overflow-hidden transition-all duration-300 ${collapsed ? 'justify-center gap-0' : 'justify-start gap-12px'}`}
+          >
             {LogoIcon}
             <span
               className={`font-manrope text-16 font-bold text-white_4 whitespace-nowrap transition-all duration-300 ${collapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}`}

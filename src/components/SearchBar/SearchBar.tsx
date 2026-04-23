@@ -1,3 +1,5 @@
+'use client';
+
 import React, { type InputHTMLAttributes, type DetailedHTMLProps, useId } from 'react';
 import type { SVGProps } from 'react';
 

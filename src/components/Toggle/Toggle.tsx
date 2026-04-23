@@ -60,7 +60,7 @@ export default function Toggle({
         disabled={disabled}
         onClick={handleToggle}
         className={classNames(
-          'relative rounded-circle transition-colors duration-200 flex-shrink-0',
+          'relative rounded-circle transition-colors duration-200 flex-shrink-0 cursor-pointer disabled:cursor-not-allowed',
           trackSizeMap[size],
           {
             'bg-pr_purple': checked,

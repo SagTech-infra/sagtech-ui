@@ -1,6 +1,14 @@
 'use client';
 
-import React, { useState, useId, PropsWithChildren, memo, useCallback } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  memo,
+  type PropsWithChildren,
+} from 'react';
 import useOutsideClick from '@/hooks/useOutsideClick';
 import { AnimatePresence } from 'framer-motion';
 import { FieldPath, FieldValues, UseFormRegister } from 'react-hook-form';
@@ -27,20 +35,15 @@ type Props<T extends FieldValues> = {
   disabled?: boolean;
   onChange?: (value: string) => void;
   /**
-   * @deprecated Use `onChange` instead. `onSelect` is kept for backwards
-   * compatibility with earlier versions of the library and will be removed
-   * in a future major release.
+   * @deprecated Use `onChange` instead. Kept for backwards compat.
    */
   onSelect?: (value: string) => void;
   /**
-   * @deprecated Passing `react-hook-form`'s `register` is now optional.
-   * Prefer the controlled API via `value` + `onChange`. When both `register`
-   * and `name` are provided the hidden native `<select>` is rendered so
-   * existing RHF integrations keep working.
+   * @deprecated `register` is optional; prefer controlled `value` + `onChange`.
    */
   register?: UseFormRegister<T>;
   /**
-   * @deprecated See `register`. Still accepted for backwards compatibility.
+   * @deprecated See `register`.
    */
   name?: FieldPath<T>;
 } & VariableValuePropType &
@@ -61,8 +64,21 @@ function Select<T extends FieldValues>({
   className = '',
 }: Props<T>) {
   const [isOpen, setIsOpen] = useState(false);
-  const id = useId();
-  const ref = useOutsideClick<HTMLDivElement>(() => setIsOpen(false));
+  const [activeIndex, setActiveIndex] = useState<number>(-1);
+  const reactId = useId();
+  const listboxId = `${reactId}-listbox`;
+  const triggerInputRef = useRef<HTMLInputElement>(null);
+
+  const closeAndRestore = useCallback(() => {
+    setIsOpen(false);
+    setActiveIndex(-1);
+    triggerInputRef.current?.focus();
+  }, []);
+
+  const outsideRef = useOutsideClick<HTMLDivElement>(() => {
+    setIsOpen(false);
+    setActiveIndex(-1);
+  });
 
   const emitChange = useCallback(
     (next: string) => {
@@ -76,24 +92,120 @@ function Select<T extends FieldValues>({
     (newValue: string) => {
       if (disabled) return;
       emitChange(newValue);
-      if (!multiple) setIsOpen(false);
+      if (!multiple) {
+        closeAndRestore();
+      }
     },
-    [emitChange, multiple, disabled],
+    [emitChange, multiple, disabled, closeAndRestore],
   );
 
   const handleOpen = useCallback(
     (event: React.MouseEvent) => {
       event.preventDefault();
       if (disabled) return;
-      setIsOpen(true);
+      setIsOpen((prev) => !prev);
+      setActiveIndex(0);
     },
     [disabled],
   );
 
+  const selectedIndexForValue = useCallback(() => {
+    if (multiple) {
+      const first = (value as Array<string>)[0];
+      if (!first) return 0;
+      const idx = options.findIndex((o) => o.value === first);
+      return idx === -1 ? 0 : idx;
+    }
+    const idx = options.findIndex((o) => o.value === value);
+    return idx === -1 ? 0 : idx;
+  }, [multiple, options, value]);
+
+  const openWithActive = useCallback(
+    (index: number) => {
+      setIsOpen(true);
+      setActiveIndex(Math.max(0, Math.min(index, options.length - 1)));
+    },
+    [options.length],
+  );
+
+  const handleTriggerKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (disabled) return;
+      if (!isOpen) {
+        if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openWithActive(selectedIndexForValue());
+        } else if (event.key === 'ArrowUp') {
+          event.preventDefault();
+          openWithActive(options.length - 1);
+        }
+        return;
+      }
+
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeAndRestore();
+        return;
+      }
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        setActiveIndex((i) => (i + 1) % options.length);
+        return;
+      }
+      if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        setActiveIndex((i) => (i <= 0 ? options.length - 1 : i - 1));
+        return;
+      }
+      if (event.key === 'Home') {
+        event.preventDefault();
+        setActiveIndex(0);
+        return;
+      }
+      if (event.key === 'End') {
+        event.preventDefault();
+        setActiveIndex(options.length - 1);
+        return;
+      }
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        const opt = options[activeIndex];
+        if (opt) handleSelect(opt.value);
+        return;
+      }
+      if (event.key === 'Tab') {
+        setIsOpen(false);
+        setActiveIndex(-1);
+      }
+    },
+    [
+      isOpen,
+      disabled,
+      options,
+      activeIndex,
+      handleSelect,
+      closeAndRestore,
+      openWithActive,
+      selectedIndexForValue,
+    ],
+  );
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handler = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeAndRestore();
+      }
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [isOpen, closeAndRestore]);
+
   const getIsActiveValue = (option: SelectOption<string>) =>
     Array.isArray(value) ? value.includes(option.value) : value === option.value;
 
-  const unifiedValue = multiple ? value.join(', ') : value;
+  const unifiedValue = multiple ? (value as string[]).join(', ') : (value as string);
   const hasRhf = Boolean(register && name);
 
   return (
@@ -105,7 +217,7 @@ function Select<T extends FieldValues>({
       {hasRhf && (
         <select
           {...register!(name as FieldPath<T>)}
-          id={id}
+          id={reactId}
           name={name as string}
           multiple={multiple}
           disabled={disabled}
@@ -119,17 +231,21 @@ function Select<T extends FieldValues>({
         </select>
       )}
       <SelectFakeInput
+        ref={triggerInputRef}
         isOpen={isOpen}
         onClick={handleOpen}
+        onKeyDown={handleTriggerKeyDown}
         placeholder={placeholder}
         displayValue={valueAsPlaceholder ? placeholder : unifiedValue}
         className={className}
+        listboxId={listboxId}
+        disabled={disabled}
       />
       <AnimatePresence>
         {isOpen && !disabled && (
           <SelectDropdownLayout onClose={() => setIsOpen(false)}>
-            <div ref={ref}>
-              <ul className="flex flex-col px-16px">
+            <div ref={outsideRef}>
+              <ul id={listboxId} role="listbox" className="flex flex-col px-16px">
                 {children && <li className="list-none">{children}</li>}
                 {options.map((option, index) => (
                   <SelectOptionItem
@@ -138,6 +254,7 @@ function Select<T extends FieldValues>({
                     onSelect={handleSelect}
                     withChecbox={multiple}
                     isActive={getIsActiveValue(option)}
+                    isHighlighted={index === activeIndex}
                   />
                 ))}
               </ul>

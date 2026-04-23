@@ -14,9 +14,9 @@ function SliderArrow({ onClick, isReversed = false, isDisabled, className }: Pro
       type="button"
       disabled={isDisabled}
       className={cn(
-        'flex-shrink-0 transition-opacity duration-300 hover:opacity-60',
+        'flex-shrink-0 cursor-pointer transition-opacity duration-300 hover:opacity-60',
+        'disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:opacity-50',
         isReversed && 'relative rotate-180',
-        isDisabled && 'opacity-50',
         className,
       )}
       onClick={onClick}

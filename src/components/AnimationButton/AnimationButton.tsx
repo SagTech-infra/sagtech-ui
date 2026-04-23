@@ -1,5 +1,4 @@
 import React, { type ButtonHTMLAttributes, type DetailedHTMLProps } from 'react';
-// @ts-ignore
 import '@/tokens/index.css';
 import { Icon } from '@/components/Icon/Icon';
 
@@ -13,7 +12,7 @@ export default function AnimationButton({ text = 'Some txt', ...rest }: AnimateT
     <div className="inline-block">
       <button
         type="button"
-        className="buttonAnim buttonAnims items-center overflow-hidden rounded-circle bg-pr_purple"
+        className="buttonAnim buttonAnims items-center overflow-hidden rounded-circle bg-pr_purple cursor-pointer disabled:cursor-not-allowed"
         {...rest}
       >
         <div className="flex items-center ">

@@ -22,6 +22,11 @@ const typographyConst = {
   metricsXL: 'font-orbitron text-48 font-bold leading-64 uppercase',
   tabInfoTitle: 'font-manrope text-32 font-bold leading-48',
   heroSubtitle: 'font-manrope text-20 font-bold leading-24',
+  displayXL: 'font-orbitron text-40 sm:text-48 font-bold leading-56 sm:leading-64 uppercase',
+  displayL: 'font-orbitron text-28 sm:text-32 font-bold leading-40 sm:leading-48 uppercase',
+  sectionTitleL: 'font-manrope text-28 font-bold leading-40',
+  sectionTitleM: 'font-manrope text-18 font-bold leading-28',
+  sectionTitleS: 'font-manrope text-16 font-semibold leading-24',
 };
 
 export default typographyConst;

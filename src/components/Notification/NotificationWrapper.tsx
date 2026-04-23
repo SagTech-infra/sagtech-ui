@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useContext, useEffect } from 'react';
-// @ts-ignore
 import '@/tokens/index.css';
 import { Notification } from './Notification';
 import { NotificationContext } from './NotificationContext';
@@ -30,7 +29,10 @@ export default function NotificationWrapper() {
   return (
     <Portal>
       {isOpen && (
-        <div className="sm:bottom-32px 2xl:bottom-40px pointer-events-none fixed bottom-24px right-0px z-[500] flex w-full justify-center sm:right-[32px] sm:block sm:w-auto 2xl:right-[40px]">
+        <div
+          className="sm:bottom-32px 2xl:bottom-40px pointer-events-none fixed bottom-24px right-0px flex w-full justify-center sm:right-[32px] sm:block sm:w-auto 2xl:right-[40px]"
+          style={{ zIndex: 5000 }}
+        >
           <Notification
             title={title}
             text={text}
@@ -38,7 +40,7 @@ export default function NotificationWrapper() {
             useIconButtonFirst={false}
             color={color}
             onClickButtonFirst={onClose}
-            state={state as any}
+            state={state}
           />
         </div>
       )}

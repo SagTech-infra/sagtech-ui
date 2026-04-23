@@ -22,6 +22,7 @@ export function Icon(props: IIconProps) {
     size = 24,
     color = '#fff',
     height,
+    viewBox,
     className,
     classes,
     svgProps = {},
@@ -37,11 +38,11 @@ export function Icon(props: IIconProps) {
   return (
     <div className={`flex flex-col items-center ${classes}`}>
       <Component
-        viewBox={`0 0 ${size} ${size}`}
         width={size}
         className={className}
         height={height || size}
         color={color}
+        {...(viewBox ? { viewBox } : {})}
         {...svgProps}
         {...rest}
         fill="none"

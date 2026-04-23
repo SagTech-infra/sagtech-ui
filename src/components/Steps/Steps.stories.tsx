@@ -7,8 +7,15 @@ const meta = {
   component: Steps,
   tags: ['autodocs'],
   parameters: {
-    layout: 'padded',
+    layout: 'centered',
   },
+  decorators: [
+    (Story) => (
+      <div className="flex items-center justify-center w-full min-h-[420px] py-32px">
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof Steps>;
 
 export default meta;

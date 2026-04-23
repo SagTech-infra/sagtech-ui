@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createRef } from 'react';
 import { render } from '@testing-library/react';
-import TextArea from '@/components/TextArea/TextArea';
+import { TextArea } from '@/components/TextArea/TextArea';
 import Toggle from '@/components/Toggle/Toggle';
 import RadioGroup from '@/components/RadioGroup/RadioGroup';
 import DatePicker from '@/components/DatePicker/DatePicker';

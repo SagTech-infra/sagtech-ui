@@ -2,8 +2,7 @@
 
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
-import { PhoneInput as PhoneInputEl, PhoneInputProps } from 'react-international-phone';
-// @ts-ignore
+import { PhoneInput as PhoneInputEl, type PhoneInputProps, type CountryIso2 } from 'react-international-phone';
 import 'react-international-phone/style.css';
 import { detectCountry } from '@/utils/detectCountry';
 
@@ -17,7 +16,7 @@ function PhoneInput({
   externalLabel?: string;
   ref?: React.Ref<HTMLDivElement>;
 }) {
-  const [detectedCountry, setDetectedCountry] = useState<string>('us');
+  const [detectedCountry, setDetectedCountry] = useState<CountryIso2>('us');
 
   useEffect(() => {
     try {
@@ -46,7 +45,7 @@ function PhoneInput({
           '!border-error': error,
         })}
         className="w-full relative "
-        defaultCountry={detectedCountry as any}
+        defaultCountry={detectedCountry}
         key={error ? 'error' : 'no-error'}
         {...props}
       />

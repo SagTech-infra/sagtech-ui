@@ -1,8 +1,6 @@
-'use client';
+import { createContext } from 'react';
 
-import { createContext, useState, useMemo, type ReactNode } from 'react';
-
-interface ContextProps {
+export interface NotificationContextProps {
   isOpen: boolean;
   toggle: (value: boolean) => void;
   title: string;
@@ -15,11 +13,7 @@ interface ContextProps {
   getState: (value: string) => void;
 }
 
-interface ProviderProps {
-  children: ReactNode;
-}
-
-export const NotificationContext = createContext<ContextProps>({
+export const NotificationContext = createContext<NotificationContextProps>({
   isOpen: false,
   toggle: () => {},
   title: '',
@@ -32,30 +26,4 @@ export const NotificationContext = createContext<ContextProps>({
   getState: () => {},
 });
 
-export function NotificationContextProvider({ children }: ProviderProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [title, setTitle] = useState('');
-  const [text, setText] = useState('');
-  const [color, setColor] = useState('');
-  const [state, setState] = useState('success' as 'success' | 'error');
-
-  const contextValue = useMemo(
-    () => ({
-      isOpen,
-      toggle: (value: boolean) => setIsOpen(value),
-      title,
-      getTitle: (value: string) => setTitle(value),
-      text,
-      getText: (value: string) => setText(value),
-      color,
-      getColor: (value: string) => setColor(value),
-      state,
-      getState: (value: string) => setState(value as 'success' | 'error'),
-    }),
-    [color, isOpen, state, text, title],
-  );
-
-  return (
-    <NotificationContext.Provider value={contextValue}>{children}</NotificationContext.Provider>
-  );
-}
+export { NotificationContextProvider } from './NotificationContextProvider';

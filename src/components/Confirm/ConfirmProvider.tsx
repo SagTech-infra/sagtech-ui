@@ -10,18 +10,35 @@ import {
   type ReactNode,
 } from 'react';
 import ConfirmDialog from './ConfirmDialog';
-import type { ConfirmFn, ConfirmOptions } from './types';
+import ConfirmWithNoteDialog from './ConfirmWithNoteDialog';
+import type {
+  ConfirmFn,
+  ConfirmOptions,
+  ConfirmWithNoteFn,
+  ConfirmWithNoteOptions,
+  ConfirmWithNoteResult,
+} from './types';
 
 interface ConfirmContextValue {
   confirm: ConfirmFn;
+  confirmWithNote: ConfirmWithNoteFn;
 }
 
 const ConfirmContext = createContext<ConfirmContextValue | null>(null);
 
-interface QueueEntry {
+interface BasicQueueEntry {
+  kind: 'basic';
   options: ConfirmOptions;
   resolve: (accepted: boolean) => void;
 }
+
+interface NoteQueueEntry {
+  kind: 'note';
+  options: ConfirmWithNoteOptions;
+  resolve: (result: ConfirmWithNoteResult) => void;
+}
+
+type QueueEntry = BasicQueueEntry | NoteQueueEntry;
 
 export interface ConfirmProviderProps {
   children: ReactNode;
@@ -38,41 +55,45 @@ export function ConfirmProvider({ children }: ConfirmProviderProps) {
     setLoading(false);
   }, []);
 
+  const enqueue = useCallback((entry: QueueEntry) => {
+    setCurrent((prev) => {
+      if (prev) {
+        queueRef.current.push(entry);
+        return prev;
+      }
+      return entry;
+    });
+  }, []);
+
   const confirm = useCallback<ConfirmFn>(
     (options) =>
       new Promise<boolean>((resolve) => {
-        const entry: QueueEntry = { options, resolve };
-        setCurrent((prev) => {
-          if (prev) {
-            queueRef.current.push(entry);
-            return prev;
-          }
-          return entry;
-        });
+        enqueue({ kind: 'basic', options, resolve });
       }),
-    [],
+    [enqueue],
   );
 
-  const resolveAndClose = useCallback(
-    (accepted: boolean) => {
-      if (!current) return;
-      current.resolve(accepted);
-      advance();
-    },
-    [current, advance],
+  const confirmWithNote = useCallback<ConfirmWithNoteFn>(
+    (options) =>
+      new Promise<ConfirmWithNoteResult>((resolve) => {
+        enqueue({ kind: 'note', options, resolve });
+      }),
+    [enqueue],
   );
 
-  const handleCancel = useCallback(() => {
-    if (!current || loading) return;
+  const handleBasicCancel = useCallback(() => {
+    if (!current || current.kind !== 'basic' || loading) return;
     current.options.onCancel?.();
-    resolveAndClose(false);
-  }, [current, loading, resolveAndClose]);
+    current.resolve(false);
+    advance();
+  }, [current, loading, advance]);
 
-  const handleConfirm = useCallback(async () => {
-    if (!current) return;
+  const handleBasicConfirm = useCallback(async () => {
+    if (!current || current.kind !== 'basic') return;
     const { onConfirm } = current.options;
     if (!onConfirm) {
-      resolveAndClose(true);
+      current.resolve(true);
+      advance();
       return;
     }
     try {
@@ -81,28 +102,58 @@ export function ConfirmProvider({ children }: ConfirmProviderProps) {
         setLoading(true);
         await result;
       }
-      resolveAndClose(true);
+      current.resolve(true);
+      advance();
     } catch {
       setLoading(false);
     }
-  }, [current, resolveAndClose]);
+  }, [current, advance]);
 
-  const handleOpenChange = useCallback(
-    (open: boolean) => {
-      if (!open) handleCancel();
+  const handleNoteCancel = useCallback(() => {
+    if (!current || current.kind !== 'note' || loading) return;
+    current.options.onCancel?.();
+    current.resolve({ confirmed: false, note: '' });
+    advance();
+  }, [current, loading, advance]);
+
+  const handleNoteConfirm = useCallback(
+    async (note: string) => {
+      if (!current || current.kind !== 'note') return;
+      const { onConfirm } = current.options;
+      if (!onConfirm) {
+        current.resolve({ confirmed: true, note });
+        advance();
+        return;
+      }
+      try {
+        const result = onConfirm();
+        if (result && typeof (result as Promise<void>).then === 'function') {
+          setLoading(true);
+          await result;
+        }
+        current.resolve({ confirmed: true, note });
+        advance();
+      } catch {
+        setLoading(false);
+      }
     },
-    [handleCancel],
+    [current, advance],
   );
 
-  const value = useMemo<ConfirmContextValue>(() => ({ confirm }), [confirm]);
+  const value = useMemo<ConfirmContextValue>(
+    () => ({ confirm, confirmWithNote }),
+    [confirm, confirmWithNote],
+  );
 
   return (
     <ConfirmContext.Provider value={value}>
       {children}
-      {current && (
+      {current && current.kind === 'basic' && (
         <ConfirmDialog
           open
-          onOpenChange={handleOpenChange}
+          onOpenChange={(open) => {
+            if (!open) handleBasicCancel();
+          }}
           title={current.options.title}
           description={current.options.description}
           confirmText={current.options.confirmText}
@@ -110,7 +161,24 @@ export function ConfirmProvider({ children }: ConfirmProviderProps) {
           variant={current.options.variant}
           icon={current.options.icon}
           loading={loading}
-          onConfirm={handleConfirm}
+          onConfirm={handleBasicConfirm}
+        />
+      )}
+      {current && current.kind === 'note' && (
+        <ConfirmWithNoteDialog
+          open
+          onCancel={handleNoteCancel}
+          onConfirm={handleNoteConfirm}
+          title={current.options.title}
+          description={current.options.description}
+          confirmText={current.options.confirmText}
+          cancelText={current.options.cancelText}
+          variant={current.options.variant}
+          noteLabel={current.options.noteLabel}
+          notePlaceholder={current.options.notePlaceholder}
+          noteRequired={current.options.noteRequired}
+          noteMinLength={current.options.noteMinLength}
+          loading={loading}
         />
       )}
     </ConfirmContext.Provider>
@@ -125,6 +193,16 @@ export function useConfirm(): ConfirmFn {
     );
   }
   return ctx.confirm;
+}
+
+export function useConfirmWithNote(): ConfirmWithNoteFn {
+  const ctx = useContext(ConfirmContext);
+  if (!ctx) {
+    throw new Error(
+      'useConfirmWithNote() must be used inside <ConfirmProvider>.',
+    );
+  }
+  return ctx.confirmWithNote;
 }
 
 export { ConfirmContext };

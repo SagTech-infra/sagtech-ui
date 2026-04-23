@@ -1,10 +1,10 @@
-type Props = {
-  width?: number;
-  height?: number;
-  className?: string;
-};
+import type { SVGProps } from 'react';
 
-export default function FolderIcon({ width = 32, height = 32, className }: Props) {
+export default function FolderIcon({
+  width = 32,
+  height = 32,
+  ...rest
+}: SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -12,11 +12,11 @@ export default function FolderIcon({ width = 32, height = 32, className }: Props
       height={height}
       viewBox="0 0 32 32"
       fill="none"
-      className={className}
+      {...rest}
     >
       <path
         d="M16.5513 6.66667H27.9993C28.353 6.66667 28.6921 6.80714 28.9422 7.05719C29.1922 7.30724 29.3327 7.64638 29.3327 8V26.6667C29.3327 27.0203 29.1922 27.3594 28.9422 27.6095C28.6921 27.8595 28.353 28 27.9993 28H3.99935C3.64573 28 3.30659 27.8595 3.05654 27.6095C2.80649 27.3594 2.66602 27.0203 2.66602 26.6667V5.33333C2.66602 4.97971 2.80649 4.64057 3.05654 4.39052C3.30659 4.14048 3.64573 4 3.99935 4H13.8847L16.5513 6.66667ZM26.666 14.6667H5.33268V25.3333H26.666V14.6667ZM26.666 12V9.33333H15.4473L12.7807 6.66667H5.33268V12H26.666Z"
-        fill="white"
+        fill="currentColor"
       />
     </svg>
   );

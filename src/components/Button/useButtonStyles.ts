@@ -28,8 +28,8 @@ const useButtonStyles = ({
           variant === 'primary' && loadingType !== true && changeColor,
         [buttonConst.tabButtonBase]: variant === 'tabButton',
         [buttonConst.secondaryButton]: variant === 'secondary' && loadingType !== true,
+        [buttonConst.dangerButton]: variant === 'danger' && loadingType !== true,
         [buttonConst.hoverAnimation]:
-          buttonSize === 'large' &&
           !(disabled ?? false) &&
           variant === 'primary' &&
           loadingType !== true &&
@@ -39,6 +39,13 @@ const useButtonStyles = ({
           buttonSize === 'large' &&
           !(disabled ?? false) &&
           loadingType !== true,
+        [buttonConst.dangerAnimation]:
+          variant === 'danger' &&
+          !(disabled ?? false) &&
+          loadingType !== true &&
+          !hoverOff,
+        [buttonConst.dangerDisabledStyles]: variant === 'danger' && disabled,
+        [buttonConst.loadingDanger]: variant === 'danger' && loadingType,
         [buttonConst.tabButtonHover]: variant === 'tabButton' && stateOfButton !== 'active',
         [buttonConst.basicStyles]: variant !== 'tabButton',
         [buttonConst.primaryDisabledStyles]: variant === 'primary',

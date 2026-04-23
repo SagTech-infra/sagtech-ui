@@ -46,8 +46,8 @@ const dotColorMap = {
 } as const;
 
 const sizeMap = {
-  sm: 'text-10 py-[2px] px-8px',
-  md: 'text-12 py-4px px-12px',
+  sm: 'text-12 py-[3px] px-10px',
+  md: 'text-14 py-4px px-12px',
 } as const;
 
 export default function Badge({

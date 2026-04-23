@@ -279,7 +279,10 @@ export default function DataTable<T, K extends string = string>({
 
   return (
     <div
-      className={classNames('w-full rounded-16px border border-solid border-black_3 bg-black_1', className)}
+      className={classNames(
+        'w-full rounded-16px border border-solid border-black_3 bg-black_1 overflow-hidden',
+        className,
+      )}
     >
       <div
         className={classNames({

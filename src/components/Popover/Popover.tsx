@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import classNames from 'classnames';
 import useOutsideClick from '@/hooks/useOutsideClick';
@@ -67,6 +67,7 @@ export default function Popover({
   className,
 }: PopoverProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   const handleClose = useCallback(() => setIsOpen(false), []);
   const ref = useOutsideClick<HTMLDivElement>(handleClose);
@@ -75,9 +76,29 @@ export default function Popover({
     setIsOpen((prev) => !prev);
   }, []);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const handler = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setIsOpen(false);
+        triggerRef.current?.focus();
+      }
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [isOpen]);
+
   return (
     <div ref={ref} className={classNames('relative inline-block', className)}>
-      <button type="button" onClick={handleToggle} className="cursor-pointer">
+      <button
+        ref={triggerRef}
+        type="button"
+        onClick={handleToggle}
+        className="cursor-pointer"
+        aria-expanded={isOpen}
+        aria-haspopup="dialog"
+      >
         {trigger}
       </button>
 

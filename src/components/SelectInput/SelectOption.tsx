@@ -9,16 +9,30 @@ type Props = {
   option: SelectOption<string>;
   onSelect: (value: string) => void;
   isActive?: boolean;
+  isHighlighted?: boolean;
   withChecbox?: boolean;
 };
 
-function SelectOptionItem({ onSelect, isActive = false, withChecbox = false, option }: Props) {
+function SelectOptionItem({
+  onSelect,
+  isActive = false,
+  isHighlighted = false,
+  withChecbox = false,
+  option,
+}: Props) {
   const { value, label } = option;
 
   return (
-    <li className="border-black_2 border-b-1 last:border-[0px] border-solid border-1px">
+    <li
+      role="option"
+      aria-selected={isActive || undefined}
+      className={`border-black_2 border-b-1 last:border-[0px] border-solid border-1px ${
+        isHighlighted ? 'bg-pr_purple/10' : ''
+      }`}
+    >
       <button
         type="button"
+        tabIndex={-1}
         onClick={() => onSelect(value)}
         className="w-full flex justify-between items-center cursor-pointer transition-[background] py-8px px-[4px]"
       >

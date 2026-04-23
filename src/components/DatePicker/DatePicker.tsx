@@ -25,6 +25,9 @@ export interface DatePickerProps {
   error?: string;
   label?: string;
   className?: string;
+  showTime?: boolean;
+  /** Granularity for the time picker. Defaults to 5. */
+  timeStep?: number;
   ref?: Ref<HTMLDivElement>;
 }
 
@@ -100,6 +103,8 @@ export default function DatePicker({
   error,
   label,
   className,
+  showTime = false,
+  timeStep = 5,
   ref,
 }: DatePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -141,10 +146,29 @@ export default function DatePicker({
   const handleDayClick = useCallback(
     (day: CalendarDay) => {
       if (day.isDisabled) return;
-      onChange?.(day.date);
-      setIsOpen(false);
+      const next = new Date(day.date);
+      if (showTime && value) {
+        next.setHours(value.getHours(), value.getMinutes(), 0, 0);
+      }
+      onChange?.(next);
+      if (!showTime) setIsOpen(false);
     },
-    [onChange],
+    [onChange, showTime, value],
+  );
+
+  const handleTimeChange = useCallback(
+    (hours: number, minutes: number) => {
+      if (!value) {
+        const now = new Date();
+        now.setHours(hours, minutes, 0, 0);
+        onChange?.(now);
+        return;
+      }
+      const next = new Date(value);
+      next.setHours(hours, minutes, 0, 0);
+      onChange?.(next);
+    },
+    [onChange, value],
   );
 
   const handleToggle = useCallback(() => {
@@ -174,7 +198,11 @@ export default function DatePicker({
           )}
         >
           <span className={value ? 'text-grey_4' : 'text-grey_2'}>
-            {value ? formatDisplayDate(value) : placeholder}
+            {value
+              ? showTime
+                ? `${formatDisplayDate(value)} ${String(value.getHours()).padStart(2, '0')}:${String(value.getMinutes()).padStart(2, '0')}`
+                : formatDisplayDate(value)
+              : placeholder}
           </span>
           <span className="text-grey_2">
             <CalendarIcon />
@@ -253,6 +281,46 @@ export default function DatePicker({
                   );
                 })}
               </div>
+
+              {showTime && (
+                <div className="mt-12px pt-12px border-t border-solid border-black_3 flex items-center justify-between gap-12px">
+                  <span className="font-manrope text-12 font-semibold text-grey_4">Time</span>
+                  <div className="flex items-center gap-4px">
+                    <select
+                      aria-label="Hours"
+                      className="bg-black_1 border border-solid border-black_3 rounded-8px text-white_4 text-14 font-manrope px-8px py-4px cursor-pointer"
+                      value={value ? value.getHours() : 0}
+                      onChange={(e) =>
+                        handleTimeChange(parseInt(e.target.value, 10), value ? value.getMinutes() : 0)
+                      }
+                    >
+                      {Array.from({ length: 24 }, (_, h) => (
+                        <option key={h} value={h}>
+                          {String(h).padStart(2, '0')}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="text-grey_4">:</span>
+                    <select
+                      aria-label="Minutes"
+                      className="bg-black_1 border border-solid border-black_3 rounded-8px text-white_4 text-14 font-manrope px-8px py-4px cursor-pointer"
+                      value={value ? value.getMinutes() - (value.getMinutes() % timeStep) : 0}
+                      onChange={(e) =>
+                        handleTimeChange(value ? value.getHours() : 0, parseInt(e.target.value, 10))
+                      }
+                    >
+                      {Array.from({ length: Math.ceil(60 / timeStep) }, (_, i) => {
+                        const m = i * timeStep;
+                        return (
+                          <option key={m} value={m}>
+                            {String(m).padStart(2, '0')}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>

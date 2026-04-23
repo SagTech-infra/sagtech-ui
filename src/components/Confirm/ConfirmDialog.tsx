@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useRef, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import classNames from 'classnames';
 import Typography from '@/components/Typography/Typography';
 import Button from '@/components/Button/Button';
 import type { ConfirmVariant } from './types';
@@ -115,13 +114,10 @@ export default function ConfirmDialog({
                   data-sagtech-confirm-primary="true"
                   text={confirmText}
                   buttonSize="small"
-                  variant="primary"
+                  variant={variant === 'danger' ? 'danger' : 'primary'}
                   onClick={onConfirm}
                   loadingType={loading}
                   disabled={loading}
-                  classes={classNames({
-                    '!bg-error hover:!bg-error/80 !border-error': variant === 'danger',
-                  })}
                 />
               </div>
             </div>

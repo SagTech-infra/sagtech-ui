@@ -9,6 +9,7 @@ const meta = {
   argTypes: {
     title: { control: 'text' },
     description: { control: 'text' },
+    variant: { control: 'radio', options: ['inline', 'card'] },
   },
 } satisfies Meta<typeof EmptyState>;
 
@@ -27,6 +28,15 @@ export const WithAction: Story = {
     title: 'No items yet',
     description: 'Get started by creating your first item.',
     action: <Button text="Add Item" variant="primary" buttonSize="small" />,
+  },
+};
+
+export const Card: Story = {
+  args: {
+    variant: 'card',
+    title: 'Nothing here yet',
+    description: 'Use the card variant inside page sections where the inline variant would blend into the background.',
+    action: <Button text="Create" variant="primary" buttonSize="small" />,
   },
 };
 

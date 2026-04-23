@@ -49,8 +49,13 @@ function CardWrapper({ className, children, rounded = '24', stoke = '2', href, h
     className,
   );
 
+  const linkClassName = classNames(
+    classNameCommon,
+    'block cursor-pointer transition-all duration-300 hover:-translate-y-[2px] hover:shadow-3xl hover:brightness-110',
+  );
+
   return href ? (
-    <Link href={href} className={classNameCommon} onClick={hrefClickEvent}>
+    <Link href={href} className={linkClassName} onClick={hrefClickEvent}>
       {children}
     </Link>
   ) : (

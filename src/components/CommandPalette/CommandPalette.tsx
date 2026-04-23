@@ -118,6 +118,18 @@ export default function CommandPalette({
         return;
       }
 
+      if (e.key === 'Home') {
+        e.preventDefault();
+        setActiveIndex(0);
+        return;
+      }
+
+      if (e.key === 'End') {
+        e.preventDefault();
+        setActiveIndex(Math.max(selectableItems.length - 1, 0));
+        return;
+      }
+
       if (e.key === 'Enter') {
         e.preventDefault();
         const selected = selectableItems[activeIndex];

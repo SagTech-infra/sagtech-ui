@@ -14,7 +14,7 @@ import Typography from '@/components/Typography/Typography';
 interface AttachmentTypes
   extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
   state?: 'active' | 'default' | 'disabled';
-  accept?: '.png, .jpg, .pdf, .gif';
+  accept?: string;
   isError?: boolean;
   onUpload?: (files: Array<File> | undefined) => void;
   multiple?: boolean;
@@ -104,7 +104,10 @@ export function Attachment({
     <div className="flex flex-col">
       <label htmlFor="input-file" className="flex flex-col">
         <div
-          className="pointer inline-flex cursor-pointer items-center gap-12px"
+          className={classNames(
+            'pointer inline-flex items-center gap-12px',
+            state === 'disabled' ? 'cursor-not-allowed' : 'cursor-pointer',
+          )}
           onMouseOver={state === 'default' ? mouseHandlerOver : undefined}
           onMouseLeave={state === 'default' ? mouseHandlerLeave : undefined}
         >

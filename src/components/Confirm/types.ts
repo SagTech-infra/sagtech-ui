@@ -24,3 +24,21 @@ export interface ConfirmOptions {
 }
 
 export type ConfirmFn = (options: ConfirmOptions) => Promise<boolean>;
+
+export interface ConfirmWithNoteOptions extends ConfirmOptions {
+  /** If true, the user cannot confirm with an empty note. Defaults to false. */
+  noteRequired?: boolean;
+  noteLabel?: string;
+  notePlaceholder?: string;
+  /** Minimum length of the note when `noteRequired`. Defaults to 1. */
+  noteMinLength?: number;
+}
+
+export type ConfirmWithNoteResult = {
+  confirmed: boolean;
+  note: string;
+};
+
+export type ConfirmWithNoteFn = (
+  options: ConfirmWithNoteOptions,
+) => Promise<ConfirmWithNoteResult>;

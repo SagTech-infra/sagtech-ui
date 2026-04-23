@@ -140,6 +140,29 @@ import { CheckedIcon } from './ui/Check';
 import LightBulb from './ui/LightBulb';
 import PlugIcon from './ui/Plug';
 import FolderIcon from './ui/Folder';
+import BarChartBoxIcon from './ui/BarChartBox';
+import DashboardIcon from './ui/Dashboard';
+import MacIcon from './ui/Mac';
+import RoadMapIcon from './ui/RoadMap';
+import {
+  MenuIcon,
+  PlusIcon,
+  EditIcon,
+  TrashIcon,
+  EyeIcon,
+  EyeOffIcon,
+  FilterIcon,
+  SearchIcon as SearchChromeIcon,
+  InfoIcon,
+  WarningIcon,
+  CheckCircleIcon,
+  AlertTriangleIcon,
+  LockIcon,
+  DocumentIcon,
+  UsersIcon,
+  CalendarIcon,
+  SettingsIcon,
+} from './ui/ChromeIcons';
 
 export const content = {
   attach: AttachIcon,
@@ -147,6 +170,27 @@ export const content = {
   lightbulb: LightBulb,
   project: Project,
   folder: FolderIcon,
+  barChartBox: BarChartBoxIcon,
+  dashboard: DashboardIcon,
+  mac: MacIcon,
+  roadmap: RoadMapIcon,
+  menu: MenuIcon,
+  plus: PlusIcon,
+  edit: EditIcon,
+  trash: TrashIcon,
+  eye: EyeIcon,
+  eyeOff: EyeOffIcon,
+  filter: FilterIcon,
+  search: SearchChromeIcon,
+  info: InfoIcon,
+  warning: WarningIcon,
+  checkCircle: CheckCircleIcon,
+  alertTriangle: AlertTriangleIcon,
+  lock: LockIcon,
+  document: DocumentIcon,
+  users: UsersIcon,
+  calendar: CalendarIcon,
+  settings: SettingsIcon,
   loading: Loading,
   paginationArrow: PgIcon,
   success: Success,

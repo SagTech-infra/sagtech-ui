@@ -8,7 +8,7 @@ const meta = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'tabButton', 'tabButtonWhite'],
+      options: ['primary', 'secondary', 'danger', 'tabButton', 'tabButtonWhite'],
     },
     buttonSize: {
       control: 'select',
@@ -36,6 +36,14 @@ export const Primary: Story = {
 
 export const Secondary: Story = {
   args: { text: 'Learn More', variant: 'secondary', buttonSize: 'large' },
+};
+
+export const Danger: Story = {
+  args: { text: 'Delete', variant: 'danger', buttonSize: 'large' },
+};
+
+export const DangerSmall: Story = {
+  args: { text: 'Remove', variant: 'danger', buttonSize: 'small' },
 };
 
 export const PrimarySmall: Story = {
@@ -74,6 +82,12 @@ export const AllVariants: Story = {
         <Button text="Secondary Large" variant="secondary" buttonSize="large" />
         <Button text="Secondary Small" variant="secondary" buttonSize="small" />
         <Button text="Secondary Disabled" variant="secondary" buttonSize="large" disabled />
+      </div>
+      <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+        <Button text="Danger Large" variant="danger" buttonSize="large" />
+        <Button text="Danger Small" variant="danger" buttonSize="small" />
+        <Button text="Danger Disabled" variant="danger" buttonSize="large" disabled />
+        <Button text="Danger Loading" variant="danger" buttonSize="large" loadingType />
       </div>
       <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
         <Button text="Tab Default" variant="tabButton" buttonSize="tabSize" />

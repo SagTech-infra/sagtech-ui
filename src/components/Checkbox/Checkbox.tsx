@@ -1,3 +1,5 @@
+'use client';
+
 import { type InputHTMLAttributes, useId } from 'react';
 import Typography from '@/components/Typography/Typography';
 import CheckboxView from './CheckboxView';

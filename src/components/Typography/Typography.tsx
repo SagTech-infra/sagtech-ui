@@ -11,11 +11,26 @@ export interface TypographyTypes {
   type?: VariantTypoTagsStyles;
   color?: VariantTypoColors;
   id?: string;
+  htmlFor?: string;
+  onClick?: React.MouseEventHandler<HTMLElement>;
 }
 
-const Typography = forwardRef<HTMLParagraphElement, TypographyTypes>(
-  ({ children, text, className, tag = 'p', type = 'BodyL', color = 'text-white_1', id }, ref) => {
-    const tagDefault = tag === 'p';
+const Typography = forwardRef<HTMLElement, TypographyTypes>(
+  (
+    {
+      children,
+      text,
+      className,
+      tag = 'p',
+      type = 'BodyL',
+      color = 'text-white_1',
+      id,
+      htmlFor,
+      onClick,
+    },
+    ref,
+  ) => {
+    const tagDefault = tag !== 'h1' && tag !== 'h2' && tag !== 'h3' && tag !== 'h4';
     const Component = useMemo(() => tag, [tag]);
     const classes = useMemo(
       () =>
@@ -43,13 +58,24 @@ const Typography = forwardRef<HTMLParagraphElement, TypographyTypes>(
           [typographyConst.metricsXL]: type === 'MetricsXL' && tagDefault,
           [typographyConst.tabInfoTitle]: type === 'TabInfoTitle' && tagDefault,
           [typographyConst.heroSubtitle]: type === 'HeroSubtitle' && tagDefault,
+          [typographyConst.displayXL]: type === 'DisplayXL' && tagDefault,
+          [typographyConst.displayL]: type === 'DisplayL' && tagDefault,
+          [typographyConst.sectionTitleL]: type === 'SectionTitleL' && tagDefault,
+          [typographyConst.sectionTitleM]: type === 'SectionTitleM' && tagDefault,
+          [typographyConst.sectionTitleS]: type === 'SectionTitleS' && tagDefault,
           [color]: true,
         }),
       [type, tag, tagDefault, color],
     );
 
     return (
-      <Component id={id} ref={ref} className={`${classes} ${className}`}>
+      <Component
+        id={id}
+        ref={ref as never}
+        className={`${classes} ${className ?? ''}`}
+        onClick={onClick}
+        {...(tag === 'label' && htmlFor ? { htmlFor } : {})}
+      >
         {text}
         {children}
       </Component>

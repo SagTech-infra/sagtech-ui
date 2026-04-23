@@ -5,6 +5,7 @@ export interface EmptyStateProps {
   title: string;
   description?: string;
   action?: React.ReactNode;
+  variant?: 'inline' | 'card';
   className?: string;
 }
 
@@ -44,12 +45,14 @@ export default function EmptyState({
   title,
   description,
   action,
+  variant = 'inline',
   className,
 }: EmptyStateProps) {
   return (
     <div
       className={classNames(
         'flex flex-col items-center text-center py-48px px-24px',
+        variant === 'card' && 'bg-black_2 border border-solid border-black_3 rounded-16px',
         className,
       )}
     >
