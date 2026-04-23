@@ -265,7 +265,7 @@ Or render via the `<Icon>` component: `<Icon icon="menu" size={20} color="#CDCDD
 Tag-driven via `.github/workflows/publish.yml`:
 
 1. Bump `version` in `package.json` on `main`.
-2. `git tag v0.2.0 && git push --tags`.
+2. `git tag v1.0.0 && git push --tags`.
 3. CI verifies the tag matches `package.json#version`, builds, and publishes to GitHub Packages (`@sagtech-infra` scope).
 
 Tags that don't match `package.json#version` fail the publish step.

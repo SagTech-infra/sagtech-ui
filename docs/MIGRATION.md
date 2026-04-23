@@ -7,13 +7,13 @@
 Существующим потребителям (`admin-fe`, `customer-fe`, `posting-hub`, `lead-gen-tool/fe-next`, `smg-frontend-new`, `landing-*`):
 
 - Пока проект установлен через `file:../sagtech-ui` или `workspace:*` — alias `@sagtech/ui` работает.
-- При первом публичном релизе (bump до `0.2.0`+ и публикация на `npm.pkg.github.com`) потребителям нужно:
+- При первом публичном релизе (bump до `1.0.0`+ и публикация на `npm.pkg.github.com`) потребителям нужно:
 
 ```diff
  // package.json
  "dependencies": {
 -  "@sagtech/ui": "file:../sagtech-ui"
-+  "@sagtech-infra/ui": "^0.2.0"
++  "@sagtech-infra/ui": "^1.0.0"
  }
 ```
 
@@ -34,7 +34,7 @@
 
 ## Breaking changes
 
-### 0.2.0 (upcoming)
+### 1.0.0 (upcoming)
 
 - `Modal`: убран `isPartnershipForm: boolean` → заменён на `size: 'sm' | 'md'`. Миграция: `isPartnershipForm` → `size="md"`; отсутствие → `size="sm"` (default).
 - `TextArea`: убран `export default TextArea`. Импортируйте named: `import { TextArea } from '@sagtech-infra/ui'`.

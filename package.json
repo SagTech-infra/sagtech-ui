@@ -1,6 +1,6 @@
 {
   "name": "@sagtech-infra/ui",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "SagTech UI component library with Storybook",
   "type": "module",
   "main": "./dist/index.cjs",
