@@ -1,7 +1,7 @@
 'use client';
 
 import classNames from 'classnames';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 export type AlertVariant = 'info' | 'success' | 'warning' | 'error';
 
@@ -14,6 +14,12 @@ export interface AlertProps {
   onClose?: () => void;
   className?: string;
   role?: 'alert' | 'status';
+  /**
+   * Optional auto-dismiss timer in milliseconds. When set and `onClose` is
+   * provided, the alert will fire `onClose` after the duration. The timer is
+   * paused while the user hovers the alert. Default: undefined (no auto-dismiss).
+   */
+  autoDismiss?: number;
 }
 
 const variantClasses: Record<AlertVariant, string> = {
@@ -65,7 +71,33 @@ export default function Alert({
   onClose,
   className,
   role = variant === 'error' ? 'alert' : 'status',
+  autoDismiss,
 }: AlertProps) {
+  const [paused, setPaused] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (!autoDismiss || autoDismiss <= 0 || !onClose) return;
+    if (paused) return;
+    timerRef.current = setTimeout(() => {
+      onClose();
+    }, autoDismiss);
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [autoDismiss, paused, onClose]);
+
+  const hoverHandlers =
+    autoDismiss && onClose
+      ? {
+          onMouseEnter: () => setPaused(true),
+          onMouseLeave: () => setPaused(false),
+        }
+      : {};
+
   return (
     <div
       role={role}
@@ -76,6 +108,7 @@ export default function Alert({
         variantClasses[variant],
         className,
       )}
+      {...hoverHandlers}
     >
       <div className={children ? 'pt-2px' : ''}>
         {icon ?? <DefaultIcon variant={variant} />}

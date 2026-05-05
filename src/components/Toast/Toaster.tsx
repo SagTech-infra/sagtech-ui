@@ -161,7 +161,7 @@ export default function Toaster({
         'fixed flex flex-col pointer-events-none',
         positionStyles[position],
       )}
-      style={{ gap: `${gap}px`, zIndex: 5000 }}
+      style={{ gap: `${gap}px`, zIndex: 'var(--z-toast)' }}
     >
       <AnimatePresence initial={false}>
         {visible.map((t) => (

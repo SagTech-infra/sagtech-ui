@@ -122,7 +122,7 @@ export default function Table<T extends Record<string, unknown>>({
                 <th
                   key={col.key}
                   className={classNames(
-                    'py-16px px-24px font-manrope font-semibold text-12 uppercase tracking-[0.06em] border-b border-[#2F1E5E]',
+                    'py-16px px-24px font-manrope font-semibold text-12 uppercase tracking-[0.06em] border-b border-shape_stroke_2_part_two',
                     alignClasses[col.align ?? 'left'],
                     {
                       'text-pr_purple': sort?.key === col.key,

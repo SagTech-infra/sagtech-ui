@@ -7,6 +7,13 @@ interface ProviderProps {
   children: ReactNode;
 }
 
+/**
+ * @deprecated Use Toast instead — see docs/COMPONENT_PICKER.md.
+ *
+ * Mount `<Toaster />` once at your app root and call `toast.success(...)`,
+ * `toast.error(...)`, etc. The legacy NotificationContext / NotificationWrapper
+ * pair is scheduled for removal in v2.0.
+ */
 export function NotificationContextProvider({ children }: ProviderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState('');

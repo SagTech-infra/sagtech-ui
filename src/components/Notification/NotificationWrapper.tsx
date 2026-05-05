@@ -6,6 +6,11 @@ import { Notification } from './Notification';
 import { NotificationContext } from './NotificationContext';
 import Portal from '@/utils/Portal';
 
+/**
+ * @deprecated Use Toaster + toast() instead — see docs/COMPONENT_PICKER.md.
+ *
+ * Scheduled for removal in v2.0.
+ */
 export default function NotificationWrapper() {
   const { isOpen, toggle, title, text, color, state } = useContext(NotificationContext);
 
@@ -31,7 +36,7 @@ export default function NotificationWrapper() {
       {isOpen && (
         <div
           className="sm:bottom-32px 2xl:bottom-40px pointer-events-none fixed bottom-24px right-0px flex w-full justify-center sm:right-[32px] sm:block sm:w-auto 2xl:right-[40px]"
-          style={{ zIndex: 5000 }}
+          style={{ zIndex: 'var(--z-toast)' }}
         >
           <Notification
             title={title}

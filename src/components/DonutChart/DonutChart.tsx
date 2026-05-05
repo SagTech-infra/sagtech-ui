@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useCallback, useState } from 'react';
+import * as tokens from '@/tokens/tokens';
 
 interface DonutChartTypes {
   value?: number[];
@@ -11,11 +12,14 @@ interface DonutChartTypes {
   labels?: string[];
 }
 
+// Segment palette. The first three values come straight from the design
+// tokens; the last two are purpose-built tints used only by the donut so it
+// can fall back gracefully when more than three segments need colour.
 const DEFAULT_COLORS = [
-  { bgColor: '#6D3EF1', color: '#FFFFFF' },
-  { bgColor: '#B69FF8', color: '#FFFFFF' },
-  { bgColor: '#9494C9', color: '#FFFFFF' },
-  { bgColor: '#4A2AAF', color: '#FFFFFF' },
+  { bgColor: tokens.colors.pr_purple, color: tokens.colors.white },
+  { bgColor: tokens.colors.sec_purple, color: tokens.colors.white },
+  { bgColor: tokens.colors.sec_blue, color: tokens.colors.white },
+  { bgColor: '#4A2AAF', color: tokens.colors.white },
   { bgColor: '#E0D6FC', color: '#000000' },
 ];
 
@@ -117,7 +121,7 @@ function DonutChart({
     // Center circle (clean dark fill)
     ctx.beginPath();
     ctx.arc(cx, cy, innerR - 1, 0, Math.PI * 2);
-    ctx.fillStyle = '#070715';
+    ctx.fillStyle = tokens.colors.black_1;
     ctx.fill();
 
     // Center text — show hovered label + pct, or nothing
@@ -126,7 +130,7 @@ function DonutChart({
       const label = labels?.[hover.index] || '';
       const segColor = (colors[hover.index] || DEFAULT_COLORS[hover.index % DEFAULT_COLORS.length]).bgColor;
 
-      ctx.fillStyle = '#F8F8F8';
+      ctx.fillStyle = tokens.colors.white_4;
       ctx.font = 'bold 28px Orbitron, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -160,14 +164,14 @@ function DonutChart({
         ctx.fillStyle = segColor;
         ctx.fill();
 
-        ctx.fillStyle = hover?.index === i ? '#F8F8F8' : '#9C9CA1';
+        ctx.fillStyle = hover?.index === i ? tokens.colors.white_4 : tokens.colors.grey_3;
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
         ctx.fillText(label, lx + 14, legendY - 2);
         lx += 14 + ctx.measureText(label).width + 20;
       });
     }
-  }, [value, width, colors, size, labels, hover, cx, cy, outerR, innerR, ringWidth, dim, total, gap, hasLabels]);
+  }, [value, colors, labels, hover, cx, cy, outerR, innerR, ringWidth, dim, total, gap, hasLabels]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -246,7 +250,7 @@ function DonutChart({
             left: hover.x,
             top: hover.y - 52,
             transform: 'translateX(-50%)',
-            background: '#20202D',
+            background: tokens.colors.black_2,
             border: `1px solid ${hoveredColor}`,
             borderRadius: '8px',
             padding: '8px 14px',
@@ -258,7 +262,7 @@ function DonutChart({
         >
           <div
             style={{
-              color: '#F8F8F8',
+              color: tokens.colors.white_4,
               fontSize: '13px',
               fontWeight: 700,
               fontFamily: 'Manrope, sans-serif',
@@ -277,7 +281,7 @@ function DonutChart({
                 flexShrink: 0,
               }}
             />
-            {hoveredLabel && <span style={{ color: '#9C9CA1' }}>{hoveredLabel}:</span>}
+            {hoveredLabel && <span style={{ color: tokens.colors.grey_3 }}>{hoveredLabel}:</span>}
             <span>{hoveredPct}%</span>
           </div>
         </div>

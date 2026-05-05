@@ -7,6 +7,7 @@ import CardWrapper from '@/components/CardWrapper/CardWrapper';
 import Button from '@/components/Button/Button';
 import { Icon } from '@/components/Icon/Icon';
 import { useImageComponent } from '@/providers';
+import * as tokens from '@/tokens/tokens';
 import type { InfoTab } from './types';
 
 interface Props {
@@ -103,7 +104,7 @@ export default function InfoTabs({ title, list, renderModal }: Props) {
                           onClick={toggleModal}
                           classes="rounded-[50px] flex !gap-16px flex-row-reverse !py-12px pr-12px pl-24px"
                         >
-                          <Icon icon="arrow" size={32} viewBox="0 0 32 32" color="#6D3EF1" />
+                          <Icon icon="arrow" size={32} viewBox="0 0 32 32" color={tokens.colors.pr_purple} />
                         </Button>
                       )}
                     </Fragment>

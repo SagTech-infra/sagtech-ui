@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
+ 
 import React, {
   useState,
   type InputHTMLAttributes,
@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import classNames from 'classnames';
 import { Icon } from '@/components/Icon/Icon';
+import * as tokens from '@/tokens/tokens';
 import attachmentConsts from './attachment.const';
 import Typography from '@/components/Typography/Typography';
 
@@ -154,7 +155,7 @@ export function Attachment({
       {files &&
         files.map((file: File) => (
           <div className="pointer inline-flex items-center gap-12px" key={file.name}>
-            <Icon icon="attach" size={24} color="#F8F8F8" />
+            <Icon icon="attach" size={24} color={tokens.colors.white_4} />
             <div className="flex flex-col">
               <Typography tag="h4" color="text-white_4">
                 {file.name}

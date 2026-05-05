@@ -17,6 +17,11 @@ export interface ConfirmDialogProps {
   variant?: ConfirmVariant;
   icon?: ReactNode;
   loading?: boolean;
+  /**
+   * When true, the primary confirm button is disabled (e.g. while a parent
+   * form is invalid). The cancel/close path remains active. Default: false.
+   */
+  confirmDisabled?: boolean;
   onConfirm?: () => void;
 }
 
@@ -30,6 +35,7 @@ export default function ConfirmDialog({
   variant = 'default',
   icon,
   loading = false,
+  confirmDisabled = false,
   onConfirm,
 }: ConfirmDialogProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -69,7 +75,8 @@ export default function ConfirmDialog({
           aria-modal="true"
           aria-labelledby="sagtech-confirm-title"
           aria-describedby={description ? 'sagtech-confirm-desc' : undefined}
-          className="fixed inset-0 z-50 flex items-center justify-center p-16px"
+          style={{ zIndex: 'var(--z-modal)' }}
+          className="fixed inset-0 flex items-center justify-center p-16px"
         >
           <motion.div
             className="absolute inset-0 bg-backdrop"
@@ -117,7 +124,7 @@ export default function ConfirmDialog({
                   variant={variant === 'danger' ? 'danger' : 'primary'}
                   onClick={onConfirm}
                   loadingType={loading}
-                  disabled={loading}
+                  disabled={loading || confirmDisabled}
                 />
               </div>
             </div>

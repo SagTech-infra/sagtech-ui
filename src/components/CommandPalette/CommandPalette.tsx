@@ -177,7 +177,8 @@ export default function CommandPalette({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-[300] bg-backdrop flex items-start justify-center pt-[20vh]"
+          style={{ zIndex: 'var(--z-modal)' }}
+          className="fixed inset-0 bg-backdrop flex items-start justify-center pt-[20vh]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

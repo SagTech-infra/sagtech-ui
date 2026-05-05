@@ -81,6 +81,8 @@ export type {
   SkeletonListProps,
 } from './components/Skeleton/presets';
 export { default as Divider } from './components/Divider/Divider';
+export { default as KBD } from './components/KBD/KBD';
+export type { KBDProps, KBDSize } from './components/KBD/KBD';
 
 // Components — Form Controls
 export { default as Button } from './components/Button/Button';
@@ -129,6 +131,12 @@ export { default as DropdownMenu } from './components/DropdownMenu/DropdownMenu'
 export type { DropdownMenuProps, MenuItem } from './components/DropdownMenu/DropdownMenu';
 export { default as TagInput } from './components/TagInput/TagInput';
 export type { TagInputProps } from './components/TagInput/TagInput';
+export { default as SegmentedControl } from './components/SegmentedControl/SegmentedControl';
+export type {
+  SegmentedControlProps,
+  SegmentedOption,
+  SegmentedSize,
+} from './components/SegmentedControl/SegmentedControl';
 
 export { default as FaqDropdown } from './components/FaqDropdown/FaqDropdown';
 export { default as FaqList } from './components/FaqDropdown/FaqList';
@@ -140,6 +148,7 @@ export { default as Timeline } from './components/Timeline/Timeline';
 
 // Components — Layout
 export { Modal } from './components/Modal/Modal';
+export type { ModalMotionVariants } from './components/Modal/Modal';
 export {
   ConfirmDialog,
   ConfirmProvider,
@@ -186,6 +195,19 @@ export type {
   VariablePickerProps,
   VariableItem,
 } from './components/VariablePicker/VariablePicker';
+export { default as Sheet } from './components/Sheet/Sheet';
+export type { SheetProps, SheetSide, SheetSize } from './components/Sheet/Sheet';
+export { default as BottomSheet } from './components/BottomSheet/BottomSheet';
+export type { BottomSheetProps } from './components/BottomSheet/BottomSheet';
+export { default as FAB } from './components/FAB/FAB';
+export type { FABProps, FABPosition } from './components/FAB/FAB';
+export { default as Toolbar, ToolbarSeparator } from './components/Toolbar/Toolbar';
+export type {
+  ToolbarProps,
+  ToolbarSeparatorProps,
+  ToolbarOrientation,
+  ToolbarSize,
+} from './components/Toolbar/Toolbar';
 
 // Components — Data Display
 export { default as Avatar } from './components/Avatar/Avatar';
@@ -242,6 +264,48 @@ export { default as Pagination } from './components/Pagination/Pagination';
 export type { PaginationProps } from './components/Pagination/Pagination';
 export { default as StatCard } from './components/StatCard/StatCard';
 export type { StatCardProps } from './components/StatCard/StatCard';
+export { default as AreaChart } from './components/AreaChart/AreaChart';
+export type { AreaChartProps, AreaChartSeries } from './components/AreaChart/types';
+export { default as BarChart } from './components/BarChart/BarChart';
+export type { BarChartProps, BarChartSeries } from './components/BarChart/types';
+export { default as HeatmapChart } from './components/HeatmapChart/HeatmapChart';
+export type { HeatmapChartProps, HeatmapDatum } from './components/HeatmapChart/types';
+export { default as RadarChart } from './components/RadarChart/RadarChart';
+export type { RadarChartProps, RadarChartSeries } from './components/RadarChart/types';
+export { default as SparklineChart } from './components/SparklineChart/SparklineChart';
+export type { SparklineChartProps } from './components/SparklineChart/SparklineChart';
+export { default as ScatterChart } from './components/ScatterChart/ScatterChart';
+export type {
+  ScatterChartProps,
+  ScatterChartSeries,
+  ScatterPoint,
+} from './components/ScatterChart/types';
+export { default as GaugeChart } from './components/GaugeChart/GaugeChart';
+export type { GaugeChartProps, GaugeThreshold } from './components/GaugeChart/types';
+export { default as SankeyChart } from './components/SankeyChart/SankeyChart';
+export type { SankeyChartProps, SankeyNode, SankeyLink } from './components/SankeyChart/types';
+export { default as TreemapChart } from './components/TreemapChart/TreemapChart';
+export type { TreemapChartProps, TreemapNode } from './components/TreemapChart/types';
+export { default as FunnelChart } from './components/FunnelChart/FunnelChart';
+export type { FunnelChartProps, FunnelStage } from './components/FunnelChart/types';
+export { default as Stepper } from './components/Stepper/Stepper';
+export type { StepperProps } from './components/Stepper/Stepper';
+export type {
+  StepperStep,
+  StepperStatus,
+  StepperOrientation,
+  StepperClickable,
+} from './components/Stepper/types';
+
+// Components — 3D / WebGL
+export { default as Network3D } from './components/Network3D/Network3D';
+export type { Network3DProps, Network3DNode, Network3DLink } from './components/Network3D/types';
+export { default as Globe3D } from './components/Globe3D/Globe3D';
+export type { Globe3DProps, Globe3DMarker } from './components/Globe3D/types';
+export { default as Scene3D } from './components/Scene3D/Scene3D';
+export type { Scene3DProps } from './components/Scene3D/Scene3D';
+export { default as Mindmap3D } from './components/Mindmap3D/Mindmap3D';
+export type { Mindmap3DProps, MindmapNode } from './components/Mindmap3D/types';
 
 // Components — Feedback
 export { default as EmptyState } from './components/EmptyState/EmptyState';
@@ -282,6 +346,11 @@ export type { LineChartSeriesType, VariantType as LineChartVariantType } from '.
 
 export { default as DonutChart } from './components/DonutChart/DonutChart';
 export type { VariantType as DonutChartVariantType } from './components/DonutChart/types';
+
+export { default as Banner } from './components/Banner/Banner';
+export type { BannerProps, BannerVariant, BannerPosition } from './components/Banner/Banner';
+export { default as Spotlight } from './components/Spotlight/Spotlight';
+export type { SpotlightProps, SpotlightPlacement } from './components/Spotlight/types';
 
 // Icons
 export { content as iconContent } from './icons';

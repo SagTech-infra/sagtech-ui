@@ -44,6 +44,9 @@ function Image({
     if (url && url !== imgSrc) {
       setSrc(url);
     }
+    // imgSrc is intentionally omitted — including it would loop because we
+    // call setSrc(url) which then changes imgSrc on the next render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url]);
 
   const onLoad = useCallback(() => {
@@ -59,11 +62,6 @@ function Image({
       setFallbackSrc(url);
     }
   }, [setLoading, url]);
-
-  const isLoadingState = useMemo(
-    () => !imgSrc || isLoading || isError,
-    [imgSrc, isLoading, isError],
-  );
 
   const containerClasses = useMemo(() => cn(className), [className]);
 

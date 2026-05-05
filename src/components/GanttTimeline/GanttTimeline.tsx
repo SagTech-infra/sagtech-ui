@@ -41,7 +41,7 @@ export interface GanttTimelineProps {
   className?: string;
   laneHeight?: number;
   rowLabelWidth?: number;
-  /** Label shown in the top-left header cell above lane names. Defaults to ''. */
+  /** Label shown in the top-left header cell above lane names. Defaults to 'Lane'. */
   laneHeaderLabel?: string;
 }
 
@@ -118,7 +118,7 @@ export default function GanttTimeline({
   className,
   laneHeight = 44,
   rowLabelWidth = 160,
-  laneHeaderLabel = '',
+  laneHeaderLabel = 'Lane',
 }: GanttTimelineProps) {
   const [openItem, setOpenItem] = useState<GanttItem | null>(null);
 

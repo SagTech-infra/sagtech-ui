@@ -1,6 +1,7 @@
 import React, { type ButtonHTMLAttributes, type DetailedHTMLProps } from 'react';
 import '@/tokens/index.css';
 import { Icon } from '@/components/Icon/Icon';
+import * as tokens from '@/tokens/tokens';
 
 interface AnimateType
   extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
@@ -20,7 +21,7 @@ export default function AnimationButton({ text = 'Some txt', ...rest }: AnimateT
             {text}
           </span>
           <div role="contentinfo" className="iconStyles">
-            <Icon icon="arrow" size={32} viewBox="0 0 32 32" color="#6D3EF1" />
+            <Icon icon="arrow" size={32} viewBox="0 0 32 32" color={tokens.colors.pr_purple} />
           </div>
         </div>
       </button>

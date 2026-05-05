@@ -79,3 +79,27 @@
 ---
 
 **Ссылка на исходный мультиаудит:** `~/.claude/plans/transient-roaming-panda.md`
+
+---
+
+## ✅ v1.1 — released 2026-05-05
+
+**New components (23):**
+- Charts: `AreaChart`, `BarChart`, `HeatmapChart`, `RadarChart`, `SparklineChart`, `ScatterChart`, `GaugeChart`, `SankeyChart`, `TreemapChart`, `FunnelChart` (all canvas-based, no new peers).
+- 3D / WebGL: `Network3D`, `Globe3D`, `Scene3D`, `Mindmap3D` (optional peers: `three`, `@react-three/fiber`, `@react-three/drei`, `react-force-graph-3d`).
+- Overlays/UX: `Sheet`, `BottomSheet`, `Banner`, `Spotlight`, `FAB`, `SegmentedControl`, `Stepper`, `KBD`, `Toolbar` (+ `ToolbarSeparator` compound).
+
+**Improvements (additive, non-breaking):**
+- `Modal` forwards ref; new `motionVariants?` prop.
+- `Drawer` integrates ModalStack for proper stacking; uses `--z-drawer` token.
+- `Alert.autoDismiss?: number`.
+- `ConfirmDialog.confirmDisabled?: boolean`.
+- `CookieBanner.position?` and `children?` slot.
+
+**Cleanup:**
+- Z-index hard-codes across Toaster / Popover / Tooltip / CommandPalette / ConfirmDialog / CookieBanner replaced with `--z-*` CSS vars (`tokens.zIndex.*`).
+- New `--z-banner: 4500` token added.
+- `LineChart` spline helper extracted to `LineChart/spline.ts` (reused by `AreaChart`).
+- `Notification`, `NotificationContext`, `NotificationContextProvider`, `NotificationWrapper` marked `@deprecated` (use `Toast`). Removal scheduled for v2.0.
+
+**Tests**: 136 → 164 (28 new across SegmentedControl/Stepper/Toolbar).

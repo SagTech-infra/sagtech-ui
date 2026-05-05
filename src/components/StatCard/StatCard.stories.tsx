@@ -139,7 +139,7 @@ export const Grid: Story = {
     value: '$48,520',
   },
   decorators: [
-    (Story, context) => (
+    (_Story, _context) => (
       <div className="bg-black_1 p-24px rounded-16px max-w-[720px]">
         <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-16px">
           <StatCard

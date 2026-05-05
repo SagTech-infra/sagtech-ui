@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import cn from 'classnames';
 import Button from '@/components/Button/Button';
 import Typography from '@/components/Typography/Typography';
@@ -16,6 +16,16 @@ export interface CookieBannerProps {
   cookieMaxAge?: number;
   onAccept?: () => void;
   onDecline?: () => void;
+  /**
+   * Where the banner anchors. 'bottom' (default) preserves the existing
+   * placement; 'top' renders the banner at the top of the viewport.
+   */
+  position?: 'top' | 'bottom';
+  /**
+   * Optional custom content slot. When provided, replaces the default
+   * title/description block. The Accept / Decline buttons still render.
+   */
+  children?: ReactNode;
 }
 
 function setCookieValue(name: string, value: string, maxAge: number) {
@@ -33,6 +43,8 @@ export default function CookieBanner({
   cookieMaxAge = 365 * 24 * 60 * 60,
   onAccept,
   onDecline,
+  position = 'bottom',
+  children,
 }: CookieBannerProps) {
   const [isHidden, setHidden] = useState<boolean>(false);
 
@@ -50,9 +62,11 @@ export default function CookieBanner({
 
   return (
     <div
+      style={{ zIndex: 'var(--z-banner)' }}
       className={cn(
-        'fixed bottom-[0px] left-[0px] right-[0px] z-[100] w-full transition-transform',
-        isHidden && 'translate-y-full',
+        'fixed left-[0px] right-[0px] w-full transition-transform',
+        position === 'top' ? 'top-[0px]' : 'bottom-[0px]',
+        isHidden && (position === 'top' ? '-translate-y-full' : 'translate-y-full'),
       )}
     >
       <div
@@ -62,21 +76,25 @@ export default function CookieBanner({
           isHidden && 'shadow-none',
         )}
       >
-        <div className="text-center">
-          <h1 className="text-16 font-semibold leading-24 text-white_4">{title}</h1>
-          <p className="mt-4px text-14 font-medium leading-24 text-grey_4">
-            {description}
-            {privacyHref && (
-              <>
-                {' '}
-                Read our&nbsp;
-                <a href={privacyHref}>
-                  <span className="underline text-white_4">{privacyLabel}</span>
-                </a>
-              </>
-            )}
-          </p>
-        </div>
+        {children ? (
+          <div className="text-center">{children}</div>
+        ) : (
+          <div className="text-center">
+            <h1 className="text-16 font-semibold leading-24 text-white_4">{title}</h1>
+            <p className="mt-4px text-14 font-medium leading-24 text-grey_4">
+              {description}
+              {privacyHref && (
+                <>
+                  {' '}
+                  Read our&nbsp;
+                  <a href={privacyHref}>
+                    <span className="underline text-white_4">{privacyLabel}</span>
+                  </a>
+                </>
+              )}
+            </p>
+          </div>
+        )}
         <div className="mt-16px flex items-center justify-center gap-8px">
           <Button
             useIcon={false}

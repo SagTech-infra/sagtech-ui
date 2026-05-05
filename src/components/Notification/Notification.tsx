@@ -1,10 +1,16 @@
-import classNames from 'classnames';
 import type { MouseEventHandler } from 'react';
 import type { IAvailableIcons } from '@/icons';
 import notificationConsts from './notification.const';
 import { Icon } from '@/components/Icon/Icon';
 import Button from '@/components/Button/Button';
 
+/**
+ * @deprecated Use Toast instead — see docs/COMPONENT_PICKER.md.
+ *
+ * The Notification component, NotificationContext, and NotificationContextProvider
+ * are scheduled for removal in v2.0. New code should use the imperative `toast`
+ * API and `<Toaster />` from `@sagtech-infra/ui`.
+ */
 interface NotificationTypes {
   title?: string;
   text?: string;
@@ -17,6 +23,13 @@ interface NotificationTypes {
   onClickButtonFirst?: MouseEventHandler;
 }
 
+/**
+ * @deprecated Use Toast instead — see docs/COMPONENT_PICKER.md.
+ *
+ * Notification is the legacy feedback primitive and is scheduled for removal
+ * in v2.0. Migrate to `toast.success(...)`, `toast.error(...)`, etc., paired
+ * with a single `<Toaster />` mounted at your app root.
+ */
 export function Notification({
   title,
   text,
