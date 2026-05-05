@@ -53,3 +53,34 @@
 - `@xyflow/react` — для `VisualGraphEditor`
 
 Устанавливайте только если используете соответствующий компонент.
+
+### 1.0 → 1.1
+
+**Zero breaking changes.** Drop-in upgrade from `1.0.x` — all existing imports, props, and runtime behavior continue to work unchanged.
+
+**New optional peer-deps for 3D components.** Install ONLY if you render the corresponding components:
+
+| Peer | Required by |
+|---|---|
+| `three`, `@react-three/fiber`, `@react-three/drei` | `Globe3D`, `Scene3D`, `Mindmap3D` |
+| `three`, `@react-three/fiber`, `@react-three/drei`, `react-force-graph-3d` | `Network3D` |
+
+```bash
+# Only if you use a 3D component
+pnpm add three @react-three/fiber @react-three/drei
+# And for Network3D specifically:
+pnpm add react-force-graph-3d
+```
+
+If you don't import any of the four 3D components, you don't need any new peer.
+
+**`Notification` family deprecated (warn-only, no runtime change).**
+
+`Notification`, `NotificationWrapper`, `NotificationContext`, `NotificationContextProvider` now carry `@deprecated` JSDoc pointing at `Toast`. Existing imports still work and behave identically — only IDE/TS surfacing changes. Migrate to `Toast` (`Toaster` + imperative `toast.success()` / `toast.error()` / `toast.promise()`) at your convenience. Removal is scheduled for **v2.0**.
+
+**Additive prop additions (zero migration needed):**
+
+- `Modal` now `forwardRef`s to its root container, and accepts an optional `motionVariants?: ModalMotionVariants` prop.
+- `Alert.autoDismiss?: number` (ms) — when set, fires `onClose` after the timeout.
+- `ConfirmDialog.confirmDisabled?: boolean` — disables the primary action without affecting cancel.
+- `CookieBanner.position?: 'top' \| 'bottom'` (default `'bottom'`) and a `children?` slot for custom content. Existing `title`/`description` continue to work.

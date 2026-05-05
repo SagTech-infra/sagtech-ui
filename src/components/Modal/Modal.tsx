@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useId, useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import {
   getOverlayDepth,
@@ -9,6 +9,12 @@ import {
   unregisterOverlay,
 } from './ModalStack';
 
+export interface ModalMotionVariants {
+  initial?: Record<string, unknown>;
+  animate?: Record<string, unknown>;
+  exit?: Record<string, unknown>;
+}
+
 interface ModalProps {
   children?: React.ReactNode;
   isOpen?: boolean;
@@ -16,6 +22,11 @@ interface ModalProps {
   size?: 'sm' | 'md';
   title?: React.ReactNode;
   footer?: React.ReactNode;
+  /**
+   * Optional overrides for the modal's framer-motion variants. Pass any subset;
+   * unspecified entries fall back to the default scale/opacity behavior.
+   */
+  motionVariants?: ModalMotionVariants;
   'aria-label'?: string;
 }
 
@@ -26,15 +37,19 @@ const Z_STEP = 10;
 const FOCUSABLE_SELECTOR =
   'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex]:not([tabindex="-1"]), [contenteditable="true"]';
 
-export function Modal({
-  children,
-  isOpen,
-  toggle,
-  size = 'sm',
-  title,
-  footer,
-  'aria-label': ariaLabel,
-}: ModalProps) {
+export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
+  {
+    children,
+    isOpen,
+    toggle,
+    size = 'sm',
+    title,
+    footer,
+    motionVariants,
+    'aria-label': ariaLabel,
+  },
+  ref,
+) {
   const idRef = useRef<number | null>(null);
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
@@ -97,6 +112,19 @@ export function Modal({
 
   const labelledBy = title ? titleId : undefined;
 
+  // Apply optional motion variants as inline style overrides on the dialog.
+  // Variants intentionally remain a non-breaking additive prop: when not
+  // provided, the dialog uses its existing CSS-driven `modalAnim` animation.
+  const motionStyle: React.CSSProperties = motionVariants?.animate
+    ? (motionVariants.animate as React.CSSProperties)
+    : {};
+
+  const setRefs = (node: HTMLDivElement | null) => {
+    dialogRef.current = node;
+    if (typeof ref === 'function') ref(node);
+    else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+  };
+
   return createPortal(
     <div
       data-tid="modal"
@@ -110,7 +138,7 @@ export function Modal({
         aria-hidden="true"
       />
       <div
-        ref={dialogRef}
+        ref={setRefs}
         role="dialog"
         aria-modal="true"
         aria-labelledby={labelledBy}
@@ -120,7 +148,7 @@ export function Modal({
         className={`modalAnim mx-8px flex flex-col w-full h-auto max-h-[90vh] rounded-24px border-[1px] border-solid border-black_3 bg-black_1 p-24px shadow-4xl overflow-hidden outline-none ${
           size === 'md' ? 'xs:w-[670px]' : 'xs:w-[454px]'
         } xs:p-32px sm:rounded-40px`}
-        style={{ zIndex: modalZ }}
+        style={{ zIndex: modalZ, ...motionStyle }}
       >
         {title && (
           <div
@@ -140,6 +168,6 @@ export function Modal({
     </div>,
     document.body,
   );
-}
+});
 
 export default Modal;

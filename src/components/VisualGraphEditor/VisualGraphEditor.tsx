@@ -2,6 +2,7 @@
 
 import { useCallback } from 'react';
 import classNames from 'classnames';
+import * as tokens from '@/tokens/tokens';
 import {
   ReactFlow,
   ReactFlowProvider,
@@ -108,9 +109,9 @@ function VisualGraphEditorInner<NData extends Record<string, unknown>, EData ext
         fitView
         proOptions={{ hideAttribution: true }}
       >
-        {showBackground && <Background color="#393944" gap={16} />}
+        {showBackground && <Background color={tokens.colors.black_3} gap={16} />}
         <Controls />
-        {showMiniMap && <MiniMap pannable zoomable nodeColor="#6D3EF1" />}
+        {showMiniMap && <MiniMap pannable zoomable nodeColor={tokens.colors.pr_purple} />}
       </ReactFlow>
     </div>
   );

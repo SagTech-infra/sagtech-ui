@@ -1,6 +1,6 @@
 {
   "name": "@sagtech-infra/ui",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "SagTech UI component library with Storybook",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -8,20 +8,21 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs"
     },
     "./tokens": "./src/tokens/index.css",
     "./icons": {
-      "import": "./dist/icons/index.js",
-      "types": "./dist/icons/index.d.ts"
+      "types": "./dist/icons/index.d.ts",
+      "import": "./dist/icons/index.js"
     }
   },
   "files": [
     "dist",
     "src/tokens",
-    "README.md"
+    "README.md",
+    "docs/AI_MIGRATION_PROMPT.md"
   ],
   "publishConfig": {
     "access": "restricted",
@@ -47,6 +48,8 @@
     "@dnd-kit/core": ">=6.0.0",
     "@dnd-kit/sortable": ">=8.0.0",
     "@dnd-kit/utilities": ">=3.0.0",
+    "@react-three/drei": ">=9.100.0",
+    "@react-three/fiber": ">=8.16.0",
     "@tanstack/react-virtual": ">=3.0.0",
     "@tiptap/core": ">=2.0.0",
     "@tiptap/react": ">=2.0.0",
@@ -56,7 +59,9 @@
     "framer-motion": ">=11.0.0",
     "next": ">=15.0.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-force-graph-3d": ">=1.24.0",
+    "three": ">=0.160.0"
   },
   "peerDependenciesMeta": {
     "@dnd-kit/core": {
@@ -66,6 +71,12 @@
       "optional": true
     },
     "@dnd-kit/utilities": {
+      "optional": true
+    },
+    "@react-three/drei": {
+      "optional": true
+    },
+    "@react-three/fiber": {
       "optional": true
     },
     "@tanstack/react-virtual": {
@@ -89,6 +100,9 @@
     "swiper": {
       "optional": true
     },
+    "react-force-graph-3d": {
+      "optional": true
+    },
     "react-hook-form": {
       "optional": true
     },
@@ -103,12 +117,18 @@
     },
     "libphonenumber-js": {
       "optional": true
+    },
+    "three": {
+      "optional": true
     }
   },
   "devDependencies": {
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
+    "@eslint/js": "^10.0.1",
+    "@react-three/drei": "^9.110.0",
+    "@react-three/fiber": "^8.17.0",
     "@storybook/addon-a11y": "^10.3.4",
     "@storybook/react-vite": "^10.3.4",
     "@tailwindcss/postcss": "^4.2.2",
@@ -121,11 +141,16 @@
     "@tiptap/starter-kit": "^3.22.4",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@types/three": "^0.165.0",
     "@xyflow/react": "^12.10.2",
     "apexcharts": "^5.10.4",
     "classnames": "^2.5.1",
     "eslint": "^10.2.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "framer-motion": "^12.38.0",
+    "globals": "^17.6.0",
     "happy-dom": "^15.11.7",
     "libphonenumber-js": "^1.12.41",
     "next": "^16.2.2",
@@ -134,13 +159,16 @@
     "react": "^19.2.4",
     "react-apexcharts": "^2.1.0",
     "react-dom": "^19.2.4",
+    "react-force-graph-3d": "^1.24.0",
     "react-hook-form": "^7.72.1",
     "react-international-phone": "^4.8.0",
     "storybook": "^10.3.4",
     "swiper": "^12.1.3",
     "tailwindcss": "^4.2.2",
+    "three": "^0.165.0",
     "tsup": "^8.5.1",
     "typescript": "^6.0.2",
+    "typescript-eslint": "^8.59.2",
     "vite": "^8.0.3",
     "vitest": "^2.1.8"
   },

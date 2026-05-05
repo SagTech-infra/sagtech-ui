@@ -4,6 +4,8 @@ Internal React component library for SagTech products. Dark-mode-only, Tailwind 
 
 Storybook covers every component with live examples — run `pnpm dev` and open [localhost:6006](http://localhost:6006).
 
+> **Migrating an existing React app to this library?** See [`docs/AI_MIGRATION_PROMPT.md`](./docs/AI_MIGRATION_PROMPT.md) — a paste-ready prompt for Claude / Cursor / Copilot that walks an AI assistant through a phased, non-breaking migration (setup → forms → overlays → data → charts), with picker rules, worked examples, and anti-patterns. It also ships inside the package at `node_modules/@sagtech-infra/ui/docs/AI_MIGRATION_PROMPT.md`.
+
 ---
 
 ## Install
@@ -44,6 +46,8 @@ pnpm build
 | `@tanstack/react-virtual` | `VirtualList` |
 | `@tiptap/react`, `@tiptap/core`, `@tiptap/starter-kit` | `RichTextEditor` |
 | `@xyflow/react` | `VisualGraphEditor` |
+| `three`, `@react-three/fiber`, `@react-three/drei` | `Globe3D`, `Scene3D`, `Mindmap3D` |
+| `three`, `@react-three/fiber`, `@react-three/drei`, `react-force-graph-3d` | `Network3D` (in addition to the three packages above) |
 
 ## Tokens and fonts
 
@@ -128,6 +132,7 @@ function DeleteButton({ onDelete }: { onDelete: () => Promise<void> }) {
 | `Icon` | 150+ icons (nav-chrome, status, tech-stack, social). `<Icon icon="call" size={24} color="#6D3EF1" />`. |
 | `Skeleton` | Loading placeholder + presets `SkeletonText`/`SkeletonAvatar`/`SkeletonCard`/`SkeletonTable`/`SkeletonList`. |
 | `Divider` | Horizontal/vertical with `variant: 'solid' \| 'dashed'`. |
+| `KBD` | Keyboard-shortcut chip group. `<KBD keys={['Cmd', 'K']} size="sm" />`. |
 
 ### Form controls
 
@@ -154,6 +159,7 @@ function DeleteButton({ onDelete }: { onDelete: () => Promise<void> }) {
 | `InlineEdit` | Click-to-edit. Enter/Esc to save/cancel, `multiline` with Cmd+Enter, `validate`, async `onSave`. |
 | `VariablePicker` | Modal with searchable + source-filtered list of template variables. Double-click / Insert returns the picked token. |
 | `RichTextEditor` | TipTap wrapper with bold/italic/strike/heading/list/quote/code/undo/redo toolbar. Extensions prop for custom nodes. |
+| `SegmentedControl` | iOS-style segmented toggle group. Controlled `value`/`onChange`, sizes, full-width, disabled, keyboard arrow navigation. |
 
 ### Layout & overlays
 
@@ -171,6 +177,10 @@ function DeleteButton({ onDelete }: { onDelete: () => Promise<void> }) {
 | `CookieBanner` | Accept/Decline banner with local cookie write. |
 | `Popover` | Trigger + floating content (position + align). Escape closes, focus returns to trigger. |
 | `Tooltip` | Hover/focus tooltip. |
+| `Sheet` | Side panel (`left`/`right`/`top`/`bottom`) with full ModalStack stacking, focus-trap, scroll-lock. Use over `Drawer` when stacking with other sheets/modals matters. |
+| `BottomSheet` | Mobile-first bottom drawer with drag-to-dismiss + multi-snap-points (framer-motion `drag="y"`). |
+| `FAB` | Floating action button anchored to viewport (`bottom-right`/`bottom-left`/`top-right`/`top-left`), optional `extended` pill with label, `loading` state. |
+| `Toolbar` (+ `Toolbar.Separator` / `ToolbarSeparator`) | Action bar — group of buttons with arrow-key roving focus, `role="toolbar"`, optional separators. |
 
 ### Data display
 
@@ -198,12 +208,34 @@ function DeleteButton({ onDelete }: { onDelete: () => Promise<void> }) {
 | `SortableList` | Drag-and-drop reorderable list on `@dnd-kit`. Vertical/horizontal/grid. |
 | `VirtualList` | Windowed list on `@tanstack/react-virtual` for 10k+ items. |
 | `VisualGraphEditor` | ReactFlow wrapper — nodes/edges/handles/minimap/controls + `readOnly`. |
+| `AreaChart` | Canvas-based stacked/non-stacked area chart with optional gradient fill, hover crosshair + tooltip. |
+| `BarChart` | Canvas bar/column chart — vertical/horizontal, stacked, grouped. |
+| `HeatmapChart` | Discrete cell matrix with linear color ramp (default `pr_purple` → `sec_purple`). |
+| `RadarChart` | Polygon chart with grid rings + axis labels. |
+| `SparklineChart` | Tiny inline trend line (default 80×24) with `tone: 'success'\|'warning'\|'error'\|'neutral'`. Use inside `StatCard`. |
+| `ScatterChart` | Bubble scatter with optional per-point `size`. |
+| `GaugeChart` | Half-circle speedometer with `min`/`max`/`thresholds`. |
+| `SankeyChart` | Layered flow diagram (no `d3-sankey` peer — layout inlined on canvas). |
+| `TreemapChart` | Squarified treemap with optional `padding`. |
+| `FunnelChart` | Vertical/horizontal funnel showing conversion % per stage. |
+| `Stepper` | Richer step indicator — per-step `status: 'pending'\|'active'\|'complete'\|'error'`, `description`, click-to-jump, vertical or horizontal. |
+
+### 3D / WebGL
+
+| Component | Purpose |
+|---|---|
+| `Network3D` | 3D force-directed network graph backed by `react-force-graph-3d`. |
+| `Globe3D` | Interactive globe with raised lat/lng markers (`@react-three/fiber` + `@react-three/drei`). |
+| `Scene3D` | Generic `<Canvas>` wrapper for ad-hoc 3D scenes (orbit controls + default lighting). |
+| `Mindmap3D` | Hierarchical 3D mindmap rendered as nodes + edges around a sphere. |
 
 ### Feedback
 
 | Component | Purpose |
 |---|---|
-| `Alert` | Inline banner (`info`/`success`/`warning`/`error`), optional title/body/icon/action/close. `role="alert"` for error, `role="status"` otherwise. |
+| `Alert` | Inline banner (`info`/`success`/`warning`/`error`), optional title/body/icon/action/close, optional `autoDismiss` ms. `role="alert"` for error, `role="status"` otherwise. |
+| `Banner` | Page-level sticky banner (top/bottom). Variants like `Alert` but persistent and viewport-anchored — distinct from inline `Alert` and legal `CookieBanner`. |
+| `Spotlight` | Onboarding/feature highlight — clip-path-style cutout around a `targetRef` + tooltip card with optional Next/Skip + step counter. |
 | `Toaster` + `toast` | Global toast API — `toast.success()`/`.error()`/`.info()`/`.warning()`/`.loading()` + `toast.promise()`. Compact layout, auto-sized to content. |
 | `Notification` + `NotificationWrapper` + `NotificationContext` + `NotificationContextProvider` | Legacy notification API (kept for back-compat). Prefer `Toast`. |
 | `NotificationCenter` | Bell icon + dropdown with notifications list, badge count, mark-as-read / mark-all-read / clear-all. Prop-driven (consumer owns data fetching). |
@@ -246,7 +278,7 @@ Or render via the `<Icon>` component: `<Icon icon="menu" size={20} color="#CDCDD
 | `pnpm dev` | Storybook dev server on port 6006 |
 | `pnpm build` | `tsup` build → `dist/` (ESM + CJS + types). Runs `generate:tokens` via `prebuild` |
 | `pnpm build-storybook` | Static Storybook build |
-| `pnpm test` | Vitest run (happy-dom + React Testing Library, 136 tests) |
+| `pnpm test` | Vitest run (happy-dom + React Testing Library, 164 tests) |
 | `pnpm test:watch` | Watch mode |
 | `pnpm typecheck` | `tsc --noEmit` |
 | `pnpm lint` | ESLint |

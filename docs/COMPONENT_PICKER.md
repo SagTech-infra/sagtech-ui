@@ -55,3 +55,42 @@
 
 - `variant="inline"` — когда родительский контейнер уже имеет фон/рамку (внутри Modal, внутри CardWrapper).
 - `variant="card"` — когда empty-state рендерится на голой странице (страница /projects без проектов).
+
+---
+
+## v1.1 additions
+
+### `Sheet` vs `Drawer` vs `Modal` vs `BottomSheet`
+
+| Component | Use it when |
+|---|---|
+| **`Modal`** | A focused, blocking dialog where the user must complete or dismiss before continuing — delete confirms, edit-profile forms, paywalls. Also for any flow that genuinely needs a centred dialog. |
+| **`Drawer`** | A single side panel (`left`/`right`) for detail views or filter sidebars. Lighter than Sheet, no built-in stacking discipline. Existing v1.0 component, kept unchanged. |
+| **`Sheet`** | A side panel that needs to **stack with other sheets / modals** via `ModalStack` — multi-level drilldowns, "open detail panel from inside an open modal", nested overlays. Also when you want the same panel UX from any of four sides (left/right/top/bottom). |
+| **`BottomSheet`** | Mobile-first bottom drawer with **drag-to-dismiss** and **multi-snap-points** (peek / half / full). Use for mobile action sheets, filter sheets, "more options" surfaces. |
+
+**Practically:** if you're building a single sidebar in v1.0 code and it works — keep `Drawer`. If you have nested overlays or a flow that opens a panel from another modal — switch to `Sheet`. For mobile bottom UX — `BottomSheet`.
+
+### `Banner` vs `Alert` vs `CookieBanner`
+
+| Component | Use it when |
+|---|---|
+| **`Alert`** | Inline status message embedded in a layout — warnings under a form, rate-limit notice on a dashboard card, upgrade-prompt inside a section. Stays in document flow. New in v1.1: optional `autoDismiss` for time-bounded notices that should disappear without user action. |
+| **`Banner`** | **Page-level sticky persistent message** (`position: 'top' \| 'bottom'`) — system-status announcements, trial-expiring warnings, "you are viewing as another user". Anchored to viewport, stays visible across scroll, has its own `--z-banner` token. |
+| **`CookieBanner`** | Legal / cookies-only — purpose-built for the GDPR-style accept/decline flow with local-storage persistence. v1.1 adds `position?` and `children?` slot for custom legal copy. |
+
+### `Network3D` vs `VisualGraphEditor`
+
+- **2D editable graph (xyflow)** → `VisualGraphEditor`. Drag-to-edit, custom node types, edge handles, minimap. Best when the graph is the workflow product (workflow editors, automation builders).
+- **3D force-directed view-only** → `Network3D`. Spatial exploration of relationships, large connected datasets, knowledge maps. Backed by `react-force-graph-3d` (optional peer).
+
+They serve different jobs — pick the one that matches the task, not the one that "looks fancier".
+
+### `Stepper` vs `Steps`
+
+- **`Steps`** (v1.0) — simple numbered indicator with animated progress line. Presentational only, no per-step state.
+- **`Stepper`** (v1.1) — richer indicator with per-step `status: 'pending' \| 'active' \| 'complete' \| 'error'`, optional `description`, and click-to-jump (`clickableSteps: 'all' \| 'completed' \| 'none'`). Supports both `horizontal` and `vertical` orientation. Use when steps can fail, can be revisited, or need supplementary text per step.
+
+### `Toast` (preferred) vs `Notification` (legacy, `@deprecated` in v1.1)
+
+`Notification`, `NotificationWrapper`, `NotificationContext`, `NotificationContextProvider` are now `@deprecated`. They still work at runtime, but new code should use `Toaster` + the imperative `toast.success()` / `toast.error()` / `toast.info()` / `toast.warning()` / `toast.loading()` / `toast.promise()` API. Removal is scheduled for **v2.0** — see `docs/MIGRATION.md`.

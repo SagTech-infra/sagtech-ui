@@ -249,7 +249,7 @@ function Select<T extends FieldValues>({
                 {children && <li className="list-none">{children}</li>}
                 {options.map((option, index) => (
                   <SelectOptionItem
-                    key={index}
+                    key={option.value}
                     option={option}
                     onSelect={handleSelect}
                     withChecbox={multiple}

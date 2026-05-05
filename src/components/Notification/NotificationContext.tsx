@@ -1,5 +1,10 @@
 import { createContext } from 'react';
 
+/**
+ * @deprecated Use Toast instead — see docs/COMPONENT_PICKER.md.
+ *
+ * Scheduled for removal in v2.0.
+ */
 export interface NotificationContextProps {
   isOpen: boolean;
   toggle: (value: boolean) => void;
@@ -13,6 +18,11 @@ export interface NotificationContextProps {
   getState: (value: string) => void;
 }
 
+/**
+ * @deprecated Use Toast instead — see docs/COMPONENT_PICKER.md.
+ *
+ * Scheduled for removal in v2.0.
+ */
 export const NotificationContext = createContext<NotificationContextProps>({
   isOpen: false,
   toggle: () => {},

@@ -105,8 +105,9 @@ export default function Popover({
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            style={{ zIndex: 'var(--z-popover)' }}
             className={classNames(
-              'absolute z-50',
+              'absolute',
               positionClasses[position],
               alignClasses[position][align],
             )}

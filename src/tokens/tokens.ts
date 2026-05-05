@@ -148,6 +148,7 @@ export const zIndex = {
   modal: "3001",
   'drawer-backdrop': "4000",
   drawer: "4001",
+  banner: "4500",
   toast: "5000",
   tooltip: "6000",
 } as const;

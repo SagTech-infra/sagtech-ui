@@ -52,8 +52,9 @@ export default function Tooltip({
       <AnimatePresence>
         {isVisible && (
           <motion.div
+            style={{ zIndex: 'var(--z-tooltip)' }}
             className={classNames(
-              'absolute z-50 pointer-events-none',
+              'absolute pointer-events-none',
               positionClasses[position],
             )}
             initial={motionVariants[position].initial}

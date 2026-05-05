@@ -1,37 +1,24 @@
 'use client';
 
 import { useRef, useEffect, useCallback, useState } from 'react';
+import * as tokens from '@/tokens/tokens';
 import type { LineChartSeriesType } from './types';
+import { catmullRomSpline } from './spline';
 
-const COLORS = ['#6D3EF1', '#B69FF8', '#58A61B', '#C6A328', '#9494C9'];
+// Series palette pulled from design tokens so the chart stays in sync with
+// the rest of the system if a token is rebranded.
+const COLORS = [
+  tokens.colors.pr_purple,
+  tokens.colors.sec_purple,
+  tokens.colors.success,
+  tokens.colors.warning,
+  tokens.colors.sec_blue,
+];
 
 export interface LineChartTypes {
   series?: LineChartSeriesType[];
   width?: number | string;
   height?: number | string;
-}
-
-function catmullRomSpline(
-  points: { x: number; y: number }[],
-  ctx: CanvasRenderingContext2D,
-  tension = 0.5,
-) {
-  if (points.length < 2) return;
-  ctx.moveTo(points[0].x, points[0].y);
-
-  for (let i = 0; i < points.length - 1; i++) {
-    const p0 = points[i === 0 ? 0 : i - 1];
-    const p1 = points[i];
-    const p2 = points[i + 1];
-    const p3 = points[i + 2 >= points.length ? points.length - 1 : i + 2];
-
-    const cp1x = p1.x + ((p2.x - p0.x) / 6) * tension;
-    const cp1y = p1.y + ((p2.y - p0.y) / 6) * tension;
-    const cp2x = p2.x - ((p3.x - p1.x) / 6) * tension;
-    const cp2y = p2.y - ((p3.y - p1.y) / 6) * tension;
-
-    ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
-  }
 }
 
 interface HoverState {
@@ -103,7 +90,7 @@ function LineChart({ series, width = '100%', height = 350 }: LineChartTypes) {
       ctx.setLineDash([]);
 
       const val = Math.round(maxY - (maxY - minY) * (i / gridLines));
-      ctx.fillStyle = '#6A6A73';
+      ctx.fillStyle = tokens.colors.grey_1;
       ctx.font = '11px Manrope, sans-serif';
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
@@ -116,7 +103,7 @@ function LineChart({ series, width = '100%', height = 350 }: LineChartTypes) {
     ctx.font = '11px Manrope, sans-serif';
     labels.forEach((label, i) => {
       const x = padding.left + (chartW / stepCount) * i;
-      ctx.fillStyle = hover?.dataIndex === i ? '#F8F8F8' : '#6A6A73';
+      ctx.fillStyle = hover?.dataIndex === i ? tokens.colors.white_4 : tokens.colors.grey_1;
       ctx.fillText(label, x, padding.top + chartH + 12);
     });
 
@@ -178,7 +165,7 @@ function LineChart({ series, width = '100%', height = 350 }: LineChartTypes) {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
-        ctx.fillStyle = '#070715';
+        ctx.fillStyle = tokens.colors.black_1;
         ctx.fill();
         ctx.beginPath();
         ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
@@ -312,7 +299,7 @@ function LineChart({ series, width = '100%', height = 350 }: LineChartTypes) {
             left: hover.x,
             top: (layoutRef.current?.padding.top ?? 24) - 8,
             transform: 'translateX(-50%)',
-            background: '#20202D',
+            background: tokens.colors.black_2,
             border: '1px solid rgba(109, 62, 241, 0.3)',
             borderRadius: '10px',
             padding: '10px 16px',
@@ -326,7 +313,7 @@ function LineChart({ series, width = '100%', height = 350 }: LineChartTypes) {
           <div
             style={{
               fontSize: '12px',
-              color: '#9C9CA1',
+              color: tokens.colors.grey_3,
               marginBottom: '6px',
               fontWeight: 600,
             }}
@@ -341,7 +328,7 @@ function LineChart({ series, width = '100%', height = 350 }: LineChartTypes) {
                 alignItems: 'center',
                 gap: '8px',
                 fontSize: '13px',
-                color: '#F8F8F8',
+                color: tokens.colors.white_4,
                 fontWeight: 500,
                 marginTop: '3px',
               }}
@@ -355,7 +342,7 @@ function LineChart({ series, width = '100%', height = 350 }: LineChartTypes) {
                   flexShrink: 0,
                 }}
               />
-              <span style={{ color: '#9C9CA1' }}>{d.name}:</span>
+              <span style={{ color: tokens.colors.grey_3 }}>{d.name}:</span>
               <span style={{ fontWeight: 700 }}>{d.value}</span>
             </div>
           ))}

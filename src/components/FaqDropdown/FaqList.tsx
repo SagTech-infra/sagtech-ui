@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Typography from '@/components/Typography/Typography';
 import CardWrapper from '@/components/CardWrapper/CardWrapper';
+import * as tokens from '@/tokens/tokens';
 
 function ChevrondownIcon({
   width = 24,
@@ -86,7 +87,7 @@ export default function FaqList({
                 transition={{ duration: 0.15 }}
                 style={{ perspective: 1000 }}
               >
-                <ChevrondownIcon width={24} height={24} color="#B5B5B9" />
+                <ChevrondownIcon width={24} height={24} color={tokens.colors.grey_4} />
               </motion.div>
             </button>
             <motion.div

@@ -166,6 +166,9 @@ function Combobox<V extends string = string>(props: ComboboxProps<V>) {
         closeDropdown();
       }
     },
+    // emitMulti / emitSingle are stable thin wrappers around props.onChange —
+    // they read from `props` directly, which is already in the dep list.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [props, disabled, closeDropdown],
   );
 

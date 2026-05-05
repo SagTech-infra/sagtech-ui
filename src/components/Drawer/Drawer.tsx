@@ -1,8 +1,14 @@
 'use client';
 
-import { useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import classNames from 'classnames';
+import {
+  getOverlayDepth,
+  registerOverlay,
+  subscribeOverlayStack,
+  unregisterOverlay,
+} from '@/components/Modal/ModalStack';
 
 export interface DrawerProps {
   isOpen: boolean;
@@ -14,6 +20,10 @@ export interface DrawerProps {
   showOverlay?: boolean;
   className?: string;
 }
+
+const Z_DRAWER_BACKDROP = 4000;
+const Z_DRAWER = 4001;
+const Z_STEP = 10;
 
 function CloseIcon() {
   return (
@@ -39,6 +49,9 @@ export default function Drawer({
   showOverlay = true,
   className,
 }: DrawerProps) {
+  const idRef = useRef<number | null>(null);
+  const [, forceRender] = useState(0);
+
   const handleEscape = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -49,15 +62,24 @@ export default function Drawer({
   );
 
   useEffect(() => {
-    if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden';
-    }
+    if (!isOpen) return;
+    idRef.current = registerOverlay(onClose);
+    const unsubscribe = subscribeOverlayStack(() => forceRender((v) => v + 1));
+    document.addEventListener('keydown', handleEscape);
+
     return () => {
+      if (idRef.current !== null) {
+        unregisterOverlay(idRef.current);
+        idRef.current = null;
+      }
+      unsubscribe();
       document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = '';
     };
-  }, [isOpen, handleEscape]);
+  }, [isOpen, handleEscape, onClose]);
+
+  const depth = idRef.current !== null ? getOverlayDepth(idRef.current) : 0;
+  const drawerZ = Z_DRAWER + depth * Z_STEP;
+  const backdropZ = Z_DRAWER_BACKDROP + depth * Z_STEP;
 
   const slideVariants = {
     hidden: { x: position === 'right' ? '100%' : '-100%' },
@@ -72,7 +94,7 @@ export default function Drawer({
           {showOverlay && (
             <motion.div
               className="fixed inset-0 bg-backdrop"
-              style={{ zIndex: 4000 }}
+              style={{ zIndex: backdropZ }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -91,7 +113,7 @@ export default function Drawer({
               width ? undefined : 'w-[400px]',
               className,
             )}
-            style={{ zIndex: 4001, ...(width ? { width } : {}) }}
+            style={{ zIndex: drawerZ, ...(width ? { width } : {}) }}
             variants={slideVariants}
             initial="hidden"
             animate="visible"
