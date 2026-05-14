@@ -14,4 +14,6 @@ export interface GaugeChartProps {
   height?: number;
   /** Render the numeric value in the centre. Defaults to true. */
   showValue?: boolean;
+  /** Render the min/max tick labels at the ends of the arc. Defaults to true. */
+  showRange?: boolean;
 }

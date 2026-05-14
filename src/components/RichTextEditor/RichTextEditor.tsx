@@ -157,6 +157,9 @@ export default function RichTextEditor({
   minHeight = 160,
 }: RichTextEditorProps) {
   const editor = useEditor({
+    // Tiptap v3 throws an SSR warning when it renders synchronously during
+    // server-side rendering. Defer the first render to the client.
+    immediatelyRender: false,
     extensions: [StarterKit, ...extensions],
     content: value,
     editable: !disabled,

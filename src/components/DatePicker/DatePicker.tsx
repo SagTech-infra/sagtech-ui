@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useCallback, useMemo, type Ref } from 'react';
+import { useEffect, useRef, useState, useCallback, useMemo, useLayoutEffect, type Ref } from 'react';
+import { createPortal } from 'react-dom';
 import classNames from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
-import useOutsideClick from '@/hooks/useOutsideClick';
-import { mergeRefs } from '@/utils/mergeRefs';
 import {
   WEEKDAYS,
   formatDisplayDate,
@@ -108,10 +107,66 @@ export default function DatePicker({
   ref,
 }: DatePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [popoverStyle, setPopoverStyle] = useState<{
+    top: number;
+    left: number;
+    minWidth: number;
+  } | null>(null);
   const [viewYear, setViewYear] = useState(() => (value ? value.getFullYear() : new Date().getFullYear()));
   const [viewMonth, setViewMonth] = useState(() => (value ? value.getMonth() : new Date().getMonth()));
 
-  const outsideRef = useOutsideClick<HTMLDivElement>(() => setIsOpen(false));
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
+
+  // Custom outside-click: the popover lives in a Portal, so the standard
+  // `contains()` check on the wrapping div would treat clicks inside the
+  // calendar as "outside" and close it before the day handler fires. Allow
+  // clicks inside either the trigger or the portalled popover.
+  useEffect(() => {
+    if (!isOpen) return;
+    const onMouseDown = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (triggerRef.current?.contains(target)) return;
+      if (popoverRef.current?.contains(target)) return;
+      setIsOpen(false);
+    };
+    document.addEventListener('mousedown', onMouseDown);
+    return () => document.removeEventListener('mousedown', onMouseDown);
+  }, [isOpen]);
+
+  // Approx height of the calendar popover (header + grid + bottom padding).
+  // Used as the initial guess; we re-measure once the popover renders.
+  const ESTIMATED_POPOVER_HEIGHT = showTime ? 400 : 360;
+
+  // Compute viewport-relative coordinates for the portalled popover so it
+  // escapes any `overflow: hidden` ancestor (e.g. CardWrapper) yet still
+  // anchors visually under (or above, on flip) the trigger button.
+  const updatePosition = useCallback(() => {
+    const trigger = triggerRef.current;
+    if (!trigger) return;
+    const rect = trigger.getBoundingClientRect();
+    const popHeight = popoverRef.current?.offsetHeight ?? ESTIMATED_POPOVER_HEIGHT;
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const flipUp = spaceBelow < popHeight + 12 && rect.top > spaceBelow;
+    const top = flipUp ? rect.top - popHeight - 4 : rect.bottom + 4;
+    setPopoverStyle({ top, left: rect.left, minWidth: rect.width });
+  }, [ESTIMATED_POPOVER_HEIGHT]);
+
+  useLayoutEffect(() => {
+    if (!isOpen) return;
+    updatePosition();
+  }, [isOpen, updatePosition]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onScroll = () => updatePosition();
+    window.addEventListener('scroll', onScroll, true);
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll, true);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [isOpen, updatePosition]);
 
   const days = useMemo(
     () => getCalendarDays(viewYear, viewMonth, minDate, maxDate),
@@ -178,12 +233,13 @@ export default function DatePicker({
   }, [disabled]);
 
   return (
-    <div className={classNames('flex flex-col gap-6px', className)} ref={mergeRefs(outsideRef, ref)}>
+    <div className={classNames('flex flex-col gap-6px', className)} ref={ref}>
       {label && (
         <label className="text-12 font-bold leading-18 text-white_4">{label}</label>
       )}
       <div className="relative">
         <button
+          ref={triggerRef}
           type="button"
           onClick={handleToggle}
           disabled={disabled}
@@ -209,16 +265,25 @@ export default function DatePicker({
           </span>
         </button>
 
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial="closed"
-              animate="open"
-              exit="closed"
-              variants={dropdownVariants}
-              transition={{ duration: 0.15 }}
-              className="absolute z-50 mt-4px bg-black_2 border border-black_3 rounded-16px p-20px shadow-6xl min-w-[320px]"
-            >
+        {typeof document !== 'undefined' &&
+          createPortal(
+            <AnimatePresence>
+              {isOpen && popoverStyle && (
+                <motion.div
+                  ref={popoverRef}
+                  initial="closed"
+                  animate="open"
+                  exit="closed"
+                  variants={dropdownVariants}
+                  transition={{ duration: 0.15 }}
+                  style={{
+                    position: 'fixed',
+                    top: popoverStyle.top,
+                    left: popoverStyle.left,
+                    minWidth: Math.max(popoverStyle.minWidth, 320),
+                  }}
+                  className="z-50 bg-black_2 border border-black_3 rounded-16px p-20px shadow-6xl"
+                >
               {/* Header */}
               <div className="flex items-center justify-between mb-12px">
                 <button
@@ -321,9 +386,11 @@ export default function DatePicker({
                   </div>
                 </div>
               )}
-            </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>,
+            document.body,
           )}
-        </AnimatePresence>
       </div>
       {error && (
         <p className="px-24px pt-4px text-12 font-medium leading-16 text-error">{error}</p>

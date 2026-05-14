@@ -13,6 +13,7 @@ function GaugeChart({
   width = 200,
   height = 120,
   showValue = true,
+  showRange = true,
 }: GaugeChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -116,14 +117,16 @@ function GaugeChart({
     }
 
     // Min/max ticks
-    ctx.fillStyle = tokens.colors.grey_2;
-    ctx.font = '10px Manrope, sans-serif';
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'top';
-    ctx.fillText(String(min), cx - radius - 4, cy + 6);
-    ctx.textAlign = 'right';
-    ctx.fillText(String(max), cx + radius + 4, cy + 6);
-  }, [value, min, max, thresholds, label, width, height, showValue]);
+    if (showRange) {
+      ctx.fillStyle = tokens.colors.grey_2;
+      ctx.font = '10px Manrope, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'top';
+      ctx.fillText(String(min), cx - radius - 4, cy + 6);
+      ctx.textAlign = 'right';
+      ctx.fillText(String(max), cx + radius + 4, cy + 6);
+    }
+  }, [value, min, max, thresholds, label, width, height, showValue, showRange]);
 
   useEffect(() => {
     draw();
