@@ -24,15 +24,15 @@
 - [x] **README.md** (B-claude-opus-4)
 - [x] **Input a11y**: `aria-invalid`, `aria-describedby`
 - [x] **Button a11y**: `aria-busy`, sync `disabled` + `aria-disabled` при loading
-- [x] **`FileDropzone`** (A-10): preview для image/*, progress bar, error-state с retry, maxFiles/maxSize валидация с inline-errors, контролируемый через `files[]` + колбэки
+- [x] **`FileDropzone`** (A-10): preview для image/\*, progress bar, error-state с retry, maxFiles/maxSize валидация с inline-errors, контролируемый через `files[]` + колбэки
 - [x] **`Wizard` + `useWizard`** (A-9): hook + compound (`Wizard.Root`/`Progress`/`Content`/`Footer`), canGoTo-гвард (только до highest-reached), `onNext` с async/false-гвардом
 - [x] **`NotificationCenter`** (A-11): bell + dropdown + badge, `notifications[]` prop-driven, unread-bg + dot, timestamp через `Intl.RelativeTimeFormat`, empty-state
 - [x] **`SortableList`** (A-20) + `@dnd-kit/*` как optional peer-deps + external в tsup
 - [x] **a11y keyboard nav**:
-    - `DropdownMenu` — ArrowUp/Down/Home/End, type-ahead, Escape, Tab-close, open-to-first/last, focus management
-    - `SelectInput` — ArrowDown/Up/Enter/Space open, ArrowUp/Down nav в дропдауне, Home/End, Escape + focus restore, активная опция подсвечивается (`isHighlighted`)
-    - `Popover` — Escape close + focus restore, `aria-expanded`, `aria-haspopup="dialog"`
-    - `CommandPalette` — Home/End в дополнение к существующим Arrow/Enter/Escape
+  - `DropdownMenu` — ArrowUp/Down/Home/End, type-ahead, Escape, Tab-close, open-to-first/last, focus management
+  - `SelectInput` — ArrowDown/Up/Enter/Space open, ArrowUp/Down nav в дропдауне, Home/End, Escape + focus restore, активная опция подсвечивается (`isHighlighted`)
+  - `Popover` — Escape close + focus restore, `aria-expanded`, `aria-haspopup="dialog"`
+  - `CommandPalette` — Home/End в дополнение к существующим Arrow/Enter/Escape
 
 ## ✅ Medium — закрыто
 
@@ -85,11 +85,13 @@
 ## ✅ v1.1 — released 2026-05-05
 
 **New components (23):**
+
 - Charts: `AreaChart`, `BarChart`, `HeatmapChart`, `RadarChart`, `SparklineChart`, `ScatterChart`, `GaugeChart`, `SankeyChart`, `TreemapChart`, `FunnelChart` (all canvas-based, no new peers).
 - 3D / WebGL: `Network3D`, `Globe3D`, `Scene3D`, `Mindmap3D` (optional peers: `three`, `@react-three/fiber`, `@react-three/drei`, `react-force-graph-3d`).
 - Overlays/UX: `Sheet`, `BottomSheet`, `Banner`, `Spotlight`, `FAB`, `SegmentedControl`, `Stepper`, `KBD`, `Toolbar` (+ `ToolbarSeparator` compound).
 
 **Improvements (additive, non-breaking):**
+
 - `Modal` forwards ref; new `motionVariants?` prop.
 - `Drawer` integrates ModalStack for proper stacking; uses `--z-drawer` token.
 - `Alert.autoDismiss?: number`.
@@ -97,9 +99,127 @@
 - `CookieBanner.position?` and `children?` slot.
 
 **Cleanup:**
+
 - Z-index hard-codes across Toaster / Popover / Tooltip / CommandPalette / ConfirmDialog / CookieBanner replaced with `--z-*` CSS vars (`tokens.zIndex.*`).
 - New `--z-banner: 4500` token added.
 - `LineChart` spline helper extracted to `LineChart/spline.ts` (reused by `AreaChart`).
 - `Notification`, `NotificationContext`, `NotificationContextProvider`, `NotificationWrapper` marked `@deprecated` (use `Toast`). Removal scheduled for v2.0.
 
 **Tests**: 136 → 164 (28 new across SegmentedControl/Stepper/Toolbar).
+
+---
+
+## ✅ v1.2 — released 2026-05-14
+
+**Fixes / additive (no breaking):**
+
+- `DatePicker` — popover renders into `document.body` via Portal so it escapes `overflow:hidden` ancestors (e.g. `CardWrapper`). Viewport-relative positioning with auto flip-up when there's no room below; re-positions on scroll/resize.
+- `GaugeChart` — new `showRange?: boolean` (default `true`) to hide the min/max tick labels at the ends of the arc.
+- `RichTextEditor` — pass `immediatelyRender: false` to Tiptap v3's `useEditor` to silence the SSR warning; first render deferred to the client.
+
+**Tests**: 164/164 (unchanged in this release).
+
+---
+
+## 🎯 v1.3 — small polish + motion-token groundwork
+
+Аддитивный мелкий релиз, готовит почву для светлой темы и motion-системы в v1.4. Никаких breaking changes.
+
+- **Motion-токены.** В `theme.css` ввести группу `--motion-duration-fast/normal/slow` (≈120ms / 200ms / 320ms) и `--motion-ease-standard/emphasized/decelerated` (cubic-bezier). Сгенерировать типизированные `tokens.motion.*` через `scripts/generate-tokens.mjs`.
+- **Overlay-моции на токены.** `Toast` / `Modal` / `Drawer` / `Sheet` / `BottomSheet` / `Popover` / `Tooltip` / `ConfirmDialog` / `DatePicker` заменяют inline `transition={{ duration: 0.18 }}` на CSS-vars/токены. Поведение идентично, диффы маленькие.
+- **`prefers-reduced-motion` honoring** на всех overlays — переходы заменяются на mount/unmount без анимации (через `useReducedMotion()` от framer-motion).
+- **`Tabs` controlled-first API**: добавить `value` + `onValueChange` как новый канон (см. `docs/API_CONVENTIONS.md`). `defaultIndex` → `@deprecated`, удалить в v2.0. Закрывает «Found, not fixed» из `CHANGELOG-INTERNAL.md` (2026-05-05).
+- **`Button` ref-forwarding** (phase 2 of B-6) — additive `ref?: Ref<HTMLButtonElement>`. Закрывает соответствующий пункт из internal sweep.
+- **`SelectDropdownLayout` token cleanup** — `bg-[#1B1B27]` → `bg-black_2` (после визуального ревью) или новый `--color-black_1_5`, если оттенок целенаправленный.
+- **Тесты для v1.1 overlays**: `Sheet`, `BottomSheet`, `Banner`, `Spotlight`, `FAB`, `Modal` (render + onClose + focus restore). Покрывает пробел из B-2.
+
+---
+
+## 🎯 v1.4 — light theme + motion presets
+
+Большая аддитивная фича. Не breaking — старые консюмеры остаются на dark по умолчанию.
+
+**Light theme:**
+
+- Семантический слой токенов в `theme.css`: `--bg-primary/secondary/tertiary`, `--fg-primary/secondary/muted`, `--border-default/strong`, `--surface-overlay`. Сегодняшние `black_1..4` / `white_1..4` / `grey_*` остаются как raw scale под темой `dark`. Для темы `light` — параллельная палитра. Покрытие: backgrounds, foregrounds, borders, surfaces, status-варианты (success/warning/error/info под обе темы).
+- **`ThemeProvider`** (новый, или расширение `SagtechUIProvider`) с пропом `theme: 'dark' | 'light' | 'system'`. Применение через `data-theme` атрибут на root + CSS-vars cascade. `system` слушает `prefers-color-scheme` через `matchMedia`.
+- Компоненты переходят на семантические токены (`bg-[var(--bg-primary)]`), а не на `bg-black_1` напрямую. Старые dark-классы продолжают работать; новые компоненты пишутся на семантику.
+- A11y / contrast аудит light-темы: focus-visible rings, WCAG AA контрасты, screen-reader smoke на ключевых overlays.
+- Storybook: глобальный theme switcher в toolbar, чтобы превьюшки переключались dark/light.
+
+**Motion presets:**
+
+- На базе motion-токенов из v1.3 — готовые `fadeIn`, `slideUp`, `scaleIn`, `popIn` варианты (функции, возвращающие framer-motion `Variants`).
+- Reuse в `Toast` / `Modal` / `Drawer` / `Popover` / `Tooltip` — убрать дублирование `dropdownVariants` объектов по компонентам.
+- Опционально — `useMotionPreset(name, options?)` hook для кастомных компонентов потребителей.
+
+---
+
+## 🎯 v1.5 — coverage push + a11y / i18n polish
+
+- **Render-smoke тесты для долгого хвоста.** `VirtualList` (IntersectionObserver / ResizeObserver моки в `vitest.setup.ts`), `RichTextEditor` (ProseMirror happy-dom mocks), `VisualGraphEditor` (ReactFlow моки). Альтернатива — Playwright component-tests против Storybook (опциональный путь).
+- **Canvas-чарты smoke** — 10 чартов v1.1 (`AreaChart`, `BarChart`, `HeatmapChart`, `RadarChart`, `ScatterChart`, `GaugeChart`, `SankeyChart`, `FunnelChart`, `SparklineChart`, `TreemapChart`) получают mount-смоук + проверку отрисованных props. Глубже не лезем — canvas-снапшоты ненадёжны в happy-dom.
+- **3D-suite smoke.** Моки `three` / `@react-three/fiber` / `react-force-graph-3d`, рендер пустых сцен без падений (`Network3D`, `Globe3D`, `Scene3D`, `Mindmap3D`).
+- **i18n hooks для дат/времени.** `DatePicker` / `DateRangePicker` / `GanttTimeline` — weekdays/months через `Intl.DateTimeFormat` вместо констант. Локаль из `ThemeProvider` или нового `LocaleProvider`.
+- **RTL audit.** Overlays и form-controls под `dir="rtl"` — починить асимметричные паддинги/иконки/выравнивания.
+- **Storybook a11y addon** (локально, без деплоя) — `@storybook/addon-a11y`, прогон по существующим сторям.
+
+---
+
+## ⚠️ v2.0 — breaking cleanup
+
+Все накопленные breakings одним окном. Каждый пункт сопровождается before/after migration-хинтом; итоговая полная миграция уедет в `docs/MIGRATION.md` при релизе.
+
+- **Удалить `Notification` family** (`Notification`, `NotificationContext`, `NotificationContextProvider`, `NotificationWrapper`). Депрекация объявлена в v1.1.
+  - _Migration_: переход на `Toast` + `Toaster` (см. `docs/COMPONENT_PICKER.md`). `useContext(NotificationContext)` → `toast.success(...)` / `toast.error(...)`.
+- **Унификация `label` prop.** `Input` / `PhoneInput` / `Dropzone` сейчас принимают `externalLabel`. Канон — `label`.
+  - _Migration_: переименовать prop. Кандидат на codemod.
+- **`Attachment.onUpload` → `onChange`.**
+  - _Migration_: переименовать колбэк, сигнатура идентична (`(files: File[]) => void`).
+- **`SelectInput.onSelect` удаляется** (уже `@deprecated`).
+  - _Migration_: `onSelect={fn}` → `onChange={fn}`.
+- **`Tabs.defaultIndex` удаляется** (после v1.3 депрекации).
+  - _Migration_: `defaultIndex={1}` → `value` (controlled) или `defaultValue` (uncontrolled, новый API после v1.3).
+- **Аудит остальных callback-имён** против `docs/API_CONVENTIONS.md` — любые оставшиеся `onUpload` / `onSelect` / `onSubmitForm` к канону.
+- **Removed**: `src/r3f.d.ts`, если к v2.0 уже на r3f@9 (нативный bridge — см. internal sweep 2026-05-05).
+- **Codemod-скрипт** в `scripts/codemod-v2/` (jscodeshift) для автомиграции переименований. Публикуется в release notes.
+
+---
+
+## 📦 Backlog (без таргета)
+
+Research / wishlist — затаскивается в минор по мере появления реальной потребности у консюмеров.
+
+**Missing primitives:**
+
+- `Slider` / `RangeInput` — single + range value, ticks, marks, keyboard nav.
+- `ColorPicker` — HSL/hex, swatches, alpha.
+- Standalone `TimePicker` (сейчас встроен в `DatePicker.showTime`).
+- `TreeView` — expandable nodes, lazy load children, keyboard nav.
+- `ResizableSplitter` / `PanelGroup` — horizontal/vertical, persistence.
+- `Carousel` — отдельно от `Timeline` на swiper, без обязательного peer.
+- `AvatarGroup` — overlapping avatars + overflow counter.
+- `Calendar` как самостоятельный примитив (выделить date-grid из `DatePicker`).
+- `Switch` с label-slot — если `Toggle` не покрывает кейс (требует confirm).
+
+**`RichTextEditor` extensions presets:**
+
+- Mentions (`@user`), slash-commands (`/heading`), image upload, syntax-highlight для code-block. Сейчас экспортируется только Tiptap StarterKit + точка расширения через prop `extensions`.
+
+**DevEx / infra:**
+
+- Per-component **bundle-size budget** (size-limit / bundlewatch), баджет фейлит CI.
+- **Tree-shake audit** — особенно chart-семейство и 3D-сьют, чтобы консюмер платил байтами только за то, что импортирует.
+- **Dynamic peers** — lazy-load `three` / `apexcharts` внутри компонента через `next/dynamic` или React `lazy`, уменьшить first-load для не-3D-страниц.
+- **Codemod** для миграций (можно завести раньше v2.0 для опытов).
+- **Storybook deploy на GitHub Pages** — отложено сознательно (2026-05-14): приватная либа, узкий круг потребителей, `git clone && pnpm dev` покрывает кейс. Передумаем, если дизайнеры/PM попросят браузер-доступ.
+
+**Server-component (RSC) friendliness:**
+
+- Расщепить ещё несколько компонентов на `'use client'`-обёртку + чистый тип-экспорт (как уже сделано для `NotificationContext`). Кандидаты — `Modal` / `Drawer` / `ConfirmDialog` типы и их Provider'ы.
+
+**Документация:**
+
+- `docs/THEMING.md` — гайд по светлой теме, кастомным темам, токен-маппингу.
+- `docs/MOTION.md` — motion-токены, presets, reduced-motion.
+- ADR-формат для крупных решений (light theme, motion API, bundle-size budget).
