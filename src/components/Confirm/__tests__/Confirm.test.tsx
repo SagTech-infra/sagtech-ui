@@ -8,6 +8,7 @@ import {
 } from "@testing-library/react";
 import { useRef } from "react";
 import ConfirmDialog from "../ConfirmDialog";
+import ConfirmWithNoteDialog from "../ConfirmWithNoteDialog";
 import { ConfirmProvider, useConfirm } from "../ConfirmProvider";
 
 describe("ConfirmDialog (declarative)", () => {
@@ -213,5 +214,65 @@ describe("ConfirmDialog — initialFocusTarget", () => {
     await waitFor(() => {
       expect(document.activeElement?.textContent).toBe("Cancel");
     });
+  });
+});
+
+describe("ConfirmWithNoteDialog — noteMaxLength + noteHelperText", () => {
+  it("renders a counter when noteMaxLength is set", () => {
+    render(
+      <ConfirmWithNoteDialog
+        open
+        onCancel={() => {}}
+        onConfirm={() => {}}
+        title="Reason?"
+        noteMaxLength={50}
+      />,
+    );
+    expect(screen.getByText("0 / 50")).toBeInTheDocument();
+  });
+
+  it("updates the counter as the user types", () => {
+    render(
+      <ConfirmWithNoteDialog
+        open
+        onCancel={() => {}}
+        onConfirm={() => {}}
+        title="Reason?"
+        noteMaxLength={20}
+      />,
+    );
+    const textarea = screen.getByRole("textbox");
+    fireEvent.change(textarea, { target: { value: "hello" } });
+    expect(screen.getByText("5 / 20")).toBeInTheDocument();
+  });
+
+  it("disables Confirm when noteRequired + note is empty", () => {
+    render(
+      <ConfirmWithNoteDialog
+        open
+        onCancel={() => {}}
+        onConfirm={() => {}}
+        title="Reason?"
+        noteRequired
+        noteMinLength={5}
+      />,
+    );
+    const confirm = screen.getByText("Confirm").closest("button");
+    expect(confirm).toBeDisabled();
+  });
+
+  it("renders helper text below the textarea", () => {
+    render(
+      <ConfirmWithNoteDialog
+        open
+        onCancel={() => {}}
+        onConfirm={() => {}}
+        title="Reason?"
+        noteHelperText="Provide context for the audit log."
+      />,
+    );
+    expect(
+      screen.getByText("Provide context for the audit log."),
+    ).toBeInTheDocument();
   });
 });
