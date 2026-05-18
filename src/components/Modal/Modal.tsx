@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React, { forwardRef, useEffect, useId, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
+import React, { forwardRef, useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   getOverlayDepth,
   registerOverlay,
   subscribeOverlayStack,
   unregisterOverlay,
-} from './ModalStack';
+} from "./ModalStack";
 
 export interface ModalMotionVariants {
   initial?: Record<string, unknown>;
@@ -19,7 +19,7 @@ interface ModalProps {
   children?: React.ReactNode;
   isOpen?: boolean;
   toggle?: () => void;
-  size?: 'sm' | 'md';
+  size?: "sm" | "md";
   title?: React.ReactNode;
   footer?: React.ReactNode;
   /**
@@ -27,7 +27,20 @@ interface ModalProps {
    * unspecified entries fall back to the default scale/opacity behavior.
    */
   motionVariants?: ModalMotionVariants;
-  'aria-label'?: string;
+  "aria-label"?: string;
+  /**
+   * Controls which element receives focus when the modal opens.
+   * - `string` — CSS selector queried within the modal root.
+   * - `HTMLElement` — focused directly.
+   * - `React.RefObject<HTMLElement>` — focuses `ref.current` if non-null.
+   * - `null` — suppresses auto-focus entirely.
+   * - `undefined` (default) — focuses the first focusable element (existing behavior).
+   */
+  initialFocusTarget?:
+    | string
+    | HTMLElement
+    | React.RefObject<HTMLElement>
+    | null;
 }
 
 const Z_MODAL_BACKDROP = 3000;
@@ -42,11 +55,12 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
     children,
     isOpen,
     toggle,
-    size = 'sm',
+    size = "sm",
     title,
     footer,
     motionVariants,
-    'aria-label': ariaLabel,
+    "aria-label": ariaLabel,
+    initialFocusTarget,
   },
   ref,
 ) {
@@ -65,6 +79,22 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
     const frame = requestAnimationFrame(() => {
       const dialog = dialogRef.current;
       if (!dialog) return;
+      if (initialFocusTarget === null) return;
+      if (initialFocusTarget !== undefined) {
+        let target: HTMLElement | null = null;
+        if (typeof initialFocusTarget === "string") {
+          target = dialog.querySelector<HTMLElement>(initialFocusTarget);
+        } else if (initialFocusTarget instanceof HTMLElement) {
+          target = initialFocusTarget;
+        } else if (
+          typeof initialFocusTarget === "object" &&
+          "current" in initialFocusTarget
+        ) {
+          target = initialFocusTarget.current;
+        }
+        target?.focus();
+        return;
+      }
       const focusable = dialog.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
       (focusable ?? dialog).focus();
     });
@@ -78,7 +108,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
       cancelAnimationFrame(frame);
       previousFocusRef.current?.focus?.();
     };
-  }, [isOpen, toggle]);
+  }, [isOpen, toggle, initialFocusTarget]);
 
   if (!isOpen) return null;
 
@@ -87,12 +117,12 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
   const modalZ = Z_MODAL + depth * Z_STEP;
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key !== 'Tab') return;
+    if (event.key !== "Tab") return;
     const dialog = dialogRef.current;
     if (!dialog) return;
     const focusables = Array.from(
       dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
-    ).filter((el) => !el.hasAttribute('disabled') && el.offsetParent !== null);
+    ).filter((el) => !el.hasAttribute("disabled") && el.offsetParent !== null);
     if (focusables.length === 0) {
       event.preventDefault();
       dialog.focus();
@@ -121,8 +151,9 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
 
   const setRefs = (node: HTMLDivElement | null) => {
     dialogRef.current = node;
-    if (typeof ref === 'function') ref(node);
-    else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+    if (typeof ref === "function") ref(node);
+    else if (ref)
+      (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
   };
 
   return createPortal(
@@ -146,7 +177,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
         tabIndex={-1}
         onKeyDown={handleKeyDown}
         className={`modalAnim mx-8px flex flex-col w-full h-auto max-h-[90vh] rounded-24px border-[1px] border-solid border-black_3 bg-black_1 p-24px shadow-4xl overflow-hidden outline-none ${
-          size === 'md' ? 'xs:w-[670px]' : 'xs:w-[454px]'
+          size === "md" ? "xs:w-[670px]" : "xs:w-[454px]"
         } xs:p-32px sm:rounded-40px`}
         style={{ zIndex: modalZ, ...motionStyle }}
       >
@@ -158,7 +189,9 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
             {title}
           </div>
         )}
-        <div className="flex-1 overflow-y-auto custom-scrollbar min-h-0">{children}</div>
+        <div className="flex-1 overflow-y-auto custom-scrollbar min-h-0">
+          {children}
+        </div>
         {footer && (
           <div className="mt-24px pt-16px flex items-center justify-end gap-12px flex-shrink-0">
             {footer}

@@ -90,6 +90,7 @@ export type { KBDProps, KBDSize } from "./components/KBD/KBD";
 
 // Components — Form Controls
 export { default as Button } from "./components/Button/Button";
+export type { ButtonTypes } from "./components/Button/Button";
 export { default as Input } from "./components/Input/Input";
 export { TextArea } from "./components/TextArea/TextArea";
 export { default as Checkbox } from "./components/Checkbox/Checkbox";
@@ -240,7 +241,7 @@ export type {
 
 // Components — Data Display
 export { default as Avatar } from "./components/Avatar/Avatar";
-export type { AvatarProps } from "./components/Avatar/Avatar";
+export type { AvatarProps, AvatarSize } from "./components/Avatar/Avatar";
 export { default as AvatarCard } from "./components/AvatarCard/AvatarCard";
 export { default as ResultPill } from "./components/ResultPill/ResultPill";
 export { default as Rate } from "./components/Rate/Rate";

@@ -1,45 +1,58 @@
-'use client';
+"use client";
 
-import React, { useMemo } from 'react';
-import type { MouseEventHandler, ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
-import { Icon } from '@/components/Icon/Icon';
-import type { VariantTypoTagsStyles } from '@/components/Typography/types';
-import Typography from '@/components/Typography/Typography';
-import useButtonStyles from './useButtonStyles';
+import React, { forwardRef, useMemo } from "react";
+import type {
+  MouseEventHandler,
+  ButtonHTMLAttributes,
+  DetailedHTMLProps,
+} from "react";
+import { Icon } from "@/components/Icon/Icon";
+import type { VariantTypoTagsStyles } from "@/components/Typography/types";
+import Typography from "@/components/Typography/Typography";
+import useButtonStyles from "./useButtonStyles";
 
-export interface ButtonTypes
-  extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
+export interface ButtonTypes extends DetailedHTMLProps<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  HTMLButtonElement
+> {
   loadingType?: boolean;
   text?: string;
-  buttonSize?: 'small' | 'large' | 'tabSize';
-  variant?: 'primary' | 'secondary' | 'danger' | 'tabButton' | 'tabButtonWhite';
+  buttonSize?: "small" | "large" | "tabSize";
+  variant?: "primary" | "secondary" | "danger" | "tabButton" | "tabButtonWhite";
   useIcon?: boolean;
-  stateOfButton?: 'default' | 'active';
+  stateOfButton?: "default" | "active";
   classes?: string;
   hoverOff?: boolean;
   changeColor?: boolean;
   children?: React.ReactNode;
   typeText?: VariantTypoTagsStyles;
   onClick?: MouseEventHandler;
+  shape?: "default" | "pill";
+  iconOnly?: boolean;
 }
 
-export default function Button({
-  text,
-  disabled,
-  buttonSize = 'large',
-  loadingType,
-  classes,
-  variant,
-  useIcon,
-  stateOfButton = 'default',
-  hoverOff,
-  children,
-  changeColor,
-  typeText = 'Buttons',
-  onClick,
-  type = 'button',
-  ...rest
-}: ButtonTypes) {
+const Button = forwardRef<HTMLButtonElement, ButtonTypes>(function Button(
+  {
+    text,
+    disabled,
+    buttonSize = "large",
+    loadingType,
+    classes,
+    variant,
+    useIcon,
+    stateOfButton = "default",
+    hoverOff,
+    children,
+    changeColor,
+    typeText = "Buttons",
+    onClick,
+    type = "button",
+    shape = "default",
+    iconOnly = false,
+    ...rest
+  },
+  ref,
+) {
   const buttonClasses = useButtonStyles({
     variant,
     stateOfButton,
@@ -52,17 +65,29 @@ export default function Button({
 
   const iconComponent = useMemo(() => {
     if (useIcon) {
-      return (
-        <Icon icon="arrow" size={buttonSize === 'small' ? 18 : 24} />
-      );
+      return <Icon icon="arrow" size={buttonSize === "small" ? 18 : 24} />;
     }
     return null;
   }, [useIcon, buttonSize]);
 
+  if (iconOnly && !rest["aria-label"]) {
+    const env = (globalThis as { process?: { env?: { NODE_ENV?: string } } })
+      .process?.env?.NODE_ENV;
+    if (env !== "production") {
+      console.warn(
+        "@sagtech-infra/ui Button: iconOnly requires aria-label for accessibility",
+      );
+    }
+  }
+
+  const shapeClass = shape === "pill" ? "rounded-full" : "";
+  const iconOnlyClass = iconOnly ? "aspect-square !px-8px" : "";
+
   return (
     <button
+      ref={ref}
       type={type}
-      className={`${classes} ${buttonClasses}`}
+      className={`${classes ?? ""} ${buttonClasses} ${shapeClass} ${iconOnlyClass}`.trim()}
       disabled={disabled || loadingType}
       aria-busy={loadingType || undefined}
       aria-disabled={disabled || loadingType || undefined}
@@ -73,12 +98,19 @@ export default function Button({
       {loadingType && (
         <svg
           className="animate-spin"
-          width={buttonSize === 'small' ? 16 : 20}
-          height={buttonSize === 'small' ? 16 : 20}
+          width={buttonSize === "small" ? 16 : 20}
+          height={buttonSize === "small" ? 16 : 20}
           viewBox="0 0 24 24"
           fill="none"
         >
-          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" opacity="0.3" />
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="3"
+            opacity="0.3"
+          />
           <path
             d="M12 2a10 10 0 0 1 10 10"
             stroke="currentColor"
@@ -89,10 +121,16 @@ export default function Button({
       )}
       {iconComponent}
       {text && (
-        <Typography type={typeText} color="text-white" className="hidde-paragraph">
+        <Typography
+          type={typeText}
+          color="text-white"
+          className="hidde-paragraph"
+        >
           {text}
         </Typography>
       )}
     </button>
   );
-}
+});
+
+export default Button;
