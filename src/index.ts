@@ -232,6 +232,12 @@ export {
   default as Toolbar,
   ToolbarSeparator,
 } from "./components/Toolbar/Toolbar";
+export { default as Stack } from "./components/Stack/Stack";
+export type { StackProps } from "./components/Stack/Stack";
+export { default as Inline } from "./components/Inline/Inline";
+export type { InlineProps } from "./components/Inline/Inline";
+export { default as PageHeader } from "./components/PageHeader/PageHeader";
+export type { PageHeaderProps } from "./components/PageHeader/PageHeader";
 export type {
   ToolbarProps,
   ToolbarSeparatorProps,
