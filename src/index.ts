@@ -47,6 +47,8 @@ export {
   calculateQuarters,
   formatDate,
   getCompanyAge,
+  formatRelativeTime,
+  formatAbsoluteTime,
   detectCountryByTimezone,
   detectCountryByLanguage,
   detectCountry,
@@ -302,6 +304,8 @@ export type {
   GraphNode,
   GraphEdge,
 } from "./components/VisualGraphEditor/VisualGraphEditor";
+export { default as JsonView } from "./components/JsonView/JsonView";
+export type { JsonViewProps } from "./components/JsonView/JsonView";
 export { default as GanttTimeline } from "./components/GanttTimeline/GanttTimeline";
 export type {
   GanttTimelineProps,
@@ -438,6 +442,14 @@ export type {
   SpotlightProps,
   SpotlightPlacement,
 } from "./components/Spotlight/types";
+
+// Feedback — Motion primitives
+export { default as NumberTicker } from "./components/NumberTicker/NumberTicker";
+export type { NumberTickerProps } from "./components/NumberTicker/NumberTicker";
+export { default as TypingAnimation } from "./components/TypingAnimation/TypingAnimation";
+export type { TypingAnimationProps } from "./components/TypingAnimation/TypingAnimation";
+export { default as Particles } from "./components/Particles/Particles";
+export type { ParticlesProps } from "./components/Particles/Particles";
 
 // Icons
 export { content as iconContent } from "./icons";
