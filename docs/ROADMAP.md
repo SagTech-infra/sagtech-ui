@@ -121,17 +121,52 @@
 
 ---
 
-## 🎯 v1.3 — small polish + motion-token groundwork
+## ✅ v1.3 — released 2026-05-18 — a11y blockers + DX + motion infrastructure
 
-Аддитивный мелкий релиз, готовит почву для светлой темы и motion-системы в v1.4. Никаких breaking changes.
+Большой аддитивный релиз, закрывающий весь consumer-audit от 2026-05-18 (`UI library gaps audit`). Zero breaking changes — drop-in upgrade from `1.2.x`.
 
-- **Motion-токены.** В `theme.css` ввести группу `--motion-duration-fast/normal/slow` (≈120ms / 200ms / 320ms) и `--motion-ease-standard/emphasized/decelerated` (cubic-bezier). Сгенерировать типизированные `tokens.motion.*` через `scripts/generate-tokens.mjs`.
-- **Overlay-моции на токены.** `Toast` / `Modal` / `Drawer` / `Sheet` / `BottomSheet` / `Popover` / `Tooltip` / `ConfirmDialog` / `DatePicker` заменяют inline `transition={{ duration: 0.18 }}` на CSS-vars/токены. Поведение идентично, диффы маленькие.
-- **`prefers-reduced-motion` honoring** на всех overlays — переходы заменяются на mount/unmount без анимации (через `useReducedMotion()` от framer-motion).
-- **`Tabs` controlled-first API**: добавить `value` + `onValueChange` как новый канон (см. `docs/API_CONVENTIONS.md`). `defaultIndex` → `@deprecated`, удалить в v2.0. Закрывает «Found, not fixed» из `CHANGELOG-INTERNAL.md` (2026-05-05).
-- **`Button` ref-forwarding** (phase 2 of B-6) — additive `ref?: Ref<HTMLButtonElement>`. Закрывает соответствующий пункт из internal sweep.
-- **`SelectDropdownLayout` token cleanup** — `bg-[#1B1B27]` → `bg-black_2` (после визуального ревью) или новый `--color-black_1_5`, если оттенок целенаправленный.
-- **Тесты для v1.1 overlays**: `Sheet`, `BottomSheet`, `Banner`, `Spotlight`, `FAB`, `Modal` (render + onClose + focus restore). Покрывает пробел из B-2.
+**Accessibility (Critical / High):**
+
+- `Tabs` — новый compound API (`Tabs.Root/List/Trigger/Content`) рядом с `items`-фасадом. Полная ARIA (`tablist`/`tab`/`tabpanel` + `aria-selected`/`controls`/`labelledby`), roving tabindex, arrow-keys / Home / End / Enter / Space, `orientation`, `activationMode`, `lazyMount`. `defaultIndex` → `@deprecated` (удалить в v2.0).
+- `Modal` / `Drawer` / `ConfirmDialog` — новый `initialFocusTarget?: string | HTMLElement | RefObject<HTMLElement> | null` prop.
+- `Drawer` — focus management (save/restore previously-focused element) + `forwardRef` на панель.
+- `ConfirmDialog` — `setTimeout(0)` → `requestAnimationFrame` для consistency с Modal.
+- `ConfirmWithNoteDialog` — новые `noteMaxLength` (счётчик символов) и `noteHelperText`.
+
+**Component DX:**
+
+- `Checkbox` — additive `onCheckedChange?: (checked: boolean) => void`. Существующий `onChange` (raw input event) не сломан.
+- `Avatar.size` — `AvatarSize | number` (string остаётся, число рендерится через inline width/height).
+- `Button` — `shape?: 'default' | 'pill'`, `iconOnly?: boolean`, `forwardRef<HTMLButtonElement>` (закрывает B-6 phase 2).
+- `Pagination` — overhaul: `mode?: 'offset' | 'cursor'` (offset как было; cursor — `hasPrevious`/`hasNext`/`onPreviousPage`/`onNextPage`), `loading`, `disabled`, `size?: 'default' | 'compact'`, `label` slot.
+
+**Новые компоненты:**
+
+- Layout: `Stack`, `Inline` (token-aware gap/align/justify), `PageHeader` (eyebrow + h1 + subtitle + actions).
+- Motion: `NumberTicker`, `TypingAnimation`, `Particles` — все honor `prefers-reduced-motion`.
+- Data display: `JsonView` — recursive рендер с `<details>` + copy.
+
+**Утилиты:**
+
+- `formatRelativeTime`, `formatAbsoluteTime` (Intl-based, no new deps).
+- `src/utils/motion.ts` — `motionDurationS`, `motionEaseBezier`, `tokenTransition()` для framer-motion.
+
+**Токены:**
+
+- Radii `10/12/14/18px`, shadows `glow-purple` / `elevate-md` / `elevate-lg`, `--gradient-accent` композит, motion `--motion-duration-{fast,normal,slow}` + `--motion-ease-{standard,emphasized,decelerated}`. Все типизированы в `tokens.ts`.
+
+**Motion infrastructure:**
+
+- Все overlays (`Toast` / `Drawer` / `Sheet` / `BottomSheet` / `Popover` / `Tooltip` / `ConfirmDialog` / `ConfirmWithNoteDialog` / `DatePicker` / `DateRangePicker` / `CommandPalette`) читают длительности из токенов и снимают анимации при `prefers-reduced-motion: reduce`.
+
+**Перенесено в Backlog / v1.4+:**
+
+- `SelectDropdownLayout` token cleanup (`bg-[#1B1B27]`)
+- Тесты для оставшихся v1.1 overlays (`Banner`, `Spotlight`, `FAB`)
+- `JsonDiffView` (диффы с подсветкой) — отдельный компонент, отложен.
+- Vertical orientation polish для `Tabs`.
+
+**Tests**: 299/299.
 
 ---
 

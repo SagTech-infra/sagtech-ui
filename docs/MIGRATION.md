@@ -60,10 +60,10 @@
 
 **New optional peer-deps for 3D components.** Install ONLY if you render the corresponding components:
 
-| Peer | Required by |
-|---|---|
-| `three`, `@react-three/fiber`, `@react-three/drei` | `Globe3D`, `Scene3D`, `Mindmap3D` |
-| `three`, `@react-three/fiber`, `@react-three/drei`, `react-force-graph-3d` | `Network3D` |
+| Peer                                                                       | Required by                       |
+| -------------------------------------------------------------------------- | --------------------------------- |
+| `three`, `@react-three/fiber`, `@react-three/drei`                         | `Globe3D`, `Scene3D`, `Mindmap3D` |
+| `three`, `@react-three/fiber`, `@react-three/drei`, `react-force-graph-3d` | `Network3D`                       |
 
 ```bash
 # Only if you use a 3D component
@@ -84,3 +84,81 @@ If you don't import any of the four 3D components, you don't need any new peer.
 - `Alert.autoDismiss?: number` (ms) — when set, fires `onClose` after the timeout.
 - `ConfirmDialog.confirmDisabled?: boolean` — disables the primary action without affecting cancel.
 - `CookieBanner.position?: 'top' \| 'bottom'` (default `'bottom'`) and a `children?` slot for custom content. Existing `title`/`description` continue to work.
+
+### 1.2 → 1.3
+
+**Zero breaking changes.** Drop-in upgrade from `1.2.x` — all existing imports, props, and runtime behavior continue to work unchanged.
+
+**Accessibility — major wins:**
+
+- `Tabs` — new compound API alongside the existing `items`-prop facade:
+  ```tsx
+  <Tabs.Root value={tab} onValueChange={setTab}>
+    <Tabs.List aria-label="Sections">
+      <Tabs.Trigger value="a">A</Tabs.Trigger>
+      <Tabs.Trigger value="b">B</Tabs.Trigger>
+    </Tabs.List>
+    <Tabs.Content value="a">…</Tabs.Content>
+    <Tabs.Content value="b">…</Tabs.Content>
+  </Tabs.Root>
+  ```
+  Full ARIA (`role="tablist"`/`tab`/`tabpanel`, `aria-selected`, `aria-controls`, `aria-labelledby`, `aria-orientation`), roving tabindex, arrow-key / Home / End / Enter / Space navigation, `orientation="horizontal"|"vertical"`, `activationMode="automatic"|"manual"`, `lazyMount?: boolean` (default `true`). The existing `<Tabs items={…} defaultIndex={…} onChange={…} />` keeps working unchanged. `defaultIndex` carries `@deprecated` JSDoc pointing at `defaultValue`; removal scheduled for **v2.0**.
+- `Modal`, `Drawer`, `ConfirmDialog` — new `initialFocusTarget?: string | HTMLElement | RefObject<HTMLElement> | null` prop. `string` is a CSS selector resolved inside the overlay; `HTMLElement` / `RefObject` focus directly; `null` suppresses auto-focus. `undefined` (default) preserves existing behavior on each.
+- `Drawer` — now ships proper focus management: saves the previously-focused element on open, restores it on close. Also forwards a ref to the panel element.
+- `ConfirmDialog` — focus resolution switched from `setTimeout(0)` to `requestAnimationFrame` for consistency with `Modal`. No visual change.
+
+**Component DX:**
+
+- `Checkbox` — additive `onCheckedChange?: (checked: boolean) => void` parallel prop. Existing `onChange` (raw input event) continues to work; both fire when both are supplied.
+- `Avatar.size` — now accepts `AvatarSize | number`. String values map to the existing scale; numeric values render at that pixel size via inline width/height.
+- `Button` — new `shape?: 'default' | 'pill'` (`pill` applies `rounded-full`) and `iconOnly?: boolean` (square, no horizontal padding). `Button` now forwards a `ref` to the underlying `<button>` (roadmap B-6 phase 2). Dev-mode warns when `iconOnly` is used without `aria-label`.
+- `Pagination` — overhauled to support both modes:
+  ```tsx
+  // Cursor mode:
+  <Pagination
+    mode="cursor"
+    hasPrevious
+    hasNext
+    onPreviousPage={prev}
+    onNextPage={next}
+    label="Showing 1–20 of 156"
+    loading={isFetching}
+    size="compact"
+  />
+  ```
+  Offset mode unchanged (`currentPage` / `totalPages` / `onPageChange`). New shared props: `loading`, `disabled`, `size?: 'default' | 'compact'`, `label?: ReactNode`.
+- `ConfirmWithNoteDialog` — additive `noteMaxLength?: number` (enforces + shows counter) and `noteHelperText?: ReactNode`. Existing `noteRequired` / `noteMinLength` unchanged.
+
+**New layout primitives:**
+
+- `Stack` — vertical flex container with token-aware `gap` (`xs|sm|md|lg|xl`), `align`, `justify`, polymorphic `as`.
+- `Inline` — horizontal flex container, same props plus `wrap?: boolean`.
+- `PageHeader` — eyebrow + h1 + subtitle + right-aligned `actions` slot.
+
+**New motion primitives:**
+
+- `NumberTicker` — animated count-up (`value`, `from`, `duration`, `formatter`). Honors `prefers-reduced-motion`.
+- `TypingAnimation` — char-by-char text reveal (`children`, `duration`, `delay`). Honors `prefers-reduced-motion`.
+- `Particles` — canvas-based particle background (`quantity`, `color`, `velocity`, `size`). Pauses when offscreen via `useIntersectionObserver`. Renders an empty `<div>` when `prefers-reduced-motion: reduce`.
+
+**New data display:**
+
+- `JsonView` — recursive renderer with `<details>` semantics, syntax-tinted atoms, configurable `collapsed` depth, and a built-in copy button.
+
+**New utilities:**
+
+- `formatRelativeTime(date, baseDate?, locale?)` — `"5 minutes ago"` / `"in 3 days"` via `Intl.RelativeTimeFormat`. No new deps.
+- `formatAbsoluteTime(date, locale?)` — `"May 18, 2026, 3:42 PM"` via `Intl.DateTimeFormat`.
+
+**Token additions** (`@theme` block):
+
+- Radii: `--radius-10px`, `--radius-12px`, `--radius-14px`, `--radius-18px`.
+- Shadows: `--shadow-glow-purple`, `--shadow-elevate-md`, `--shadow-elevate-lg`.
+- Gradient: `--gradient-accent` (composite `pr_purple → #5b54ee → #292a94`).
+- Motion: `--motion-duration-fast|normal|slow` (120ms / 200ms / 320ms), `--motion-ease-standard|emphasized|decelerated` (cubic-bezier).
+- Typed mirrors emitted in `tokens.radius`, `tokens.shadows`, `tokens.motionDuration`, `tokens.motionEase`.
+
+**Internal motion infrastructure:**
+
+- New `src/utils/motion.ts` exports `motionDurationS`, `motionEaseBezier`, and `tokenTransition()` bridging CSS motion tokens to framer-motion-ready numbers.
+- Overlay animations (`Toast`, `Drawer`, `Sheet`, `BottomSheet`, `Popover`, `Tooltip`, `ConfirmDialog`, `ConfirmWithNoteDialog`, `DatePicker`, `DateRangePicker`, `CommandPalette`) now read durations from motion tokens and skip animation when `prefers-reduced-motion: reduce` is set. No API surface change; near-identical visual timing.
