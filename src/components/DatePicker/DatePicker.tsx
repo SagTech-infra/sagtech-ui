@@ -1,9 +1,18 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState, useCallback, useMemo, useLayoutEffect, type Ref } from 'react';
-import { createPortal } from 'react-dom';
-import classNames from 'classnames';
-import { AnimatePresence, motion } from 'framer-motion';
+import {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  useMemo,
+  useLayoutEffect,
+  type Ref,
+} from "react";
+import { createPortal } from "react-dom";
+import classNames from "classnames";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { tokenTransition } from "@/utils/motion";
 import {
   WEEKDAYS,
   formatDisplayDate,
@@ -12,7 +21,7 @@ import {
   isSameDay,
   isToday,
   type CalendarDay,
-} from './calendar';
+} from "./calendar";
 
 export interface DatePickerProps {
   value?: Date;
@@ -66,7 +75,13 @@ function CalendarIcon() {
 
 function ChevronLeft() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M10 12L6 8L10 4"
         stroke="currentColor"
@@ -80,7 +95,13 @@ function ChevronLeft() {
 
 function ChevronRight() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M6 4L10 8L6 12"
         stroke="currentColor"
@@ -95,7 +116,7 @@ function ChevronRight() {
 export default function DatePicker({
   value,
   onChange,
-  placeholder = 'Select date',
+  placeholder = "Select date",
   minDate,
   maxDate,
   disabled = false,
@@ -106,14 +127,19 @@ export default function DatePicker({
   timeStep = 5,
   ref,
 }: DatePickerProps) {
+  const reduceMotion = useReducedMotion();
   const [isOpen, setIsOpen] = useState(false);
   const [popoverStyle, setPopoverStyle] = useState<{
     top: number;
     left: number;
     minWidth: number;
   } | null>(null);
-  const [viewYear, setViewYear] = useState(() => (value ? value.getFullYear() : new Date().getFullYear()));
-  const [viewMonth, setViewMonth] = useState(() => (value ? value.getMonth() : new Date().getMonth()));
+  const [viewYear, setViewYear] = useState(() =>
+    value ? value.getFullYear() : new Date().getFullYear(),
+  );
+  const [viewMonth, setViewMonth] = useState(() =>
+    value ? value.getMonth() : new Date().getMonth(),
+  );
 
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
@@ -130,8 +156,8 @@ export default function DatePicker({
       if (popoverRef.current?.contains(target)) return;
       setIsOpen(false);
     };
-    document.addEventListener('mousedown', onMouseDown);
-    return () => document.removeEventListener('mousedown', onMouseDown);
+    document.addEventListener("mousedown", onMouseDown);
+    return () => document.removeEventListener("mousedown", onMouseDown);
   }, [isOpen]);
 
   // Approx height of the calendar popover (header + grid + bottom padding).
@@ -145,7 +171,8 @@ export default function DatePicker({
     const trigger = triggerRef.current;
     if (!trigger) return;
     const rect = trigger.getBoundingClientRect();
-    const popHeight = popoverRef.current?.offsetHeight ?? ESTIMATED_POPOVER_HEIGHT;
+    const popHeight =
+      popoverRef.current?.offsetHeight ?? ESTIMATED_POPOVER_HEIGHT;
     const spaceBelow = window.innerHeight - rect.bottom;
     const flipUp = spaceBelow < popHeight + 12 && rect.top > spaceBelow;
     const top = flipUp ? rect.top - popHeight - 4 : rect.bottom + 4;
@@ -160,11 +187,11 @@ export default function DatePicker({
   useEffect(() => {
     if (!isOpen) return;
     const onScroll = () => updatePosition();
-    window.addEventListener('scroll', onScroll, true);
-    window.addEventListener('resize', onScroll);
+    window.addEventListener("scroll", onScroll, true);
+    window.addEventListener("resize", onScroll);
     return () => {
-      window.removeEventListener('scroll', onScroll, true);
-      window.removeEventListener('resize', onScroll);
+      window.removeEventListener("scroll", onScroll, true);
+      window.removeEventListener("resize", onScroll);
     };
   }, [isOpen, updatePosition]);
 
@@ -233,9 +260,11 @@ export default function DatePicker({
   }, [disabled]);
 
   return (
-    <div className={classNames('flex flex-col gap-6px', className)} ref={ref}>
+    <div className={classNames("flex flex-col gap-6px", className)} ref={ref}>
       {label && (
-        <label className="text-12 font-bold leading-18 text-white_4">{label}</label>
+        <label className="text-12 font-bold leading-18 text-white_4">
+          {label}
+        </label>
       )}
       <div className="relative">
         <button
@@ -244,19 +273,19 @@ export default function DatePicker({
           onClick={handleToggle}
           disabled={disabled}
           className={classNames(
-            'bg-black_1 border border-solid rounded-16px h-[56px] px-24px font-manrope text-14 w-full text-left flex items-center justify-between transition-colors duration-200',
+            "bg-black_1 border border-solid rounded-16px h-[56px] px-24px font-manrope text-14 w-full text-left flex items-center justify-between transition-colors duration-200",
             {
-              'border-pr_purple': !error,
-              'border-error': error,
-              'cursor-pointer': !disabled,
-              'cursor-not-allowed opacity-50': disabled,
+              "border-pr_purple": !error,
+              "border-error": error,
+              "cursor-pointer": !disabled,
+              "cursor-not-allowed opacity-50": disabled,
             },
           )}
         >
-          <span className={value ? 'text-grey_4' : 'text-grey_2'}>
+          <span className={value ? "text-grey_4" : "text-grey_2"}>
             {value
               ? showTime
-                ? `${formatDisplayDate(value)} ${String(value.getHours()).padStart(2, '0')}:${String(value.getMinutes()).padStart(2, '0')}`
+                ? `${formatDisplayDate(value)} ${String(value.getHours()).padStart(2, "0")}:${String(value.getMinutes()).padStart(2, "0")}`
                 : formatDisplayDate(value)
               : placeholder}
           </span>
@@ -265,7 +294,7 @@ export default function DatePicker({
           </span>
         </button>
 
-        {typeof document !== 'undefined' &&
+        {typeof document !== "undefined" &&
           createPortal(
             <AnimatePresence>
               {isOpen && popoverStyle && (
@@ -275,117 +304,140 @@ export default function DatePicker({
                   animate="open"
                   exit="closed"
                   variants={dropdownVariants}
-                  transition={{ duration: 0.15 }}
+                  transition={
+                    reduceMotion ? { duration: 0 } : tokenTransition("fast")
+                  }
                   style={{
-                    position: 'fixed',
+                    position: "fixed",
                     top: popoverStyle.top,
                     left: popoverStyle.left,
                     minWidth: Math.max(popoverStyle.minWidth, 320),
                   }}
                   className="z-50 bg-black_2 border border-black_3 rounded-16px p-20px shadow-6xl"
                 >
-              {/* Header */}
-              <div className="flex items-center justify-between mb-12px">
-                <button
-                  type="button"
-                  onClick={handlePrevMonth}
-                  className="w-[28px] h-[28px] flex items-center justify-center rounded-8px text-grey_4 hover:bg-black_3 transition-colors cursor-pointer"
-                >
-                  <ChevronLeft />
-                </button>
-                <span className="font-manrope text-14 font-semibold text-white_4">
-                  {monthLabel}
-                </span>
-                <button
-                  type="button"
-                  onClick={handleNextMonth}
-                  className="w-[28px] h-[28px] flex items-center justify-center rounded-8px text-grey_4 hover:bg-black_3 transition-colors cursor-pointer"
-                >
-                  <ChevronRight />
-                </button>
-              </div>
-
-              {/* Weekday headers */}
-              <div className="grid grid-cols-7 gap-[2px] mb-4px">
-                {WEEKDAYS.map((day) => (
-                  <div
-                    key={day}
-                    className="text-10 text-grey_1 uppercase text-center font-manrope py-4px"
-                  >
-                    {day}
-                  </div>
-                ))}
-              </div>
-
-              {/* Day grid */}
-              <div className="grid grid-cols-7 gap-[2px]">
-                {days.map((day, index) => {
-                  const isSelected = value ? isSameDay(day.date, value) : false;
-                  const isTodayDay = isToday(day.date);
-
-                  return (
+                  {/* Header */}
+                  <div className="flex items-center justify-between mb-12px">
                     <button
-                      key={index}
                       type="button"
-                      onClick={() => handleDayClick(day)}
-                      disabled={day.isDisabled}
-                      className={classNames(
-                        'w-[36px] h-[36px] rounded-8px text-14 font-manrope flex items-center justify-center mx-auto transition-colors duration-150',
-                        {
-                          'bg-pr_purple text-white': isSelected,
-                          'text-pr_purple font-semibold': isTodayDay && !isSelected,
-                          'text-grey_4 hover:bg-black_3 cursor-pointer':
-                            day.isCurrentMonth && !isSelected && !day.isDisabled,
-                          'text-grey_1': !day.isCurrentMonth && !isSelected,
-                          'opacity-50 cursor-not-allowed': day.isDisabled,
-                        },
-                      )}
+                      onClick={handlePrevMonth}
+                      className="w-[28px] h-[28px] flex items-center justify-center rounded-8px text-grey_4 hover:bg-black_3 transition-colors cursor-pointer"
                     >
-                      {day.date.getDate()}
+                      <ChevronLeft />
                     </button>
-                  );
-                })}
-              </div>
-
-              {showTime && (
-                <div className="mt-12px pt-12px border-t border-solid border-black_3 flex items-center justify-between gap-12px">
-                  <span className="font-manrope text-12 font-semibold text-grey_4">Time</span>
-                  <div className="flex items-center gap-4px">
-                    <select
-                      aria-label="Hours"
-                      className="bg-black_1 border border-solid border-black_3 rounded-8px text-white_4 text-14 font-manrope px-8px py-4px cursor-pointer"
-                      value={value ? value.getHours() : 0}
-                      onChange={(e) =>
-                        handleTimeChange(parseInt(e.target.value, 10), value ? value.getMinutes() : 0)
-                      }
+                    <span className="font-manrope text-14 font-semibold text-white_4">
+                      {monthLabel}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleNextMonth}
+                      className="w-[28px] h-[28px] flex items-center justify-center rounded-8px text-grey_4 hover:bg-black_3 transition-colors cursor-pointer"
                     >
-                      {Array.from({ length: 24 }, (_, h) => (
-                        <option key={h} value={h}>
-                          {String(h).padStart(2, '0')}
-                        </option>
-                      ))}
-                    </select>
-                    <span className="text-grey_4">:</span>
-                    <select
-                      aria-label="Minutes"
-                      className="bg-black_1 border border-solid border-black_3 rounded-8px text-white_4 text-14 font-manrope px-8px py-4px cursor-pointer"
-                      value={value ? value.getMinutes() - (value.getMinutes() % timeStep) : 0}
-                      onChange={(e) =>
-                        handleTimeChange(value ? value.getHours() : 0, parseInt(e.target.value, 10))
-                      }
-                    >
-                      {Array.from({ length: Math.ceil(60 / timeStep) }, (_, i) => {
-                        const m = i * timeStep;
-                        return (
-                          <option key={m} value={m}>
-                            {String(m).padStart(2, '0')}
-                          </option>
-                        );
-                      })}
-                    </select>
+                      <ChevronRight />
+                    </button>
                   </div>
-                </div>
-              )}
+
+                  {/* Weekday headers */}
+                  <div className="grid grid-cols-7 gap-[2px] mb-4px">
+                    {WEEKDAYS.map((day) => (
+                      <div
+                        key={day}
+                        className="text-10 text-grey_1 uppercase text-center font-manrope py-4px"
+                      >
+                        {day}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Day grid */}
+                  <div className="grid grid-cols-7 gap-[2px]">
+                    {days.map((day, index) => {
+                      const isSelected = value
+                        ? isSameDay(day.date, value)
+                        : false;
+                      const isTodayDay = isToday(day.date);
+
+                      return (
+                        <button
+                          key={index}
+                          type="button"
+                          onClick={() => handleDayClick(day)}
+                          disabled={day.isDisabled}
+                          className={classNames(
+                            "w-[36px] h-[36px] rounded-8px text-14 font-manrope flex items-center justify-center mx-auto transition-colors duration-150",
+                            {
+                              "bg-pr_purple text-white": isSelected,
+                              "text-pr_purple font-semibold":
+                                isTodayDay && !isSelected,
+                              "text-grey_4 hover:bg-black_3 cursor-pointer":
+                                day.isCurrentMonth &&
+                                !isSelected &&
+                                !day.isDisabled,
+                              "text-grey_1": !day.isCurrentMonth && !isSelected,
+                              "opacity-50 cursor-not-allowed": day.isDisabled,
+                            },
+                          )}
+                        >
+                          {day.date.getDate()}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {showTime && (
+                    <div className="mt-12px pt-12px border-t border-solid border-black_3 flex items-center justify-between gap-12px">
+                      <span className="font-manrope text-12 font-semibold text-grey_4">
+                        Time
+                      </span>
+                      <div className="flex items-center gap-4px">
+                        <select
+                          aria-label="Hours"
+                          className="bg-black_1 border border-solid border-black_3 rounded-8px text-white_4 text-14 font-manrope px-8px py-4px cursor-pointer"
+                          value={value ? value.getHours() : 0}
+                          onChange={(e) =>
+                            handleTimeChange(
+                              parseInt(e.target.value, 10),
+                              value ? value.getMinutes() : 0,
+                            )
+                          }
+                        >
+                          {Array.from({ length: 24 }, (_, h) => (
+                            <option key={h} value={h}>
+                              {String(h).padStart(2, "0")}
+                            </option>
+                          ))}
+                        </select>
+                        <span className="text-grey_4">:</span>
+                        <select
+                          aria-label="Minutes"
+                          className="bg-black_1 border border-solid border-black_3 rounded-8px text-white_4 text-14 font-manrope px-8px py-4px cursor-pointer"
+                          value={
+                            value
+                              ? value.getMinutes() -
+                                (value.getMinutes() % timeStep)
+                              : 0
+                          }
+                          onChange={(e) =>
+                            handleTimeChange(
+                              value ? value.getHours() : 0,
+                              parseInt(e.target.value, 10),
+                            )
+                          }
+                        >
+                          {Array.from(
+                            { length: Math.ceil(60 / timeStep) },
+                            (_, i) => {
+                              const m = i * timeStep;
+                              return (
+                                <option key={m} value={m}>
+                                  {String(m).padStart(2, "0")}
+                                </option>
+                              );
+                            },
+                          )}
+                        </select>
+                      </div>
+                    </div>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>,
@@ -393,7 +445,9 @@ export default function DatePicker({
           )}
       </div>
       {error && (
-        <p className="px-24px pt-4px text-12 font-medium leading-16 text-error">{error}</p>
+        <p className="px-24px pt-4px text-12 font-medium leading-16 text-error">
+          {error}
+        </p>
       )}
     </div>
   );

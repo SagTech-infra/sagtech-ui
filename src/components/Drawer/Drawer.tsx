@@ -7,7 +7,8 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { tokenTransition } from "@/utils/motion";
 import classNames from "classnames";
 import {
   getOverlayDepth,
@@ -75,6 +76,7 @@ const Drawer = forwardRef<HTMLElement, DrawerProps>(function Drawer(
   },
   ref,
 ) {
+  const reduceMotion = useReducedMotion();
   const idRef = useRef<number | null>(null);
   const panelRef = useRef<HTMLElement | null>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
@@ -156,10 +158,12 @@ const Drawer = forwardRef<HTMLElement, DrawerProps>(function Drawer(
             <motion.div
               className="fixed inset-0 bg-backdrop"
               style={{ zIndex: backdropZ }}
-              initial={{ opacity: 0 }}
+              initial={reduceMotion ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              transition={
+                reduceMotion ? { duration: 0 } : tokenTransition("normal")
+              }
               onClick={onClose}
             />
           )}

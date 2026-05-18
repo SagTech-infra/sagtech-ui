@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   forwardRef,
@@ -8,19 +8,20 @@ import {
   useRef,
   useState,
   type ReactNode,
-} from 'react';
-import { createPortal } from 'react-dom';
-import { AnimatePresence, motion } from 'framer-motion';
-import classNames from 'classnames';
+} from "react";
+import { createPortal } from "react-dom";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { tokenTransition } from "@/utils/motion";
+import classNames from "classnames";
 import {
   getOverlayDepth,
   registerOverlay,
   subscribeOverlayStack,
   unregisterOverlay,
-} from '@/components/Modal/ModalStack';
+} from "@/components/Modal/ModalStack";
 
-export type SheetSide = 'left' | 'right' | 'top' | 'bottom';
-export type SheetSize = 'sm' | 'md' | 'lg' | 'xl';
+export type SheetSide = "left" | "right" | "top" | "bottom";
+export type SheetSize = "sm" | "md" | "lg" | "xl";
 
 export interface SheetProps {
   /** Whether the sheet is open. */
@@ -41,7 +42,7 @@ export interface SheetProps {
   showBackdrop?: boolean;
   /** Additional class for the sheet panel. */
   className?: string;
-  'aria-label'?: string;
+  "aria-label"?: string;
 }
 
 const Z_STEP = 10;
@@ -51,47 +52,61 @@ const FOCUSABLE_SELECTOR =
 
 const sizeClassMap: Record<SheetSide, Record<SheetSize, string>> = {
   left: {
-    sm: 'w-[280px]',
-    md: 'w-[400px]',
-    lg: 'w-[520px]',
-    xl: 'w-[680px]',
+    sm: "w-[280px]",
+    md: "w-[400px]",
+    lg: "w-[520px]",
+    xl: "w-[680px]",
   },
   right: {
-    sm: 'w-[280px]',
-    md: 'w-[400px]',
-    lg: 'w-[520px]',
-    xl: 'w-[680px]',
+    sm: "w-[280px]",
+    md: "w-[400px]",
+    lg: "w-[520px]",
+    xl: "w-[680px]",
   },
   top: {
-    sm: 'h-[200px]',
-    md: 'h-[320px]',
-    lg: 'h-[440px]',
-    xl: 'h-[560px]',
+    sm: "h-[200px]",
+    md: "h-[320px]",
+    lg: "h-[440px]",
+    xl: "h-[560px]",
   },
   bottom: {
-    sm: 'h-[200px]',
-    md: 'h-[320px]',
-    lg: 'h-[440px]',
-    xl: 'h-[560px]',
+    sm: "h-[200px]",
+    md: "h-[320px]",
+    lg: "h-[440px]",
+    xl: "h-[560px]",
   },
 };
 
 function sideToVariants(side: SheetSide) {
   switch (side) {
-    case 'left':
-      return { hidden: { x: '-100%' }, visible: { x: 0 }, exit: { x: '-100%' } };
-    case 'right':
-      return { hidden: { x: '100%' }, visible: { x: 0 }, exit: { x: '100%' } };
-    case 'top':
-      return { hidden: { y: '-100%' }, visible: { y: 0 }, exit: { y: '-100%' } };
-    case 'bottom':
-      return { hidden: { y: '100%' }, visible: { y: 0 }, exit: { y: '100%' } };
+    case "left":
+      return {
+        hidden: { x: "-100%" },
+        visible: { x: 0 },
+        exit: { x: "-100%" },
+      };
+    case "right":
+      return { hidden: { x: "100%" }, visible: { x: 0 }, exit: { x: "100%" } };
+    case "top":
+      return {
+        hidden: { y: "-100%" },
+        visible: { y: 0 },
+        exit: { y: "-100%" },
+      };
+    case "bottom":
+      return { hidden: { y: "100%" }, visible: { y: 0 }, exit: { y: "100%" } };
   }
 }
 
 function CloseIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      aria-hidden="true"
+    >
       <path
         d="M15 5L5 15M5 5L15 15"
         stroke="currentColor"
@@ -107,17 +122,18 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(function Sheet(
   {
     open,
     onOpenChange,
-    side = 'right',
-    size = 'md',
+    side = "right",
+    size = "md",
     title,
     footer,
     children,
     showBackdrop = true,
     className,
-    'aria-label': ariaLabel,
+    "aria-label": ariaLabel,
   },
   ref,
 ) {
+  const reduceMotion = useReducedMotion();
   const idRef = useRef<number | null>(null);
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
@@ -150,7 +166,7 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(function Sheet(
     };
   }, [open, close]);
 
-  if (typeof document === 'undefined') return null;
+  if (typeof document === "undefined") return null;
 
   const depth = idRef.current !== null ? getOverlayDepth(idRef.current) : 0;
   // base z-index from CSS var resolved through computed; we approximate using numeric scale
@@ -160,12 +176,12 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(function Sheet(
   const backdropZ = Z_DRAWER_BACKDROP + depth * Z_STEP;
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key !== 'Tab') return;
+    if (event.key !== "Tab") return;
     const dialog = dialogRef.current;
     if (!dialog) return;
     const focusables = Array.from(
       dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
-    ).filter((el) => !el.hasAttribute('disabled') && el.offsetParent !== null);
+    ).filter((el) => !el.hasAttribute("disabled") && el.offsetParent !== null);
     if (focusables.length === 0) {
       event.preventDefault();
       dialog.focus();
@@ -184,12 +200,13 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(function Sheet(
   };
 
   const variants = sideToVariants(side);
-  const isHorizontalEdge = side === 'left' || side === 'right';
+  const isHorizontalEdge = side === "left" || side === "right";
 
   const setRefs = (node: HTMLDivElement | null) => {
     dialogRef.current = node;
-    if (typeof ref === 'function') ref(node);
-    else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+    if (typeof ref === "function") ref(node);
+    else if (ref)
+      (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
   };
 
   return createPortal(
@@ -200,10 +217,12 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(function Sheet(
             <motion.div
               className="fixed inset-0 bg-backdrop"
               style={{ zIndex: backdropZ }}
-              initial={{ opacity: 0 }}
+              initial={reduceMotion ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              transition={
+                reduceMotion ? { duration: 0 } : tokenTransition("normal")
+              }
               onClick={close}
               aria-hidden="true"
             />
@@ -218,14 +237,19 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(function Sheet(
             tabIndex={-1}
             onKeyDown={handleKeyDown}
             className={classNames(
-              'fixed bg-black_1 flex flex-col outline-none',
+              "fixed bg-black_1 flex flex-col outline-none",
               {
-                'top-0 right-0 h-full border-l border-black_3': side === 'right',
-                'top-0 left-0 h-full border-r border-black_3': side === 'left',
-                'top-0 left-0 right-0 w-full border-b border-black_3': side === 'top',
-                'bottom-0 left-0 right-0 w-full border-t border-black_3': side === 'bottom',
+                "top-0 right-0 h-full border-l border-black_3":
+                  side === "right",
+                "top-0 left-0 h-full border-r border-black_3": side === "left",
+                "top-0 left-0 right-0 w-full border-b border-black_3":
+                  side === "top",
+                "bottom-0 left-0 right-0 w-full border-t border-black_3":
+                  side === "bottom",
               },
-              isHorizontalEdge ? sizeClassMap[side][size] : sizeClassMap[side][size],
+              isHorizontalEdge
+                ? sizeClassMap[side][size]
+                : sizeClassMap[side][size],
               className,
             )}
             style={{ zIndex: sheetZ }}
@@ -233,7 +257,7 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(function Sheet(
             initial="hidden"
             animate="visible"
             exit="exit"
-            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
           >
             <div className="flex items-center justify-between p-24px border-b border-black_3 flex-shrink-0">
               {title ? (

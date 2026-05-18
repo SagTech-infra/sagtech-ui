@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   useCallback,
@@ -6,19 +6,21 @@ import {
   useRef,
   useState,
   type ReactNode,
-} from 'react';
-import { createPortal } from 'react-dom';
+} from "react";
+import { createPortal } from "react-dom";
 import {
   AnimatePresence,
   motion,
   useMotionValue,
+  useReducedMotion,
   type PanInfo,
-} from 'framer-motion';
-import classNames from 'classnames';
+} from "framer-motion";
+import { tokenTransition } from "@/utils/motion";
+import classNames from "classnames";
 import {
   registerOverlay,
   unregisterOverlay,
-} from '@/components/Modal/ModalStack';
+} from "@/components/Modal/ModalStack";
 
 export interface BottomSheetProps {
   /** Whether the sheet is open. */
@@ -40,7 +42,7 @@ export interface BottomSheetProps {
   /** Show backdrop behind the sheet. Default true. */
   showBackdrop?: boolean;
   className?: string;
-  'aria-label'?: string;
+  "aria-label"?: string;
 }
 
 const FOCUSABLE_SELECTOR =
@@ -59,8 +61,9 @@ export function BottomSheet({
   children,
   showBackdrop = true,
   className,
-  'aria-label': ariaLabel,
+  "aria-label": ariaLabel,
 }: BottomSheetProps) {
+  const reduceMotion = useReducedMotion();
   const sortedSnaps = [...snapPoints].sort((a, b) => a - b);
   const startIndex =
     defaultSnap !== undefined
@@ -101,7 +104,7 @@ export function BottomSheet({
   }, [open, close]);
 
   const handleDragEnd = (_event: unknown, info: PanInfo) => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
     const viewportH = window.innerHeight;
     // Determine current effective fraction visible after drag
     const currentFraction = sortedSnaps[activeSnapIndex];
@@ -135,7 +138,7 @@ export function BottomSheet({
     y.set(0);
   };
 
-  if (typeof document === 'undefined') return null;
+  if (typeof document === "undefined") return null;
 
   const activeFraction = sortedSnaps[activeSnapIndex];
 
@@ -146,11 +149,13 @@ export function BottomSheet({
           {showBackdrop && (
             <motion.div
               className="fixed inset-0 bg-backdrop"
-              style={{ zIndex: 'var(--z-drawer-backdrop)' }}
-              initial={{ opacity: 0 }}
+              style={{ zIndex: "var(--z-drawer-backdrop)" }}
+              initial={reduceMotion ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              transition={
+                reduceMotion ? { duration: 0 } : tokenTransition("normal")
+              }
               onClick={close}
               aria-hidden="true"
             />
@@ -160,7 +165,9 @@ export function BottomSheet({
             ref={sheetRef}
             role="dialog"
             aria-modal="true"
-            aria-label={ariaLabel ?? (typeof title === 'string' ? title : 'Bottom sheet')}
+            aria-label={
+              ariaLabel ?? (typeof title === "string" ? title : "Bottom sheet")
+            }
             tabIndex={-1}
             drag="y"
             dragConstraints={{ top: 0, bottom: 0 }}
@@ -168,16 +175,16 @@ export function BottomSheet({
             style={{
               y,
               height: `${activeFraction * 100}vh`,
-              zIndex: 'var(--z-drawer)',
+              zIndex: "var(--z-drawer)",
             }}
             className={classNames(
-              'fixed left-0 right-0 bottom-0 bg-black_1 rounded-halfRound border-t border-black_3 flex flex-col outline-none',
+              "fixed left-0 right-0 bottom-0 bg-black_1 rounded-halfRound border-t border-black_3 flex flex-col outline-none",
               className,
             )}
-            initial={{ y: '100%' }}
+            initial={{ y: "100%" }}
             animate={{ y: 0 }}
-            exit={{ y: '100%' }}
-            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+            exit={{ y: "100%" }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
             onDragEnd={handleDragEnd}
           >
             {/* Drag handle */}

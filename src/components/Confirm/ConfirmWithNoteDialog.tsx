@@ -8,7 +8,8 @@ import {
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { tokenTransition } from "@/utils/motion";
 import Typography from "@/components/Typography/Typography";
 import Button from "@/components/Button/Button";
 import { TextArea } from "@/components/TextArea/TextArea";
@@ -51,6 +52,7 @@ export default function ConfirmWithNoteDialog({
   noteHelperText,
   loading = false,
 }: ConfirmWithNoteDialogProps) {
+  const reduceMotion = useReducedMotion();
   const dialogRef = useRef<HTMLDivElement>(null);
   const [note, setNote] = useState("");
 
@@ -96,7 +98,9 @@ export default function ConfirmWithNoteDialog({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
+            transition={
+              reduceMotion ? { duration: 0 } : tokenTransition("fast")
+            }
             onClick={handleBackdropClick}
           />
           <motion.div
@@ -104,7 +108,9 @@ export default function ConfirmWithNoteDialog({
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
-            transition={{ duration: 0.15 }}
+            transition={
+              reduceMotion ? { duration: 0 } : tokenTransition("fast")
+            }
             className="relative w-full max-w-[440px] rounded-24px border border-solid border-black_3 bg-black_1 p-24px shadow-4xl"
           >
             <div className="flex flex-col gap-16px">

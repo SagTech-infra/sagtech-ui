@@ -16,3 +16,4 @@ export { hideDocumentScroll, getWindowScrollTop } from "./document";
 export { validateEmail, validateLink, validatePhone } from "./validation";
 export { default as Portal } from "./Portal";
 export { mergeRefs } from "./mergeRefs";
+export { motionDurationS, motionEaseBezier, tokenTransition } from "./motion";
