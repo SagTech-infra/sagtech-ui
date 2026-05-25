@@ -37,7 +37,7 @@ export const colors = {
   'fg-secondary': "#cdcdd0",
   'fg-muted': "#83838a",
   'border-default': "#393944",
-  'border-strong': "#51515b",
+  'border-strong': "#5c5c66",
   'surface-overlay': "#20202d",
   'fg-success': "#7bc242",
   'fg-warning': "#c6a328",
