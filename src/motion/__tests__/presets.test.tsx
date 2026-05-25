@@ -1,6 +1,10 @@
 import { describe, it, expect } from "vitest";
+import { renderHook } from "@testing-library/react";
+import * as framer from "framer-motion";
+import { vi } from "vitest";
 import { fadeIn, slideUp, scaleIn, popIn } from "../presets";
 import { motionDurationS } from "@/utils/motion";
+import { useMotionPreset } from "../useMotionPreset";
 
 describe("motion presets", () => {
   it("fadeIn animates opacity only", () => {
@@ -35,5 +39,23 @@ describe("motion presets", () => {
   it("respects a custom duration token name", () => {
     const v = fadeIn({ duration: "fast" });
     expect((v.visible as any).transition.duration).toBe(motionDurationS.fast);
+  });
+});
+
+describe("useMotionPreset", () => {
+  it("returns the named preset when motion is allowed", () => {
+    vi.spyOn(framer, "useReducedMotion").mockReturnValue(false);
+    const { result } = renderHook(() =>
+      useMotionPreset("slideUp", { distance: 12 }),
+    );
+    expect(result.current.hidden).toMatchObject({ y: 12 });
+  });
+
+  it("returns an opacity-only, instant variant under reduced motion", () => {
+    vi.spyOn(framer, "useReducedMotion").mockReturnValue(true);
+    const { result } = renderHook(() => useMotionPreset("slideUp"));
+    expect(result.current.hidden).toMatchObject({ opacity: 0 });
+    expect(result.current.hidden).not.toHaveProperty("y");
+    expect((result.current.visible as any).transition.duration).toBe(0);
   });
 });
