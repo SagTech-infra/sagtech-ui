@@ -50,13 +50,13 @@ export default function Input({
   return (
     <div className="flex flex-col gap-6px">
       {externalLabel && (
-        <label htmlFor={inputId} className="text-12 font-bold leading-18 text-white_1">
+        <label htmlFor={inputId} className="text-12 font-bold leading-18 text-fg-secondary">
           {externalLabel}
         </label>
       )}
       <div className={`${spanDefault} ${classes}`}>
         {state === 'active' && !isError && (
-          <span className="absolute left-24px top-8px text-10 font-medium leading-16 text-grey_2 ">
+          <span className="absolute left-24px top-8px text-10 font-medium leading-16 text-fg-muted ">
             {label}
           </span>
         )}

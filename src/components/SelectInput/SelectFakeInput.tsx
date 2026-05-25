@@ -11,7 +11,7 @@ function ChevrondownIcon({ width = 24, height = 24 }: { width?: number; height?:
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="text-white_4"
+      className="text-fg-primary"
     >
       <path
         d="M6 9L12 15L18 9"
@@ -51,7 +51,7 @@ const SelectFakeInput = forwardRef<HTMLInputElement, Props>(
           aria-disabled={disabled || undefined}
           disabled={disabled}
           placeholder={hasSomeValue ? String(displayValue) : placeholder}
-          className={`cursor-pointer bg-black_1 border-[1px] border-solid font-medium w-full leading-24 outline-none rounded-16px h-[56px] placeholder:text-grey_2 text-grey_4 border-pr_purple py-15px px-24px disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+          className={`cursor-pointer bg-bg-secondary border-[1px] border-solid font-medium w-full leading-24 outline-none rounded-16px h-[56px] placeholder:text-fg-muted text-fg-muted border-pr_purple py-15px px-24px disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
           onClick={onClick}
           onKeyDown={onKeyDown}
         />
