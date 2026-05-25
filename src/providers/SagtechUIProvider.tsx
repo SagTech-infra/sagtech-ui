@@ -13,6 +13,8 @@ import {
 } from "./defaults";
 import { ThemeProvider } from "./ThemeProvider";
 import type { Theme } from "./ThemeContext";
+import { LocaleProvider } from "./LocaleProvider";
+import type { Direction } from "./LocaleContext";
 
 export interface SagtechUIProviderProps {
   imageComponent?: UIImageComponent;
@@ -23,6 +25,10 @@ export interface SagtechUIProviderProps {
   defaultTheme?: Theme;
   /** Element to receive data-theme. Default "html". */
   themeTarget?: "html" | "body";
+  /** When set, wraps children in a LocaleProvider. */
+  locale?: string;
+  /** When set, wraps children in a LocaleProvider. */
+  dir?: Direction;
   children: ReactNode;
 }
 
@@ -32,6 +38,8 @@ export function SagtechUIProvider({
   theme,
   defaultTheme,
   themeTarget,
+  locale,
+  dir,
   children,
 }: SagtechUIProviderProps) {
   const value = useMemo<UIComponentsContextValue>(
@@ -48,12 +56,19 @@ export function SagtechUIProvider({
     </UIComponentsContext.Provider>
   );
 
+  const useLocaleWrapper = locale !== undefined || dir !== undefined;
+  const withLocale = useLocaleWrapper ? (
+    <LocaleProvider locale={locale} dir={dir}>
+      {inner}
+    </LocaleProvider>
+  ) : inner;
+
   const useThemeWrapper = theme !== undefined || defaultTheme !== undefined;
-  if (!useThemeWrapper) return inner;
+  if (!useThemeWrapper) return withLocale;
 
   return (
     <ThemeProvider theme={theme} defaultTheme={defaultTheme} target={themeTarget}>
-      {inner}
+      {withLocale}
     </ThemeProvider>
   );
 }

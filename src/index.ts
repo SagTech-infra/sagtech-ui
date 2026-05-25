@@ -23,6 +23,9 @@ export {
   ThemeScript,
   ThemeContext,
   useTheme,
+  LocaleProvider,
+  LocaleContext,
+  useLocale,
 } from "./providers";
 export type {
   SagtechUIProviderProps,
@@ -36,6 +39,9 @@ export type {
   Theme,
   ResolvedTheme,
   ThemeContextValue,
+  LocaleProviderProps,
+  Direction,
+  LocaleContextValue,
 } from "./providers";
 
 // Hooks

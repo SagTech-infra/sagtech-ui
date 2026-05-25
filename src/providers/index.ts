@@ -19,3 +19,7 @@ export { ThemeScript } from "./ThemeScript";
 export type { ThemeScriptProps } from "./ThemeScript";
 export { ThemeContext, useTheme } from "./ThemeContext";
 export type { Theme, ResolvedTheme, ThemeContextValue } from "./ThemeContext";
+export { LocaleProvider } from "./LocaleProvider";
+export type { LocaleProviderProps } from "./LocaleProvider";
+export { LocaleContext, useLocale } from "./LocaleContext";
+export type { Direction, LocaleContextValue } from "./LocaleContext";
