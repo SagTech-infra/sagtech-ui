@@ -34,12 +34,12 @@ const positionStyles: Record<ToasterPosition, string> = {
 };
 
 const variantClasses: Record<ToastVariant, string> = {
-  default: "border-black_3 bg-black_1",
-  info: "border-pr_blue bg-black_1",
-  success: "border-success bg-black_1",
-  error: "border-error bg-black_1",
-  warning: "border-warning bg-black_1",
-  loading: "border-black_3 bg-black_1",
+  default: "border-border-default bg-surface-overlay",
+  info: "border-pr_blue bg-surface-overlay",
+  success: "border-success bg-surface-overlay",
+  error: "border-error bg-surface-overlay",
+  warning: "border-warning bg-surface-overlay",
+  loading: "border-border-default bg-surface-overlay",
 };
 
 function ToastIcon({ variant }: { variant: ToastVariant }) {
@@ -117,7 +117,7 @@ function ToastIcon({ variant }: { variant: ToastVariant }) {
         viewBox="0 0 20 20"
         fill="none"
         aria-hidden="true"
-        className="flex-shrink-0 text-grey_4 animate-spin"
+        className="flex-shrink-0 text-fg-muted animate-spin"
       >
         <circle
           cx="10"
@@ -195,7 +195,7 @@ function ToastRow({
       layout
       {...motionProps}
       className={classNames(
-        "pointer-events-auto inline-flex w-fit gap-8px rounded-8px border border-solid px-12px py-6px shadow-4xl font-manrope text-14 text-white_4 max-w-[420px]",
+        "pointer-events-auto inline-flex w-fit gap-8px rounded-8px border border-solid px-12px py-6px shadow-4xl font-manrope text-14 text-fg-primary max-w-[420px]",
         toast.description ? "items-start" : "items-center",
         variantClasses[toast.variant],
       )}
@@ -206,7 +206,7 @@ function ToastRow({
           {toast.message}
         </div>
         {toast.description && (
-          <div className="text-12 text-grey_4 mt-2px break-words">
+          <div className="text-12 text-fg-secondary mt-2px break-words">
             {toast.description}
           </div>
         )}
@@ -227,7 +227,7 @@ function ToastRow({
         type="button"
         aria-label="Close notification"
         onClick={() => onDismiss(toast.id)}
-        className="text-grey_4 hover:text-white_4 cursor-pointer flex-shrink-0"
+        className="text-fg-muted hover:text-fg-primary cursor-pointer flex-shrink-0"
       >
         <svg
           width="16"

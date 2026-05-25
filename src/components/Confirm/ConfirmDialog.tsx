@@ -131,7 +131,7 @@ export default function ConfirmDialog({
             transition={
               reduceMotion ? { duration: 0 } : tokenTransition("fast")
             }
-            className="relative w-full max-w-[420px] rounded-24px border border-black_3 bg-black_1 p-24px shadow-4xl"
+            className="relative w-full max-w-[420px] rounded-24px border border-border-default bg-surface-overlay p-24px shadow-4xl"
           >
             <div className="flex flex-col gap-16px">
               {icon && (

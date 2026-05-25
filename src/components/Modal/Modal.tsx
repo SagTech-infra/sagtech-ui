@@ -176,7 +176,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
         aria-label={labelledBy ? undefined : ariaLabel}
         tabIndex={-1}
         onKeyDown={handleKeyDown}
-        className={`modalAnim mx-8px flex flex-col w-full h-auto max-h-[90vh] rounded-24px border-[1px] border-solid border-black_3 bg-black_1 p-24px shadow-4xl overflow-hidden outline-none ${
+        className={`modalAnim mx-8px flex flex-col w-full h-auto max-h-[90vh] rounded-24px border-[1px] border-solid border-border-default bg-surface-overlay p-24px shadow-4xl overflow-hidden outline-none ${
           size === "md" ? "xs:w-[670px]" : "xs:w-[454px]"
         } xs:p-32px sm:rounded-40px`}
         style={{ zIndex: modalZ, ...motionStyle }}
@@ -184,7 +184,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
         {title && (
           <div
             id={titleId}
-            className="font-manrope text-18 font-bold text-white_4 mb-16px flex-shrink-0"
+            className="font-manrope text-18 font-bold text-fg-primary mb-16px flex-shrink-0"
           >
             {title}
           </div>

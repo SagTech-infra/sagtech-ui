@@ -171,10 +171,10 @@ const Drawer = forwardRef<HTMLElement, DrawerProps>(function Drawer(
           <motion.aside
             ref={setRefs}
             className={classNames(
-              "fixed top-0 h-full bg-black_1 flex flex-col",
+              "fixed top-0 h-full bg-surface-overlay flex flex-col",
               {
-                "right-0 border-l border-black_3": position === "right",
-                "left-0 border-r border-black_3": position === "left",
+                "right-0 border-l border-border-default": position === "right",
+                "left-0 border-r border-border-default": position === "left",
               },
               width ? undefined : "w-[400px]",
               className,
@@ -186,16 +186,16 @@ const Drawer = forwardRef<HTMLElement, DrawerProps>(function Drawer(
             exit="exit"
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
           >
-            <div className="flex items-center justify-between p-24px border-b border-black_3">
+            <div className="flex items-center justify-between p-24px border-b border-border-default">
               {title && (
-                <h2 className="font-manrope text-18 font-semibold text-white_4">
+                <h2 className="font-manrope text-18 font-semibold text-fg-primary">
                   {title}
                 </h2>
               )}
               <button
                 type="button"
                 onClick={onClose}
-                className="text-grey_4 hover:text-white_4 cursor-pointer transition-colors duration-200 ml-auto"
+                className="text-fg-muted hover:text-fg-primary cursor-pointer transition-colors duration-200 ml-auto"
                 aria-label="Close drawer"
               >
                 <CloseIcon />

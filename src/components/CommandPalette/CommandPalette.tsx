@@ -199,7 +199,7 @@ export default function CommandPalette({
         >
           <motion.div
             className={classNames(
-              "w-full max-w-[560px] bg-black_2 border border-black_3 rounded-16px overflow-hidden shadow-6xl",
+              "w-full max-w-[560px] bg-surface-overlay border border-border-default rounded-16px overflow-hidden shadow-6xl",
               className,
             )}
             initial={reduceMotion ? false : { opacity: 0, scale: 0.95 }}
@@ -210,8 +210,8 @@ export default function CommandPalette({
             }
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-16px border-b border-black_3 flex items-center gap-12px">
-              <span className="text-grey_2">
+            <div className="p-16px border-b border-border-default flex items-center gap-12px">
+              <span className="text-fg-muted">
                 <SearchIcon />
               </span>
               <input
@@ -220,9 +220,9 @@ export default function CommandPalette({
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={placeholder}
-                className="bg-transparent text-white_4 font-manrope text-16 outline-none w-full placeholder:text-grey_2"
+                className="bg-transparent text-fg-primary font-manrope text-16 outline-none w-full placeholder:text-fg-muted"
               />
-              <span className="text-10 text-grey_2 border border-black_3 rounded-[4px] px-6px py-[2px] flex-shrink-0 select-none">
+              <span className="text-10 text-fg-muted border border-border-default rounded-[4px] px-6px py-[2px] flex-shrink-0 select-none">
                 ESC
               </span>
             </div>
@@ -233,7 +233,7 @@ export default function CommandPalette({
             >
               {filteredItems.length === 0 ? (
                 <div className="py-40px flex items-center justify-center">
-                  <p className="font-manrope text-14 text-grey_2">
+                  <p className="font-manrope text-14 text-fg-muted">
                     No results found
                   </p>
                 </div>
@@ -243,7 +243,7 @@ export default function CommandPalette({
                     return (
                       <div
                         key={`header-${entry.label}`}
-                        className="px-16px py-8px text-10 text-grey_1 uppercase tracking-wider font-semibold font-manrope"
+                        className="px-16px py-8px text-10 text-fg-muted uppercase tracking-wider font-semibold font-manrope"
                       >
                         {entry.label}
                       </div>
@@ -263,7 +263,7 @@ export default function CommandPalette({
                         "px-16px py-12px flex items-center gap-12px cursor-pointer transition-colors",
                         {
                           "bg-pr_purple/10": isActive,
-                          "hover:bg-black_3": !isActive,
+                          "hover:bg-bg-tertiary": !isActive,
                         },
                       )}
                       onClick={() => {
@@ -276,7 +276,7 @@ export default function CommandPalette({
                         <span
                           className={classNames("flex-shrink-0", {
                             "text-pr_purple": isActive,
-                            "text-grey_2": !isActive,
+                            "text-fg-muted": !isActive,
                           })}
                         >
                           {item.icon}
@@ -286,19 +286,19 @@ export default function CommandPalette({
                         <span
                           className={classNames("text-14 font-manrope", {
                             "text-pr_purple": isActive,
-                            "text-white_4": !isActive,
+                            "text-fg-primary": !isActive,
                           })}
                         >
                           {item.label}
                         </span>
                         {item.description && (
-                          <span className="text-12 text-grey_2 truncate">
+                          <span className="text-12 text-fg-muted truncate">
                             {item.description}
                           </span>
                         )}
                       </div>
                       {item.shortcut && (
-                        <span className="ml-auto text-10 text-grey_2 border border-black_3 rounded-[4px] px-6px py-[2px] flex-shrink-0 select-none">
+                        <span className="ml-auto text-10 text-fg-muted border border-border-default rounded-[4px] px-6px py-[2px] flex-shrink-0 select-none">
                           {item.shortcut}
                         </span>
                       )}

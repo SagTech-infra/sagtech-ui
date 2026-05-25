@@ -21,12 +21,12 @@ const positionClasses = {
 } as const;
 
 const arrowClasses = {
-  top: "bottom-[-4px] left-1/2 -translate-x-1/2 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-black_3",
+  top: "bottom-[-4px] left-1/2 -translate-x-1/2 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-border-default",
   bottom:
-    "top-[-4px] left-1/2 -translate-x-1/2 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[5px] border-b-black_3",
-  left: "right-[-4px] top-1/2 -translate-y-1/2 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-l-[5px] border-l-black_3",
+    "top-[-4px] left-1/2 -translate-x-1/2 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[5px] border-b-border-default",
+  left: "right-[-4px] top-1/2 -translate-y-1/2 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-l-[5px] border-l-border-default",
   right:
-    "left-[-4px] top-1/2 -translate-y-1/2 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-r-[5px] border-r-black_3",
+    "left-[-4px] top-1/2 -translate-y-1/2 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-r-[5px] border-r-border-default",
 } as const;
 
 export default function Tooltip({
@@ -69,7 +69,7 @@ export default function Tooltip({
             )}
             {...motionProps}
           >
-            <div className="bg-black_2 border border-black_3 rounded-8px px-12px py-8px text-grey_4 text-12 font-manrope shadow-lg whitespace-nowrap">
+            <div className="bg-surface-overlay border border-border-default rounded-8px px-12px py-8px text-fg-muted text-12 font-manrope shadow-lg whitespace-nowrap">
               {content}
             </div>
             <span

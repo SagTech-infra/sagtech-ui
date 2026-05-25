@@ -46,12 +46,12 @@ const alignClasses = {
 } as const;
 
 const arrowClasses = {
-  top: "bottom-[-5px] left-1/2 -translate-x-1/2 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-black_3",
+  top: "bottom-[-5px] left-1/2 -translate-x-1/2 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-border-default",
   bottom:
-    "top-[-5px] left-1/2 -translate-x-1/2 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[6px] border-b-black_3",
-  left: "right-[-5px] top-1/2 -translate-y-1/2 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[6px] border-l-black_3",
+    "top-[-5px] left-1/2 -translate-x-1/2 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[6px] border-b-border-default",
+  left: "right-[-5px] top-1/2 -translate-y-1/2 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[6px] border-l-border-default",
   right:
-    "left-[-5px] top-1/2 -translate-y-1/2 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-r-[6px] border-r-black_3",
+    "left-[-5px] top-1/2 -translate-y-1/2 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-r-[6px] border-r-border-default",
 } as const;
 
 export default function Popover({
@@ -116,7 +116,7 @@ export default function Popover({
               reduceMotion ? { duration: 0 } : tokenTransition("fast")
             }
           >
-            <div className="relative bg-black_2 border border-black_3 rounded-16px p-20px shadow-6xl min-w-[240px] max-w-[400px] w-max">
+            <div className="relative bg-surface-overlay border border-border-default rounded-16px p-20px shadow-6xl min-w-[240px] max-w-[400px] w-max">
               {children}
               <span
                 className={classNames(

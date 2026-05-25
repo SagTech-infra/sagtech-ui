@@ -240,7 +240,7 @@ export default function DropdownMenu({
               role="menu"
               tabIndex={-1}
               onKeyDown={handleMenuKeyDown}
-              className="fixed border border-black_3 rounded-16px py-8px shadow-6xl overflow-hidden outline-none"
+              className="fixed border border-border-default rounded-16px py-8px shadow-6xl overflow-hidden outline-none"
               style={{
                 top: pos.top,
                 left: pos.left,
@@ -291,11 +291,11 @@ export default function DropdownMenu({
                       {
                         'text-error hover:bg-error/10 hover:pl-20px focus:bg-error/10':
                           item.danger && !item.disabled,
-                        'text-grey_4 hover:bg-pr_purple/8 hover:text-white_4 hover:pl-20px focus:bg-pr_purple/8 focus:text-white_4':
+                        'text-fg-muted hover:bg-pr_purple/8 hover:text-fg-primary hover:pl-20px focus:bg-pr_purple/8 focus:text-fg-primary':
                           !item.danger && !item.disabled,
-                        'text-grey_1 opacity-40 cursor-not-allowed': item.disabled,
+                        'text-fg-muted opacity-40 cursor-not-allowed': item.disabled,
                         'cursor-pointer': !item.disabled,
-                        'bg-pr_purple/8 text-white_4':
+                        'bg-pr_purple/8 text-fg-primary':
                           isActive && !item.danger && !item.disabled,
                         'bg-error/10': isActive && item.danger && !item.disabled,
                       },

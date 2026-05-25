@@ -237,14 +237,14 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(function Sheet(
             tabIndex={-1}
             onKeyDown={handleKeyDown}
             className={classNames(
-              "fixed bg-black_1 flex flex-col outline-none",
+              "fixed bg-surface-overlay flex flex-col outline-none",
               {
-                "top-0 right-0 h-full border-l border-black_3":
+                "top-0 right-0 h-full border-l border-border-default":
                   side === "right",
-                "top-0 left-0 h-full border-r border-black_3": side === "left",
-                "top-0 left-0 right-0 w-full border-b border-black_3":
+                "top-0 left-0 h-full border-r border-border-default": side === "left",
+                "top-0 left-0 right-0 w-full border-b border-border-default":
                   side === "top",
-                "bottom-0 left-0 right-0 w-full border-t border-black_3":
+                "bottom-0 left-0 right-0 w-full border-t border-border-default":
                   side === "bottom",
               },
               isHorizontalEdge
@@ -259,11 +259,11 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(function Sheet(
             exit="exit"
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
           >
-            <div className="flex items-center justify-between p-24px border-b border-black_3 flex-shrink-0">
+            <div className="flex items-center justify-between p-24px border-b border-border-default flex-shrink-0">
               {title ? (
                 <h2
                   id={titleId}
-                  className="font-manrope text-18 font-semibold text-white_4"
+                  className="font-manrope text-18 font-semibold text-fg-primary"
                 >
                   {title}
                 </h2>
@@ -273,7 +273,7 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(function Sheet(
               <button
                 type="button"
                 onClick={close}
-                className="text-grey_4 hover:text-white_4 cursor-pointer transition-colors duration-200 ml-auto"
+                className="text-fg-muted hover:text-fg-primary cursor-pointer transition-colors duration-200 ml-auto"
                 aria-label="Close sheet"
               >
                 <CloseIcon />
@@ -285,7 +285,7 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(function Sheet(
             </div>
 
             {footer && (
-              <div className="flex items-center justify-end gap-12px p-24px border-t border-black_3 flex-shrink-0">
+              <div className="flex items-center justify-end gap-12px p-24px border-t border-border-default flex-shrink-0">
                 {footer}
               </div>
             )}

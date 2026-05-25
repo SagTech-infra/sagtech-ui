@@ -178,7 +178,7 @@ export function BottomSheet({
               zIndex: "var(--z-drawer)",
             }}
             className={classNames(
-              "fixed left-0 right-0 bottom-0 bg-black_1 rounded-halfRound border-t border-black_3 flex flex-col outline-none",
+              "fixed left-0 right-0 bottom-0 bg-surface-overlay rounded-halfRound border-t border-border-default flex flex-col outline-none",
               className,
             )}
             initial={{ y: "100%" }}
@@ -191,10 +191,10 @@ export function BottomSheet({
             <div className="flex flex-col items-center pt-12px pb-8px flex-shrink-0 cursor-grab active:cursor-grabbing">
               <div
                 aria-hidden="true"
-                className="w-[36px] h-[4px] rounded-circle bg-black_3"
+                className="w-[36px] h-[4px] rounded-circle bg-bg-tertiary"
               />
               {title && (
-                <h2 className="mt-12px font-manrope text-16 font-semibold text-white_4 px-24px text-center break-words">
+                <h2 className="mt-12px font-manrope text-16 font-semibold text-fg-primary px-24px text-center break-words">
                   {title}
                 </h2>
               )}
