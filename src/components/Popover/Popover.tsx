@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { tokenTransition } from "@/utils/motion";
+import { directionalFadeVariants as motionVariants } from "@/motion/overlayVariants";
 import classNames from "classnames";
 import useOutsideClick from "@/hooks/useOutsideClick";
 
@@ -42,13 +43,6 @@ const alignClasses = {
     center: "top-1/2 -translate-y-1/2",
     end: "bottom-0",
   },
-} as const;
-
-const motionVariants = {
-  top: { initial: { opacity: 0, y: 4 }, animate: { opacity: 1, y: 0 } },
-  bottom: { initial: { opacity: 0, y: -4 }, animate: { opacity: 1, y: 0 } },
-  left: { initial: { opacity: 0, x: 4 }, animate: { opacity: 1, x: 0 } },
-  right: { initial: { opacity: 0, x: -4 }, animate: { opacity: 1, x: 0 } },
 } as const;
 
 const arrowClasses = {

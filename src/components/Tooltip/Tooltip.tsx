@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { tokenTransition } from "@/utils/motion";
+import { directionalFadeVariants as motionVariants } from "@/motion/overlayVariants";
 import classNames from "classnames";
 
 export interface TooltipProps {
@@ -26,13 +27,6 @@ const arrowClasses = {
   left: "right-[-4px] top-1/2 -translate-y-1/2 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-l-[5px] border-l-black_3",
   right:
     "left-[-4px] top-1/2 -translate-y-1/2 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-r-[5px] border-r-black_3",
-} as const;
-
-const motionVariants = {
-  top: { initial: { opacity: 0, y: 4 }, animate: { opacity: 1, y: 0 } },
-  bottom: { initial: { opacity: 0, y: -4 }, animate: { opacity: 1, y: 0 } },
-  left: { initial: { opacity: 0, x: 4 }, animate: { opacity: 1, x: 0 } },
-  right: { initial: { opacity: 0, x: -4 }, animate: { opacity: 1, x: 0 } },
 } as const;
 
 export default function Tooltip({

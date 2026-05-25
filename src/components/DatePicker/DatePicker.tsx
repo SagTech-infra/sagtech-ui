@@ -13,6 +13,7 @@ import { createPortal } from "react-dom";
 import classNames from "classnames";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { tokenTransition } from "@/utils/motion";
+import { dropdownFadeSlideVariants as dropdownVariants } from "@/motion/overlayVariants";
 import {
   WEEKDAYS,
   formatDisplayDate,
@@ -38,11 +39,6 @@ export interface DatePickerProps {
   timeStep?: number;
   ref?: Ref<HTMLDivElement>;
 }
-
-const dropdownVariants = {
-  open: { opacity: 1, y: 0 },
-  closed: { opacity: 0, y: -4 },
-};
 
 function CalendarIcon() {
   return (
