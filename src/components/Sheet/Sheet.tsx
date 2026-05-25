@@ -12,6 +12,8 @@ import {
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { tokenTransition } from "@/utils/motion";
+import { edgeSlideVariants } from "@/motion/overlayVariants";
+import { useLocale } from "@/providers/LocaleContext";
 import classNames from "classnames";
 import {
   getOverlayDepth,
@@ -77,26 +79,6 @@ const sizeClassMap: Record<SheetSide, Record<SheetSize, string>> = {
   },
 };
 
-function sideToVariants(side: SheetSide) {
-  switch (side) {
-    case "left":
-      return {
-        hidden: { x: "-100%" },
-        visible: { x: 0 },
-        exit: { x: "-100%" },
-      };
-    case "right":
-      return { hidden: { x: "100%" }, visible: { x: 0 }, exit: { x: "100%" } };
-    case "top":
-      return {
-        hidden: { y: "-100%" },
-        visible: { y: 0 },
-        exit: { y: "-100%" },
-      };
-    case "bottom":
-      return { hidden: { y: "100%" }, visible: { y: 0 }, exit: { y: "100%" } };
-  }
-}
 
 function CloseIcon() {
   return (
@@ -133,6 +115,7 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(function Sheet(
   },
   ref,
 ) {
+  const { dir } = useLocale();
   const reduceMotion = useReducedMotion();
   const idRef = useRef<number | null>(null);
   const dialogRef = useRef<HTMLDivElement | null>(null);
@@ -199,7 +182,7 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(function Sheet(
     }
   };
 
-  const variants = sideToVariants(side);
+  const variants = edgeSlideVariants(side, dir);
   const isHorizontalEdge = side === "left" || side === "right";
 
   const setRefs = (node: HTMLDivElement | null) => {
@@ -230,6 +213,7 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(function Sheet(
 
           <motion.aside
             ref={setRefs}
+            dir={dir}
             role="dialog"
             aria-modal="true"
             aria-labelledby={title ? titleId : undefined}
@@ -239,17 +223,16 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(function Sheet(
             className={classNames(
               "fixed bg-surface-overlay flex flex-col outline-none",
               {
-                "top-0 right-0 h-full border-l border-border-default":
+                "top-0 end-0 h-full border-s border-border-default":
                   side === "right",
-                "top-0 left-0 h-full border-r border-border-default": side === "left",
+                "top-0 start-0 h-full border-e border-border-default":
+                  side === "left",
                 "top-0 left-0 right-0 w-full border-b border-border-default":
                   side === "top",
                 "bottom-0 left-0 right-0 w-full border-t border-border-default":
                   side === "bottom",
               },
-              isHorizontalEdge
-                ? sizeClassMap[side][size]
-                : sizeClassMap[side][size],
+              sizeClassMap[side][size],
               className,
             )}
             style={{ zIndex: sheetZ }}

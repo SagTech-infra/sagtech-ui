@@ -10,6 +10,7 @@ import React, {
 import { useLocale } from "@/providers/LocaleContext";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { tokenTransition } from "@/utils/motion";
+import { edgeSlideVariants } from "@/motion/overlayVariants";
 import classNames from "classnames";
 import {
   getOverlayDepth,
@@ -146,14 +147,7 @@ const Drawer = forwardRef<HTMLElement, DrawerProps>(function Drawer(
   const drawerZ = Z_DRAWER + depth * Z_STEP;
   const backdropZ = Z_DRAWER_BACKDROP + depth * Z_STEP;
 
-  const sign = dir === "rtl" ? -1 : 1;
-  const offEnd = `${100 * sign}%`;
-  const offStart = `${-100 * sign}%`;
-  const slideVariants = {
-    hidden: { x: position === "right" ? offEnd : offStart },
-    visible: { x: 0 },
-    exit: { x: position === "right" ? offEnd : offStart },
-  };
+  const slideVariants = edgeSlideVariants(position, dir);
 
   return (
     <AnimatePresence>

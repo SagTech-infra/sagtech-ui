@@ -7,6 +7,7 @@ import Toaster from "@/components/Toast/Toaster";
 import { toast } from "@/components/Toast/toast";
 import { toastStore } from "@/components/Toast/ToastStore";
 import { Modal } from "@/components/Modal/Modal";
+import { Sheet } from "@/components/Sheet/Sheet";
 
 afterEach(() => {
   act(() => toastStore.clear());
@@ -66,5 +67,18 @@ describe("RTL smoke", () => {
     // The portal renders into document.body — find the element with dir="rtl"
     const portalRoot = document.body.querySelector('[dir="rtl"]');
     expect(portalRoot).not.toBeNull();
+  });
+
+  it("Sheet panel carries dir=rtl when wrapped in SagtechUIProvider dir=rtl", () => {
+    render(
+      <SagtechUIProvider dir="rtl">
+        <Sheet open onOpenChange={() => {}} side="right" aria-label="RTL sheet">
+          <p>RTL content</p>
+        </Sheet>
+      </SagtechUIProvider>,
+    );
+    // The sheet panel (role=dialog) must carry dir="rtl"
+    const dialog = screen.getByRole("dialog");
+    expect(dialog).toHaveAttribute("dir", "rtl");
   });
 });
