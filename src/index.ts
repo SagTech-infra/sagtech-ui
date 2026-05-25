@@ -71,6 +71,16 @@ export {
   mergeRefs,
 } from "./utils";
 
+// Motion presets
+export {
+  fadeIn,
+  slideUp,
+  scaleIn,
+  popIn,
+  useMotionPreset,
+} from "./motion";
+export type { MotionPresetOptions, MotionPresetName } from "./motion";
+
 // Components — Foundations
 export { default as Typography } from "./components/Typography/Typography";
 export type { TypographyTypes } from "./components/Typography/Typography";
