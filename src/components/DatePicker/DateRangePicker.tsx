@@ -103,7 +103,7 @@ export default function DateRangePicker({
   locale: localeProp,
   ref,
 }: DateRangePickerProps) {
-  const { locale: ctxLocale } = useLocale();
+  const { locale: ctxLocale, dir } = useLocale();
   const locale = localeProp ?? ctxLocale;
   const reduceMotion = useReducedMotion();
   const [isOpen, setIsOpen] = useState(false);
@@ -191,6 +191,7 @@ export default function DateRangePicker({
   return (
     <div
       ref={mergeRefs(outsideRef, ref)}
+      dir={dir}
       className={classNames("flex flex-col gap-6px relative", className)}
     >
       {label && (

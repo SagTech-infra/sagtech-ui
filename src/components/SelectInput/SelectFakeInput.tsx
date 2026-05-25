@@ -60,7 +60,7 @@ const SelectFakeInput = forwardRef<HTMLInputElement, Props>(
           animate={{ rotateX: isOpen ? 180 : 0 }}
           transition={{ duration: 0.15 }}
           style={{ perspective: 1000 }}
-          className="absolute right-[24px] top-[16px] pointer-events-none"
+          className="absolute end-[24px] top-[16px] pointer-events-none"
         >
           <ChevrondownIcon width={24} height={24} />
         </motion.div>

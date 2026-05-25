@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { tokenTransition } from "@/utils/motion";
 import { directionalFadeVariants as motionVariants } from "@/motion/overlayVariants";
 import classNames from "classnames";
+import { useLocale } from "@/providers/LocaleContext";
 
 export interface TooltipProps {
   children: React.ReactNode;
@@ -16,17 +17,17 @@ export interface TooltipProps {
 const positionClasses = {
   top: "bottom-full left-1/2 -translate-x-1/2 mb-8px",
   bottom: "top-full left-1/2 -translate-x-1/2 mt-8px",
-  left: "right-full top-1/2 -translate-y-1/2 mr-8px",
-  right: "left-full top-1/2 -translate-y-1/2 ml-8px",
+  left: "end-full top-1/2 -translate-y-1/2 me-8px",
+  right: "start-full top-1/2 -translate-y-1/2 ms-8px",
 } as const;
 
 const arrowClasses = {
   top: "bottom-[-4px] left-1/2 -translate-x-1/2 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-border-default",
   bottom:
     "top-[-4px] left-1/2 -translate-x-1/2 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[5px] border-b-border-default",
-  left: "right-[-4px] top-1/2 -translate-y-1/2 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-l-[5px] border-l-border-default",
+  left: "right-[-4px] top-1/2 -translate-y-1/2 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-l-[5px] border-l-border-default rtl:right-auto rtl:left-[-4px] rtl:border-l-0 rtl:border-r-[5px] rtl:border-r-border-default",
   right:
-    "left-[-4px] top-1/2 -translate-y-1/2 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-r-[5px] border-r-border-default",
+    "left-[-4px] top-1/2 -translate-y-1/2 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-r-[5px] border-r-border-default rtl:left-auto rtl:right-[-4px] rtl:border-r-0 rtl:border-l-[5px] rtl:border-l-border-default",
 } as const;
 
 export default function Tooltip({
@@ -35,6 +36,7 @@ export default function Tooltip({
   position = "top",
   className,
 }: TooltipProps) {
+  const { dir } = useLocale();
   const [isVisible, setIsVisible] = useState(false);
   const reduceMotion = useReducedMotion();
 
@@ -54,6 +56,7 @@ export default function Tooltip({
 
   return (
     <div
+      dir={dir}
       className={classNames("relative inline-block", className)}
       onMouseEnter={() => setIsVisible(true)}
       onMouseLeave={() => setIsVisible(false)}

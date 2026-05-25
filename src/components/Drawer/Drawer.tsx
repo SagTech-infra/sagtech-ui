@@ -7,6 +7,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useLocale } from "@/providers/LocaleContext";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { tokenTransition } from "@/utils/motion";
 import classNames from "classnames";
@@ -76,6 +77,7 @@ const Drawer = forwardRef<HTMLElement, DrawerProps>(function Drawer(
   },
   ref,
 ) {
+  const { dir } = useLocale();
   const reduceMotion = useReducedMotion();
   const idRef = useRef<number | null>(null);
   const panelRef = useRef<HTMLElement | null>(null);
@@ -144,10 +146,13 @@ const Drawer = forwardRef<HTMLElement, DrawerProps>(function Drawer(
   const drawerZ = Z_DRAWER + depth * Z_STEP;
   const backdropZ = Z_DRAWER_BACKDROP + depth * Z_STEP;
 
+  const sign = dir === "rtl" ? -1 : 1;
+  const offEnd = `${100 * sign}%`;
+  const offStart = `${-100 * sign}%`;
   const slideVariants = {
-    hidden: { x: position === "right" ? "100%" : "-100%" },
+    hidden: { x: position === "right" ? offEnd : offStart },
     visible: { x: 0 },
-    exit: { x: position === "right" ? "100%" : "-100%" },
+    exit: { x: position === "right" ? offEnd : offStart },
   };
 
   return (
@@ -170,11 +175,12 @@ const Drawer = forwardRef<HTMLElement, DrawerProps>(function Drawer(
 
           <motion.aside
             ref={setRefs}
+            dir={dir}
             className={classNames(
               "fixed top-0 h-full bg-surface-overlay flex flex-col",
               {
-                "right-0 border-l border-border-default": position === "right",
-                "left-0 border-r border-border-default": position === "left",
+                "end-0 border-s border-border-default": position === "right",
+                "start-0 border-e border-border-default": position === "left",
               },
               width ? undefined : "w-[400px]",
               className,
@@ -195,7 +201,7 @@ const Drawer = forwardRef<HTMLElement, DrawerProps>(function Drawer(
               <button
                 type="button"
                 onClick={onClose}
-                className="text-fg-muted hover:text-fg-primary cursor-pointer transition-colors duration-200 ml-auto"
+                className="text-fg-muted hover:text-fg-primary cursor-pointer transition-colors duration-200 ms-auto"
                 aria-label="Close drawer"
               >
                 <CloseIcon />

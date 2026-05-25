@@ -6,6 +6,7 @@ import { tokenTransition } from "@/utils/motion";
 import { directionalFadeVariants as motionVariants } from "@/motion/overlayVariants";
 import classNames from "classnames";
 import useOutsideClick from "@/hooks/useOutsideClick";
+import { useLocale } from "@/providers/LocaleContext";
 
 export interface PopoverProps {
   trigger: React.ReactNode;
@@ -18,20 +19,20 @@ export interface PopoverProps {
 const positionClasses = {
   top: "bottom-full mb-8px",
   bottom: "top-full mt-8px",
-  left: "right-full mr-8px",
-  right: "left-full ml-8px",
+  left: "end-full me-8px",
+  right: "start-full ms-8px",
 } as const;
 
 const alignClasses = {
   top: {
-    start: "left-0",
+    start: "start-0",
     center: "left-1/2 -translate-x-1/2",
-    end: "right-0",
+    end: "end-0",
   },
   bottom: {
-    start: "left-0",
+    start: "start-0",
     center: "left-1/2 -translate-x-1/2",
-    end: "right-0",
+    end: "end-0",
   },
   left: {
     start: "top-0",
@@ -49,9 +50,9 @@ const arrowClasses = {
   top: "bottom-[-5px] left-1/2 -translate-x-1/2 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-border-default",
   bottom:
     "top-[-5px] left-1/2 -translate-x-1/2 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[6px] border-b-border-default",
-  left: "right-[-5px] top-1/2 -translate-y-1/2 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[6px] border-l-border-default",
+  left: "right-[-5px] top-1/2 -translate-y-1/2 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[6px] border-l-border-default rtl:right-auto rtl:left-[-5px] rtl:border-l-0 rtl:border-r-[6px] rtl:border-r-border-default",
   right:
-    "left-[-5px] top-1/2 -translate-y-1/2 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-r-[6px] border-r-border-default",
+    "left-[-5px] top-1/2 -translate-y-1/2 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-r-[6px] border-r-border-default rtl:left-auto rtl:right-[-5px] rtl:border-r-0 rtl:border-l-[6px] rtl:border-l-border-default",
 } as const;
 
 export default function Popover({
@@ -61,6 +62,7 @@ export default function Popover({
   align = "center",
   className,
 }: PopoverProps) {
+  const { dir } = useLocale();
   const reduceMotion = useReducedMotion();
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -86,7 +88,7 @@ export default function Popover({
   }, [isOpen]);
 
   return (
-    <div ref={ref} className={classNames("relative inline-block", className)}>
+    <div ref={ref} dir={dir} className={classNames("relative inline-block", className)}>
       <button
         ref={triggerRef}
         type="button"

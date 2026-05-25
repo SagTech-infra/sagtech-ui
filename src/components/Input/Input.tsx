@@ -56,7 +56,7 @@ export default function Input({
       )}
       <div className={`${spanDefault} ${classes}`}>
         {state === 'active' && !isError && (
-          <span className="absolute left-24px top-8px text-10 font-medium leading-16 text-fg-muted ">
+          <span className="absolute start-24px top-8px text-10 font-medium leading-16 text-fg-muted ">
             {label}
           </span>
         )}
