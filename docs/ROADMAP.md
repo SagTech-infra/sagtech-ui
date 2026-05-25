@@ -161,12 +161,20 @@
 
 **Перенесено в Backlog / v1.4+:**
 
-- `SelectDropdownLayout` token cleanup (`bg-[#1B1B27]`)
-- Тесты для оставшихся v1.1 overlays (`Banner`, `Spotlight`, `FAB`)
 - `JsonDiffView` (диффы с подсветкой) — отдельный компонент, отложен.
 - Vertical orientation polish для `Tabs`.
 
 **Tests**: 299/299.
+
+---
+
+## ✅ v1.3.1 — released 2026-05-25
+
+Патч-релиз: закрыл отложенные из v1.3 backlog-пункты. Без изменения поведения, без breaking.
+
+- **`SelectDropdownLayout` token cleanup** — хардкод `bg-[#1B1B27]` → новый токен `--color-black_1_5` (`#1b1b27`) → `bg-black_1_5`. Рендер идентичен.
+- **Smoke-тесты v1.1 overlays** — `Banner`, `Spotlight`, `FAB` (+ `Sheet`, `BottomSheet`) получают render/onClose-покрытие. Закрывает отложенный из v1.3 пункт.
+- **`.env.example`** — задокументирован `NODE_AUTH_TOKEN` для GitHub Packages; `.env*` добавлены в `.gitignore`.
 
 ---
 
