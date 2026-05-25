@@ -18,6 +18,7 @@ const preview: Preview = {
           "3D",
           "Feedback",
           "Providers",
+          "Motion",
           "*",
         ],
       },
