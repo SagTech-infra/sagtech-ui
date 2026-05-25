@@ -213,6 +213,14 @@ export const motionEase = {
 
 
 export type ColorToken = keyof typeof colors;
+export type SemanticColorToken = Extract<
+  ColorToken,
+  | "bg-primary" | "bg-secondary" | "bg-tertiary"
+  | "fg-primary" | "fg-secondary" | "fg-muted"
+  | "border-default" | "border-strong" | "surface-overlay"
+  | "fg-success" | "fg-warning" | "fg-error" | "fg-info"
+  | "bg-success" | "bg-warning" | "bg-error" | "bg-info"
+>;
 export type FontToken = keyof typeof fonts;
 export type TextSizeToken = keyof typeof textSizes;
 export type SpacingToken = keyof typeof spacing;
