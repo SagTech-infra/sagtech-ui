@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import VisualGraphEditor from '../VisualGraphEditor';
 import type { GraphNode, GraphEdge } from '../VisualGraphEditor';
 

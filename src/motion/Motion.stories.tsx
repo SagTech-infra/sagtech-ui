@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { fadeIn, slideUp, scaleIn, popIn } from './presets';
+import { slideUp } from './presets';
 import { useMotionPreset, type MotionPresetName } from './useMotionPreset';
 
 // ─── dummy root component (stories need a component in meta) ──────────────────

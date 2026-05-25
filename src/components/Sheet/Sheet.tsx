@@ -183,7 +183,6 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(function Sheet(
   };
 
   const variants = edgeSlideVariants(side, dir);
-  const isHorizontalEdge = side === "left" || side === "right";
 
   const setRefs = (node: HTMLDivElement | null) => {
     dialogRef.current = node;
