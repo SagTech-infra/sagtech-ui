@@ -191,4 +191,33 @@
   --motion-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --motion-ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
   --motion-ease-decelerated: cubic-bezier(0, 0, 0.2, 1);
+
+  /* Semantic — backgrounds (dark default) */
+  --color-bg-primary: #070715;
+  --color-bg-secondary: #1b1b27;
+  --color-bg-tertiary: #393944;
+
+  /* Semantic — foregrounds (dark default) */
+  --color-fg-primary: #f8f8f8;
+  --color-fg-secondary: #cdcdd0;
+  --color-fg-muted: #83838a;
+
+  /* Semantic — borders (dark default) */
+  --color-border-default: #393944;
+  --color-border-strong: #51515b;
+
+  /* Semantic — surfaces (dark default) */
+  --color-surface-overlay: #20202d;
+
+  /* Semantic — status foregrounds (dark default) */
+  --color-fg-success: #7bc242;
+  --color-fg-warning: #c6a328;
+  --color-fg-error: #e0675e;
+  --color-fg-info: #9494c9;
+
+  /* Semantic — status backgrounds (dark default) */
+  --color-bg-success: rgba(88, 166, 27, 0.16);
+  --color-bg-warning: rgba(198, 163, 40, 0.16);
+  --color-bg-error: rgba(153, 45, 45, 0.24);
+  --color-bg-info: rgba(148, 148, 201, 0.16);
 }

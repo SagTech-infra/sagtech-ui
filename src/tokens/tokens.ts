@@ -30,6 +30,23 @@ export const colors = {
   backdrop: "rgba(0, 0, 0, 0.56)",
   backdrop_2: "rgba(255, 255, 255, 0.04)",
   back_load: "rgba(7, 7, 15, 0.05)",
+  'bg-primary': "#070715",
+  'bg-secondary': "#1b1b27",
+  'bg-tertiary': "#393944",
+  'fg-primary': "#f8f8f8",
+  'fg-secondary': "#cdcdd0",
+  'fg-muted': "#83838a",
+  'border-default': "#393944",
+  'border-strong': "#51515b",
+  'surface-overlay': "#20202d",
+  'fg-success': "#7bc242",
+  'fg-warning': "#c6a328",
+  'fg-error': "#e0675e",
+  'fg-info': "#9494c9",
+  'bg-success': "rgba(88, 166, 27, 0.16)",
+  'bg-warning': "rgba(198, 163, 40, 0.16)",
+  'bg-error': "rgba(153, 45, 45, 0.24)",
+  'bg-info': "rgba(148, 148, 201, 0.16)",
 } as const;
 
 export const fonts = {
