@@ -4,6 +4,7 @@ import { useCallback, useMemo, useState, type Ref } from 'react';
 import classNames from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
 import useOutsideClick from '@/hooks/useOutsideClick';
+import { useOverlayTransition, dropdownVariants } from '@/hooks/useMotion';
 import { mergeRefs } from '@/utils/mergeRefs';
 import {
   WEEKDAYS,
@@ -36,11 +37,6 @@ export interface DateRangePickerProps {
 }
 
 const EMPTY_RANGE: DateRange = { from: null, to: null };
-
-const dropdownVariants = {
-  open: { opacity: 1, y: 0 },
-  closed: { opacity: 0, y: -4 },
-};
 
 function CalendarIcon() {
   return (
@@ -96,6 +92,7 @@ export default function DateRangePicker({
   className,
   ref,
 }: DateRangePickerProps) {
+  const drpTransition = useOverlayTransition('fast');
   const [isOpen, setIsOpen] = useState(false);
   const [viewYear, setViewYear] = useState(() =>
     (value.from ?? new Date()).getFullYear(),
@@ -206,7 +203,7 @@ export default function DateRangePicker({
             animate="open"
             exit="closed"
             variants={dropdownVariants}
-            transition={{ duration: 0.15 }}
+            transition={drpTransition}
             className="absolute z-50 mt-4px top-full bg-black_2 border border-black_3 rounded-16px p-20px shadow-6xl min-w-[320px]"
             role="dialog"
             aria-label="Date range picker"

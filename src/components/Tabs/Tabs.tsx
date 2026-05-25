@@ -10,18 +10,27 @@ export interface TabItem {
 
 export interface TabsProps {
   items: TabItem[];
+  /** @deprecated Use `value`/`onValueChange` */
   defaultIndex?: number;
   className?: string;
+  /** @deprecated Use `value`/`onValueChange` */
   onChange?: (index: number) => void;
+  /** Controlled active index. When provided, component is controlled. */
+  value?: number;
+  /** Called when the active tab changes (controlled). */
+  onValueChange?: (index: number) => void;
 }
 
-export default function Tabs({ items, defaultIndex = 0, className, onChange }: TabsProps) {
-  const [activeIndex, setActiveIndex] = useState(defaultIndex);
+export default function Tabs({ items, defaultIndex = 0, className, onChange, value, onValueChange }: TabsProps) {
+  const [internalIndex, setInternalIndex] = useState(defaultIndex);
+  const isControlled = value !== undefined;
+  const activeIndex = isControlled ? value : internalIndex;
 
   const handleTabClick = (index: number) => {
-    if (index !== activeIndex) {
-      setActiveIndex(index);
-      onChange?.(index);
+    onValueChange?.(index);
+    onChange?.(index);
+    if (!isControlled) {
+      setInternalIndex(index);
     }
   };
 

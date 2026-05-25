@@ -23,6 +23,7 @@
 
 - **`SelectInput`** — `onSelect` помечен `@deprecated`; новый путь `onChange`.
 - **`Attachment`** — `onUpload` (custom) вместо `onChange`. Обозначен как legacy-компонент; для новых полей предпочтительнее `FileDropzone`.
+- **`Tabs`** — index-based `defaultIndex` + `onChange(index)` помечены `@deprecated`; канон — `value` + `onValueChange(index)` (controlled-first, index-based). Удаление алиасов — v2.0.
 
 При создании новых компонентов следуйте таблице выше — не плодите custom-имена без нужды.
 

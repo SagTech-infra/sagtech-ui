@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useOverlayTransition } from '@/hooks/useMotion';
 import Typography from '@/components/Typography/Typography';
 import Button from '@/components/Button/Button';
 import { TextArea } from '@/components/TextArea/TextArea';
@@ -39,6 +40,7 @@ export default function ConfirmWithNoteDialog({
   noteMinLength = 1,
   loading = false,
 }: ConfirmWithNoteDialogProps) {
+  const t = useOverlayTransition('fast');
   const dialogRef = useRef<HTMLDivElement>(null);
   const [note, setNote] = useState('');
 
@@ -81,7 +83,7 @@ export default function ConfirmWithNoteDialog({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
+            transition={t}
             onClick={handleBackdropClick}
           />
           <motion.div
@@ -89,7 +91,7 @@ export default function ConfirmWithNoteDialog({
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
-            transition={{ duration: 0.15 }}
+            transition={t}
             className="relative w-full max-w-[440px] rounded-24px border border-solid border-black_3 bg-black_1 p-24px shadow-4xl"
           >
             <div className="flex flex-col gap-16px">

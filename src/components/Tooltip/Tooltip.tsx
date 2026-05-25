@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import classNames from 'classnames';
+import { useOverlayTransition, positionVariants } from '@/hooks/useMotion';
 
 export interface TooltipProps {
   children: React.ReactNode;
@@ -27,19 +28,13 @@ const arrowClasses = {
     'left-[-4px] top-1/2 -translate-y-1/2 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-r-[5px] border-r-black_3',
 } as const;
 
-const motionVariants = {
-  top: { initial: { opacity: 0, y: 4 }, animate: { opacity: 1, y: 0 } },
-  bottom: { initial: { opacity: 0, y: -4 }, animate: { opacity: 1, y: 0 } },
-  left: { initial: { opacity: 0, x: 4 }, animate: { opacity: 1, x: 0 } },
-  right: { initial: { opacity: 0, x: -4 }, animate: { opacity: 1, x: 0 } },
-} as const;
-
 export default function Tooltip({
   children,
   content,
   position = 'top',
   className,
 }: TooltipProps) {
+  const t = useOverlayTransition('fast');
   const [isVisible, setIsVisible] = useState(false);
 
   return (
@@ -57,10 +52,10 @@ export default function Tooltip({
               'absolute pointer-events-none',
               positionClasses[position],
             )}
-            initial={motionVariants[position].initial}
-            animate={motionVariants[position].animate}
-            exit={motionVariants[position].initial}
-            transition={{ duration: 0.15 }}
+            initial={positionVariants[position].initial}
+            animate={positionVariants[position].animate}
+            exit={positionVariants[position].initial}
+            transition={t}
           >
             <div className="bg-black_2 border border-black_3 rounded-8px px-12px py-8px text-grey_4 text-12 font-manrope shadow-lg whitespace-nowrap">
               {content}

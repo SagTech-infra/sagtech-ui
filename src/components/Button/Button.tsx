@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import type { MouseEventHandler, ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
 import { Icon } from '@/components/Icon/Icon';
 import type { VariantTypoTagsStyles } from '@/components/Typography/types';
@@ -23,23 +23,26 @@ export interface ButtonTypes
   onClick?: MouseEventHandler;
 }
 
-export default function Button({
-  text,
-  disabled,
-  buttonSize = 'large',
-  loadingType,
-  classes,
-  variant,
-  useIcon,
-  stateOfButton = 'default',
-  hoverOff,
-  children,
-  changeColor,
-  typeText = 'Buttons',
-  onClick,
-  type = 'button',
-  ...rest
-}: ButtonTypes) {
+const Button = forwardRef<HTMLButtonElement, ButtonTypes>(function Button(
+  {
+    text,
+    disabled,
+    buttonSize = 'large',
+    loadingType,
+    classes,
+    variant,
+    useIcon,
+    stateOfButton = 'default',
+    hoverOff,
+    children,
+    changeColor,
+    typeText = 'Buttons',
+    onClick,
+    type = 'button',
+    ...rest
+  },
+  ref,
+) {
   const buttonClasses = useButtonStyles({
     variant,
     stateOfButton,
@@ -61,6 +64,7 @@ export default function Button({
 
   return (
     <button
+      ref={ref}
       type={type}
       className={`${classes} ${buttonClasses}`}
       disabled={disabled || loadingType}
@@ -95,4 +99,8 @@ export default function Button({
       )}
     </button>
   );
-}
+});
+
+Button.displayName = 'Button';
+
+export default Button;

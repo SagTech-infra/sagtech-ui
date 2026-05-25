@@ -3,6 +3,7 @@
 
 export const colors = {
   black_1: "#070715",
+  black_1_5: "#1B1B27",
   black_2: "#20202D",
   black_3: "#393944",
   black_4: "#51515B",
@@ -174,6 +175,15 @@ export const aspect = {
   '704': "704",
 } as const;
 
+export const motion = {
+  'duration-fast': "120ms",
+  'duration-normal': "200ms",
+  'duration-slow': "320ms",
+  'ease-standard': "cubic-bezier(0.2, 0, 0, 1)",
+  'ease-emphasized': "cubic-bezier(0.3, 0, 0, 1)",
+  'ease-decelerated': "cubic-bezier(0, 0, 0, 1)",
+} as const;
+
 
 export type ColorToken = keyof typeof colors;
 export type FontToken = keyof typeof fonts;
@@ -183,3 +193,4 @@ export type BreakpointToken = keyof typeof breakpoints;
 export type RadiusToken = keyof typeof radius;
 export type ShadowToken = keyof typeof shadows;
 export type ZIndexToken = keyof typeof zIndex;
+export type MotionToken = keyof typeof motion;

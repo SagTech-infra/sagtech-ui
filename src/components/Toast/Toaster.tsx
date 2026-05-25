@@ -4,8 +4,10 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import classNames from 'classnames';
+import { useOverlayTransition } from '@/hooks/useMotion';
 import { toastStore } from './ToastStore';
 import type { ToastData, ToastVariant } from './types';
+import type { Transition } from 'framer-motion';
 
 export type ToasterPosition =
   | 'top-right'
@@ -85,7 +87,7 @@ function ToastIcon({ variant }: { variant: ToastVariant }) {
   return null;
 }
 
-function ToastRow({ toast, onDismiss }: { toast: ToastData; onDismiss: (id: string | number) => void }) {
+function ToastRow({ toast, onDismiss, transition }: { toast: ToastData; onDismiss: (id: string | number) => void; transition: Transition }) {
   useEffect(() => {
     if (!Number.isFinite(toast.duration)) return;
     const handle = window.setTimeout(() => onDismiss(toast.id), toast.duration);
@@ -100,7 +102,7 @@ function ToastRow({ toast, onDismiss }: { toast: ToastData; onDismiss: (id: stri
       initial={{ opacity: 0, y: -8, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: -8, scale: 0.98 }}
-      transition={{ duration: 0.18 }}
+      transition={transition}
       className={classNames(
         'pointer-events-auto inline-flex w-fit gap-8px rounded-8px border border-solid px-12px py-6px shadow-4xl font-manrope text-14 text-white_4 max-w-[420px]',
         toast.description ? 'items-start' : 'items-center',
@@ -145,6 +147,7 @@ export default function Toaster({
   visibleToasts = 5,
   gap = 12,
 }: ToasterProps) {
+  const toastTransition = useOverlayTransition('fast');
   const [toasts, setToasts] = useState<ToastData[]>([]);
 
   useEffect(() => toastStore.subscribe(setToasts), []);
@@ -165,7 +168,7 @@ export default function Toaster({
     >
       <AnimatePresence initial={false}>
         {visible.map((t) => (
-          <ToastRow key={t.id} toast={t} onDismiss={handleDismiss} />
+          <ToastRow key={t.id} toast={t} onDismiss={handleDismiss} transition={toastTransition} />
         ))}
       </AnimatePresence>
     </div>,

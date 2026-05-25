@@ -9,6 +9,7 @@ export type {
   RadiusToken,
   ShadowToken,
   ZIndexToken,
+  MotionToken,
 } from './tokens/tokens';
 
 // Providers

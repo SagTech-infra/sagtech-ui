@@ -36,6 +36,7 @@ const groups = {
   z: [],
   inset: [],
   aspect: [],
+  motion: [],
   other: [],
 };
 
@@ -53,6 +54,7 @@ function classify(name) {
   if (name.startsWith('z-')) return 'z';
   if (name.startsWith('inset-')) return 'inset';
   if (name.startsWith('aspect-')) return 'aspect';
+  if (name.startsWith('motion-')) return 'motion';
   return 'other';
 }
 
@@ -99,6 +101,7 @@ ${emitGroup('borderWidths', 'border-width-', groups.borderWidths)}
 ${emitGroup('zIndex', 'z-', groups.z)}
 ${emitGroup('inset', 'inset-', groups.inset)}
 ${emitGroup('aspect', 'aspect-', groups.aspect)}
+${emitGroup('motion', 'motion-', groups.motion)}
 
 export type ColorToken = keyof typeof colors;
 export type FontToken = keyof typeof fonts;
@@ -108,6 +111,7 @@ export type BreakpointToken = keyof typeof breakpoints;
 export type RadiusToken = keyof typeof radius;
 export type ShadowToken = keyof typeof shadows;
 export type ZIndexToken = keyof typeof zIndex;
+export type MotionToken = keyof typeof motion;
 `;
 
 writeFileSync(outPath, out, 'utf8');

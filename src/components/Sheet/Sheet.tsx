@@ -12,6 +12,7 @@ import {
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import classNames from 'classnames';
+import { useOverlayTransition, useSpringTransition } from '@/hooks/useMotion';
 import {
   getOverlayDepth,
   registerOverlay,
@@ -118,6 +119,8 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(function Sheet(
   },
   ref,
 ) {
+  const backdropTransition = useOverlayTransition('normal');
+  const springTransition = useSpringTransition();
   const idRef = useRef<number | null>(null);
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
@@ -203,7 +206,7 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(function Sheet(
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              transition={backdropTransition}
               onClick={close}
               aria-hidden="true"
             />
@@ -233,7 +236,7 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(function Sheet(
             initial="hidden"
             animate="visible"
             exit="exit"
-            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+            transition={springTransition}
           >
             <div className="flex items-center justify-between p-24px border-b border-black_3 flex-shrink-0">
               {title ? (
