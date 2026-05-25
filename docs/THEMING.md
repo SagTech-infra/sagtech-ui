@@ -2,6 +2,8 @@
 
 `@sagtech-infra/ui` ships a dark-first design. Light theme is opt-in via `ThemeProvider`.
 
+> For locale-aware dates and right-to-left (RTL) layout, see [I18N.md](./I18N.md).
+
 ---
 
 ## 1. Import tokens

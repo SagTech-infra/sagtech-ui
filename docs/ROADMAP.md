@@ -202,7 +202,15 @@
 
 ---
 
-## 🎯 v1.5 — coverage push + a11y / i18n polish
+## ✅ v1.5 — released 2026-05-25 — coverage push + a11y / i18n polish
+
+Аддитивный релиз, **zero breaking**. Дефолты `locale`/`dir` = `en-US`/`ltr` — консюмеры без `LocaleProvider` не меняются.
+
+**Shipped:** рендер-smoke хвоста (`VirtualList`/`RichTextEditor`/`VisualGraphEditor` + 10 canvas-чартов + 4 3D-сцены) на глобальных моках `IntersectionObserver`/`ResizeObserver`/canvas-2D/three+r3f+drei+react-force-graph-3d в `vitest.setup.ts`; theme-aware `:focus-visible` кольца на base form-controls (`Input`/`Button`/`SelectInput`, видимы в обеих темах); новый `LocaleProvider` + `useLocale()` (`{ locale, dir }`), композируется в `SagtechUIProvider`; locale-aware даты через `Intl` (`DatePicker`/`DateRangePicker`/`GanttTimeline`, Monday-first сетка сохранена); RTL через Tailwind v4 logical properties (`ps/pe/ms/me/start/end`, `border-s/e`) + `dir` на корнях (включая порталы) для form-controls и overlays (`Tooltip`/`Popover`/`Drawer`/`Sheet`/`Modal`/`Toaster`/`BottomSheet`/`DatePicker`/`DateRangePicker`); консолидация Drawer/Sheet edge-slide в `edgeSlideVariants(edge,dir)`; raw→semantic миграция high-traffic (`GanttTimeline`/`DataTable`/`Pagination`/`Combobox`/`NotificationCenter`); Storybook-стори (`Container`, `ThemeProvider`, `LocaleProvider`, `Motion/Presets`); `addon-a11y` подтверждён активным; CI `publish.yml` → actions v5 + Node 24 (GitHub Node-20 EOL 2026-06-02); `docs/I18N.md`. Tests **346 → 438**.
+
+**Scope-уточнения / отложено:** canvas-чарты используют JS-цвета на `<canvas>` (не Tailwind-классы) → их theming/RTL/locale — отдельная задача (backlog); `GanttTimeline`-ось остаётся геометрически LTR (локализуются только тики); `NotificationCenter`-дропдаун не входил в RTL-аудит (контент локализуется, сторона открытия не флипается); 4px directional-fade офсет `Popover`/`Tooltip` не зеркалится.
+
+<details><summary>Исходный план v1.5</summary>
 
 - **Render-smoke тесты для долгого хвоста.** `VirtualList` (IntersectionObserver / ResizeObserver моки в `vitest.setup.ts`), `RichTextEditor` (ProseMirror happy-dom mocks), `VisualGraphEditor` (ReactFlow моки). Альтернатива — Playwright component-tests против Storybook (опциональный путь).
 - **Canvas-чарты smoke** — 10 чартов v1.1 (`AreaChart`, `BarChart`, `HeatmapChart`, `RadarChart`, `ScatterChart`, `GaugeChart`, `SankeyChart`, `FunnelChart`, `SparklineChart`, `TreemapChart`) получают mount-смоук + проверку отрисованных props. Глубже не лезем — canvas-снапшоты ненадёжны в happy-dom.
@@ -210,6 +218,8 @@
 - **i18n hooks для дат/времени.** `DatePicker` / `DateRangePicker` / `GanttTimeline` — weekdays/months через `Intl.DateTimeFormat` вместо констант. Локаль из `ThemeProvider` или нового `LocaleProvider`.
 - **RTL audit.** Overlays и form-controls под `dir="rtl"` — починить асимметричные паддинги/иконки/выравнивания.
 - **Storybook a11y addon** (локально, без деплоя) — `@storybook/addon-a11y`, прогон по существующим сторям.
+
+</details>
 
 ---
 
