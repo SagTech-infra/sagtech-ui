@@ -6,13 +6,7 @@
 }
 
 .modalAnim {
-  animation: slide-down var(--motion-duration-slow) var(--motion-ease-decelerated) forwards;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .modalAnim {
-    animation: none;
-  }
+  animation: slide-down 300ms ease-out forwards;
 }
 
 @keyframes scaleIn {

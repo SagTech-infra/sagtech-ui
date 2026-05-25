@@ -19,7 +19,6 @@ import {
   registerOverlay,
   unregisterOverlay,
 } from '@/components/Modal/ModalStack';
-import { useOverlayTransition, useSpringTransition } from '@/hooks/useMotion';
 
 export interface BottomSheetProps {
   /** Whether the sheet is open. */
@@ -62,8 +61,6 @@ export function BottomSheet({
   className,
   'aria-label': ariaLabel,
 }: BottomSheetProps) {
-  const backdropTransition = useOverlayTransition('normal');
-  const springTransition = useSpringTransition();
   const sortedSnaps = [...snapPoints].sort((a, b) => a - b);
   const startIndex =
     defaultSnap !== undefined
@@ -153,7 +150,7 @@ export function BottomSheet({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={backdropTransition}
+              transition={{ duration: 0.2 }}
               onClick={close}
               aria-hidden="true"
             />
@@ -180,7 +177,7 @@ export function BottomSheet({
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
-            transition={springTransition}
+            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
             onDragEnd={handleDragEnd}
           >
             {/* Drag handle */}

@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useRef, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useOverlayTransition } from '@/hooks/useMotion';
 import Typography from '@/components/Typography/Typography';
 import Button from '@/components/Button/Button';
 import type { ConfirmVariant } from './types';
@@ -39,7 +38,6 @@ export default function ConfirmDialog({
   confirmDisabled = false,
   onConfirm,
 }: ConfirmDialogProps) {
-  const t = useOverlayTransition('fast');
   const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -85,7 +83,7 @@ export default function ConfirmDialog({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={t}
+            transition={{ duration: 0.15 }}
             onClick={handleBackdropClick}
           />
           <motion.div
@@ -93,7 +91,7 @@ export default function ConfirmDialog({
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
-            transition={t}
+            transition={{ duration: 0.15 }}
             className="relative w-full max-w-[420px] rounded-24px border border-black_3 bg-black_1 p-24px shadow-4xl"
           >
             <div className="flex flex-col gap-16px">

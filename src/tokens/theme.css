@@ -3,7 +3,6 @@
 @theme {
   /* Colors */
   --color-black_1: #070715;
-  --color-black_1_5: #1B1B27;
   --color-black_2: #20202D;
   --color-black_3: #393944;
   --color-black_4: #51515B;
@@ -166,12 +165,4 @@
   --aspect-384: 384;
   --aspect-528: 528;
   --aspect-704: 704;
-
-  /* Motion */
-  --motion-duration-fast: 120ms;
-  --motion-duration-normal: 200ms;
-  --motion-duration-slow: 320ms;
-  --motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
-  --motion-ease-emphasized: cubic-bezier(0.3, 0, 0, 1);
-  --motion-ease-decelerated: cubic-bezier(0, 0, 0, 1);
 }

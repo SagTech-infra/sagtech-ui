@@ -4,7 +4,6 @@ import { useEffect, useRef, useState, useCallback, useMemo, useLayoutEffect, typ
 import { createPortal } from 'react-dom';
 import classNames from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useOverlayTransition, dropdownVariants } from '@/hooks/useMotion';
 import {
   WEEKDAYS,
   formatDisplayDate,
@@ -30,6 +29,11 @@ export interface DatePickerProps {
   timeStep?: number;
   ref?: Ref<HTMLDivElement>;
 }
+
+const dropdownVariants = {
+  open: { opacity: 1, y: 0 },
+  closed: { opacity: 0, y: -4 },
+};
 
 function CalendarIcon() {
   return (
@@ -102,7 +106,6 @@ export default function DatePicker({
   timeStep = 5,
   ref,
 }: DatePickerProps) {
-  const dpTransition = useOverlayTransition('fast');
   const [isOpen, setIsOpen] = useState(false);
   const [popoverStyle, setPopoverStyle] = useState<{
     top: number;
@@ -272,7 +275,7 @@ export default function DatePicker({
                   animate="open"
                   exit="closed"
                   variants={dropdownVariants}
-                  transition={dpTransition}
+                  transition={{ duration: 0.15 }}
                   style={{
                     position: 'fixed',
                     top: popoverStyle.top,

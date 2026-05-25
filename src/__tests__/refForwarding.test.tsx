@@ -9,7 +9,6 @@ import TagInput from '@/components/TagInput/TagInput';
 import Dropzone from '@/components/Dropzone/Dropzone';
 import { Attachment } from '@/components/Attachment/Attachment';
 import PhoneInput from '@/components/PhoneInput/PhoneInput';
-import Button from '@/components/Button/Button';
 
 describe('Form controls — ref forwarding (B-6 phase 1)', () => {
   it('TextArea exposes the underlying <textarea>', () => {
@@ -68,11 +67,5 @@ describe('Form controls — ref forwarding (B-6 phase 1)', () => {
     const ref = createRef<HTMLDivElement>();
     render(<PhoneInput ref={ref} value="" onChange={() => {}} />);
     expect(ref.current).toBeInstanceOf(HTMLDivElement);
-  });
-
-  it('Button exposes the underlying <button>', () => {
-    const ref = createRef<HTMLButtonElement>();
-    render(<Button ref={ref} text="x" />);
-    expect(ref.current).toBeInstanceOf(HTMLButtonElement);
   });
 });

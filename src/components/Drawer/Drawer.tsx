@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import classNames from 'classnames';
-import { useOverlayTransition, useSpringTransition } from '@/hooks/useMotion';
 import {
   getOverlayDepth,
   registerOverlay,
@@ -50,8 +49,6 @@ export default function Drawer({
   showOverlay = true,
   className,
 }: DrawerProps) {
-  const backdropTransition = useOverlayTransition('normal');
-  const springTransition = useSpringTransition();
   const idRef = useRef<number | null>(null);
   const [, forceRender] = useState(0);
 
@@ -101,7 +98,7 @@ export default function Drawer({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={backdropTransition}
+              transition={{ duration: 0.2 }}
               onClick={onClose}
             />
           )}
@@ -121,7 +118,7 @@ export default function Drawer({
             initial="hidden"
             animate="visible"
             exit="exit"
-            transition={springTransition}
+            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
           >
             <div className="flex items-center justify-between p-24px border-b border-black_3">
               {title && (

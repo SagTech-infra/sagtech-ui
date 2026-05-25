@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import classNames from 'classnames';
 import useOutsideClick from '@/hooks/useOutsideClick';
-import { useOverlayTransition, positionVariants } from '@/hooks/useMotion';
 
 export interface PopoverProps {
   trigger: React.ReactNode;
@@ -44,6 +43,13 @@ const alignClasses = {
   },
 } as const;
 
+const motionVariants = {
+  top: { initial: { opacity: 0, y: 4 }, animate: { opacity: 1, y: 0 } },
+  bottom: { initial: { opacity: 0, y: -4 }, animate: { opacity: 1, y: 0 } },
+  left: { initial: { opacity: 0, x: 4 }, animate: { opacity: 1, x: 0 } },
+  right: { initial: { opacity: 0, x: -4 }, animate: { opacity: 1, x: 0 } },
+} as const;
+
 const arrowClasses = {
   top: 'bottom-[-5px] left-1/2 -translate-x-1/2 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-black_3',
   bottom:
@@ -60,7 +66,6 @@ export default function Popover({
   align = 'center',
   className,
 }: PopoverProps) {
-  const t = useOverlayTransition('fast');
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
 
@@ -106,10 +111,10 @@ export default function Popover({
               positionClasses[position],
               alignClasses[position][align],
             )}
-            initial={positionVariants[position].initial}
-            animate={positionVariants[position].animate}
-            exit={positionVariants[position].initial}
-            transition={t}
+            initial={motionVariants[position].initial}
+            animate={motionVariants[position].animate}
+            exit={motionVariants[position].initial}
+            transition={{ duration: 0.15 }}
           >
             <div className="relative bg-black_2 border border-black_3 rounded-16px p-20px shadow-6xl min-w-[240px] max-w-[400px] w-max">
               {children}
