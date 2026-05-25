@@ -6,8 +6,22 @@ export interface CalendarDay {
 
 export const WEEKDAYS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'] as const;
 
-export function formatDisplayDate(date: Date): string {
-  return date.toLocaleDateString('en-US', {
+// 2024-01-01 is a Monday; iterate Mon–Sun via UTC to avoid timezone drift.
+const _weekdayCache = new Map<string, string[]>();
+
+export function getWeekdayLabels(locale: string = 'en-US'): string[] {
+  const cached = _weekdayCache.get(locale);
+  if (cached) return cached;
+  const fmt = new Intl.DateTimeFormat(locale, { weekday: 'short' });
+  const labels = Array.from({ length: 7 }, (_, i) =>
+    fmt.format(new Date(Date.UTC(2024, 0, 1 + i))),
+  );
+  _weekdayCache.set(locale, labels);
+  return labels;
+}
+
+export function formatDisplayDate(date: Date, locale: string = 'en-US'): string {
+  return date.toLocaleDateString(locale, {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
@@ -50,8 +64,8 @@ export function isBetween(date: Date, from: Date, to: Date): boolean {
   return t > from.getTime() && t < to.getTime();
 }
 
-export function formatMonthLabel(year: number, month: number): string {
-  return new Date(year, month).toLocaleDateString('en-US', {
+export function formatMonthLabel(year: number, month: number, locale: string = 'en-US'): string {
+  return new Date(year, month).toLocaleDateString(locale, {
     month: 'long',
     year: 'numeric',
   });
