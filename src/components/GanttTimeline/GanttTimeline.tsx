@@ -54,7 +54,7 @@ const colorMap = {
   success: { bg: 'bg-success/20', border: 'border-success', fill: 'bg-success' },
   warning: { bg: 'bg-warning/20', border: 'border-warning', fill: 'bg-warning' },
   error: { bg: 'bg-error/20', border: 'border-error', fill: 'bg-error' },
-  grey: { bg: 'bg-black_3', border: 'border-grey_1', fill: 'bg-grey_2' },
+  grey: { bg: 'bg-bg-tertiary', border: 'border-border-default', fill: 'bg-grey_2' },
 } as const;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -193,16 +193,16 @@ export default function GanttTimeline({
   return (
     <div
       className={classNames(
-        'border border-solid border-black_3 rounded-16px overflow-hidden bg-black_1',
+        'border border-solid border-border-default rounded-16px overflow-hidden bg-bg-primary',
         className,
       )}
     >
       <div className="overflow-x-auto custom-scrollbar">
         <div style={{ width: rowLabelWidth + contentWidth }}>
           {/* Header row with ticks */}
-          <div className="flex border-b border-solid border-black_3 bg-black_2">
+          <div className="flex border-b border-solid border-border-default bg-bg-secondary">
             <div
-              className="flex-shrink-0 px-16px py-10px font-manrope text-10 font-bold text-grey_1 uppercase tracking-[0.12em] border-r border-solid border-black_3 flex items-end"
+              className="flex-shrink-0 px-16px py-10px font-manrope text-10 font-bold text-fg-muted uppercase tracking-[0.12em] border-r border-solid border-border-default flex items-end"
               style={{ width: rowLabelWidth, height: 48 }}
             >
               {laneHeaderLabel}
@@ -223,7 +223,7 @@ export default function GanttTimeline({
                     className={classNames(
                       'absolute top-0 h-full flex flex-col items-center justify-center border-l border-solid font-manrope',
                       isMonthStart ? 'border-l-pr_purple/40' : 'border-l-black_3',
-                      isWeekend && 'bg-black_3/30',
+                      isWeekend && 'bg-bg-tertiary/30',
                     )}
                     style={{ left: computeX(tick), width: dayWidth }}
                   >
@@ -232,7 +232,7 @@ export default function GanttTimeline({
                         <span
                           className={classNames(
                             'text-10 uppercase tracking-wider leading-tight',
-                            isWeekend ? 'text-grey_1' : 'text-grey_2',
+                            isWeekend ? 'text-fg-muted' : 'text-fg-muted',
                           )}
                         >
                           {isMonthStart ? monthLabel : weekday}
@@ -240,7 +240,7 @@ export default function GanttTimeline({
                         <span
                           className={classNames(
                             'text-12 font-semibold leading-tight mt-2px',
-                            isWeekend ? 'text-grey_2' : 'text-white_4',
+                            isWeekend ? 'text-fg-muted' : 'text-fg-primary',
                           )}
                         >
                           {tick.getDate()}
@@ -249,16 +249,16 @@ export default function GanttTimeline({
                     )}
                     {scale === 'week' && (
                       <>
-                        <span className="text-10 uppercase tracking-wider text-grey_2 leading-tight">
+                        <span className="text-10 uppercase tracking-wider text-fg-muted leading-tight">
                           W{isoWeek(tick)}
                         </span>
-                        <span className="text-10 font-semibold text-white_4 leading-tight mt-2px">
+                        <span className="text-10 font-semibold text-fg-primary leading-tight mt-2px">
                           {monthLabel} {tick.getDate()}
                         </span>
                       </>
                     )}
                     {scale === 'month' && (
-                      <span className="text-10 text-grey_2 uppercase tracking-wider">
+                      <span className="text-10 text-fg-muted uppercase tracking-wider">
                         {tick.toLocaleDateString(locale, { month: 'short', year: '2-digit' })}
                       </span>
                     )}
@@ -274,10 +274,10 @@ export default function GanttTimeline({
             return (
               <div
                 key={lane || `__default-${laneIndex}`}
-                className="flex border-b border-solid border-black_3 last:border-b-0"
+                className="flex border-b border-solid border-border-default last:border-b-0"
               >
                 <div
-                  className="flex-shrink-0 px-12px py-8px font-manrope text-12 text-white_4 border-r border-solid border-black_3 flex items-center"
+                  className="flex-shrink-0 px-12px py-8px font-manrope text-12 text-fg-primary border-r border-solid border-border-default flex items-center"
                   style={{ width: rowLabelWidth, minHeight: actualLaneHeight }}
                 >
                   {lane || '—'}
@@ -299,7 +299,7 @@ export default function GanttTimeline({
                           isMonthStart
                             ? 'border-l-pr_purple/30'
                             : 'border-l-black_3 opacity-40',
-                          isWeekend && 'bg-black_3/20',
+                          isWeekend && 'bg-bg-tertiary/20',
                         )}
                         style={{
                           left: computeX(tick),
@@ -348,7 +348,7 @@ export default function GanttTimeline({
                             }}
                           />
                         )}
-                        <span className="relative z-[1] px-8px font-manrope text-12 text-white_4 truncate block leading-[30px]">
+                        <span className="relative z-[1] px-8px font-manrope text-12 text-fg-primary truncate block leading-[30px]">
                           {it.label}
                         </span>
                       </button>

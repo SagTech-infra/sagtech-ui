@@ -17,7 +17,7 @@ function SortIcon({ direction }: { direction: SortDirection | null }) {
         aria-hidden="true"
         className={classNames('leading-none', {
           'text-pr_purple': direction === 'asc',
-          'text-grey_2': direction !== 'asc',
+          'text-fg-muted': direction !== 'asc',
         })}
       >
         ▲
@@ -26,7 +26,7 @@ function SortIcon({ direction }: { direction: SortDirection | null }) {
         aria-hidden="true"
         className={classNames('leading-none', {
           'text-pr_purple': direction === 'desc',
-          'text-grey_2': direction !== 'desc',
+          'text-fg-muted': direction !== 'desc',
         })}
       >
         ▼
@@ -65,12 +65,12 @@ function HeaderCell<T, K extends string>({
       }
       style={column.width ? { width: column.width } : undefined}
       className={classNames(
-        'font-manrope text-12 uppercase tracking-wide text-grey_2 font-semibold',
+        'font-manrope text-12 uppercase tracking-wide text-fg-muted font-semibold',
         alignClasses[column.align ?? 'left'],
         {
           'py-8px px-16px': compact,
           'py-12px px-20px': !compact,
-          'cursor-pointer select-none hover:text-white_4': sortable,
+          'cursor-pointer select-none hover:text-fg-primary': sortable,
         },
       )}
     >
@@ -154,13 +154,13 @@ export default function DataTable<T, K extends string = string>({
 
   const tableEl = (
     <table className="w-full border-collapse font-manrope">
-      {caption && <caption className="text-left text-14 text-grey_4 pb-12px">{caption}</caption>}
+      {caption && <caption className="text-left text-14 text-fg-muted pb-12px">{caption}</caption>}
       <thead
-        className={classNames('bg-black_2', {
+        className={classNames('bg-bg-secondary', {
           'sticky top-0 z-10': stickyHeader,
         })}
       >
-        <tr className="border-b border-solid border-black_3">
+        <tr className="border-b border-solid border-border-default">
           {hasSelection && (
             <th
               scope="col"
@@ -197,13 +197,13 @@ export default function DataTable<T, K extends string = string>({
           Array.from({ length: 3 }).map((_, i) => (
             <tr
               key={`skeleton-${i}`}
-              className="border-b border-black_3 animate-pulse"
+              className="border-b border-border-default animate-pulse"
               aria-hidden="true"
             >
               {hasSelection && <td className="py-12px px-16px" />}
               {columns.map((c) => (
                 <td key={c.key} className="py-12px px-20px">
-                  <div className="h-[14px] w-full bg-black_3 rounded-8px" />
+                  <div className="h-[14px] w-full bg-bg-tertiary rounded-8px" />
                 </td>
               ))}
             </tr>
@@ -212,7 +212,7 @@ export default function DataTable<T, K extends string = string>({
           <tr>
             <td
               colSpan={totalColumns}
-              className="py-24px text-center text-grey_2 text-14"
+              className="py-24px text-center text-fg-muted text-14"
             >
               {emptyText}
             </td>
@@ -225,9 +225,9 @@ export default function DataTable<T, K extends string = string>({
             return (
               <tr
                 key={id}
-                className={classNames('border-b border-solid border-black_3 transition-colors', {
+                className={classNames('border-b border-solid border-border-default transition-colors', {
                   'bg-pr_purple/10': selected,
-                  'hover:bg-black_2': !selected,
+                  'hover:bg-bg-secondary': !selected,
                   'cursor-pointer': onRowClick,
                 })}
                 onClick={onRowClick ? () => onRowClick(row, index) : undefined}
@@ -259,8 +259,8 @@ export default function DataTable<T, K extends string = string>({
                       {
                         'py-8px px-16px': compact,
                         'py-12px px-20px': !compact,
-                        'text-white_4': ci === 0,
-                        'text-grey_4': ci !== 0,
+                        'text-fg-primary': ci === 0,
+                        'text-fg-muted': ci !== 0,
                       },
                     )}
                     style={col.width ? { width: col.width } : undefined}
@@ -280,7 +280,7 @@ export default function DataTable<T, K extends string = string>({
   return (
     <div
       className={classNames(
-        'w-full rounded-16px border border-solid border-black_3 bg-black_1 overflow-hidden',
+        'w-full rounded-16px border border-solid border-border-default bg-bg-primary overflow-hidden',
         className,
       )}
     >

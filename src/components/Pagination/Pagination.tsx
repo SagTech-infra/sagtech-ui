@@ -196,9 +196,9 @@ export default function Pagination({
           disabled={prevDisabled}
           onClick={handlePrev}
           className={classNames(navButtonClass, {
-            "text-grey_4 hover:text-white_4 hover:bg-black_3 cursor-pointer":
+            "text-fg-muted hover:text-fg-primary hover:bg-bg-tertiary cursor-pointer":
               !prevDisabled,
-            "text-grey_2 opacity-50 cursor-not-allowed": prevDisabled,
+            "text-fg-muted opacity-50 cursor-not-allowed": prevDisabled,
           })}
           aria-label="Previous page"
         >
@@ -207,7 +207,7 @@ export default function Pagination({
         </button>
 
         {label != null && (
-          <span className="font-manrope text-12 text-grey_4 px-8px">
+          <span className="font-manrope text-12 text-fg-muted px-8px">
             {label}
           </span>
         )}
@@ -217,9 +217,9 @@ export default function Pagination({
           disabled={nextDisabled}
           onClick={handleNext}
           className={classNames(navButtonClass, {
-            "text-grey_4 hover:text-white_4 hover:bg-black_3 cursor-pointer":
+            "text-fg-muted hover:text-fg-primary hover:bg-bg-tertiary cursor-pointer":
               !nextDisabled,
-            "text-grey_2 opacity-50 cursor-not-allowed": nextDisabled,
+            "text-fg-muted opacity-50 cursor-not-allowed": nextDisabled,
           })}
           aria-label="Next page"
         >
@@ -266,9 +266,9 @@ export default function Pagination({
             "w-[36px] h-[36px] rounded-8px flex items-center justify-center transition-colors",
             size === "compact" ? "py-4px" : "",
             {
-              "text-grey_4 hover:text-white_4 hover:bg-black_3 cursor-pointer":
+              "text-fg-muted hover:text-fg-primary hover:bg-bg-tertiary cursor-pointer":
                 !prevDisabled,
-              "text-grey_2 opacity-50 cursor-not-allowed": prevDisabled,
+              "text-fg-muted opacity-50 cursor-not-allowed": prevDisabled,
             },
           )}
           aria-label="Previous page"
@@ -280,7 +280,7 @@ export default function Pagination({
           page === "ellipsis" ? (
             <span
               key={`ellipsis-${index}`}
-              className="w-[36px] h-[36px] flex items-center justify-center font-manrope text-14 text-grey_2"
+              className="w-[36px] h-[36px] flex items-center justify-center font-manrope text-14 text-fg-muted"
             >
               ...
             </span>
@@ -298,9 +298,9 @@ export default function Pagination({
                     page === safeCurrentPage && !disabled && !loading,
                   "bg-pr_purple text-white opacity-70 cursor-not-allowed":
                     page === safeCurrentPage && (disabled || loading),
-                  "text-grey_4 hover:text-white_4 hover:bg-black_3 cursor-pointer":
+                  "text-fg-muted hover:text-fg-primary hover:bg-bg-tertiary cursor-pointer":
                     page !== safeCurrentPage && !disabled && !loading,
-                  "text-grey_2 opacity-50 cursor-not-allowed":
+                  "text-fg-muted opacity-50 cursor-not-allowed":
                     page !== safeCurrentPage && (disabled || loading),
                 },
               )}
@@ -320,9 +320,9 @@ export default function Pagination({
             "w-[36px] h-[36px] rounded-8px flex items-center justify-center transition-colors",
             size === "compact" ? "py-4px" : "",
             {
-              "text-grey_4 hover:text-white_4 hover:bg-black_3 cursor-pointer":
+              "text-fg-muted hover:text-fg-primary hover:bg-bg-tertiary cursor-pointer":
                 !nextDisabled,
-              "text-grey_2 opacity-50 cursor-not-allowed": nextDisabled,
+              "text-fg-muted opacity-50 cursor-not-allowed": nextDisabled,
             },
           )}
           aria-label="Next page"
@@ -332,7 +332,7 @@ export default function Pagination({
       </div>
 
       {label != null && (
-        <span className="font-manrope text-12 text-grey_4">{label}</span>
+        <span className="font-manrope text-12 text-fg-muted">{label}</span>
       )}
     </nav>
   );
