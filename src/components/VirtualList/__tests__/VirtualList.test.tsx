@@ -1,17 +1,16 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
+import { render } from '@testing-library/react';
 import VirtualList from '../VirtualList';
 
-// happy-dom has no real layout engine so the virtualizer calculates zero
-// visible items when the scroll container reports offsetHeight=0.  With the
-// global ResizeObserver stub (no-op) and overscan=5 the virtualizer still
-// renders items whose index < overscan.  We rely on that: pass enough items
-// so at least the first one falls within the overscan window.
+// happy-dom has no layout engine, so the virtualizer reports a zero-height
+// viewport and the set of rendered rows is non-deterministic. We therefore
+// assert the parts that are layout-independent: the scroll container mounts,
+// and the inner sizer height is derived purely from count × estimateSize.
 
 const ITEMS = Array.from({ length: 20 }, (_, i) => `Item ${i + 1}`);
 
 describe('VirtualList', () => {
-  it('mounts without crashing and renders the scroll container', () => {
+  it('mounts and renders the scroll container with the given height', () => {
     const { container } = render(
       <VirtualList
         items={ITEMS}
@@ -20,11 +19,10 @@ describe('VirtualList', () => {
         height={400}
       />,
     );
-    // The outer div has overflow-auto — it is always rendered regardless of
-    // virtualizer math.
-    const scrollContainer = container.firstElementChild;
-    expect(scrollContainer).toBeTruthy();
-    expect(scrollContainer).toBeInTheDocument();
+    const scroll = container.firstElementChild as HTMLElement;
+    expect(scroll).toBeInTheDocument();
+    expect(scroll).toHaveClass('overflow-auto');
+    expect(scroll.style.height).toBe('400px');
   });
 
   it('accepts a function estimateSize and getItemKey without crashing', () => {
@@ -41,39 +39,18 @@ describe('VirtualList', () => {
     ).not.toThrow();
   });
 
-  it('passes renderItem output for items in the overscan window', () => {
-    render(
+  it('sizes the inner spacer to items.length × estimateSize', () => {
+    const { container } = render(
       <VirtualList
         items={ITEMS}
         estimateSize={40}
-        renderItem={(item, idx) => <div data-testid={`row-${idx}`}>{item}</div>}
-        overscan={3}
+        renderItem={(item) => <div>{item}</div>}
         height={400}
       />,
     );
-    // In happy-dom layout is zero, but @tanstack/react-virtual still renders
-    // the first `overscan` items.  Assert at least one row appeared.
-    const rows = screen.queryAllByTestId(/^row-/);
-    // If the virtualizer rendered zero items (edge case) we still pass the
-    // mount-without-crash requirement checked by previous tests.  If it did
-    // render items, confirm text content is correct.
-    if (rows.length > 0) {
-      expect(rows[0]).toHaveTextContent('Item 1');
-    }
-  });
-
-  it('calls onChange-style handlers (no-op smoke)', () => {
-    const renderItem = vi.fn((item: string) => <span>{item}</span>);
-    render(
-      <VirtualList
-        items={['a', 'b']}
-        estimateSize={40}
-        renderItem={renderItem}
-        height={200}
-      />,
-    );
-    // renderItem is called for each virtualised row; in happy-dom that may be
-    // 0 or more.  Either way, no exception should be thrown.
-    expect(renderItem).not.toThrow();
+    // getTotalSize() is count-based (20 × 40 = 800) and computed without DOM
+    // measurement, so it is deterministic even in happy-dom.
+    const sizer = container.firstElementChild?.firstElementChild as HTMLElement;
+    expect(sizer.style.height).toBe('800px');
   });
 });
