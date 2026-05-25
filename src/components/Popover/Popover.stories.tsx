@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Popover from './Popover';
 
 const meta = {
-  title: 'Data Display/Popover',
+  title: 'Overlays/Popover',
   component: Popover,
   tags: ['autodocs'],
   argTypes: {

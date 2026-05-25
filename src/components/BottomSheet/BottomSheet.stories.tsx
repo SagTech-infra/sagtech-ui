@@ -4,7 +4,7 @@ import BottomSheet from './BottomSheet';
 import Button from '@/components/Button/Button';
 
 const meta = {
-  title: 'Layout/BottomSheet',
+  title: 'Overlays/BottomSheet',
   component: BottomSheet,
   tags: ['autodocs'],
   parameters: { layout: 'fullscreen' },

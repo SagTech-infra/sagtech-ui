@@ -3,7 +3,7 @@ import Mindmap3D from './Mindmap3D';
 import type { MindmapNode } from './types';
 
 const meta = {
-  title: 'Data Display/Mindmap3D',
+  title: '3D/Mindmap3D',
   component: Mindmap3D,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },

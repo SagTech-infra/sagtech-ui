@@ -6,6 +6,22 @@ const preview: Preview = {
     backgrounds: { disable: true }, // background follows the theme decorator
     controls: { expanded: true },
     layout: "centered",
+    options: {
+      storySort: {
+        order: [
+          "Foundations",
+          "Form Controls",
+          "Layout",
+          "Overlays",
+          "Data Display",
+          "Charts",
+          "3D",
+          "Feedback",
+          "Providers",
+          "*",
+        ],
+      },
+    },
   },
   globalTypes: {
     theme: {

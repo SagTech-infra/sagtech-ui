@@ -3,7 +3,7 @@ import Network3D from './Network3D';
 import type { Network3DNode, Network3DLink } from './types';
 
 const meta = {
-  title: 'Data Display/Network3D',
+  title: '3D/Network3D',
   component: Network3D,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },

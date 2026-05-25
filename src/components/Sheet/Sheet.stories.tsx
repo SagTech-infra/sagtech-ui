@@ -4,7 +4,7 @@ import Sheet from './Sheet';
 import Button from '@/components/Button/Button';
 
 const meta = {
-  title: 'Layout/Sheet',
+  title: 'Overlays/Sheet',
   component: Sheet,
   tags: ['autodocs'],
   parameters: { layout: 'fullscreen' },

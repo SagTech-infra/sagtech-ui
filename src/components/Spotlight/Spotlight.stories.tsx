@@ -4,7 +4,7 @@ import Spotlight from './Spotlight';
 import Button from '@/components/Button/Button';
 
 const meta = {
-  title: 'Feedback/Spotlight',
+  title: 'Overlays/Spotlight',
   component: Spotlight,
   tags: ['autodocs'],
   parameters: { layout: 'fullscreen' },
