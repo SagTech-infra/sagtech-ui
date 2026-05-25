@@ -178,9 +178,13 @@
 
 ---
 
-## 🎯 v1.4 — light theme + motion presets
+## ✅ v1.4 — released 2026-05-25 — light theme + motion presets
 
 Большая аддитивная фича. Не breaking — старые консюмеры остаются на dark по умолчанию.
+
+**Shipped:** семантический слой токенов (`--color-bg/fg/border/surface-*` + status) с dark-дефолтами и `[data-theme="light"]` override (включая raw-scale — гибрид); `ThemeProvider` + `useTheme` + `<ThemeScript/>` (dark/light/system, localStorage `sagtech-ui-theme`, `data-theme`+`color-scheme` на `<html>`); WCAG-гейт `scripts/check-contrast.mjs` (`pnpm check:contrast`, AA на обеих темах); motion-пресеты `fadeIn/slideUp/scaleIn/popIn` + `useMotionPreset` (reduced-motion); консолидация идентичных overlay-variants в `src/motion/overlayVariants.ts`; миграция overlays + base form-controls на семантику; Storybook theme-switcher; `docs/THEMING.md` + `docs/MOTION.md`. Tests 331 → 346.
+
+**Scope-уточнения:** консолидация motion — консервативная (только буквальные дубли `Popover`/`Tooltip` + `DatePicker`/`DateRangePicker`; `Drawer`/`Sheet`/`Modal`/`Toast` — кандидаты на будущее, разные key-conventions). Обнаружен пред-существующий a11y-пробел: base form-controls используют `outline-none` без кастомного focus-ring — это не регрессия light-темы (одинаково в обеих темах), вынесено в v1.5 a11y-polish.
 
 **Light theme:**
 
