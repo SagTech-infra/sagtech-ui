@@ -7,6 +7,7 @@ import { tokenTransition } from "@/utils/motion";
 import classNames from "classnames";
 import { toastStore } from "./ToastStore";
 import type { ToastData, ToastVariant } from "./types";
+import { useLocale } from "@/providers/LocaleContext";
 
 export type ToasterPosition =
   | "top-right"
@@ -25,11 +26,11 @@ export interface ToasterProps {
 }
 
 const positionStyles: Record<ToasterPosition, string> = {
-  "top-right": "top-16px right-16px items-end",
-  "top-left": "top-16px left-16px items-start",
+  "top-right": "top-16px end-16px items-end",
+  "top-left": "top-16px start-16px items-start",
   "top-center": "top-16px left-1/2 -translate-x-1/2 items-center",
-  "bottom-right": "bottom-16px right-16px items-end",
-  "bottom-left": "bottom-16px left-16px items-start",
+  "bottom-right": "bottom-16px end-16px items-end",
+  "bottom-left": "bottom-16px start-16px items-start",
   "bottom-center": "bottom-16px left-1/2 -translate-x-1/2 items-center",
 };
 
@@ -253,6 +254,7 @@ export default function Toaster({
   visibleToasts = 5,
   gap = 12,
 }: ToasterProps) {
+  const { dir } = useLocale();
   const [toasts, setToasts] = useState<ToastData[]>([]);
 
   useEffect(() => toastStore.subscribe(setToasts), []);
@@ -265,6 +267,7 @@ export default function Toaster({
 
   return createPortal(
     <div
+      dir={dir}
       className={classNames(
         "fixed flex flex-col pointer-events-none",
         positionStyles[position],

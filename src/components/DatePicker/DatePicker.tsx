@@ -127,7 +127,7 @@ export default function DatePicker({
   locale: localeProp,
   ref,
 }: DatePickerProps) {
-  const { locale: ctxLocale } = useLocale();
+  const { locale: ctxLocale, dir } = useLocale();
   const locale = localeProp ?? ctxLocale;
   const reduceMotion = useReducedMotion();
   const [isOpen, setIsOpen] = useState(false);
@@ -303,6 +303,7 @@ export default function DatePicker({
             <AnimatePresence>
               {isOpen && popoverStyle && (
                 <motion.div
+                  dir={dir}
                   ref={popoverRef}
                   initial="closed"
                   animate="open"

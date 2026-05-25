@@ -21,6 +21,7 @@ import {
   registerOverlay,
   unregisterOverlay,
 } from "@/components/Modal/ModalStack";
+import { useLocale } from "@/providers/LocaleContext";
 
 export interface BottomSheetProps {
   /** Whether the sheet is open. */
@@ -63,6 +64,7 @@ export function BottomSheet({
   className,
   "aria-label": ariaLabel,
 }: BottomSheetProps) {
+  const { dir } = useLocale();
   const reduceMotion = useReducedMotion();
   const sortedSnaps = [...snapPoints].sort((a, b) => a - b);
   const startIndex =
@@ -162,6 +164,7 @@ export function BottomSheet({
           )}
 
           <motion.div
+            dir={dir}
             ref={sheetRef}
             role="dialog"
             aria-modal="true"

@@ -8,6 +8,7 @@ import {
   subscribeOverlayStack,
   unregisterOverlay,
 } from "./ModalStack";
+import { useLocale } from "@/providers/LocaleContext";
 
 export interface ModalMotionVariants {
   initial?: Record<string, unknown>;
@@ -64,6 +65,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
   },
   ref,
 ) {
+  const { dir } = useLocale();
   const idRef = useRef<number | null>(null);
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
@@ -158,6 +160,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
 
   return createPortal(
     <div
+      dir={dir}
       data-tid="modal"
       className="fixed inset-0 flex w-full justify-center h-full items-center"
       style={{ zIndex: modalZ }}
