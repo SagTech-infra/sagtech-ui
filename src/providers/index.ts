@@ -13,3 +13,9 @@ export type {
   UILinkComponent,
   UILinkProps,
 } from './defaults';
+export { ThemeProvider } from "./ThemeProvider";
+export type { ThemeProviderProps } from "./ThemeProvider";
+export { ThemeScript } from "./ThemeScript";
+export type { ThemeScriptProps } from "./ThemeScript";
+export { ThemeContext, useTheme } from "./ThemeContext";
+export type { Theme, ResolvedTheme, ThemeContextValue } from "./ThemeContext";

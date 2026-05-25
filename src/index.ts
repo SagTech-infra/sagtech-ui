@@ -19,6 +19,10 @@ export {
   useLinkComponent,
   DefaultImageShim,
   DefaultLinkShim,
+  ThemeProvider,
+  ThemeScript,
+  ThemeContext,
+  useTheme,
 } from "./providers";
 export type {
   SagtechUIProviderProps,
@@ -27,6 +31,11 @@ export type {
   UIImageProps,
   UILinkComponent,
   UILinkProps,
+  ThemeProviderProps,
+  ThemeScriptProps,
+  Theme,
+  ResolvedTheme,
+  ThemeContextValue,
 } from "./providers";
 
 // Hooks
