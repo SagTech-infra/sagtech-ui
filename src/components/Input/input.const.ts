@@ -1,6 +1,6 @@
 const inputConsts = {
   basicStyles:
-    'bg-bg-secondary border-[1px] border-solid font-medium w-full leading-24 outline-none rounded-16px h-[56px]',
+    'bg-bg-secondary border-[1px] border-solid font-medium w-full leading-24 outline-none focus-visible:ring-2 focus-visible:ring-pr_purple rounded-16px h-[56px]',
   defaultBorder: 'border-pr_purple py-15px px-24px',
   defaultStyles: 'placeholder:text-fg-muted text-fg-muted',
   disabledInput:

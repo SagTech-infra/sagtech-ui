@@ -1,6 +1,6 @@
 const buttonConst = {
   basicStyles:
-    'leading-24 flex justify-center items-center gap-8px font-bold rounded-[16px] cursor-pointer disabled:cursor-not-allowed',
+    'leading-24 flex justify-center items-center gap-8px font-bold rounded-[16px] cursor-pointer disabled:cursor-not-allowed outline-none focus-visible:ring-2 focus-visible:ring-pr_purple',
   primaryButton: 'bg-pr_purple box-border border-animation',
   primaryButtonTextColor: 'text-white',
   primaryButtonNewColor: 'text-pr_purple',
