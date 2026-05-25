@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import classNames from 'classnames';
 import { Modal } from '@/components/Modal/Modal';
+import { useLocale } from '@/providers/LocaleContext';
 
 export interface GanttItem {
   id: string;
@@ -43,6 +44,8 @@ export interface GanttTimelineProps {
   rowLabelWidth?: number;
   /** Label shown in the top-left header cell above lane names. Defaults to 'Lane'. */
   laneHeaderLabel?: string;
+  /** BCP-47 locale; falls back to LocaleProvider, then 'en-US'. Controls tick label language. */
+  locale?: string;
 }
 
 const colorMap = {
@@ -119,7 +122,10 @@ export default function GanttTimeline({
   laneHeight = 44,
   rowLabelWidth = 160,
   laneHeaderLabel = 'Lane',
+  locale: localeProp,
 }: GanttTimelineProps) {
+  const { locale: ctxLocale } = useLocale();
+  const locale = localeProp ?? ctxLocale;
   const [openItem, setOpenItem] = useState<GanttItem | null>(null);
 
   const { start, end, ticks, dayWidth } = useMemo(() => {
@@ -208,9 +214,9 @@ export default function GanttTimeline({
                   scale === 'day' && (tick.getDay() === 0 || tick.getDay() === 6);
                 const weekday =
                   scale === 'day'
-                    ? tick.toLocaleDateString(undefined, { weekday: 'short' })
+                    ? tick.toLocaleDateString(locale, { weekday: 'short' })
                     : null;
-                const monthLabel = tick.toLocaleDateString(undefined, { month: 'short' });
+                const monthLabel = tick.toLocaleDateString(locale, { month: 'short' });
                 return (
                   <div
                     key={i}
@@ -253,7 +259,7 @@ export default function GanttTimeline({
                     )}
                     {scale === 'month' && (
                       <span className="text-10 text-grey_2 uppercase tracking-wider">
-                        {tick.toLocaleDateString(undefined, { month: 'short', year: '2-digit' })}
+                        {tick.toLocaleDateString(locale, { month: 'short', year: '2-digit' })}
                       </span>
                     )}
                   </div>

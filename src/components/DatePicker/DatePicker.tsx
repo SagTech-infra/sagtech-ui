@@ -14,8 +14,9 @@ import classNames from "classnames";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { tokenTransition } from "@/utils/motion";
 import { dropdownFadeSlideVariants as dropdownVariants } from "@/motion/overlayVariants";
+import { useLocale } from "@/providers/LocaleContext";
 import {
-  WEEKDAYS,
+  getWeekdayLabels,
   formatDisplayDate,
   formatMonthLabel,
   getCalendarDays,
@@ -37,6 +38,8 @@ export interface DatePickerProps {
   showTime?: boolean;
   /** Granularity for the time picker. Defaults to 5. */
   timeStep?: number;
+  /** BCP-47 locale; falls back to LocaleProvider, then 'en-US'. */
+  locale?: string;
   ref?: Ref<HTMLDivElement>;
 }
 
@@ -121,8 +124,11 @@ export default function DatePicker({
   className,
   showTime = false,
   timeStep = 5,
+  locale: localeProp,
   ref,
 }: DatePickerProps) {
+  const { locale: ctxLocale } = useLocale();
+  const locale = localeProp ?? ctxLocale;
   const reduceMotion = useReducedMotion();
   const [isOpen, setIsOpen] = useState(false);
   const [popoverStyle, setPopoverStyle] = useState<{
@@ -196,9 +202,11 @@ export default function DatePicker({
     [viewYear, viewMonth, minDate, maxDate],
   );
 
+  const weekdays = useMemo(() => getWeekdayLabels(locale), [locale]);
+
   const monthLabel = useMemo(
-    () => formatMonthLabel(viewYear, viewMonth),
-    [viewYear, viewMonth],
+    () => formatMonthLabel(viewYear, viewMonth, locale),
+    [viewYear, viewMonth, locale],
   );
 
   const handlePrevMonth = useCallback(() => {
@@ -281,8 +289,8 @@ export default function DatePicker({
           <span className={value ? "text-grey_4" : "text-grey_2"}>
             {value
               ? showTime
-                ? `${formatDisplayDate(value)} ${String(value.getHours()).padStart(2, "0")}:${String(value.getMinutes()).padStart(2, "0")}`
-                : formatDisplayDate(value)
+                ? `${formatDisplayDate(value, locale)} ${String(value.getHours()).padStart(2, "0")}:${String(value.getMinutes()).padStart(2, "0")}`
+                : formatDisplayDate(value, locale)
               : placeholder}
           </span>
           <span className="text-grey_2">
@@ -334,7 +342,7 @@ export default function DatePicker({
 
                   {/* Weekday headers */}
                   <div className="grid grid-cols-7 gap-[2px] mb-4px">
-                    {WEEKDAYS.map((day) => (
+                    {weekdays.map((day) => (
                       <div
                         key={day}
                         className="text-10 text-grey_1 uppercase text-center font-manrope py-4px"

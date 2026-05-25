@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { useState } from 'react';
 import DateRangePicker, { type DateRange } from '../DateRangePicker';
+import { LocaleProvider } from '@/providers/LocaleProvider';
 
 function Host({
   onChange,
@@ -103,5 +104,40 @@ describe('DateRangePicker', () => {
     expect(getLabel()).not.toBe(before);
     fireEvent.click(screen.getByLabelText('Previous month'));
     expect(getLabel()).toBe(before);
+  });
+});
+
+describe('DateRangePicker — locale integration', () => {
+  it('LocaleProvider de-DE produces a non-English month label', () => {
+    const from = new Date(2026, 0, 5); // January 2026
+    render(
+      <LocaleProvider locale="de-DE">
+        <DateRangePicker
+          value={{ from, to: null }}
+          onChange={() => {}}
+        />
+      </LocaleProvider>,
+    );
+    fireEvent.click(screen.getAllByRole('button')[0]);
+    const label = screen.getByRole('dialog').querySelector('span.font-semibold')!.textContent;
+    // de-DE January is "Januar" — not "January"
+    expect(label).not.toMatch(/^January/);
+    expect(label).toMatch(/[A-Za-zÄÖÜäöü]/);
+  });
+
+  it('locale prop overrides LocaleProvider', () => {
+    const from = new Date(2026, 0, 5);
+    render(
+      <LocaleProvider locale="de-DE">
+        <DateRangePicker
+          value={{ from, to: null }}
+          onChange={() => {}}
+          locale="en-US"
+        />
+      </LocaleProvider>,
+    );
+    fireEvent.click(screen.getAllByRole('button')[0]);
+    const label = screen.getByRole('dialog').querySelector('span.font-semibold')!.textContent;
+    expect(label).toMatch(/January/);
   });
 });

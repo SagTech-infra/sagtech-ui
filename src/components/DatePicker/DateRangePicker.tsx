@@ -7,8 +7,9 @@ import { tokenTransition } from "@/utils/motion";
 import { dropdownFadeSlideVariants as dropdownVariants } from "@/motion/overlayVariants";
 import useOutsideClick from "@/hooks/useOutsideClick";
 import { mergeRefs } from "@/utils/mergeRefs";
+import { useLocale } from "@/providers/LocaleContext";
 import {
-  WEEKDAYS,
+  getWeekdayLabels,
   formatDisplayDate,
   formatMonthLabel,
   getCalendarDays,
@@ -34,6 +35,8 @@ export interface DateRangePickerProps {
   error?: string;
   label?: string;
   className?: string;
+  /** BCP-47 locale; falls back to LocaleProvider, then 'en-US'. */
+  locale?: string;
   ref?: Ref<HTMLDivElement>;
 }
 
@@ -97,8 +100,11 @@ export default function DateRangePicker({
   error,
   label,
   className,
+  locale: localeProp,
   ref,
 }: DateRangePickerProps) {
+  const { locale: ctxLocale } = useLocale();
+  const locale = localeProp ?? ctxLocale;
   const reduceMotion = useReducedMotion();
   const [isOpen, setIsOpen] = useState(false);
   const [viewYear, setViewYear] = useState(() =>
@@ -116,9 +122,11 @@ export default function DateRangePicker({
     [viewYear, viewMonth, minDate, maxDate],
   );
 
+  const weekdays = useMemo(() => getWeekdayLabels(locale), [locale]);
+
   const monthLabel = useMemo(
-    () => formatMonthLabel(viewYear, viewMonth),
-    [viewYear, viewMonth],
+    () => formatMonthLabel(viewYear, viewMonth, locale),
+    [viewYear, viewMonth, locale],
   );
 
   const handlePrev = useCallback(() => {
@@ -168,13 +176,13 @@ export default function DateRangePicker({
 
   const triggerText = useMemo(() => {
     if (value.from && value.to) {
-      return `${formatDisplayDate(value.from)} – ${formatDisplayDate(value.to)}`;
+      return `${formatDisplayDate(value.from, locale)} – ${formatDisplayDate(value.to, locale)}`;
     }
     if (value.from) {
-      return `${formatDisplayDate(value.from)} – …`;
+      return `${formatDisplayDate(value.from, locale)} – …`;
     }
     return placeholder;
-  }, [value, placeholder]);
+  }, [value, placeholder, locale]);
 
   const effectiveTo =
     value.to ??
@@ -251,7 +259,7 @@ export default function DateRangePicker({
             </div>
 
             <div className="grid grid-cols-7 gap-[2px] mb-4px">
-              {WEEKDAYS.map((d) => (
+              {weekdays.map((d) => (
                 <div
                   key={d}
                   className="text-10 text-grey_1 uppercase text-center font-manrope py-4px"
