@@ -1,21 +1,38 @@
-import type { Preview } from '@storybook/react';
-import '../src/tokens/index.css';
+import type { Preview } from "@storybook/react";
+import "../src/tokens/index.css";
 
 const preview: Preview = {
   parameters: {
-    backgrounds: {
-      default: 'dark',
-      values: [
-        { name: 'dark', value: '#070715' },
-        { name: 'light', value: '#F8F8F8' },
-      ],
-    },
+    backgrounds: { disable: true }, // background follows the theme decorator
     controls: { expanded: true },
-    layout: 'centered',
+    layout: "centered",
   },
-  initialGlobals: {
-    backgrounds: { value: '#070715' },
+  globalTypes: {
+    theme: {
+      description: "Global theme for components",
+      defaultValue: "dark",
+      toolbar: {
+        title: "Theme",
+        icon: "circlehollow",
+        items: [
+          { value: "dark", title: "Dark", icon: "moon" },
+          { value: "light", title: "Light", icon: "sun" },
+        ],
+        dynamicTitle: true,
+      },
+    },
   },
+  decorators: [
+    (Story, context) => {
+      const theme = context.globals.theme === "light" ? "light" : "dark";
+      const root = document.documentElement;
+      root.setAttribute("data-theme", theme);
+      root.style.colorScheme = theme;
+      document.body.style.background =
+        theme === "light" ? "#f7f7fa" : "#070715";
+      return Story();
+    },
+  ],
 };
 
 export default preview;
