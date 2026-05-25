@@ -204,7 +204,7 @@
 
   /* Semantic — borders (dark default) */
   --color-border-default: #393944;
-  --color-border-strong: #51515b;
+  --color-border-strong: #5c5c66;
 
   /* Semantic — surfaces (dark default) */
   --color-surface-overlay: #20202d;
@@ -242,7 +242,7 @@
 
   /* Semantic — borders */
   --color-border-default: #d8d8dc;
-  --color-border-strong: #9c9ca1;
+  --color-border-strong: #8f8f94;
 
   /* Semantic — surfaces */
   --color-surface-overlay: #ffffff;

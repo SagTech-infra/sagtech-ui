@@ -42,6 +42,7 @@
     "test:watch": "vitest",
     "prepublishOnly": "pnpm build",
     "generate:tokens": "node scripts/generate-tokens.mjs",
+    "check:contrast": "node scripts/check-contrast.mjs",
     "prebuild": "node scripts/generate-tokens.mjs"
   },
   "peerDependencies": {
