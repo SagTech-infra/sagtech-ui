@@ -13,10 +13,14 @@ export default defineConfig({
     include: ['src/**/*.test.{ts,tsx}'],
     css: false,
     coverage: {
-      // Report-only in v1.8.0: no enforced thresholds. Several components are
-      // geometry-heavy (canvas charts, 3D, virtualized lists) and can only be
-      // smoke-tested in happy-dom, so a global threshold would be misleading.
-      // Revisit per-file thresholds once those move to Playwright CT.
+      // Enforced as a regression ratchet from v1.9 (thresholds set just below the
+      // measured numbers — see below). They are deliberately not high: canvas
+      // charts (LTR geometry, smoke-only by ADR-0002) and the VirtualList /
+      // VisualGraphEditor / RichTextEditor geometry/pointer/ProseMirror paths are
+      // verified in a real browser by Playwright CT (`pnpm test:ct`), a separate
+      // layer NOT merged into this v8 report — so they read as partially covered
+      // here. The 3D *Core files are excluded outright: they only render WebGL
+      // peers that are mocked to no-ops in happy-dom, so their coverage is noise.
       provider: 'v8',
       reporter: ['text-summary', 'html', 'lcov'],
       reportsDirectory: './coverage',
@@ -28,7 +32,14 @@ export default defineConfig({
         'src/**/index.ts',
         'src/tokens/**',
         'src/**/*.d.ts',
+        'src/components/**/*Core.tsx',
       ],
+      thresholds: {
+        statements: 55,
+        branches: 72,
+        functions: 53,
+        lines: 55,
+      },
     },
   },
   resolve: {
