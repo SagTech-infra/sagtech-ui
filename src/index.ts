@@ -123,6 +123,20 @@ export { TextArea } from "./components/TextArea/TextArea";
 export { default as Checkbox } from "./components/Checkbox/Checkbox";
 export { default as SearchBar } from "./components/SearchBar/SearchBar";
 export { default as Toggle } from "./components/Toggle/Toggle";
+export { default as Switch } from "./components/Switch/Switch";
+export type { SwitchProps } from "./components/Switch/Switch";
+export { default as Slider } from "./components/Slider/Slider";
+export type {
+  SliderProps,
+  SliderMark,
+  SliderSingleProps,
+  SliderRangeProps,
+} from "./components/Slider/Slider";
+export {
+  default as ColorPicker,
+  DEFAULT_SWATCHES,
+} from "./components/ColorPicker/ColorPicker";
+export type { ColorPickerProps } from "./components/ColorPicker/ColorPicker";
 export { default as Attachment } from "./components/Attachment/Attachment";
 export { default as PhoneInput } from "./components/PhoneInput/PhoneInput";
 export { default as SelectInput } from "./components/SelectInput/SelectInput";
@@ -157,6 +171,11 @@ export type {
   DateRangePickerProps,
   DateRange,
 } from "./components/DatePicker/DateRangePicker";
+export { default as TimePicker } from "./components/TimePicker/TimePicker";
+export type {
+  TimePickerProps,
+  TimeValue,
+} from "./components/TimePicker/TimePicker";
 export { default as Dropzone } from "./components/Dropzone/Dropzone";
 export type { DropzoneProps } from "./components/Dropzone/Dropzone";
 export { default as FileDropzone } from "./components/FileDropzone/FileDropzone";
@@ -275,6 +294,8 @@ export type {
 // Components — Data Display
 export { default as Avatar } from "./components/Avatar/Avatar";
 export type { AvatarProps, AvatarSize } from "./components/Avatar/Avatar";
+export { default as AvatarGroup } from "./components/AvatarGroup/AvatarGroup";
+export type { AvatarGroupProps } from "./components/AvatarGroup/AvatarGroup";
 export { default as AvatarCard } from "./components/AvatarCard/AvatarCard";
 export { default as ResultPill } from "./components/ResultPill/ResultPill";
 export { default as Rate } from "./components/Rate/Rate";

@@ -24,6 +24,7 @@ import {
   isToday,
   type CalendarDay,
 } from "./calendar";
+import TimePicker from "../TimePicker/TimePicker";
 
 export interface DatePickerProps {
   value?: Date;
@@ -389,59 +390,16 @@ export default function DatePicker({
                   </div>
 
                   {showTime && (
-                    <div className="mt-12px pt-12px border-t border-solid border-black_3 flex items-center justify-between gap-12px">
-                      <span className="font-manrope text-12 font-semibold text-grey_4">
-                        Time
-                      </span>
-                      <div className="flex items-center gap-4px">
-                        <select
-                          aria-label="Hours"
-                          className="bg-black_1 border border-solid border-black_3 rounded-8px text-white_4 text-14 font-manrope px-8px py-4px cursor-pointer"
-                          value={value ? value.getHours() : 0}
-                          onChange={(e) =>
-                            handleTimeChange(
-                              parseInt(e.target.value, 10),
-                              value ? value.getMinutes() : 0,
-                            )
-                          }
-                        >
-                          {Array.from({ length: 24 }, (_, h) => (
-                            <option key={h} value={h}>
-                              {String(h).padStart(2, "0")}
-                            </option>
-                          ))}
-                        </select>
-                        <span className="text-grey_4">:</span>
-                        <select
-                          aria-label="Minutes"
-                          className="bg-black_1 border border-solid border-black_3 rounded-8px text-white_4 text-14 font-manrope px-8px py-4px cursor-pointer"
-                          value={
-                            value
-                              ? value.getMinutes() -
-                                (value.getMinutes() % timeStep)
-                              : 0
-                          }
-                          onChange={(e) =>
-                            handleTimeChange(
-                              value ? value.getHours() : 0,
-                              parseInt(e.target.value, 10),
-                            )
-                          }
-                        >
-                          {Array.from(
-                            { length: Math.ceil(60 / timeStep) },
-                            (_, i) => {
-                              const m = i * timeStep;
-                              return (
-                                <option key={m} value={m}>
-                                  {String(m).padStart(2, "0")}
-                                </option>
-                              );
-                            },
-                          )}
-                        </select>
-                      </div>
-                    </div>
+                    <TimePicker
+                      step={timeStep}
+                      value={{
+                        hours: value ? value.getHours() : 0,
+                        minutes: value ? value.getMinutes() : 0,
+                      }}
+                      onChange={({ hours, minutes }) =>
+                        handleTimeChange(hours, minutes)
+                      }
+                    />
                   )}
                 </motion.div>
               )}
