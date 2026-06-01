@@ -1,25 +1,19 @@
 /**
  * codemod-v2: Attachment.onUpload → Attachment.onChange
  *
- * ⚠️ MANUAL REVIEW REQUIRED — NOT A PURE RENAME.
- *
- * This transform renames the `onUpload` JSX attribute to `onChange` on
- * `<Attachment>` elements only. BUT the callback signatures may differ between
- * v1.x and v2.0:
+ * v2.0 renames the `onUpload` prop on `<Attachment>` to `onChange` to match the
+ * callback convention in docs/API_CONVENTIONS.md. The signature is IDENTICAL —
  *
  *   v1.x  onUpload?: (files: Array<File> | undefined) => void
- *   v2.0  onChange?: (value: ...) => void   // shape may differ (e.g. a value
- *                                            // object instead of a File array)
+ *   v2.0  onChange?: (files: Array<File> | undefined) => void
  *
- * Renaming the attribute does NOT adapt the handler body. After running this,
- * you MUST manually verify every migrated handler still receives the argument
- * shape it expects. This codemod only moves the prop name; it cannot reason
- * about the function passed to it.
+ * — so this is a safe, pure mechanical rename of the JSX attribute, scoped to
+ * `<Attachment>` only. An `onUpload` prop on any other component is untouched.
  *
- * Run (required --parser=tsx for .ts transform + .tsx sources):
+ * Run (required --parser=tsx for a .ts transform + .tsx sources):
  *   pnpm dlx jscodeshift \
  *     -t scripts/codemod-v2/transforms/attachment-onUpload-to-onChange.ts \
- *     "src/**\/*.tsx" --parser=tsx --extensions=tsx,ts
+ *     "src/**\/*.tsx" --parser=tsx --extensions=tsx,ts [--dry --print]
  *
  * Idempotent: re-running finds no remaining `onUpload` on `<Attachment>`.
  */
@@ -32,7 +26,6 @@ const TARGET_ELEMENT = 'Attachment';
 export default function transformer(file: FileInfo, api: API): string {
   const j = api.jscodeshift;
   const root = j(file.source);
-  let renamed = 0;
 
   root
     .find(j.JSXOpeningElement, {
@@ -45,19 +38,8 @@ export default function transformer(file: FileInfo, api: API): string {
         })
         .forEach((attrPath) => {
           (attrPath.node.name as JSXIdentifier).name = NEW_NAME;
-          renamed += 1;
         });
     });
-
-  if (renamed > 0) {
-    // eslint-disable-next-line no-console
-    console.warn(
-      `[attachment-onUpload-to-onChange] ${file.path}: renamed ${renamed} ` +
-        `onUpload→onChange. VERIFY handler signature — onUpload received ` +
-        `(files: Array<File> | undefined); onChange may receive a different ` +
-        `value shape in v2.0.`,
-    );
-  }
 
   return root.toSource();
 }
