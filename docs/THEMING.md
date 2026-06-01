@@ -250,3 +250,32 @@ Light overrides use a dual selector for specificity robustness:
   when the attribute is on `<html>` (default `target`).
 - `[data-theme="light"]` covers `target="body"` via custom-property inheritance
   proximity: `<body>` is a closer ancestor for its subtree than `<html>`.
+
+---
+
+## 9. Charts and theming
+
+The canvas charts (`AreaChart`, `BarChart`, `HeatmapChart`, `RadarChart`,
+`SparklineChart`, `ScatterChart`, `GaugeChart`, `SankeyChart`, `TreemapChart`,
+`FunnelChart`, plus `LineChart`/`DonutChart`) draw to a `<canvas>`, so they can't
+use Tailwind utility classes for color. Instead they read their palette from the
+same CSS custom properties as the rest of the library, at render time, via the
+`useThemeColors` hook.
+
+- **Theme-aware at draw time.** On each draw the chart resolves its palette from
+  the CSS custom properties on the document (the values that the active
+  `data-theme` resolves to via the cascade in §8). Switching the theme flips the
+  chart colors with everything else — no per-chart `theme` prop needed.
+- **Repaints on theme change.** `useThemeColors` observes the active theme
+  (`data-theme` on the target element) and triggers a repaint when it changes, so
+  a `ThemeProvider`/`setTheme` toggle re-colors live charts without remounting.
+- **Static fallback.** When CSS custom properties aren't resolvable — SSR, the
+  first paint before hydration, or tests without a real CSSOM — the hook falls
+  back to the static token palette (the same values exported as `tokens.colors`),
+  so charts still render with sensible colors instead of blank/transparent fills.
+- **Localized numeric labels.** Axis ticks and value labels are formatted with
+  `Intl.NumberFormat`, using the locale from `useLocale()` (see [I18N.md](./I18N.md)),
+  so thousands separators and decimals match the consumer's locale.
+
+`useThemeColors` is exported from the package root, so consumers building their
+own canvas/SVG renderers can reuse the same theme-aware palette resolution.
