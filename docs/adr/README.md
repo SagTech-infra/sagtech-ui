@@ -53,10 +53,12 @@ new decision.
 | [0001](./0001-dark-first-design-tokens.md) | Dark-first design tokens | Accepted | 2026-05 |
 | [0002](./0002-canvas-charts-over-apexcharts.md) | Canvas charts over ApexCharts | Accepted | 2026-05 |
 | [0003](./0003-optional-peer-dependencies-pattern.md) | Optional peer-dependencies pattern | Accepted | 2026-05 |
+| [0004](./0004-playwright-component-tests-for-geometry.md) | Playwright Component Testing for geometry/pointer/ProseMirror | Accepted | 2026-06 |
 
 > ADR-0001..0003 are **retrospective** — they document decisions that were
 > already made and shipped (through v1.x). They are recorded now so the
-> rationale is preserved before the v2.0 cleanup.
+> rationale is preserved before the v2.0 cleanup. ADR-0004 onward are recorded
+> as the decisions are made (v1.9+).
 
 ## How to add a new ADR
 

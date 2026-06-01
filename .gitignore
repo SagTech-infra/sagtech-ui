@@ -8,3 +8,8 @@ storybook-static/
 .env
 .env.local
 .env.*.local
+
+# Playwright Component Testing (browsers/artifacts are local-only — see ADR-0004)
+playwright-report/
+test-results/
+playwright/.cache/
