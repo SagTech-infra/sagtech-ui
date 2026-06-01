@@ -1,6 +1,7 @@
 export { createMentionExtension } from './mention';
 export { createSlashCommandExtension, defaultSlashCommands } from './slashCommand';
 export { createImageUploadExtension, validateImageFile } from './imageUpload';
+export { createSyntaxHighlightExtension, resolveLowlight } from './syntaxHighlight';
 export { SuggestionMenu, SuggestionPortal, createSuggestionRenderer } from './SuggestionMenu';
 export type {
   SuggestionMenuProps,
@@ -14,4 +15,6 @@ export type {
   CreateMentionOptions,
   CreateSlashCommandOptions,
   CreateImageUploadOptions,
+  CreateSyntaxHighlightOptions,
+  LowlightInstance,
 } from './types';

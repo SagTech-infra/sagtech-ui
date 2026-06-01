@@ -4,6 +4,7 @@ import RichTextEditor from './RichTextEditor';
 import { createMentionExtension } from './presets/mention';
 import { createSlashCommandExtension, defaultSlashCommands } from './presets/slashCommand';
 import { createImageUploadExtension } from './presets/imageUpload';
+import { createSyntaxHighlightExtension } from './presets/syntaxHighlight';
 
 const meta = {
   title: 'Form Controls/RichTextEditor',
@@ -152,6 +153,31 @@ export const ImageUploadBase64: Story = {
         onChange={setHtml}
         extensions={[ext]}
         placeholder="Paste an image to embed as base64…"
+      />
+    );
+  },
+};
+
+const CODE_SAMPLE = `<p>Code blocks are syntax-highlighted via lowlight:</p><pre><code class="language-javascript">function greet(name) {
+  // a friendly greeting
+  const msg = \`Hello, \${name}!\`;
+  return msg.toUpperCase();
+}</code></pre>`;
+
+export const SyntaxHighlight: Story = {
+  name: 'Preset — Syntax Highlight (code block)',
+  render: function SyntaxHighlightStory() {
+    const [html, setHtml] = useState(CODE_SAMPLE);
+    // NOTE: disable StarterKit's built-in codeBlock — CodeBlockLowlight
+    // registers the same node and the two would otherwise collide.
+    const ext = createSyntaxHighlightExtension({ languages: 'common' });
+    return (
+      <RichTextEditor
+        value={html}
+        onChange={setHtml}
+        extensions={[ext]}
+        starterKitOptions={{ codeBlock: false }}
+        placeholder="Write some code…"
       />
     );
   },

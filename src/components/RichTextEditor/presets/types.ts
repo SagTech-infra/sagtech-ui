@@ -1,4 +1,5 @@
 import type { Editor, Range } from '@tiptap/core';
+import type { createLowlight } from 'lowlight';
 
 // ---------------------------------------------------------------------------
 // Shared primitive types
@@ -74,4 +75,27 @@ export interface CreateImageUploadOptions {
    * console.error but never silently swallowed.
    */
   onError?: (err: Error) => void;
+}
+
+/** A lowlight instance as returned by `createLowlight(...)`. */
+export type LowlightInstance = ReturnType<typeof createLowlight>;
+
+export interface CreateSyntaxHighlightOptions {
+  /**
+   * Pre-built lowlight instance. When provided, `languages` is ignored. Lets
+   * the consumer control bundle size (e.g. `createLowlight(common)` vs `all`,
+   * or a hand-picked set of grammars registered individually).
+   */
+  lowlight?: LowlightInstance;
+  /**
+   * Language bundle to auto-create when `lowlight` is not supplied:
+   * `'common'` (~37 grammars) or `'all'` (190+).
+   * @default 'common'
+   */
+  languages?: 'common' | 'all';
+  /**
+   * Default language applied to code blocks that have no language set.
+   * @default 'plaintext'
+   */
+  defaultLanguage?: string;
 }

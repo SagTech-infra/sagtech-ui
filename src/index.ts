@@ -376,8 +376,10 @@ export {
   createMentionExtension,
   createSlashCommandExtension,
   createImageUploadExtension,
+  createSyntaxHighlightExtension,
   defaultSlashCommands,
   validateImageFile,
+  resolveLowlight,
 } from "./components/RichTextEditor/presets";
 export type {
   MentionItem,
@@ -385,6 +387,8 @@ export type {
   CreateMentionOptions,
   CreateSlashCommandOptions,
   CreateImageUploadOptions,
+  CreateSyntaxHighlightOptions,
+  LowlightInstance,
 } from "./components/RichTextEditor/presets";
 export { default as VisualGraphEditor } from "./components/VisualGraphEditor/VisualGraphEditor";
 export type {
