@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 export interface MindmapNode {
   id: string;
   label: string;
@@ -15,4 +17,9 @@ export interface Mindmap3DProps {
   backgroundColor?: string;
   /** Edge color override. */
   edgeColor?: string;
+  /**
+   * Rendered inside the sized container while the 3D engine chunk loads (and
+   * during SSR). Defaults to `null`.
+   */
+  loadingFallback?: ReactNode;
 }

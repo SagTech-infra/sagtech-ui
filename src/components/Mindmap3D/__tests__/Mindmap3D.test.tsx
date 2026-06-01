@@ -16,31 +16,40 @@ const root: MindmapNode = {
   ],
 };
 
+// The heavy core (@react-three/fiber) is lazy-loaded behind <Suspense>, so the
+// mocked `r3f-canvas` placeholder appears asynchronously — assertions on it use
+// findBy*. The outer wrapper div renders synchronously.
+
 describe('Mindmap3D', () => {
-  it('mounts without throwing', () => {
-    expect(() => render(<Mindmap3D root={root} />)).not.toThrow();
-  });
-
-  it('renders the outer wrapper and r3f-canvas placeholder', () => {
+  it('mounts and resolves the core without throwing', async () => {
     render(<Mindmap3D root={root} />);
-    // Outer div carries the component CSS class
-    expect(document.querySelector('.sagtech-mindmap3d')).not.toBeNull();
-    // @react-three/fiber Canvas is mocked to render this testid
-    expect(screen.getByTestId('r3f-canvas')).toBeInTheDocument();
+    expect(await screen.findByTestId('r3f-canvas')).toBeInTheDocument();
   });
 
-  it('accepts optional callbacks without throwing', () => {
+  it('renders the outer wrapper synchronously and the canvas after load', async () => {
+    render(<Mindmap3D root={root} />);
+    // Outer div carries the component CSS class and renders before the chunk.
+    expect(document.querySelector('.sagtech-mindmap3d')).not.toBeNull();
+    // @react-three/fiber Canvas is mocked to render this testid once loaded.
+    expect(await screen.findByTestId('r3f-canvas')).toBeInTheDocument();
+  });
+
+  it('accepts loadingFallback and still resolves the core', async () => {
+    render(<Mindmap3D root={root} loadingFallback={<div data-testid="mm-fallback" />} />);
+    expect(await screen.findByTestId('r3f-canvas')).toBeInTheDocument();
+  });
+
+  it('accepts optional callbacks without throwing', async () => {
     const onNodeClick = vi.fn();
-    expect(() =>
-      render(
-        <Mindmap3D
-          root={root}
-          onNodeClick={onNodeClick}
-          width={800}
-          height={600}
-          edgeColor="#ff00ff"
-        />,
-      ),
-    ).not.toThrow();
+    render(
+      <Mindmap3D
+        root={root}
+        onNodeClick={onNodeClick}
+        width={800}
+        height={600}
+        edgeColor="#ff00ff"
+      />,
+    );
+    expect(await screen.findByTestId('r3f-canvas')).toBeInTheDocument();
   });
 });
