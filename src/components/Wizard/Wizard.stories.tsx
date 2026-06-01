@@ -69,7 +69,7 @@ export const WithValidation: Story = {
                     value={name}
                     onChange={(e) => setName(e.currentTarget.value)}
                     placeholder="Your full name"
-                    externalLabel="Name"
+                    label="Name"
                     state="default"
                   />
                 </div>
