@@ -72,7 +72,7 @@
 
 ## 🚧 Остаётся
 
-- **Расширенное тестовое покрытие** — частично закрыто в v1.8 (логика/wiring: VirtualList count-math, VisualGraphEditor change-адаптеры через file-scoped ReactFlow-мок, RichTextEditor controlled/disabled/command). Остаются жёсткие стены, требующие реального браузера (scroll-windowing VirtualList, pointer-drag/fitView VisualGraphEditor, paste/drop RichTextEditor) → Playwright component-тесты против Storybook, кандидат на v1.9+.
+- **Расширенное тестовое покрытие** — частично закрыто в v1.8 (логика/wiring: VirtualList count-math, VisualGraphEditor change-адаптеры через file-scoped ReactFlow-мок, RichTextEditor controlled/disabled/command). Жёсткие стены, требующие реального браузера (scroll-windowing VirtualList, pointer-drag/fitView VisualGraphEditor, paste/drop RichTextEditor), **закрыты в v1.9** через Playwright component-тесты (`pnpm test:ct`).
 - **Унификация `label` prop** по Input/PhoneInput/Dropzone — сейчас `externalLabel`. Breaking, даст чистое API.
 - **Депрекация `onUpload` в Attachment** → `onChange`. Breaking.
 
@@ -223,6 +223,22 @@
 
 ---
 
+## ✅ v1.9 — released 2026-06-01 — Playwright CT + RSC directives + coverage ratchet
+
+Аддитивный релиз, **zero breaking**. Закрывает осознанно отложенный из v1.8 техдолг качества/тестирования.
+
+**Shipped:**
+- **Playwright component-тесты** (`@playwright/experimental-ct-react`, `pnpm test:ct`, локально — НЕ в основном CI-гейте; см. **ADR-0004**) для поведения, которое happy-dom физически не покрывает. 16 спеков в реальном Chromium через fixture-компоненты (render-props/extensions исполняются в браузере, наружу — только сериализуемые пропсы): **VirtualList** (scroll-windowing, `measureElement` remeasure, overscan), **VisualGraphEditor** (pointer-drag → `onNodesChange`, `fitView`-трансформа, MiniMap, readOnly-guard), **RichTextEditor** (image paste/drop, mention/slash popover + keyboard-select, lowlight `.hljs-*` спаны), focus-ring (рендер `box-shadow` под `:focus-visible`). CT-конфиг переиспользует Tailwind/`@`/next-mocks-окружение Storybook; `playwright/index.css` добавляет `@source` чтобы Tailwind v4 генерил утилиты `src/components`. Закрывает backlog-пункт «жёсткие стены happy-dom».
+- **fix: выбор пункта в suggestion-popover `RichTextEditor` теперь вставляет узел** — баг, вскрытый CT: mention `@` / slash `/` ничего не вставляли (портальный `onSelect` шёл в no-op, TipTap-`command` не вызывался — текст оставался `suggestion`-декорацией). Заодно починены клавиатурная навигация (подсветка была заморожена — `forceUpdate` не дёргал setState; заменён на `useReducer`) и race ленивого `import('@tiptap/react')` (теперь статический — `@tiptap/react` и так в том же чанке).
+- **preserve `'use client'` в `dist/`** (**ADR-0005**) — esbuild стрипал все директивы (dist шёл без единой → ломал RSC-консьюмеров). tsup `onSuccess` (`scripts/add-use-client.mjs`) штампует директиву на client-entry (`index`/`3d`/`charts`, ESM+CJS); директива на entry делает весь импортируемый граф client-границей, поэтому чанки её не требуют, а `./icons` остаётся server-safe. Гард `scripts/check-directives.mjs` (`pnpm check:directives`) в гейте + `ci.yml`.
+- **Coverage thresholds (ratchet)** — coverage переключён с report-only на enforced; пороги (stmts 55 / branches 72 / funcs 53 / lines 55) чуть ниже измеренного, ловят регресс без поломок на мелких изменениях. 3D `*Core` исключены (WebGL-peer'ы замоканы в no-op). Canvas-чарты и geometry-пути CT-компонентов остаются в отчёте, но верифицируются Playwright CT (отдельный слой, не мержится).
+
+**Tests**: 639 vitest (без изменений) + 16 новых Playwright CT-спеков (отдельный браузерный слой). Новые ADR: **0004** (Playwright CT), **0005** (preserve directives).
+
+Отложено осознанно: nightly/manual CI-job для `test:ct`; codemod-v2 стабы (v2.0-задел).
+
+---
+
 ## ✅ v1.8 — released 2026-06-01 — syntax-highlight preset + lazy 3D + coverage + ADR/codemod
 
 Аддитивный релиз, **zero breaking**. Всё новое добавлено поверх существующего API.
@@ -235,7 +251,7 @@
 - **`scripts/codemod-v2/`** — jscodeshift-каркас под v2.0-переименования (рабочий `input-externalLabel-to-label` + фикстуры, `attachment-onUpload-to-onChange`, 3 стаба). Publish-safe (вне `files[]`).
 - **CI** — `pnpm/action-setup` v4 → v6 (Node 24 runtime) в `ci.yml` + `publish.yml` перед форсом Node-20-deprecation от GitHub (2026-06-02).
 
-Отложено осознанно: Playwright component-тесты для жёстких стен (реальный scroll-windowing VirtualList, pointer-drag/fitView VisualGraphEditor, paste/drop RichTextEditor) — кандидат на v1.9+; preserve-directives build-шаг для `'use client'` в split-чанках — отдельный follow-up.
+Отложено осознанно: Playwright component-тесты для жёстких стен (реальный scroll-windowing VirtualList, pointer-drag/fitView VisualGraphEditor, paste/drop RichTextEditor) — кандидат на v1.9+; preserve-directives build-шаг для `'use client'` в split-чанках — отдельный follow-up. → **оба закрыты в v1.9** (Playwright CT + `'use client'`-штамп на client-entry).
 
 ---
 
