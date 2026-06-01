@@ -4,6 +4,8 @@ export default defineConfig({
   entry: {
     index: 'src/index.ts',
     'icons/index': 'src/icons/index.ts',
+    '3d/index': 'src/3d/index.ts',
+    'charts/index': 'src/charts/index.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,
@@ -23,8 +25,6 @@ export default defineConfig({
     'swiper/css',
     'react-hook-form',
     'react-international-phone',
-    'react-apexcharts',
-    'apexcharts',
     'libphonenumber-js',
     '@dnd-kit/core',
     '@dnd-kit/sortable',
