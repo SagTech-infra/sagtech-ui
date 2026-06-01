@@ -185,3 +185,35 @@ consumer-facing breaking changes see [`MIGRATION.md`](./MIGRATION.md).
 - build: pass (no warnings)
 - check:contrast: pass (AA both themes)
 - check:size: pass (main entry 415/515 KB gzip)
+
+## 2026-06-01 — v1.8.0 release sweep
+
+### Added
+
+- **`createSyntaxHighlightExtension({ languages?, lowlight?, defaultLanguage? })` + `resolveLowlight`** (new exports from main entry) — a `CodeBlockLowlight`-based preset that syntax-highlights code blocks via lowlight (highlight.js). `languages: 'common'` (~37 grammars, default) | `'all'` (190+); pass a pre-built `lowlight` instance to control bundle size. Pairs with the new `RichTextEditor` `starterKitOptions` prop — consumers MUST pass `starterKitOptions={{ codeBlock: false }}` because `CodeBlockLowlight` and `StarterKit` both register a `codeBlock` node (tiptap v3 warns + resolves non-deterministically otherwise; it does NOT throw). Token spans are themed in `src/tokens/hljs.css`.
+- **Two new optional peers** declared in all four required places (`peerDependencies`, `peerDependenciesMeta.optional: true`, `tsup.config.ts` `external`, `.size-limit` ignore): `@tiptap/extension-code-block-lowlight` (`>=2.0.0`) and `lowlight` (`>=3.0.0` — the factory uses the v3 `createLowlight`/`common`/`all` API). devDeps added for Storybook/tests. No bundle impact: both are external + size-limit-ignored.
+- **`RichTextEditor.starterKitOptions?: Partial<StarterKitOptions>`** (additive prop, default `{}`) — forwarded to `StarterKit.configure(...)` so a built-in node can be disabled when replacing it via `extensions`. Backward-compatible.
+- **`loadingFallback?: ReactNode`** (additive prop, default `null`) on `Network3D` / `Globe3D` / `Scene3D` / `Mindmap3D` — rendered in the sized container while the lazy 3D chunk loads (also serves as the SSR placeholder).
+- **`src/tokens/hljs.css`** — `.hljs-*` token classes mapped to **raw** palette tokens (`black_2`, `sec_purple`, `sec_blue`, `success`, `grey_2`, …), scoped under `.sagtech-code-block`. Raw (non-flipping) tokens are deliberate: the RichTextEditor surface is dark-only, so semantic `fg/bg-*` tokens (which flip under `[data-theme="light"]`) would render dark-on-dark inside the dark editor.
+- **`docs/adr/`** — MADR-lightweight ADR log (README index + template + three retrospective ADRs: dark-first tokens, canvas-charts-over-apexcharts, optional-peer-dependencies pattern). Not published (`files[]`).
+- **`scripts/codemod-v2/`** — jscodeshift scaffold for the v2.0 renames: a working `input-externalLabel-to-label` transform (+fixtures) and `attachment-onUpload-to-onChange`, plus three documented stubs. `jscodeshift` + `@types/jscodeshift` devDeps. Not published.
+- **Report-only test coverage** — `@vitest/coverage-v8` + a `coverage` script + vitest coverage config (no enforced thresholds; geometry-heavy components are smoke-only). `coverage/` git-ignored.
+
+### Changed (internal — no public API change)
+
+- **Lazy-loaded 3D peers** — `Network3D` / `Globe3D` / `Scene3D` / `Mindmap3D` split into a light wrapper + a `<Name>Core` imported via `React.lazy(() => import())` behind `<Suspense>`. The heavy peers (`react-force-graph-3d`, `@react-three/fiber`, `@react-three/drei`, `three`) now live only in dynamically-imported chunks: the ESM `/3d` entry's static graph imports none of them (verified in `dist/`). CJS still eager-requires (tsup CJS code-splitting is experimental/off) — no regression vs the prior eager behavior; the win is ESM-only (the primary consumer path).
+- **`'use client'` on 3D cores** — the `<Name>Core` files intentionally omit the directive (the client boundary is the `'use client'` wrapper, the only export). This keeps the split build warning-free; esbuild cannot preserve a module directive at the top of a generated split chunk. A proper preserve-directives build step remains a tracked follow-up.
+
+### Tested
+
+- **+~39 tests (600 → 639):** syntax-highlight preset (lowlight bundle selection, schema-collision warning, mount); 3D wrappers made async (`findBy*` for the lazily-mounted canvas) + a `loadingFallback` smoke each; VirtualList count-driven spacer math; a `VisualGraphEditor` adapters suite (file-scoped ReactFlow mock capturing props to exercise the real change/connect/readOnly/click adapters); deeper RichTextEditor controlled-value/disabled/extension/command tests.
+
+### Toolchain status
+
+- lint: pass (0 errors, 0 warnings)
+- test: pass (639/639)
+- typecheck: pass
+- build: pass (no warnings)
+- check:contrast: pass (AA both themes)
+- check:size: pass (main entry 416/515 KB gzip; 3d entry 4.17/5 KB)
+- CI: `pnpm/action-setup` bumped v4 → v6 (Node 24 runtime) in `ci.yml` + `publish.yml` ahead of the 2026-06-02 GitHub Node-20 deprecation.

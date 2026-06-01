@@ -1,5 +1,7 @@
-'use client';
-
+// No 'use client' directive here: this core is reached only via React.lazy()
+// from the client wrapper (Network3D.tsx), which owns the client boundary.
+// Keeping the directive off the split chunk avoids esbuild's "directive ignored"
+// build warning.
 import { useMemo } from 'react';
 import ForceGraph3D from 'react-force-graph-3d';
 import * as tokens from '@/tokens/tokens';
