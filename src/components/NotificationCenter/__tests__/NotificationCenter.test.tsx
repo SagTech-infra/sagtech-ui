@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import NotificationCenter, { type NotificationItem } from '../NotificationCenter';
+import { LocaleProvider } from '@/providers/LocaleProvider';
 
 const items: NotificationItem[] = [
   { id: '1', title: 'One', read: false, variant: 'info' },
@@ -42,5 +43,30 @@ describe('NotificationCenter', () => {
     render(<NotificationCenter notifications={[]} emptyMessage="Nothing here" />);
     fireEvent.click(screen.getByRole('button'));
     expect(screen.getByText('Nothing here')).toBeInTheDocument();
+  });
+
+  it('flips dropdown anchor and sets dir under RTL', () => {
+    render(
+      <LocaleProvider locale="ar-EG" dir="rtl">
+        <NotificationCenter notifications={items} />
+      </LocaleProvider>,
+    );
+    const trigger = screen.getByRole('button', { name: /unread/i });
+    // root container carries the RTL direction
+    expect(trigger.closest('[dir="rtl"]')).not.toBeNull();
+
+    fireEvent.click(trigger);
+    const dialog = screen.getByRole('dialog');
+    // default position 'right' anchors to inline-end in LTR -> flips to start-0 in RTL
+    expect(dialog.className).toContain('start-0');
+    expect(dialog.className).not.toContain('end-0');
+  });
+
+  it('keeps logical end anchor in LTR for default position', () => {
+    render(<NotificationCenter notifications={items} />);
+    fireEvent.click(screen.getByRole('button', { name: /unread/i }));
+    const dialog = screen.getByRole('dialog');
+    expect(dialog.className).toContain('end-0');
+    expect(dialog.className).not.toContain('start-0');
   });
 });

@@ -54,6 +54,7 @@ export {
   useStatusColor,
   useRovingTabindex,
   useTypeahead,
+  useThemeColors,
 } from "./hooks";
 export type {
   StatusMeta,
@@ -62,6 +63,8 @@ export type {
   UseRovingTabindexResult,
   UseTypeaheadOptions,
   UseTypeaheadResult,
+  UseThemeColorsResult,
+  ThemeColorRecord,
 } from "./hooks";
 
 // Utils

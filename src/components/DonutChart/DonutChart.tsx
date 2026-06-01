@@ -1,7 +1,8 @@
 'use client';
 
-import { useRef, useEffect, useCallback, useState } from 'react';
+import { useRef, useEffect, useCallback, useMemo, useState } from 'react';
 import * as tokens from '@/tokens/tokens';
+import { useThemeColors } from '@/hooks/useThemeColors';
 
 interface DonutChartTypes {
   value?: number[];
@@ -12,17 +13,6 @@ interface DonutChartTypes {
   labels?: string[];
 }
 
-// Segment palette. The first three values come straight from the design
-// tokens; the last two are purpose-built tints used only by the donut so it
-// can fall back gracefully when more than three segments need colour.
-const DEFAULT_COLORS = [
-  { bgColor: tokens.colors.pr_purple, color: tokens.colors.white },
-  { bgColor: tokens.colors.sec_purple, color: tokens.colors.white },
-  { bgColor: tokens.colors.sec_blue, color: tokens.colors.white },
-  { bgColor: '#4A2AAF', color: tokens.colors.white },
-  { bgColor: '#E0D6FC', color: '#000000' },
-];
-
 interface HoverState {
   index: number;
   x: number;
@@ -32,13 +22,29 @@ interface HoverState {
 function DonutChart({
   value = [100],
   width = 300,
-  colors = DEFAULT_COLORS,
+  colors: colorsProp,
   size = 65,
   labels,
 }: DonutChartTypes) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hover, setHover] = useState<HoverState | null>(null);
   const segmentsRef = useRef<{ startAngle: number; endAngle: number }[]>([]);
+  const { colors: themeColors } = useThemeColors();
+
+  // Segment palette. The first three values come straight from the (theme-aware)
+  // design tokens; the last two are purpose-built tints used only by the donut
+  // so it can fall back gracefully when more than three segments need colour.
+  const DEFAULT_COLORS = useMemo(
+    () => [
+      { bgColor: themeColors.pr_purple, color: tokens.colors.white },
+      { bgColor: themeColors.sec_purple, color: tokens.colors.white },
+      { bgColor: themeColors.sec_blue, color: tokens.colors.white },
+      { bgColor: '#4A2AAF', color: tokens.colors.white },
+      { bgColor: '#E0D6FC', color: '#000000' },
+    ],
+    [themeColors.pr_purple, themeColors.sec_purple, themeColors.sec_blue],
+  );
+  const colors = colorsProp ?? DEFAULT_COLORS;
 
   const dim = typeof width === 'number' ? width : 300;
   const hasLabels = labels && labels.length > 0;
@@ -171,7 +177,7 @@ function DonutChart({
         lx += 14 + ctx.measureText(label).width + 20;
       });
     }
-  }, [value, colors, labels, hover, cx, cy, outerR, innerR, ringWidth, dim, total, gap, hasLabels]);
+  }, [value, colors, DEFAULT_COLORS, labels, hover, cx, cy, outerR, innerR, ringWidth, dim, total, gap, hasLabels]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {

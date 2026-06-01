@@ -2,18 +2,10 @@
 
 import { useRef, useEffect, useCallback, useState } from 'react';
 import * as tokens from '@/tokens/tokens';
+import { useThemeColors } from '@/hooks/useThemeColors';
+import { useLocale } from '@/providers/LocaleContext';
 import type { LineChartSeriesType } from './types';
 import { catmullRomSpline } from './spline';
-
-// Series palette pulled from design tokens so the chart stays in sync with
-// the rest of the system if a token is rebranded.
-const COLORS = [
-  tokens.colors.pr_purple,
-  tokens.colors.sec_purple,
-  tokens.colors.success,
-  tokens.colors.warning,
-  tokens.colors.sec_blue,
-];
 
 export interface LineChartTypes {
   series?: LineChartSeriesType[];
@@ -30,6 +22,8 @@ interface HoverState {
 function LineChart({ series, width = '100%', height = 350 }: LineChartTypes) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hover, setHover] = useState<HoverState | null>(null);
+  const { palette: COLORS } = useThemeColors();
+  const { locale } = useLocale();
   const layoutRef = useRef<{
     padding: { top: number; right: number; bottom: number; left: number };
     chartW: number;
@@ -94,7 +88,7 @@ function LineChart({ series, width = '100%', height = 350 }: LineChartTypes) {
       ctx.font = '11px Manrope, sans-serif';
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
-      ctx.fillText(String(val), padding.left - 12, y);
+      ctx.fillText(new Intl.NumberFormat(locale).format(val), padding.left - 12, y);
     }
 
     // X axis labels
@@ -217,7 +211,7 @@ function LineChart({ series, width = '100%', height = 350 }: LineChartTypes) {
       ctx.fillText(s.name, legendX + 14, legendY);
       legendX += 14 + ctx.measureText(s.name).width + 28;
     });
-  }, [series, hover]);
+  }, [series, hover, COLORS, locale]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {

@@ -89,3 +89,43 @@ describe('GanttTimeline — locale integration', () => {
     expect(hasDiff).toBe(true);
   });
 });
+
+describe('GanttTimeline — RTL geometry', () => {
+  const rtlItems: GanttItem[] = [
+    { id: '1', label: 'Task A', start: new Date('2026-04-02'), end: new Date('2026-04-04'), lane: 'Build' },
+  ];
+
+  it('puts dir="rtl" on the component root when LocaleProvider dir is rtl', () => {
+    const { container } = render(
+      <LocaleProvider dir="rtl">
+        <GanttTimeline items={rtlItems} scale="day" />
+      </LocaleProvider>,
+    );
+    expect(container.querySelector('[dir="rtl"]')).not.toBeNull();
+  });
+
+  it('positions a bar with a logical inset-inline-start offset (not raw left) under RTL', () => {
+    // rangeStart one day before the bar start -> a deterministic non-zero
+    // logical offset of exactly one day-width (dayWidth=48 at scale="day").
+    render(
+      <LocaleProvider dir="rtl">
+        <GanttTimeline
+          items={rtlItems}
+          scale="day"
+          rangeStart={new Date('2026-04-01')}
+        />
+      </LocaleProvider>,
+    );
+    const bar = screen.getByText('Task A').closest('button');
+    expect(bar).not.toBeNull();
+    // Geometry is expressed as a logical inline-start offset so the browser
+    // mirrors it under dir="rtl"; no raw physical `left` is applied.
+    expect(bar!.style.insetInlineStart).toBe('48px');
+    expect(bar!.style.left).toBe('');
+  });
+
+  it('defaults to dir="ltr" without a LocaleProvider', () => {
+    const { container } = render(<GanttTimeline items={rtlItems} scale="day" />);
+    expect(container.querySelector('[dir="ltr"]')).not.toBeNull();
+  });
+});

@@ -2,15 +2,8 @@
 
 import { useRef, useEffect, useCallback, useState } from 'react';
 import * as tokens from '@/tokens/tokens';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import type { RadarChartProps } from './types';
-
-const COLORS = [
-  tokens.colors.pr_purple,
-  tokens.colors.sec_purple,
-  tokens.colors.success,
-  tokens.colors.warning,
-  tokens.colors.sec_blue,
-];
 
 interface HoverState {
   axisIndex: number;
@@ -34,6 +27,7 @@ function RadarChart({
 }: RadarChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hover, setHover] = useState<HoverState | null>(null);
+  const { palette: COLORS } = useThemeColors();
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
@@ -188,7 +182,7 @@ function RadarChart({
         lx += 14 + ctx.measureText(s.name).width + 28;
       });
     }
-  }, [series, axes, hover, showGrid, fill]);
+  }, [series, axes, hover, showGrid, fill, COLORS]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {

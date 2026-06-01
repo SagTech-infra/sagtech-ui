@@ -2,15 +2,9 @@
 
 import { useRef, useEffect, useCallback, useState } from 'react';
 import * as tokens from '@/tokens/tokens';
+import { useThemeColors } from '@/hooks/useThemeColors';
+import { useLocale } from '@/providers/LocaleContext';
 import type { BarChartProps } from './types';
-
-const COLORS = [
-  tokens.colors.pr_purple,
-  tokens.colors.sec_purple,
-  tokens.colors.success,
-  tokens.colors.warning,
-  tokens.colors.sec_blue,
-];
 
 interface HoverState {
   categoryIndex: number;
@@ -38,6 +32,8 @@ function BarChart({
 }: BarChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hover, setHover] = useState<HoverState | null>(null);
+  const { palette: COLORS } = useThemeColors();
+  const { locale } = useLocale();
   const barsRef = useRef<BarRect[]>([]);
 
   const draw = useCallback(() => {
@@ -102,7 +98,7 @@ function BarChart({
         ctx.font = '11px Manrope, sans-serif';
         ctx.textAlign = 'right';
         ctx.textBaseline = 'middle';
-        ctx.fillText(String(val), padding.left - 12, y);
+        ctx.fillText(new Intl.NumberFormat(locale).format(val), padding.left - 12, y);
       }
     } else {
       for (let i = 0; i <= gridLines; i++) {
@@ -120,7 +116,7 @@ function BarChart({
         ctx.font = '11px Manrope, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
-        ctx.fillText(String(val), x, padding.top + chartH + 8);
+        ctx.fillText(new Intl.NumberFormat(locale).format(val), x, padding.top + chartH + 8);
       }
     }
 
@@ -281,7 +277,7 @@ function BarChart({
         lx += 14 + ctx.measureText(s.name).width + 28;
       });
     }
-  }, [series, hover, orientation, stacked, grouped]);
+  }, [series, hover, orientation, stacked, grouped, COLORS, locale]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {

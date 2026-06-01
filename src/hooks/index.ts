@@ -12,3 +12,8 @@ export type {
 } from './useRovingTabindex';
 export { useTypeahead } from './useTypeahead';
 export type { UseTypeaheadOptions, UseTypeaheadResult } from './useTypeahead';
+export { useThemeColors } from './useThemeColors';
+export type {
+  UseThemeColorsResult,
+  ThemeColorRecord,
+} from './useThemeColors';

@@ -40,17 +40,18 @@ export default function Tooltip({
   const [isVisible, setIsVisible] = useState(false);
   const reduceMotion = useReducedMotion();
 
+  const variant = motionVariants(position, dir);
   const motionProps = reduceMotion
     ? {
         initial: false as const,
-        animate: motionVariants[position].animate,
+        animate: variant.animate,
         exit: { opacity: 0 },
         transition: { duration: 0 },
       }
     : {
-        initial: motionVariants[position].initial,
-        animate: motionVariants[position].animate,
-        exit: motionVariants[position].initial,
+        initial: variant.initial,
+        animate: variant.animate,
+        exit: variant.initial,
         transition: tokenTransition("fast"),
       };
 

@@ -124,7 +124,7 @@ export default function GanttTimeline({
   laneHeaderLabel = 'Lane',
   locale: localeProp,
 }: GanttTimelineProps) {
-  const { locale: ctxLocale } = useLocale();
+  const { locale: ctxLocale, dir } = useLocale();
   const locale = localeProp ?? ctxLocale;
   const [openItem, setOpenItem] = useState<GanttItem | null>(null);
 
@@ -192,6 +192,7 @@ export default function GanttTimeline({
 
   return (
     <div
+      dir={dir}
       className={classNames(
         'border border-solid border-border-default rounded-16px overflow-hidden bg-bg-primary',
         className,
@@ -225,7 +226,7 @@ export default function GanttTimeline({
                       isMonthStart ? 'border-l-pr_purple/40' : 'border-l-black_3',
                       isWeekend && 'bg-bg-tertiary/30',
                     )}
-                    style={{ left: computeX(tick), width: dayWidth }}
+                    style={{ insetInlineStart: computeX(tick), width: dayWidth }}
                   >
                     {scale === 'day' && (
                       <>
@@ -302,7 +303,7 @@ export default function GanttTimeline({
                           isWeekend && 'bg-bg-tertiary/20',
                         )}
                         style={{
-                          left: computeX(tick),
+                          insetInlineStart: computeX(tick),
                           width: isWeekend ? dayWidth : undefined,
                         }}
                       />
@@ -330,7 +331,7 @@ export default function GanttTimeline({
                           bar.border,
                         )}
                         style={{
-                          left: x,
+                          insetInlineStart: x,
                           top: topOffset,
                           width: Math.max(12, width - 4),
                           height: laneHeight - 14,
@@ -339,7 +340,7 @@ export default function GanttTimeline({
                         {typeof it.progress === 'number' && (
                           <div
                             className={classNames(
-                              'absolute left-0 top-0 h-full',
+                              'absolute start-0 top-0 h-full',
                               bar.fill,
                             )}
                             style={{

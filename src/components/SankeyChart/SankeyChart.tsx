@@ -2,15 +2,8 @@
 
 import { useRef, useEffect, useCallback, useState } from 'react';
 import * as tokens from '@/tokens/tokens';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import type { SankeyChartProps, SankeyLink } from './types';
-
-const PALETTE = [
-  tokens.colors.pr_purple,
-  tokens.colors.sec_purple,
-  tokens.colors.success,
-  tokens.colors.warning,
-  tokens.colors.sec_blue,
-];
 
 interface NodeLayout {
   id: string;
@@ -90,6 +83,7 @@ function assignColumns(nodes: { id: string }[], links: SankeyLink[]): Record<str
 function SankeyChart({ nodes, links, width = '100%', height = 400 }: SankeyChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hover, setHover] = useState<HoverState | null>(null);
+  const { palette: PALETTE } = useThemeColors();
   const layoutRef = useRef<{ nodes: NodeLayout[]; links: LinkLayout[] } | null>(null);
 
   const draw = useCallback(() => {
@@ -274,7 +268,7 @@ function SankeyChart({ nodes, links, width = '100%', height = 400 }: SankeyChart
     });
 
     layoutRef.current = { nodes: Object.values(nodeMap), links: linkLayouts };
-  }, [nodes, links, hover]);
+  }, [nodes, links, hover, PALETTE]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {

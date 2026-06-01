@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { useLinkComponent } from '@/providers';
+import { useLocale } from '@/providers/LocaleContext';
 
 export type NotificationVariant = 'info' | 'success' | 'warning' | 'error';
 
@@ -91,7 +92,10 @@ function VariantIcon({ variant }: { variant: NotificationVariant }) {
   );
 }
 
-function formatRelative(timestamp: Date | string | number): string {
+function formatRelative(
+  timestamp: Date | string | number,
+  locale?: string,
+): string {
   const date = new Date(timestamp);
   const now = Date.now();
   const diffMs = date.getTime() - now;
@@ -103,7 +107,7 @@ function formatRelative(timestamp: Date | string | number): string {
 
   if (abs < minute) return 'just now';
   try {
-    const rtf = new Intl.RelativeTimeFormat(undefined, { numeric: 'auto' });
+    const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
     if (abs < hour) return rtf.format(Math.round(diffMs / minute), 'minute');
     if (abs < day) return rtf.format(Math.round(diffMs / hour), 'hour');
     if (abs < week) return rtf.format(Math.round(diffMs / day), 'day');
@@ -129,6 +133,7 @@ export default function NotificationCenter({
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const Link = useLinkComponent();
+  const { locale, dir } = useLocale();
 
   const computedUnread =
     unreadCount ?? notifications.filter((n) => !n.read).length;
@@ -191,7 +196,7 @@ export default function NotificationCenter({
           )}
           {notification.timestamp && (
             <span className="font-manrope text-10 text-fg-muted mt-4px block">
-              {formatRelative(notification.timestamp)}
+              {formatRelative(notification.timestamp, locale)}
             </span>
           )}
         </div>
@@ -229,8 +234,17 @@ export default function NotificationCenter({
     );
   };
 
+  // Treat `position` as the LTR-side; flip it under RTL so the dropdown
+  // opens mirrored. `right` anchors to the inline-end in LTR, inline-start in RTL.
+  const anchorClass =
+    (position === 'right') === (dir !== 'rtl') ? 'end-0' : 'start-0';
+
   return (
-    <div ref={containerRef} className={classNames('relative inline-block', className)}>
+    <div
+      ref={containerRef}
+      dir={dir}
+      className={classNames('relative inline-block', className)}
+    >
       <button
         ref={triggerRef}
         type="button"
@@ -244,7 +258,7 @@ export default function NotificationCenter({
         {computedUnread > 0 && (
           <span
             aria-hidden="true"
-            className="absolute top-6px right-6px min-w-[16px] h-[16px] px-4px rounded-[50px] bg-error text-white text-10 font-manrope font-bold flex items-center justify-center"
+            className="absolute top-6px end-6px min-w-[16px] h-[16px] px-4px rounded-[50px] bg-error text-white text-10 font-manrope font-bold flex items-center justify-center"
           >
             {computedUnread > 99 ? '99+' : computedUnread}
           </span>
@@ -257,7 +271,7 @@ export default function NotificationCenter({
           aria-label={label}
           className={classNames(
             'absolute mt-8px w-[360px] max-h-[480px] flex flex-col bg-surface-overlay border border-solid border-border-default rounded-16px shadow-6xl overflow-hidden',
-            position === 'right' ? 'right-0' : 'left-0',
+            anchorClass,
           )}
           style={{ zIndex: 1000 }}
         >

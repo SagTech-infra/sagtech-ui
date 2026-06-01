@@ -2,6 +2,8 @@
 
 import { useRef, useEffect, useCallback } from 'react';
 import * as tokens from '@/tokens/tokens';
+import { useThemeColors } from '@/hooks/useThemeColors';
+import { useLocale } from '@/providers/LocaleContext';
 import type { GaugeChartProps } from './types';
 
 function GaugeChart({
@@ -16,6 +18,8 @@ function GaugeChart({
   showRange = true,
 }: GaugeChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { colors } = useThemeColors();
+  const { locale } = useLocale();
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
@@ -72,8 +76,8 @@ function GaugeChart({
 
     // Value arc with gradient
     const grad = ctx.createLinearGradient(cx - radius, cy, cx + radius, cy);
-    grad.addColorStop(0, tokens.colors.pr_purple);
-    grad.addColorStop(1, tokens.colors.sec_purple);
+    grad.addColorStop(0, colors.pr_purple);
+    grad.addColorStop(1, colors.sec_purple);
 
     // Determine current zone color (if thresholds defined and value falls within one)
     let activeColor: string | null = null;
@@ -89,7 +93,7 @@ function GaugeChart({
     }
 
     ctx.save();
-    ctx.shadowColor = (activeColor ?? tokens.colors.pr_purple) + '90';
+    ctx.shadowColor = (activeColor ?? colors.pr_purple) + '90';
     ctx.shadowBlur = 10;
     ctx.beginPath();
     ctx.arc(cx, cy, radius, startAngle, valueAngle);
@@ -105,7 +109,7 @@ function GaugeChart({
       ctx.font = 'bold 28px Orbitron, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(String(Math.round(clamped)), cx, cy - 14);
+      ctx.fillText(new Intl.NumberFormat(locale).format(Math.round(clamped)), cx, cy - 14);
     }
 
     if (label) {
@@ -122,11 +126,11 @@ function GaugeChart({
       ctx.font = '10px Manrope, sans-serif';
       ctx.textAlign = 'left';
       ctx.textBaseline = 'top';
-      ctx.fillText(String(min), cx - radius - 4, cy + 6);
+      ctx.fillText(new Intl.NumberFormat(locale).format(min), cx - radius - 4, cy + 6);
       ctx.textAlign = 'right';
-      ctx.fillText(String(max), cx + radius + 4, cy + 6);
+      ctx.fillText(new Intl.NumberFormat(locale).format(max), cx + radius + 4, cy + 6);
     }
-  }, [value, min, max, thresholds, label, width, height, showValue, showRange]);
+  }, [value, min, max, thresholds, label, width, height, showValue, showRange, colors, locale]);
 
   useEffect(() => {
     draw();

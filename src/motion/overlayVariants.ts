@@ -2,13 +2,37 @@
 // that were copy-pasted identically across components. Values and key names
 // (initial/animate, open/closed) are preserved exactly — no behavior change.
 
-/** Directional fade used by Popover and Tooltip (4px offset by position). */
-export const directionalFadeVariants = {
-  top: { initial: { opacity: 0, y: 4 }, animate: { opacity: 1, y: 0 } },
-  bottom: { initial: { opacity: 0, y: -4 }, animate: { opacity: 1, y: 0 } },
-  left: { initial: { opacity: 0, x: 4 }, animate: { opacity: 1, x: 0 } },
-  right: { initial: { opacity: 0, x: -4 }, animate: { opacity: 1, x: 0 } },
-} as const;
+export type FadePosition = "top" | "bottom" | "left" | "right";
+
+/**
+ * Directional fade used by Popover and Tooltip (4px offset by position).
+ * `dir` flips the sign of the horizontal (`left`/`right`) offset so the fade
+ * slides from the correct visual side in RTL — the vertical (`top`/`bottom`)
+ * offsets are unaffected. Mirrors the `dir`-aware pattern of
+ * `edgeSlideVariants`. Transition is applied by the component, not here.
+ */
+export function directionalFadeVariants(
+  position: FadePosition,
+  dir: "ltr" | "rtl" = "ltr",
+) {
+  const flip = dir === "rtl" ? -1 : 1;
+  switch (position) {
+    case "top":
+      return { initial: { opacity: 0, y: 4 }, animate: { opacity: 1, y: 0 } };
+    case "bottom":
+      return { initial: { opacity: 0, y: -4 }, animate: { opacity: 1, y: 0 } };
+    case "left":
+      return {
+        initial: { opacity: 0, x: 4 * flip },
+        animate: { opacity: 1, x: 0 },
+      };
+    case "right":
+      return {
+        initial: { opacity: 0, x: -4 * flip },
+        animate: { opacity: 1, x: 0 },
+      };
+  }
+}
 
 /** Fade + slight downward slide used by DatePicker and DateRangePicker. */
 export const dropdownFadeSlideVariants = {

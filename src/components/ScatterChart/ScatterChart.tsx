@@ -2,15 +2,9 @@
 
 import { useRef, useEffect, useCallback, useState } from 'react';
 import * as tokens from '@/tokens/tokens';
+import { useThemeColors } from '@/hooks/useThemeColors';
+import { useLocale } from '@/providers/LocaleContext';
 import type { ScatterChartProps } from './types';
-
-const COLORS = [
-  tokens.colors.pr_purple,
-  tokens.colors.sec_purple,
-  tokens.colors.success,
-  tokens.colors.warning,
-  tokens.colors.sec_blue,
-];
 
 interface HoverState {
   seriesIndex: number;
@@ -30,6 +24,8 @@ interface PointRect {
 function ScatterChart({ series, width = '100%', height = 350, xLabel, yLabel }: ScatterChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hover, setHover] = useState<HoverState | null>(null);
+  const { palette: COLORS } = useThemeColors();
+  const { locale } = useLocale();
   const pointsRef = useRef<PointRect[]>([]);
 
   const draw = useCallback(() => {
@@ -93,21 +89,35 @@ function ScatterChart({ series, width = '100%', height = 350, xLabel, yLabel }: 
       ctx.lineTo(w - padding.right, y);
       ctx.stroke();
       ctx.setLineDash([]);
-      const val = (maxY - (maxY - minY) * (i / gridLines)).toFixed(1);
+      const val = maxY - (maxY - minY) * (i / gridLines);
       ctx.fillStyle = tokens.colors.grey_1;
       ctx.font = '11px Manrope, sans-serif';
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
-      ctx.fillText(val, padding.left - 12, y);
+      ctx.fillText(
+        new Intl.NumberFormat(locale, {
+          minimumFractionDigits: 1,
+          maximumFractionDigits: 1,
+        }).format(val),
+        padding.left - 12,
+        y,
+      );
     }
     for (let i = 0; i <= gridLines; i++) {
       const x = padding.left + (chartW / gridLines) * i;
-      const val = (minX + (maxX - minX) * (i / gridLines)).toFixed(1);
+      const val = minX + (maxX - minX) * (i / gridLines);
       ctx.fillStyle = tokens.colors.grey_1;
       ctx.font = '11px Manrope, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
-      ctx.fillText(val, x, padding.top + chartH + 8);
+      ctx.fillText(
+        new Intl.NumberFormat(locale, {
+          minimumFractionDigits: 1,
+          maximumFractionDigits: 1,
+        }).format(val),
+        x,
+        padding.top + chartH + 8,
+      );
     }
 
     // Axis labels
@@ -186,7 +196,7 @@ function ScatterChart({ series, width = '100%', height = 350, xLabel, yLabel }: 
         lx += 14 + ctx.measureText(s.name).width + 28;
       });
     }
-  }, [series, hover, xLabel, yLabel]);
+  }, [series, hover, xLabel, yLabel, COLORS, locale]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {

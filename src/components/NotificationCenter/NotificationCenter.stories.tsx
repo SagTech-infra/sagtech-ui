@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import NotificationCenter, { type NotificationItem } from './NotificationCenter';
+import { LocaleProvider } from '@/providers/LocaleProvider';
 
 const meta = {
   title: 'Feedback/NotificationCenter',
@@ -108,5 +109,18 @@ export const PositionLeft: Story = {
   args: {
     notifications: sample,
     position: 'left',
+  },
+};
+
+export const RTL: Story = {
+  args: {
+    notifications: sample,
+  },
+  render: function RtlStory(args) {
+    return (
+      <LocaleProvider locale="ar-EG" dir="rtl">
+        <NotificationCenter {...args} />
+      </LocaleProvider>
+    );
   },
 };

@@ -74,6 +74,8 @@ export default function Popover({
     setIsOpen((prev) => !prev);
   }, []);
 
+  const variant = motionVariants(position, dir);
+
   useEffect(() => {
     if (!isOpen) return;
     const handler = (event: KeyboardEvent) => {
@@ -109,11 +111,9 @@ export default function Popover({
               positionClasses[position],
               alignClasses[position][align],
             )}
-            initial={reduceMotion ? false : motionVariants[position].initial}
-            animate={motionVariants[position].animate}
-            exit={
-              reduceMotion ? { opacity: 0 } : motionVariants[position].initial
-            }
+            initial={reduceMotion ? false : variant.initial}
+            animate={variant.animate}
+            exit={reduceMotion ? { opacity: 0 } : variant.initial}
             transition={
               reduceMotion ? { duration: 0 } : tokenTransition("fast")
             }
