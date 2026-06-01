@@ -52,8 +52,17 @@ export {
   useOutsideClick,
   useModals,
   useStatusColor,
+  useRovingTabindex,
+  useTypeahead,
 } from "./hooks";
-export type { StatusMeta, StatusTone } from "./hooks";
+export type {
+  StatusMeta,
+  StatusTone,
+  UseRovingTabindexOptions,
+  UseRovingTabindexResult,
+  UseTypeaheadOptions,
+  UseTypeaheadResult,
+} from "./hooks";
 
 // Utils
 export {
@@ -207,6 +216,18 @@ export type { InfoTab } from "./components/InfoTabs/types";
 export { default as Timeline } from "./components/Timeline/Timeline";
 
 // Components — Layout
+export { default as Carousel } from "./components/Carousel/Carousel";
+export type { CarouselProps } from "./components/Carousel/Carousel";
+export {
+  PanelGroup,
+  Panel,
+  PanelResizeHandle,
+} from "./components/PanelGroup";
+export type {
+  PanelGroupProps,
+  PanelProps,
+  PanelResizeHandleProps,
+} from "./components/PanelGroup";
 export { Modal } from "./components/Modal/Modal";
 export type { ModalMotionVariants } from "./components/Modal/Modal";
 export {
@@ -296,6 +317,10 @@ export { default as Avatar } from "./components/Avatar/Avatar";
 export type { AvatarProps, AvatarSize } from "./components/Avatar/Avatar";
 export { default as AvatarGroup } from "./components/AvatarGroup/AvatarGroup";
 export type { AvatarGroupProps } from "./components/AvatarGroup/AvatarGroup";
+export { default as TreeView } from "./components/TreeView/TreeView";
+export type { TreeNode, TreeViewProps } from "./components/TreeView/types";
+export { default as Calendar } from "./components/Calendar/Calendar";
+export type { CalendarProps } from "./components/Calendar/Calendar";
 export { default as AvatarCard } from "./components/AvatarCard/AvatarCard";
 export { default as ResultPill } from "./components/ResultPill/ResultPill";
 export { default as Rate } from "./components/Rate/Rate";

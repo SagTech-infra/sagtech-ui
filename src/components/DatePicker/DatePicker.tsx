@@ -5,7 +5,6 @@ import {
   useRef,
   useState,
   useCallback,
-  useMemo,
   useLayoutEffect,
   type Ref,
 } from "react";
@@ -15,15 +14,8 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { tokenTransition } from "@/utils/motion";
 import { dropdownFadeSlideVariants as dropdownVariants } from "@/motion/overlayVariants";
 import { useLocale } from "@/providers/LocaleContext";
-import {
-  getWeekdayLabels,
-  formatDisplayDate,
-  formatMonthLabel,
-  getCalendarDays,
-  isSameDay,
-  isToday,
-  type CalendarDay,
-} from "./calendar";
+import { formatDisplayDate } from "./calendar";
+import Calendar from "../Calendar/Calendar";
 import TimePicker from "../TimePicker/TimePicker";
 
 export interface DatePickerProps {
@@ -73,46 +65,6 @@ function CalendarIcon() {
   );
 }
 
-function ChevronLeft() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M10 12L6 8L10 4"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function ChevronRight() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M6 4L10 8L6 12"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 export default function DatePicker({
   value,
   onChange,
@@ -137,13 +89,6 @@ export default function DatePicker({
     left: number;
     minWidth: number;
   } | null>(null);
-  const [viewYear, setViewYear] = useState(() =>
-    value ? value.getFullYear() : new Date().getFullYear(),
-  );
-  const [viewMonth, setViewMonth] = useState(() =>
-    value ? value.getMonth() : new Date().getMonth(),
-  );
-
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
 
@@ -198,42 +143,9 @@ export default function DatePicker({
     };
   }, [isOpen, updatePosition]);
 
-  const days = useMemo(
-    () => getCalendarDays(viewYear, viewMonth, minDate, maxDate),
-    [viewYear, viewMonth, minDate, maxDate],
-  );
-
-  const weekdays = useMemo(() => getWeekdayLabels(locale), [locale]);
-
-  const monthLabel = useMemo(
-    () => formatMonthLabel(viewYear, viewMonth, locale),
-    [viewYear, viewMonth, locale],
-  );
-
-  const handlePrevMonth = useCallback(() => {
-    setViewMonth((prev) => {
-      if (prev === 0) {
-        setViewYear((y) => y - 1);
-        return 11;
-      }
-      return prev - 1;
-    });
-  }, []);
-
-  const handleNextMonth = useCallback(() => {
-    setViewMonth((prev) => {
-      if (prev === 11) {
-        setViewYear((y) => y + 1);
-        return 0;
-      }
-      return prev + 1;
-    });
-  }, []);
-
   const handleDayClick = useCallback(
-    (day: CalendarDay) => {
-      if (day.isDisabled) return;
-      const next = new Date(day.date);
+    (date: Date) => {
+      const next = new Date(date);
       if (showTime && value) {
         next.setHours(value.getHours(), value.getMinutes(), 0, 0);
       }
@@ -321,73 +233,13 @@ export default function DatePicker({
                   }}
                   className="z-50 bg-black_2 border border-black_3 rounded-16px p-20px shadow-6xl"
                 >
-                  {/* Header */}
-                  <div className="flex items-center justify-between mb-12px">
-                    <button
-                      type="button"
-                      onClick={handlePrevMonth}
-                      className="w-[28px] h-[28px] flex items-center justify-center rounded-8px text-grey_4 hover:bg-black_3 transition-colors cursor-pointer"
-                    >
-                      <ChevronLeft />
-                    </button>
-                    <span className="font-manrope text-14 font-semibold text-white_4">
-                      {monthLabel}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={handleNextMonth}
-                      className="w-[28px] h-[28px] flex items-center justify-center rounded-8px text-grey_4 hover:bg-black_3 transition-colors cursor-pointer"
-                    >
-                      <ChevronRight />
-                    </button>
-                  </div>
-
-                  {/* Weekday headers */}
-                  <div className="grid grid-cols-7 gap-[2px] mb-4px">
-                    {weekdays.map((day) => (
-                      <div
-                        key={day}
-                        className="text-10 text-grey_1 uppercase text-center font-manrope py-4px"
-                      >
-                        {day}
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Day grid */}
-                  <div className="grid grid-cols-7 gap-[2px]">
-                    {days.map((day, index) => {
-                      const isSelected = value
-                        ? isSameDay(day.date, value)
-                        : false;
-                      const isTodayDay = isToday(day.date);
-
-                      return (
-                        <button
-                          key={index}
-                          type="button"
-                          onClick={() => handleDayClick(day)}
-                          disabled={day.isDisabled}
-                          className={classNames(
-                            "w-[36px] h-[36px] rounded-8px text-14 font-manrope flex items-center justify-center mx-auto transition-colors duration-150",
-                            {
-                              "bg-pr_purple text-white": isSelected,
-                              "text-pr_purple font-semibold":
-                                isTodayDay && !isSelected,
-                              "text-grey_4 hover:bg-black_3 cursor-pointer":
-                                day.isCurrentMonth &&
-                                !isSelected &&
-                                !day.isDisabled,
-                              "text-grey_1": !day.isCurrentMonth && !isSelected,
-                              "opacity-50 cursor-not-allowed": day.isDisabled,
-                            },
-                          )}
-                        >
-                          {day.date.getDate()}
-                        </button>
-                      );
-                    })}
-                  </div>
+                  <Calendar
+                    value={value}
+                    onChange={handleDayClick}
+                    minDate={minDate}
+                    maxDate={maxDate}
+                    locale={locale}
+                  />
 
                   {showTime && (
                     <TimePicker

@@ -39,6 +39,7 @@ export default defineConfig({
     '@react-three/fiber',
     '@react-three/drei',
     'react-force-graph-3d',
+    'react-resizable-panels',
   ],
   clean: true,
   treeshake: true,
