@@ -489,12 +489,6 @@ export type { ProgressBarProps } from "./components/ProgressBar/ProgressBar";
 export { default as AnimationButton } from "./components/AnimationButton/AnimationButton";
 export { default as CookieBanner } from "./components/CookieBanner/CookieBanner";
 export type { CookieBannerProps } from "./components/CookieBanner/CookieBanner";
-export { Notification } from "./components/Notification/Notification";
-export { default as NotificationWrapper } from "./components/Notification/NotificationWrapper";
-export {
-  NotificationContext,
-  NotificationContextProvider,
-} from "./components/Notification/NotificationContext";
 export { default as NotificationCenter } from "./components/NotificationCenter/NotificationCenter";
 export type {
   NotificationCenterProps,
