@@ -19,13 +19,13 @@ const Network3DCore = lazy(() => import('./Network3DCore'));
  * `null`, preserving the previous empty-until-ready behavior.
  */
 export default function Network3D(props: Network3DProps) {
+  // className + loadingFallback are wrapper-only; everything else flows to the core.
+  const { className, loadingFallback, ...coreProps } = props;
   const {
     width = 600,
     height = 400,
     backgroundColor = tokens.colors.black_1,
-    className,
-    loadingFallback,
-  } = props;
+  } = coreProps;
 
   return (
     <div
@@ -33,7 +33,7 @@ export default function Network3D(props: Network3DProps) {
       style={{ width, height, background: backgroundColor }}
     >
       <Suspense fallback={loadingFallback ?? null}>
-        <Network3DCore {...props} />
+        <Network3DCore {...coreProps} />
       </Suspense>
     </div>
   );

@@ -1,7 +1,9 @@
 export { createMentionExtension } from './mention';
 export { createSlashCommandExtension, defaultSlashCommands } from './slashCommand';
 export { createImageUploadExtension, validateImageFile } from './imageUpload';
-export { createSyntaxHighlightExtension, resolveLowlight } from './syntaxHighlight';
+// resolveLowlight stays module-local (used internally + in unit tests); it is
+// intentionally NOT part of the public API surface.
+export { createSyntaxHighlightExtension } from './syntaxHighlight';
 export { SuggestionMenu, SuggestionPortal, createSuggestionRenderer } from './SuggestionMenu';
 export type {
   SuggestionMenuProps,

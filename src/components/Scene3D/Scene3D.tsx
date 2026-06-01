@@ -37,13 +37,13 @@ export interface Scene3DProps {
 const Scene3DCore = lazy(() => import('./Scene3DCore'));
 
 export default function Scene3D(props: Scene3DProps) {
+  // className + loadingFallback are wrapper-only; everything else flows to the core.
+  const { className, loadingFallback, ...coreProps } = props;
   const {
     width = 500,
     height = 500,
     background = tokens.colors.black_1,
-    className,
-    loadingFallback,
-  } = props;
+  } = coreProps;
 
   return (
     <div
@@ -51,7 +51,7 @@ export default function Scene3D(props: Scene3DProps) {
       style={{ width, height, background }}
     >
       <Suspense fallback={loadingFallback ?? null}>
-        <Scene3DCore {...props} />
+        <Scene3DCore {...coreProps} />
       </Suspense>
     </div>
   );

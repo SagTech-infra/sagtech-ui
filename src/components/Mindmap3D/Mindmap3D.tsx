@@ -19,13 +19,13 @@ const Mindmap3DCore = lazy(() => import('./Mindmap3DCore'));
  * while the chunk loads (and during SSR); defaults to `null`.
  */
 export default function Mindmap3D(props: Mindmap3DProps) {
+  // className + loadingFallback are wrapper-only; everything else flows to the core.
+  const { className, loadingFallback, ...coreProps } = props;
   const {
     width = 600,
     height = 500,
     backgroundColor = tokens.colors.black_1,
-    className,
-    loadingFallback,
-  } = props;
+  } = coreProps;
 
   return (
     <div
@@ -33,7 +33,7 @@ export default function Mindmap3D(props: Mindmap3DProps) {
       style={{ width, height, background: backgroundColor }}
     >
       <Suspense fallback={loadingFallback ?? null}>
-        <Mindmap3DCore {...props} />
+        <Mindmap3DCore {...coreProps} />
       </Suspense>
     </div>
   );

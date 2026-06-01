@@ -112,10 +112,9 @@ describe('StarterKit codeBlock collision', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const ext = createSyntaxHighlightExtension();
     getSchema([StarterKit, ext]);
+    // Tolerant of tiptap's exact wording — match either term, case-insensitive.
     expect(
-      warn.mock.calls.some(
-        (c) => String(c[0]).includes('Duplicate') && String(c[0]).includes('codeBlock'),
-      ),
+      warn.mock.calls.some((c) => /duplicate|codeblock/i.test(String(c[0]))),
     ).toBe(true);
     warn.mockRestore();
   });

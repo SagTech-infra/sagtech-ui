@@ -379,7 +379,6 @@ export {
   createSyntaxHighlightExtension,
   defaultSlashCommands,
   validateImageFile,
-  resolveLowlight,
 } from "./components/RichTextEditor/presets";
 export type {
   MentionItem,

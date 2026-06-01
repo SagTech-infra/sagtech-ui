@@ -19,13 +19,13 @@ const Globe3DCore = lazy(() => import('./Globe3DCore'));
  * while the chunk loads (and during SSR); defaults to `null`.
  */
 export default function Globe3D(props: Globe3DProps) {
+  // className + loadingFallback are wrapper-only; everything else flows to the core.
+  const { className, loadingFallback, ...coreProps } = props;
   const {
     width = 500,
     height = 500,
     backgroundColor = tokens.colors.black_1,
-    className,
-    loadingFallback,
-  } = props;
+  } = coreProps;
 
   return (
     <div
@@ -33,7 +33,7 @@ export default function Globe3D(props: Globe3DProps) {
       style={{ width, height, background: backgroundColor }}
     >
       <Suspense fallback={loadingFallback ?? null}>
-        <Globe3DCore {...props} />
+        <Globe3DCore {...coreProps} />
       </Suspense>
     </div>
   );
