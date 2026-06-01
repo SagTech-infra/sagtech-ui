@@ -14,21 +14,16 @@ export interface TabItem {
 
 export interface TabsProps {
   items: TabItem[];
-  /**
-   * @deprecated Use `defaultValue` with the compound API (Tabs.Root).
-   * `defaultIndex` will be removed in v2.0.
-   */
-  defaultIndex?: number;
+  /** Default active tab id (`tab-<index>`); defaults to the first tab. */
+  defaultValue?: string;
   className?: string;
   onChange?: (index: number) => void;
 }
 
 const TabsBase = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
-  { items, defaultIndex = 0, className, onChange },
+  { items, defaultValue = "tab-0", className, onChange },
   ref,
 ) {
-  const defaultValue = `tab-${defaultIndex}`;
-
   function handleValueChange(value: string) {
     if (onChange) {
       const index = parseInt(value.replace("tab-", ""), 10);

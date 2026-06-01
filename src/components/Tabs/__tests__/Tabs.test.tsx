@@ -200,10 +200,10 @@ describe("Tabs — items-prop facade (backward compat)", () => {
     expect(screen.getByRole("tabpanel")).toHaveTextContent("Panel B");
   });
 
-  it("honors defaultIndex", () => {
+  it("honors defaultValue", () => {
     render(
       <Tabs
-        defaultIndex={1}
+        defaultValue="tab-1"
         items={[
           { label: "A", content: <div>Panel A</div> },
           { label: "B", content: <div>Panel B</div> },

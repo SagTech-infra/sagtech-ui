@@ -11,7 +11,7 @@ const meta = {
   component: Tabs,
   tags: ["autodocs"],
   argTypes: {
-    defaultIndex: { control: "number" },
+    defaultValue: { control: "text" },
   },
 } satisfies Meta<typeof Tabs>;
 

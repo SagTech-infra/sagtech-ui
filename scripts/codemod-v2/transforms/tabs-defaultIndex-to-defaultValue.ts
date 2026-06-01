@@ -1,26 +1,73 @@
 /**
- * codemod-v2: Tabs.defaultIndex → Tabs.defaultValue  (STUB)
+ * codemod-v2: Tabs.defaultIndex → Tabs.defaultValue
  *
- * Intent (v2.0): the `items`-facade `<Tabs defaultIndex={n} />` prop is
- * `@deprecated`; the compound API (`Tabs.Root`) uses `defaultValue` keyed by a
- * tab id/value rather than a numeric index.
+ * v2.0 removes the deprecated numeric `defaultIndex` from the items-facade
+ * `<Tabs>`. The facade keeps the internal `tab-<index>` id scheme, so
+ * `defaultValue` is the string id of the default tab.
  *
- * Why this is deferred / likely semi-manual:
- *   - `defaultIndex` is a NUMBER (position in the `items` array); `defaultValue`
- *     is the VALUE/ID of a tab. Mapping index → value requires statically
- *     knowing the `items` array passed to that `<Tabs>` — which is frequently a
- *     variable, an imported constant, or computed at runtime. A codemod cannot
- *     reliably resolve `items[n].value` in the general case.
- *   - Internally v1.x maps `defaultIndex` to `` `tab-${defaultIndex}` `` for the
- *     compound API; whether v2.0 keeps that scheme or uses real item ids affects
- *     the correct rewrite.
+ * Best-effort behavior (see scripts/codemod-v2/README.md for limits):
+ *   - `defaultIndex={N}` with a NUMERIC LITERAL → `defaultValue="tab-N"` (safe).
+ *   - `defaultIndex={expr}` where expr is dynamic (variable / computed) →
+ *     NOT rewritten; flagged, because the codemod can't statically resolve the
+ *     index to a `tab-<n>` id.
+ * Only the `<Tabs>` facade is touched; `<Tabs.Root>` already uses `defaultValue`.
  *
- * This stub is a no-op. A realistic v2.0 implementation will likely rename the
- * easy literal cases and FLAG the rest for manual migration.
+ * Run once:
+ *   pnpm dlx jscodeshift \
+ *     -t scripts/codemod-v2/transforms/tabs-defaultIndex-to-defaultValue.ts \
+ *     "src/**\/*.tsx" --parser=tsx --extensions=tsx,ts [--dry --print]
  */
-import type { FileInfo } from 'jscodeshift';
+import type { API, FileInfo, JSXIdentifier } from 'jscodeshift';
 
-export default function transformer(file: FileInfo): string {
-  // TODO v2.0: resolve items[index].value where statically known; flag the rest.
-  return file.source;
+const TARGET = 'Tabs';
+const OLD = 'defaultIndex';
+const NEW = 'defaultValue';
+const MARKER = 'codemod-v2: review <Tabs defaultIndex>';
+
+export default function transformer(file: FileInfo, api: API): string {
+  const j = api.jscodeshift;
+  const root = j(file.source);
+  let flag = false;
+
+  root
+    .find(j.JSXOpeningElement, { name: { type: 'JSXIdentifier', name: TARGET } })
+    .forEach((path) => {
+      j(path)
+        .find(j.JSXAttribute, { name: { type: 'JSXIdentifier', name: OLD } })
+        .forEach((attrPath) => {
+          const value = attrPath.node.value;
+          const expr =
+            value && value.type === 'JSXExpressionContainer' ? value.expression : null;
+
+          // Numeric literal (babel: NumericLiteral; estree: Literal w/ number).
+          const num =
+            expr && expr.type === 'NumericLiteral'
+              ? expr.value
+              : expr && expr.type === 'Literal' && typeof expr.value === 'number'
+                ? expr.value
+                : null;
+
+          if (num !== null) {
+            (attrPath.node.name as JSXIdentifier).name = NEW;
+            attrPath.node.value = j.stringLiteral(`tab-${num}`);
+          } else {
+            flag = true;
+          }
+        });
+    });
+
+  if (flag && !file.source.includes(MARKER)) {
+    const body = root.find(j.Program).get('body', 0);
+    if (body?.node) {
+      const banner = j.commentBlock(
+        `\n * ${MARKER}: a dynamic \`defaultIndex\` could not be converted to a\n * \`defaultValue="tab-<n>"\` automatically. Set defaultValue to the target\n * tab id by hand. See docs/MIGRATION.md (v1.9 → v2.0).\n `,
+        true,
+        false,
+      );
+      body.node.comments = body.node.comments ?? [];
+      body.node.comments.unshift(banner);
+    }
+  }
+
+  return root.toSource();
 }
