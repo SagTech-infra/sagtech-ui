@@ -1,18 +1,14 @@
 "use client";
 
-import { useMemo, type ReactNode } from "react";
+import { useMemo } from "react";
 import {
   LocaleContext,
   DEFAULT_LOCALE,
   DEFAULT_DIR,
-  type Direction,
+  type LocaleProviderProps,
 } from "./LocaleContext";
 
-export interface LocaleProviderProps {
-  locale?: string;
-  dir?: Direction;
-  children: ReactNode;
-}
+export type { LocaleProviderProps };
 
 export function LocaleProvider({
   locale = DEFAULT_LOCALE,

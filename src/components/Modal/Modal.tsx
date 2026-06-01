@@ -9,47 +9,10 @@ import {
   unregisterOverlay,
 } from "./ModalStack";
 import { useLocale } from "@/providers/LocaleContext";
+import type { ModalMotionVariants, ModalProps } from "./types";
+import { Z_MODAL_BACKDROP, Z_MODAL, Z_STEP, FOCUSABLE_SELECTOR } from "./modal.const";
 
-export interface ModalMotionVariants {
-  initial?: Record<string, unknown>;
-  animate?: Record<string, unknown>;
-  exit?: Record<string, unknown>;
-}
-
-interface ModalProps {
-  children?: React.ReactNode;
-  isOpen?: boolean;
-  toggle?: () => void;
-  size?: "sm" | "md";
-  title?: React.ReactNode;
-  footer?: React.ReactNode;
-  /**
-   * Optional overrides for the modal's framer-motion variants. Pass any subset;
-   * unspecified entries fall back to the default scale/opacity behavior.
-   */
-  motionVariants?: ModalMotionVariants;
-  "aria-label"?: string;
-  /**
-   * Controls which element receives focus when the modal opens.
-   * - `string` — CSS selector queried within the modal root.
-   * - `HTMLElement` — focused directly.
-   * - `React.RefObject<HTMLElement>` — focuses `ref.current` if non-null.
-   * - `null` — suppresses auto-focus entirely.
-   * - `undefined` (default) — focuses the first focusable element (existing behavior).
-   */
-  initialFocusTarget?:
-    | string
-    | HTMLElement
-    | React.RefObject<HTMLElement>
-    | null;
-}
-
-const Z_MODAL_BACKDROP = 3000;
-const Z_MODAL = 3001;
-const Z_STEP = 10;
-
-const FOCUSABLE_SELECTOR =
-  'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex]:not([tabindex="-1"]), [contenteditable="true"]';
+export type { ModalMotionVariants };
 
 export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
   {

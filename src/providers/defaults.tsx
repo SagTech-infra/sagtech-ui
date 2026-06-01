@@ -82,3 +82,8 @@ export const DefaultLinkShim: UILinkComponent = ({
 );
 
 DefaultLinkShim.displayName = 'DefaultLinkShim';
+
+export interface UIComponentsContextValue {
+  imageComponent: UIImageComponent;
+  linkComponent: UILinkComponent;
+}

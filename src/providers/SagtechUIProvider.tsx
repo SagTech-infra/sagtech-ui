@@ -1,36 +1,16 @@
 "use client";
 
-import { useMemo, type ReactNode } from "react";
+import { useMemo } from "react";
 import {
   UIComponentsContext,
   type UIComponentsContextValue,
 } from "./UIComponentsContext";
-import {
-  DefaultImageShim,
-  DefaultLinkShim,
-  type UIImageComponent,
-  type UILinkComponent,
-} from "./defaults";
+import { DefaultImageShim, DefaultLinkShim } from "./defaults";
 import { ThemeProvider } from "./ThemeProvider";
-import type { Theme } from "./ThemeContext";
 import { LocaleProvider } from "./LocaleProvider";
-import type { Direction } from "./LocaleContext";
+import type { SagtechUIProviderProps } from "./SagtechUIProvider.types";
 
-export interface SagtechUIProviderProps {
-  imageComponent?: UIImageComponent;
-  linkComponent?: UILinkComponent;
-  /** When set, wraps children in a ThemeProvider (controlled). */
-  theme?: Theme;
-  /** When set, wraps children in a ThemeProvider (uncontrolled). */
-  defaultTheme?: Theme;
-  /** Element to receive data-theme. Default "html". */
-  themeTarget?: "html" | "body";
-  /** When set, wraps children in a LocaleProvider. */
-  locale?: string;
-  /** When set, wraps children in a LocaleProvider. */
-  dir?: Direction;
-  children: ReactNode;
-}
+export type { SagtechUIProviderProps };
 
 export function SagtechUIProvider({
   imageComponent,

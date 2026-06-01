@@ -1,44 +1,14 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef, type ReactNode } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { tokenTransition } from "@/utils/motion";
 import Typography from "@/components/Typography/Typography";
 import Button from "@/components/Button/Button";
-import type { ConfirmVariant } from "./types";
+import type { ConfirmDialogProps } from "./types";
 
-export interface ConfirmDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  title: string;
-  description?: ReactNode;
-  confirmText?: string;
-  cancelText?: string;
-  variant?: ConfirmVariant;
-  icon?: ReactNode;
-  loading?: boolean;
-  /**
-   * When true, the primary confirm button is disabled (e.g. while a parent
-   * form is invalid). The cancel/close path remains active. Default: false.
-   */
-  confirmDisabled?: boolean;
-  onConfirm?: () => void;
-  /**
-   * Controls which element receives focus when the dialog opens.
-   * - `string` — CSS selector queried within the dialog root.
-   * - `HTMLElement` — focused directly.
-   * - `React.RefObject<HTMLElement>` — focuses `ref.current` if non-null.
-   * - `null` — suppresses auto-focus entirely.
-   * - `undefined` (default) — focuses the primary confirm button via the
-   *   `data-sagtech-confirm-primary="true"` attribute.
-   */
-  initialFocusTarget?:
-    | string
-    | HTMLElement
-    | React.RefObject<HTMLElement>
-    | null;
-}
+export type { ConfirmDialogProps };
 
 export default function ConfirmDialog({
   open,

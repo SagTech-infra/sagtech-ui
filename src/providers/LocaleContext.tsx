@@ -1,6 +1,13 @@
 import { createContext, useContext } from "react";
+import type { ReactNode } from "react";
 
 export type Direction = "ltr" | "rtl";
+
+export interface LocaleProviderProps {
+  locale?: string;
+  dir?: Direction;
+  children: ReactNode;
+}
 
 export interface LocaleContextValue {
   locale: string;

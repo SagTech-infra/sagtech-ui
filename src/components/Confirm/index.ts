@@ -1,5 +1,5 @@
 export { default as ConfirmDialog } from './ConfirmDialog';
-export type { ConfirmDialogProps } from './ConfirmDialog';
+export type { ConfirmDialogProps } from './types';
 export {
   ConfirmProvider,
   useConfirm,

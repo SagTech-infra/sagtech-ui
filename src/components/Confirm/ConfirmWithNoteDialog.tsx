@@ -5,7 +5,6 @@ import {
   useEffect,
   useRef,
   useState,
-  type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
@@ -13,27 +12,7 @@ import { tokenTransition } from "@/utils/motion";
 import Typography from "@/components/Typography/Typography";
 import Button from "@/components/Button/Button";
 import { TextArea } from "@/components/TextArea/TextArea";
-import type { ConfirmVariant } from "./types";
-
-export interface ConfirmWithNoteDialogProps {
-  open: boolean;
-  onCancel: () => void;
-  onConfirm: (note: string) => void;
-  title: string;
-  description?: ReactNode;
-  confirmText?: string;
-  cancelText?: string;
-  variant?: ConfirmVariant;
-  noteLabel?: string;
-  notePlaceholder?: string;
-  noteRequired?: boolean;
-  noteMinLength?: number;
-  /** Optional max-length on the note; renders an inline counter when set. */
-  noteMaxLength?: number;
-  /** Helper text shown below the textarea. */
-  noteHelperText?: ReactNode;
-  loading?: boolean;
-}
+import type { ConfirmWithNoteDialogProps } from "./types";
 
 export default function ConfirmWithNoteDialog({
   open,

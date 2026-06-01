@@ -5,36 +5,16 @@ import {
   useEffect,
   useMemo,
   useState,
-  type ReactNode,
 } from "react";
 import {
   ThemeContext,
+  DEFAULT_STORAGE_KEY,
   type Theme,
   type ResolvedTheme,
+  type ThemeProviderProps,
 } from "./ThemeContext";
 
-const DEFAULT_STORAGE_KEY = "sagtech-ui-theme";
-
-export interface ThemeProviderProps {
-  /** Controlled theme. When set, persistence is disabled and the prop wins. */
-  theme?: Theme;
-  /** Uncontrolled initial theme. Default "dark". */
-  defaultTheme?: Theme;
-  onThemeChange?: (theme: Theme) => void;
-  /** Element to receive data-theme + colorScheme. Default "html". */
-  target?: "html" | "body";
-  storageKey?: string;
-  /** When false, "system" falls back to "dark". Default true. */
-  enableSystem?: boolean;
-  children: ReactNode;
-}
-
-function getSystemTheme(): ResolvedTheme {
-  if (typeof window === "undefined" || !window.matchMedia) return "dark";
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
-}
+export type { ThemeProviderProps };
 
 export function ThemeProvider({
   theme: controlledTheme,
@@ -109,5 +89,3 @@ export function ThemeProvider({
   );
 }
 
-// Suppress unused warning for the exported utility
-export { getSystemTheme };

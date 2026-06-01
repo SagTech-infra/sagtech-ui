@@ -4,14 +4,12 @@ import { createContext, useContext } from 'react';
 import {
   DefaultImageShim,
   DefaultLinkShim,
+  type UIComponentsContextValue,
   type UIImageComponent,
   type UILinkComponent,
 } from './defaults';
 
-export interface UIComponentsContextValue {
-  imageComponent: UIImageComponent;
-  linkComponent: UILinkComponent;
-}
+export type { UIComponentsContextValue };
 
 export const UIComponentsContext = createContext<UIComponentsContextValue>({
   imageComponent: DefaultImageShim,
