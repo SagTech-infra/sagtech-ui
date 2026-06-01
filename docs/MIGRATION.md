@@ -162,3 +162,96 @@ If you don't import any of the four 3D components, you don't need any new peer.
 
 - New `src/utils/motion.ts` exports `motionDurationS`, `motionEaseBezier`, and `tokenTransition()` bridging CSS motion tokens to framer-motion-ready numbers.
 - Overlay animations (`Toast`, `Drawer`, `Sheet`, `BottomSheet`, `Popover`, `Tooltip`, `ConfirmDialog`, `ConfirmWithNoteDialog`, `DatePicker`, `DateRangePicker`, `CommandPalette`) now read durations from motion tokens and skip animation when `prefers-reduced-motion: reduce` is set. No API surface change; near-identical visual timing.
+
+### v1.9 → v2.0 (BREAKING)
+
+v2.0 is the single breaking-change window: every accumulated `@deprecated` API is removed and naming is aligned with `docs/API_CONVENTIONS.md`. All deprecations were announced in earlier minors. Codemods under `scripts/codemod-v2/` automate the mechanical parts and flag what needs manual review — see the command table at the end.
+
+**1. `Notification` family removed → `Toast`.**
+
+`Notification`, `NotificationWrapper`, `NotificationContext`, `NotificationContextProvider` are gone (deprecated since v1.1). `NotificationCenter` is a separate component and is unaffected. This is a structural migration (provider + context → imperative `toast`):
+
+```diff
+- import { NotificationContextProvider, useNotification } from '@sagtech-infra/ui';
++ import { Toaster, toast } from '@sagtech-infra/ui';
+
+  // App root — mount once:
+- <NotificationContextProvider>{children}</NotificationContextProvider>
++ <>{children}<Toaster /></>
+
+  // Anywhere — fire a notification:
+- const { notify } = useNotification();
+- notify({ type: 'success', message: 'Saved' });
++ toast.success('Saved');
+```
+
+`toast` also exposes `.error()`, `.warning()`, `.info()`, `.loading()`, `.promise()`, `.dismiss()`, `.update()`. `<Toaster>` accepts `position`, `visibleToasts`, `gap`.
+
+**2. `label` prop unified on `Input` and `PhoneInput`.**
+
+`label` is now the static, `htmlFor`-associated label on every field. Dropzone is unaffected (it never had a label prop).
+
+```diff
+  // Input — static label:
+- <Input externalLabel="Email" />
++ <Input label="Email" />
+
+  // Input — the old floating label (shown at state="active") is now `floatingLabel`:
+- <Input state="active" label="Email" />
++ <Input state="active" floatingLabel="Email" />
+
+  // PhoneInput:
+- <PhoneInput externalLabel="Phone" />
++ <PhoneInput label="Phone" />
+```
+
+**3. `Attachment.onUpload` → `onChange`** (identical signature, `(files: Array<File> | undefined) => void`):
+
+```diff
+- <Attachment onUpload={handleFiles} />
++ <Attachment onChange={handleFiles} />
+```
+
+**4. `SelectInput` is controlled-only.** The deprecated `onSelect`, `register` and `name` props are removed; use `value` + `onChange`. react-hook-form integration must be rewired to a controlled field:
+
+```diff
+- <SelectInput options={opts} value={v} onSelect={setV} />
++ <SelectInput options={opts} value={v} onChange={setV} />
+
+  // react-hook-form (Controller instead of register/name):
+- <SelectInput options={opts} register={register} name="framework" value={v} onChange={...} />
++ <Controller name="framework" control={control} render={({ field }) => (
++   <SelectInput options={opts} value={field.value} onChange={field.onChange} placeholder="…" />
++ )} />
+```
+
+**5. `Tabs.defaultIndex` → `defaultValue`** on the items-facade `<Tabs>`. `defaultValue` is the tab id (`tab-<index>`), matching the compound `Tabs.Root` API:
+
+```diff
+- <Tabs defaultIndex={1} items={items} />
++ <Tabs defaultValue="tab-1" items={items} />
+```
+
+**6. 3D peers bumped to the React 19 line.** Peer deps now require `@react-three/fiber >=9` and `@react-three/drei >=10`. Consumers rendering `Globe3D` / `Scene3D` / `Mindmap3D` / `Network3D` must upgrade those peers:
+
+```bash
+pnpm add @react-three/fiber@^9 @react-three/drei@^10
+```
+
+`three` stays at `>=0.160`. The internal `src/r3f.d.ts` JSX bridge was removed — fiber 9 augments `react/jsx-runtime` with `ThreeElements` itself.
+
+**7. Callback-name audit.** The remaining public callback surface already conforms to `docs/API_CONVENTIONS.md` (`onChange`, `onClick`, `onClose`, `onOpenChange`, `onConfirm`, `onDrop`, `onFilesAdd`/`onFileRemove`/`onFileRetry`, `onReorder`, `onValueChange`, `onSelect` for menu items, …). No further renames beyond items 2–5 above.
+
+**Codemods** (`scripts/codemod-v2/`, jscodeshift). Run once on your codebase, preview with `--dry --print`:
+
+```bash
+pnpm dlx jscodeshift -t scripts/codemod-v2/transforms/<name>.ts "src/**/*.tsx" --parser=tsx --extensions=tsx,ts [--dry --print]
+```
+
+| Transform | Automates | Flags for manual review |
+| --- | --- | --- |
+| `remove-notification-family` | strips the 4 removed imports (keeps `NotificationCenter`) | remaining usages → migrate to `Toast` |
+| `input-externalLabel-to-label` | `<Input>`/`<PhoneInput>` `externalLabel`→`label`, Input floating `label`→`floatingLabel` | ambiguous `<Input label>`-only usages |
+| `attachment-onUpload-to-onChange` | `<Attachment>` `onUpload`→`onChange` (pure rename) | — |
+| `selectInput-onSelect-to-onChange` | `onSelect`→`onChange` when safe | `onSelect`+`onChange` clashes; `register`/`name` rewiring |
+| `tabs-defaultIndex-to-defaultValue` | numeric `defaultIndex={N}`→`defaultValue="tab-N"` | dynamic (non-literal) indices |

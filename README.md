@@ -162,7 +162,7 @@ Reaching for the subpath makes the dependency boundary explicit and keeps the 3D
 | Component | Purpose |
 |---|---|
 | `Button` | `variant: 'primary' \| 'secondary' \| 'danger' \| 'tabButton' \| 'tabButtonWhite'`, `buttonSize: 'small' \| 'large' \| 'tabSize'`, `loadingType`, `disabled`. |
-| `Input` | Dark text input with `state='default'\|'active'`, `isError` + `errorMessage` (wired to `aria-invalid`/`aria-describedby`), `externalLabel`. |
+| `Input` | Dark text input with `state='default'\|'active'`, `isError` + `errorMessage` (wired to `aria-invalid`/`aria-describedby`), static `label` + floating `floatingLabel`. |
 | `TextArea` | Same contract as `Input`, multi-line. |
 | `Checkbox` | Controlled; `label` rendered inside a native `<label>`. |
 | `Toggle` | `checked` + `onChange(boolean)`, `size: 'sm' \| 'md'`. |
@@ -269,7 +269,6 @@ Reaching for the subpath makes the dependency boundary explicit and keeps the 3D
 | `Banner` | Page-level sticky banner (top/bottom). Variants like `Alert` but persistent and viewport-anchored — distinct from inline `Alert` and legal `CookieBanner`. |
 | `Spotlight` | Onboarding/feature highlight — clip-path-style cutout around a `targetRef` + tooltip card with optional Next/Skip + step counter. |
 | `Toaster` + `toast` | Global toast API — `toast.success()`/`.error()`/`.info()`/`.warning()`/`.loading()` + `toast.promise()`. Compact layout, auto-sized to content. |
-| `Notification` + `NotificationWrapper` + `NotificationContext` + `NotificationContextProvider` | Legacy notification API (kept for back-compat). Prefer `Toast`. |
 | `NotificationCenter` | Bell icon + dropdown with notifications list, badge count, mark-as-read / mark-all-read / clear-all. Prop-driven (consumer owns data fetching). |
 | `EmptyState` | Empty placeholder — `variant: 'inline' \| 'card'`, optional icon/description/action. |
 | `ProgressBar` | Determinate bar with variants + optional animation. |

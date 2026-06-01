@@ -1,11 +1,11 @@
 # codemod-v2 — `@sagtech-infra/ui` v2.0 migration codemods
 
-> 🚧 **SCAFFOLD — NOT FOR PRODUCTION USE UNTIL v2.0.**
-> These transforms target API changes scheduled for the v2.0 breaking-cleanup
-> release. The library is currently on the v1.x line; **most transforms are
-> stubs**. Do not run these against a real codebase yet — the v2.0 API is not
-> frozen, and the stubs are intentional no-ops. This directory exists so the
-> migration tooling can be designed, reviewed, and tested ahead of v2.0.
+> These transforms automate the **v2.0 breaking-cleanup** renames and removals.
+> They are **best-effort**: each automates the mechanically-safe rewrite and
+> inserts a banner comment flagging the cases it cannot safely handle (structural
+> migrations, dynamic values, ambiguous props). Run them **once** against a
+> **clean git tree**, always preview with `--dry --print` first, then resolve any
+> flagged comments by hand. See `docs/MIGRATION.md` (v1.9 → v2.0) for before/after.
 >
 > This directory is **not published** (`package.json#files` ships only `dist`,
 > `src/tokens`, `README.md`, `docs/AI_MIGRATION_PROMPT.md`).
@@ -52,32 +52,39 @@ Useful flags:
 
 ## Transforms
 
-| Name | Target | Status |
+| Name | Automates | Flags for manual review |
 |---|---|---|
-| `input-externalLabel-to-label.ts` | `<Input externalLabel>` → `<Input label>` | ✅ example (fully implemented + fixtures) |
-| `attachment-onUpload-to-onChange.ts` | `<Attachment onUpload>` → `<Attachment onChange>` | ✅ example (implemented; ⚠️ signature differs — verify handlers) |
-| `selectInput-onSelect-to-onChange.ts` | `<SelectInput onSelect>` → `onChange` | 🚧 stub |
-| `tabs-defaultIndex-to-defaultValue.ts` | `<Tabs defaultIndex>` → `defaultValue` | 🚧 stub |
-| `remove-notification-family.ts` | remove `Notification`/`NotificationContext`/`NotificationContextProvider`/`NotificationWrapper` | 🚧 stub |
+| `input-externalLabel-to-label.ts` | `<Input>`/`<PhoneInput>` `externalLabel`→`label`; Input floating `label`→`floatingLabel` (only when `externalLabel` is present, so it's idempotent) | ambiguous `<Input label>`-only usages (could be old floating or new static) |
+| `attachment-onUpload-to-onChange.ts` | `<Attachment>` `onUpload`→`onChange` — pure rename, identical signature | — |
+| `selectInput-onSelect-to-onChange.ts` | `onSelect`→`onChange` when no sibling `onChange` | `onSelect`+`onChange` clashes; `register`/`name` (rewire to controlled) |
+| `tabs-defaultIndex-to-defaultValue.ts` | numeric literal `defaultIndex={N}`→`defaultValue="tab-N"` | dynamic (non-literal) `defaultIndex` |
+| `remove-notification-family.ts` | strips the four removed imports (by exact name) | remaining usages → migrate to `Toast` (provider→imperative) |
 
 Notes:
 
-- `attachment-onUpload-to-onChange` renames the prop but the callback signature
-  may differ (`Array<File> | undefined` vs a v2.0 value shape) — it emits a
-  `console.warn` and **requires manual handler verification**.
-- `remove-notification-family` does **not** touch `NotificationCenter`, which is
-  a separate, non-deprecated component.
+- **Best-effort + flagging policy.** Structural migrations cannot be fully
+  automated. Where a transform can't safely rewrite, it leaves the source intact
+  and prepends a banner comment (`codemod-v2: …`) describing the manual step.
+  Search for `codemod-v2:` after running.
+- `input-externalLabel-to-label` rewrites an `<Input>` only when it still carries
+  the unambiguous `externalLabel`, renaming the floating `label`→`floatingLabel`
+  first, then `externalLabel`→`label`. This keeps it safe to run more than once.
+- `remove-notification-family` matches the four removed symbols by **exact name**,
+  so `NotificationCenter` (a separate, non-deprecated component) is never touched.
 
 ## Fixtures
 
 `__testfixtures__/` holds `<name>.input.tsx` / `<name>.output.tsx` pairs that
-demonstrate (and let you verify) a transform. The `input-externalLabel-to-label`
-fixtures also show scoping: `externalLabel` on a non-`Input` component is left
-unchanged.
+demonstrate (and let you verify) every transform — including scoping guards
+(e.g. `externalLabel` / `onUpload` on a non-target component is left unchanged)
+and the flagged branches. Re-run a transform on its `.input.tsx` with
+`--dry --print` to confirm the output matches the `.output.tsx`.
 
 ## See also
 
 - [`docs/MIGRATION.md`](../../docs/MIGRATION.md) — the human migration guide
   (deprecations, replacements, timelines).
-- [`docs/ROADMAP.md`](../../docs/ROADMAP.md) — the **v2.0 — breaking cleanup**
-  section listing every scheduled removal.
+- [`docs/ROADMAP.md`](../../docs/ROADMAP.md) — the **✅ v2.0 — released** section
+  summarising every removal.
+- [`docs/adr/0006-v2-breaking-cleanup-window.md`](../../docs/adr/0006-v2-breaking-cleanup-window.md)
+  — the decision record for the breaking window.

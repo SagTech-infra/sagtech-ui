@@ -55,6 +55,7 @@ new decision.
 | [0003](./0003-optional-peer-dependencies-pattern.md) | Optional peer-dependencies pattern | Accepted | 2026-05 |
 | [0004](./0004-playwright-component-tests-for-geometry.md) | Playwright Component Testing for geometry/pointer/ProseMirror | Accepted | 2026-06 |
 | [0005](./0005-preserve-use-client-directives.md) | Preserve "use client" directives in the published bundle | Accepted | 2026-06 |
+| [0006](./0006-v2-breaking-cleanup-window.md) | v2.0 breaking-cleanup window | Accepted | 2026-06 |
 
 > ADR-0001..0003 are **retrospective** — they document decisions that were
 > already made and shipped (through v1.x). They are recorded now so the

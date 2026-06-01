@@ -223,6 +223,26 @@
 
 ---
 
+## ✅ v2.0 — released 2026-06-01 — breaking cleanup (deprecated API removal + r3f@9)
+
+**MAJOR.** Все накопленные breakings одним окном; имена выровнены под `docs/API_CONVENTIONS.md`. Полная миграция с before/after и codemod-командами — `docs/MIGRATION.md` (v1.9 → v2.0). Решение задокументировано в ADR-0006.
+
+**Removed / renamed (breaking):**
+
+- **`Notification` family удалён** (`Notification`, `NotificationContext`, `NotificationContextProvider`, `NotificationWrapper`; deprecated с v1.1) → `Toast` (`<Toaster/>` + imperative `toast.*`). `NotificationCenter` не затронут.
+- **`label` унифицирован**: `Input` / `PhoneInput` `externalLabel` → `label` (статичный, per canon); старый floating `Input.label` → `floatingLabel`. `Dropzone` не затронут (label не было — расхождение с первоначальным планом).
+- **`Attachment.onUpload` → `onChange`** (сигнатура идентична).
+- **`SelectInput` controlled-only**: удалены `onSelect`, `register`, `name`.
+- **`Tabs.defaultIndex` → `defaultValue`** (`tab-<index>`) на items-фасаде.
+- **3D peers**: `@react-three/fiber >=9`, `@react-three/drei >=10` (React 19 line); `three` остаётся `>=0.160`. `src/r3f.d.ts` удалён (fiber 9 даёт нативный JSX-bridge); полиморфные `Inline`/`Stack` переведены на `React.createElement`, чтобы `ThreeElements` не схлопывал `children` в `never`.
+- **Callback-аудит**: остальная публичная callback-поверхность уже канонична — новых ренеймов нет.
+
+**Codemods** (`scripts/codemod-v2/`, jscodeshift) дописаны до best-effort + flagging с фикстурами: `remove-notification-family`, `input-externalLabel-to-label` (Input+PhoneInput), `attachment-onUpload-to-onChange`, `selectInput-onSelect-to-onChange`, `tabs-defaultIndex-to-defaultValue`. Структурные кейсы (provider→imperative, dynamic index, register/name) помечаются комментом для ручной правки.
+
+**Gate** зелёный: typecheck / lint / test (637 vitest) / build / check:contrast / check:directives / check:size / coverage.
+
+---
+
 ## ✅ v1.9 — released 2026-06-01 — Playwright CT + RSC directives + coverage ratchet
 
 Аддитивный релиз, **zero breaking**. Закрывает осознанно отложенный из v1.8 техдолг качества/тестирования.
@@ -322,26 +342,6 @@
 - Удалены неиспользуемые `apexcharts` / `react-apexcharts` из externals/peer-meta.
 - `size-limit`-баджеты (main / icons / 3d / charts) + `pnpm check:size`.
 - Новый `.github/workflows/ci.yml`: lint / typecheck / test / build / check:contrast / check:size на push + PR.
-
----
-
-## ⚠️ v2.0 — breaking cleanup
-
-Все накопленные breakings одним окном. Каждый пункт сопровождается before/after migration-хинтом; итоговая полная миграция уедет в `docs/MIGRATION.md` при релизе.
-
-- **Удалить `Notification` family** (`Notification`, `NotificationContext`, `NotificationContextProvider`, `NotificationWrapper`). Депрекация объявлена в v1.1.
-  - _Migration_: переход на `Toast` + `Toaster` (см. `docs/COMPONENT_PICKER.md`). `useContext(NotificationContext)` → `toast.success(...)` / `toast.error(...)`.
-- **Унификация `label` prop.** `Input` / `PhoneInput` / `Dropzone` сейчас принимают `externalLabel`. Канон — `label`.
-  - _Migration_: переименовать prop. Кандидат на codemod.
-- **`Attachment.onUpload` → `onChange`.**
-  - _Migration_: переименовать колбэк, сигнатура идентична (`(files: File[]) => void`).
-- **`SelectInput.onSelect` удаляется** (уже `@deprecated`).
-  - _Migration_: `onSelect={fn}` → `onChange={fn}`.
-- **`Tabs.defaultIndex` удаляется** (после v1.3 депрекации).
-  - _Migration_: `defaultIndex={1}` → `value` (controlled) или `defaultValue` (uncontrolled, новый API после v1.3).
-- **Аудит остальных callback-имён** против `docs/API_CONVENTIONS.md` — любые оставшиеся `onUpload` / `onSelect` / `onSubmitForm` к канону.
-- **Removed**: `src/r3f.d.ts`, если к v2.0 уже на r3f@9 (нативный bridge — см. internal sweep 2026-05-05).
-- **Codemod-скрипт** в `scripts/codemod-v2/` (jscodeshift) для автомиграции переименований — каркас и пример уже заведены в v1.8 (`input-externalLabel-to-label` + стабы); к v2.0 дописать стабы и опубликовать в release notes.
 
 ---
 
