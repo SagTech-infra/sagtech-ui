@@ -204,4 +204,57 @@ describe("TreeView", () => {
     fireEvent.keyDown(alpha, { key: "ArrowDown" });
     expect(getRow("Charlie")).toHaveFocus();
   });
+
+  // BUG 1 — type-ahead cycling with repeated same character
+  it("type-ahead cycles f1→f2→f3→f1 when the same letter is pressed repeatedly", () => {
+    const fNodes: TreeNode[] = [
+      { id: "fig", label: "Fig" },
+      { id: "foo", label: "Foo" },
+      { id: "fizz", label: "Fizz" },
+      { id: "mango", label: "Mango" },
+    ];
+    render(<TreeView nodes={fNodes} aria-label="Fruits" />);
+
+    const fig = getRow("Fig");
+    fig.focus();
+
+    // First 'f': active is "Fig" → should cycle to "Foo"
+    fireEvent.keyDown(getRow("Fig"), { key: "f" });
+    expect(getRow("Foo")).toHaveFocus();
+
+    // Second 'f': active is now "Foo" → should cycle to "Fizz"
+    fireEvent.keyDown(getRow("Foo"), { key: "f" });
+    expect(getRow("Fizz")).toHaveFocus();
+
+    // Third 'f': active is now "Fizz" → should wrap back to "Fig"
+    fireEvent.keyDown(getRow("Fizz"), { key: "f" });
+    expect(getRow("Fig")).toHaveFocus();
+  });
+
+  // BUG 2 — lazy load returning [] must not leave node aria-expanded=true
+  it("lazy-loads [] → node becomes a non-expandable leaf (no aria-expanded, no spinner)", async () => {
+    const loadChildren = vi.fn().mockResolvedValue([]);
+    const lazyTree: TreeNode[] = [
+      { id: "empty-branch", label: "Empty Branch", hasChildren: true },
+    ];
+    render(
+      <TreeView nodes={lazyTree} aria-label="Lazy Empty" loadChildren={loadChildren} />,
+    );
+    const row = getRow("Empty Branch");
+    // Before expanding: has aria-expanded (it's declared as having children)
+    expect(
+      screen.getByText("Empty Branch").closest('[role="treeitem"]'),
+    ).toHaveAttribute("aria-expanded");
+
+    fireEvent.keyDown(row, { key: "ArrowRight" });
+
+    // Wait for the promise to resolve and state to settle
+    await act(async () => {});
+
+    // After empty resolve: node is no longer expandable → no aria-expanded
+    const treeitem = screen.getByText("Empty Branch").closest('[role="treeitem"]')!;
+    expect(treeitem).not.toHaveAttribute("aria-expanded");
+    // No spinner
+    expect(screen.queryByTestId("tree-loading-empty-branch")).toBeNull();
+  });
 });

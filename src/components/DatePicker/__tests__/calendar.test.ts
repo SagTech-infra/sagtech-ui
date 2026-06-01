@@ -3,6 +3,8 @@ import {
   formatDisplayDate,
   formatMonthLabel,
   getWeekdayLabels,
+  getFirstDayOfWeek,
+  getCalendarDays,
 } from '../calendar';
 
 describe('getWeekdayLabels', () => {
@@ -10,10 +12,13 @@ describe('getWeekdayLabels', () => {
     expect(getWeekdayLabels('en-US')).toHaveLength(7);
   });
 
-  it('en-US first label is the Monday short name', () => {
+  it('en-US first label is locale-driven (Sunday-first → Sun)', () => {
     const labels = getWeekdayLabels('en-US');
-    // Monday short name in en-US is "Mon"; match case-insensitively on leading M
-    expect(labels[0]).toMatch(/^M/i);
+    // en-US is Sunday-first; the first label should be the Sunday short name
+    const sunLabel = new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(
+      new Date(Date.UTC(2024, 0, 7)), // 2024-01-07 is a Sunday
+    );
+    expect(labels[0]).toBe(sunLabel);
   });
 
   it('en-US labels are all non-empty strings', () => {
@@ -65,6 +70,90 @@ describe('formatMonthLabel', () => {
   it('December 2025 contains December and 2025', () => {
     expect(formatMonthLabel(2025, 11, 'en-US')).toMatch(/December/);
     expect(formatMonthLabel(2025, 11, 'en-US')).toMatch(/2025/);
+  });
+});
+
+describe('getFirstDayOfWeek', () => {
+  it('returns 1 (Monday) for de-DE', () => {
+    // Germany is Monday-first
+    const result = getFirstDayOfWeek('de-DE');
+    expect(result).toBe(1);
+  });
+
+  it('returns 0 (Sunday) for en-US', () => {
+    // US is Sunday-first
+    const result = getFirstDayOfWeek('en-US');
+    expect(result).toBe(0);
+  });
+
+  it('falls back to 1 (Monday) when weekInfo is unavailable', () => {
+    // Simulate engine without Intl weekInfo
+    const origIntlLocale = globalThis.Intl.Locale;
+    // @ts-expect-error overriding for test
+    globalThis.Intl.Locale = class {
+      constructor() {}
+      // no weekInfo property
+    };
+    try {
+      expect(getFirstDayOfWeek('en-US')).toBe(1);
+    } finally {
+      globalThis.Intl.Locale = origIntlLocale;
+    }
+  });
+});
+
+describe('getWeekdayLabels with weekStartsOn', () => {
+  it('weekStartsOn=0 puts Sunday first', () => {
+    const labels = getWeekdayLabels('en-US', 0);
+    const sunLabel = new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(
+      new Date(Date.UTC(2024, 0, 7)), // 2024-01-07 is a Sunday
+    );
+    expect(labels[0]).toBe(sunLabel);
+  });
+
+  it('weekStartsOn=1 puts Monday first', () => {
+    const labels = getWeekdayLabels('en-US', 1);
+    const monLabel = new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(
+      new Date(Date.UTC(2024, 0, 1)), // 2024-01-01 is a Monday
+    );
+    expect(labels[0]).toBe(monLabel);
+  });
+
+  it('cache key is locale|weekStartsOn — different weekStartsOn returns different array', () => {
+    const mon = getWeekdayLabels('en-US', 1);
+    const sun = getWeekdayLabels('en-US', 0);
+    expect(mon[0]).not.toBe(sun[0]);
+  });
+
+  it('same locale+weekStartsOn returns same array reference (memoized)', () => {
+    const a = getWeekdayLabels('en-US', 0);
+    const b = getWeekdayLabels('en-US', 0);
+    expect(a).toBe(b);
+  });
+});
+
+describe('getCalendarDays with weekStartsOn', () => {
+  // January 2026: starts on a Thursday (day=4)
+  it('Monday-first (weekStartsOn=1): first cell is Mon 29 Dec 2025', () => {
+    const days = getCalendarDays(2026, 0, undefined, undefined, 1);
+    // firstDay offset = (4 - 1 + 7) % 7 = 3 → 3 leading days from prev month
+    expect(days[0].date.getDate()).toBe(29);
+    expect(days[0].date.getMonth()).toBe(11); // December
+    expect(days[0].isCurrentMonth).toBe(false);
+  });
+
+  it('Sunday-first (weekStartsOn=0): first cell is Sun 28 Dec 2025', () => {
+    const days = getCalendarDays(2026, 0, undefined, undefined, 0);
+    // firstDay offset = (4 - 0 + 7) % 7 = 4 → 4 leading days
+    expect(days[0].date.getDate()).toBe(28);
+    expect(days[0].date.getMonth()).toBe(11); // December
+    expect(days[0].isCurrentMonth).toBe(false);
+  });
+
+  it('no weekStartsOn arg preserves existing (backward-compat) behaviour', () => {
+    // Old callers pass no 5th arg — should not throw and return 42 cells
+    const days = getCalendarDays(2026, 0);
+    expect(days).toHaveLength(42);
   });
 });
 

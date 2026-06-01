@@ -32,6 +32,13 @@ export interface UseTypeaheadOptions<T> {
   onMatch: (item: T) => void;
   /** Milliseconds of inactivity before the buffer resets. Default `800`. */
   resetMs?: number;
+  /**
+   * Returns the currently-active/focused item so repeated same-character
+   * presses cycle through all matches after it (ARIA APG type-ahead).
+   * When omitted the hook falls back to finding the first match from the
+   * list start (backward-compatible behaviour).
+   */
+  getActiveItem?: () => T | null;
 }
 
 export interface UseTypeaheadResult {
@@ -46,7 +53,7 @@ const DEFAULT_RESET_MS = 800;
 export function useTypeahead<T>(
   options: UseTypeaheadOptions<T>,
 ): UseTypeaheadResult {
-  const { items, getText, onMatch, resetMs = DEFAULT_RESET_MS } = options;
+  const { items, getText, onMatch, resetMs = DEFAULT_RESET_MS, getActiveItem } = options;
 
   const bufferRef = useRef("");
   const timerRef = useRef<number | null>(null);
@@ -55,9 +62,11 @@ export function useTypeahead<T>(
   const itemsRef = useRef(items);
   const getTextRef = useRef(getText);
   const onMatchRef = useRef(onMatch);
+  const getActiveItemRef = useRef(getActiveItem);
   itemsRef.current = items;
   getTextRef.current = getText;
   onMatchRef.current = onMatch;
+  getActiveItemRef.current = getActiveItem;
 
   const clearTimer = useCallback(() => {
     if (timerRef.current !== null) {
@@ -82,9 +91,40 @@ export function useTypeahead<T>(
       }, resetMs);
 
       const buffer = bufferRef.current;
-      const match = itemsRef.current.find((item) =>
-        getTextRef.current(item).toLowerCase().startsWith(buffer),
-      );
+      const currentItems = itemsRef.current;
+      const getText = getTextRef.current;
+
+      // ARIA APG cycling: when the buffer is all the same character (e.g. "f",
+      // "ff", "fff"), search for the next item whose text starts with that
+      // single character AFTER the currently-active item, wrapping around.
+      const isAllSameChar =
+        buffer.length >= 1 && buffer.split("").every((c) => c === buffer[0]);
+
+      let match: T | undefined;
+
+      if (isAllSameChar && getActiveItemRef.current) {
+        const singleChar = buffer[0];
+        const activeItem = getActiveItemRef.current();
+        const activeIdx =
+          activeItem !== null && activeItem !== undefined
+            ? currentItems.indexOf(activeItem)
+            : -1;
+
+        // Search from the item AFTER the active one, wrapping around.
+        const len = currentItems.length;
+        for (let offset = 1; offset <= len; offset++) {
+          const candidate = currentItems[(activeIdx + offset) % len];
+          if (getText(candidate).toLowerCase().startsWith(singleChar)) {
+            match = candidate;
+            break;
+          }
+        }
+      } else {
+        match = currentItems.find((item) =>
+          getText(item).toLowerCase().startsWith(buffer),
+        );
+      }
+
       if (match !== undefined) {
         onMatchRef.current(match);
       }

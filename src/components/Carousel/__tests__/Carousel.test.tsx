@@ -122,6 +122,43 @@ describe("Carousel", () => {
     expect(onIndexChange).toHaveBeenCalledWith(1);
   });
 
+  // BUG 3 — autoplay must stop firing when loop=false and at last slide
+  it("autoplay stops ticking at the last slide when loop=false", () => {
+    vi.useFakeTimers();
+    const onIndexChange = vi.fn();
+    render(
+      <Carousel autoplay={1000} loop={false} onIndexChange={onIndexChange}>
+        {slides}
+      </Carousel>,
+    );
+    // Advance to last slide (index 2)
+    act(() => { vi.advanceTimersByTime(1000); }); // → 1
+    act(() => { vi.advanceTimersByTime(1000); }); // → 2
+    onIndexChange.mockClear();
+
+    // Now at last slide — further ticks must NOT call onIndexChange
+    act(() => { vi.advanceTimersByTime(3000); });
+    expect(onIndexChange).not.toHaveBeenCalled();
+  });
+
+  it("autoplay wraps when loop=true (still fires at last slide)", () => {
+    vi.useFakeTimers();
+    const onIndexChange = vi.fn();
+    render(
+      <Carousel autoplay={1000} loop onIndexChange={onIndexChange}>
+        {slides}
+      </Carousel>,
+    );
+    // Advance to last slide
+    act(() => { vi.advanceTimersByTime(1000); });
+    act(() => { vi.advanceTimersByTime(1000); });
+    onIndexChange.mockClear();
+
+    // One more tick must wrap to 0
+    act(() => { vi.advanceTimersByTime(1000); });
+    expect(onIndexChange).toHaveBeenCalledWith(0);
+  });
+
   it("hides dots and arrows when disabled via props", () => {
     render(
       <Carousel showDots={false} showArrows={false}>

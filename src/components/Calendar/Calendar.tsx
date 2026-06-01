@@ -6,6 +6,7 @@ import { useLocale } from "@/providers/LocaleContext";
 import {
   getCalendarDays,
   getWeekdayLabels,
+  getFirstDayOfWeek,
   formatMonthLabel,
   isSameDay,
   isToday,
@@ -23,6 +24,11 @@ export interface CalendarProps {
   maxDate?: Date;
   /** BCP-47 locale; falls back to LocaleProvider, then 'en-US'. */
   locale?: string;
+  /**
+   * Override the first day of the week (0=Sunday … 6=Saturday).
+   * When omitted the locale-derived value from Intl is used.
+   */
+  weekStartsOn?: number;
   className?: string;
   ref?: Ref<HTMLDivElement>;
 }
@@ -77,11 +83,13 @@ export default function Calendar({
   minDate,
   maxDate,
   locale: localeProp,
+  weekStartsOn: weekStartsOnProp,
   className,
   ref,
 }: CalendarProps) {
   const { locale: ctxLocale, dir } = useLocale();
   const locale = localeProp ?? ctxLocale;
+  const weekStartsOn = weekStartsOnProp ?? getFirstDayOfWeek(locale);
 
   const [viewYear, setViewYear] = useState(() =>
     value ? value.getFullYear() : new Date().getFullYear(),
@@ -91,11 +99,11 @@ export default function Calendar({
   );
 
   const days = useMemo(
-    () => getCalendarDays(viewYear, viewMonth, minDate, maxDate),
-    [viewYear, viewMonth, minDate, maxDate],
+    () => getCalendarDays(viewYear, viewMonth, minDate, maxDate, weekStartsOn),
+    [viewYear, viewMonth, minDate, maxDate, weekStartsOn],
   );
 
-  const weekdays = useMemo(() => getWeekdayLabels(locale), [locale]);
+  const weekdays = useMemo(() => getWeekdayLabels(locale, weekStartsOn), [locale, weekStartsOn]);
 
   const monthLabel = useMemo(
     () => formatMonthLabel(viewYear, viewMonth, locale),

@@ -8,15 +8,48 @@ import { LocaleProvider } from "@/providers/LocaleProvider";
 const JAN_2026 = new Date(2026, 0, 15);
 
 describe("Calendar", () => {
-  it("renders the current month grid with a Monday-first weekday header", () => {
+  it("renders the current month grid with a locale-driven weekday header (en-US → Sunday-first)", () => {
     render(<Calendar value={JAN_2026} />);
-    // 7 weekday columnheaders, Monday first (en-US short label starts with "M").
+    // 7 weekday columnheaders
     const headers = document.querySelectorAll(".grid-cols-7 .text-10");
     expect(headers).toHaveLength(7);
-    expect(headers[0].textContent).toMatch(/^M/i);
+    // en-US is Sunday-first; first header should be the Sunday short label
+    const sunLabel = new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(
+      new Date(Date.UTC(2024, 0, 7)), // 2024-01-07 is a Sunday
+    );
+    expect(headers[0].textContent).toBe(sunLabel);
     // Month label is rendered.
     const label = document.querySelector("span.font-semibold");
     expect(label?.textContent).toMatch(/January 2026/);
+  });
+
+  it("de-DE locale renders Monday-first weekday header", () => {
+    render(
+      <LocaleProvider locale="de-DE">
+        <Calendar value={JAN_2026} />
+      </LocaleProvider>,
+    );
+    const headers = document.querySelectorAll(".grid-cols-7 .text-10");
+    expect(headers).toHaveLength(7);
+    // de-DE is Monday-first; first header should be Monday short label in German
+    const monLabel = new Intl.DateTimeFormat("de-DE", { weekday: "short" }).format(
+      new Date(Date.UTC(2024, 0, 1)), // 2024-01-01 is a Monday
+    );
+    expect(headers[0].textContent).toBe(monLabel);
+  });
+
+  it("weekStartsOn prop overrides the locale-derived value", () => {
+    // Force Sunday-first on a Monday-first locale
+    render(
+      <LocaleProvider locale="de-DE">
+        <Calendar value={JAN_2026} weekStartsOn={0} />
+      </LocaleProvider>,
+    );
+    const headers = document.querySelectorAll(".grid-cols-7 .text-10");
+    const sunLabel = new Intl.DateTimeFormat("de-DE", { weekday: "short" }).format(
+      new Date(Date.UTC(2024, 0, 7)),
+    );
+    expect(headers[0].textContent).toBe(sunLabel);
   });
 
   it("calls onChange with the clicked day's Date", () => {

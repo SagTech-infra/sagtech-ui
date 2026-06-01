@@ -87,8 +87,9 @@ export default function Carousel({
   const goNext = useCallback(() => goTo(activeIndex + 1), [goTo, activeIndex]);
 
   const autoplayInterval = resolveAutoplayInterval(autoplay);
+  const atEndNoLoop = !loop && activeIndex >= maxIndex;
   const autoplayEnabled =
-    autoplayInterval !== null && !reduceMotion && !paused && pageCount > 1;
+    autoplayInterval !== null && !reduceMotion && !paused && pageCount > 1 && !atEndNoLoop;
 
   useEffect(() => {
     if (!autoplayEnabled) return;

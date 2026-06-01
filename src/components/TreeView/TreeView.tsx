@@ -116,10 +116,17 @@ export default function TreeView({
 
   const isExpandable = useCallback(
     (node: TreeNode): boolean => {
+      // Once a lazy load has resolved for this node, the actual result overrides
+      // the optimistic `hasChildren` hint — an empty result means the node is a
+      // leaf and must no longer show a twisty or carry aria-expanded.
+      const hasLoaded = Object.prototype.hasOwnProperty.call(loadedChildren, node.id);
+      if (hasLoaded) {
+        return (loadedChildren[node.id]?.length ?? 0) > 0;
+      }
       const kids = childrenOf(node);
       return (kids !== undefined && kids.length > 0) || node.hasChildren === true;
     },
-    [childrenOf],
+    [childrenOf, loadedChildren],
   );
 
   // --- flatten visible nodes in traversal order ---
@@ -173,6 +180,7 @@ export default function TreeView({
       setActiveValue(id);
       focusRow(id);
     },
+    getActiveItem: () => activeValue,
   });
 
   // --- expand / collapse helpers ---

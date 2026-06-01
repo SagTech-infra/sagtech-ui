@@ -24,12 +24,15 @@ describe('DatePicker — default locale (en-US)', () => {
     expect(header.textContent).toMatch(/[A-Za-z]/);
   });
 
-  it('shows en-US weekday headers (Mon-first)', () => {
+  it('shows en-US weekday headers (locale-driven, Sunday-first)', () => {
     render(<DatePicker />);
     openCalendar();
     const headers = document.querySelectorAll('.grid-cols-7 .text-10');
-    // First weekday header should start with M (Monday in en-US)
-    expect(headers[0].textContent).toMatch(/^M/i);
+    // en-US is Sunday-first; first header should be the Sunday short label
+    const sunLabel = new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(
+      new Date(Date.UTC(2024, 0, 7)), // 2024-01-07 is a Sunday
+    );
+    expect(headers[0].textContent).toBe(sunLabel);
   });
 });
 
