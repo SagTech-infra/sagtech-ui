@@ -1,6 +1,6 @@
 {
   "name": "@sagtech-infra/ui",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "SagTech UI component library with Storybook",
   "type": "module",
   "sideEffects": false,
@@ -65,8 +65,11 @@
     "@react-three/fiber": ">=8.16.0",
     "@tanstack/react-virtual": ">=3.0.0",
     "@tiptap/core": ">=2.0.0",
+    "@tiptap/extension-image": ">=2.0.0",
+    "@tiptap/extension-mention": ">=2.0.0",
     "@tiptap/react": ">=2.0.0",
     "@tiptap/starter-kit": ">=2.0.0",
+    "@tiptap/suggestion": ">=2.0.0",
     "@xyflow/react": ">=12.0.0",
     "classnames": "^2.3.0",
     "framer-motion": ">=11.0.0",
@@ -99,10 +102,19 @@
     "@tiptap/core": {
       "optional": true
     },
+    "@tiptap/extension-image": {
+      "optional": true
+    },
+    "@tiptap/extension-mention": {
+      "optional": true
+    },
     "@tiptap/react": {
       "optional": true
     },
     "@tiptap/starter-kit": {
+      "optional": true
+    },
+    "@tiptap/suggestion": {
       "optional": true
     },
     "@xyflow/react": {
@@ -149,13 +161,16 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@tiptap/core": "^3.22.4",
+    "@tiptap/extension-image": "^3.24.0",
+    "@tiptap/extension-mention": "^3.24.0",
+    "@tiptap/pm": "^3.22.4",
     "@tiptap/react": "^3.22.4",
     "@tiptap/starter-kit": "^3.22.4",
+    "@tiptap/suggestion": "^3.24.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/three": "^0.165.0",
     "@xyflow/react": "^12.10.2",
-    "apexcharts": "^5.10.4",
     "classnames": "^2.5.1",
     "eslint": "^10.2.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
@@ -169,7 +184,6 @@
     "postcss": "^8.5.8",
     "prettier": "^3.8.1",
     "react": "^19.2.4",
-    "react-apexcharts": "^2.1.0",
     "react-dom": "^19.2.4",
     "react-force-graph-3d": "^1.24.0",
     "react-hook-form": "^7.72.1",

@@ -32,7 +32,7 @@ There is no local `dev server for the library itself` — Storybook is the dev h
 
 `tsup.config.ts` emits two entry points: `src/index.ts` → `dist/index.{js,cjs,d.ts}` and `src/icons/index.ts` → `dist/icons/index.{js,cjs,d.ts}`, matching the `exports` map in `package.json`.
 
-All React, Next, framer-motion, classnames, and optional peers (swiper, react-hook-form, apexcharts, libphonenumber-js, react-international-phone) are `external`. **When adding a new dependency that should not be bundled into consumer code, add it to both `peerDependencies` and `tsup.config.ts`'s `external` array** — forgetting either leads to duplicate React copies or bundle bloat at the consumer.
+All React, Next, framer-motion, classnames, and optional peers (swiper, react-hook-form, libphonenumber-js, react-international-phone) are `external`. **When adding a new dependency that should not be bundled into consumer code, add it to both `peerDependencies` and `tsup.config.ts`'s `external` array** — forgetting either leads to duplicate React copies or bundle bloat at the consumer.
 
 ### Design tokens — Tailwind v4 `@theme` block
 

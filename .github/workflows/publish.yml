@@ -1,4 +1,4 @@
-name: Publish @sagtech/ui
+name: Publish @sagtech-infra/ui
 
 on:
   push:

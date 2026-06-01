@@ -232,7 +232,7 @@ export type {
   PanelResizeHandleProps,
 } from "./components/PanelGroup";
 export { Modal } from "./components/Modal/Modal";
-export type { ModalMotionVariants } from "./components/Modal/Modal";
+export type { ModalMotionVariants } from "./components/Modal/types";
 export {
   ConfirmDialog,
   ConfirmProvider,
@@ -372,6 +372,20 @@ export type {
 } from "./components/CodeBlock/CodeBlock";
 export { default as RichTextEditor } from "./components/RichTextEditor/RichTextEditor";
 export type { RichTextEditorProps } from "./components/RichTextEditor/RichTextEditor";
+export {
+  createMentionExtension,
+  createSlashCommandExtension,
+  createImageUploadExtension,
+  defaultSlashCommands,
+  validateImageFile,
+} from "./components/RichTextEditor/presets";
+export type {
+  MentionItem,
+  SlashCommand,
+  CreateMentionOptions,
+  CreateSlashCommandOptions,
+  CreateImageUploadOptions,
+} from "./components/RichTextEditor/presets";
 export { default as VisualGraphEditor } from "./components/VisualGraphEditor/VisualGraphEditor";
 export type {
   VisualGraphEditorProps,

@@ -40,7 +40,6 @@ pnpm build
 | `next@^15` | `Steps`, `InfoTabs`, `Point`, `CardWrapper` (can be bypassed via `<SagtechUIProvider imageComponent={...} linkComponent={...}>`) |
 | `react-hook-form` | `Form` + `FormField`/`FormLabel`/`FormControl`/`FormError`/`FormHint` |
 | `react-international-phone`, `libphonenumber-js` | `PhoneInput` |
-| `apexcharts`, `react-apexcharts` | `LineChart`, `DonutChart` |
 | `swiper` | `Timeline` |
 | `@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities` | `SortableList` |
 | `@tanstack/react-virtual` | `VirtualList` |
@@ -276,7 +275,7 @@ Reaching for the subpath makes the dependency boundary explicit and keeps the 3D
 | `AnimationButton` | Branded pill-style CTA with hover expand (desktop only). |
 | `CookieBanner` | (also in Layout) |
 | `SliderArrow` | Reusable nav arrow for Swiper carousels. |
-| `LineChart` / `DonutChart` | ApexCharts wrappers with the SagTech palette. |
+| `LineChart` / `DonutChart` | Canvas/SVG charts (theme-aware) with the SagTech palette. |
 
 ### Providers & hooks
 

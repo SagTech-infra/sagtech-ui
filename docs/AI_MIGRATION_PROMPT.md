@@ -91,11 +91,13 @@ Skip any row whose component the app does not use.
 | `Steps`, `InfoTabs`, `Point`, `CardWrapper` (with `href`) | `next` (already there if it's a Next app); else use `<SagtechUIProvider>` (step 6) |
 | `Form` + `FormField`/`FormControl`/`FormError`/etc. | `react-hook-form` |
 | `PhoneInput` | `react-international-phone libphonenumber-js` |
-| `LineChart`, `DonutChart` | `apexcharts react-apexcharts` |
 | `Timeline` | `swiper` |
 | `SortableList` | `@dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities` |
 | `VirtualList` | `@tanstack/react-virtual` |
-| `RichTextEditor` | `@tiptap/core @tiptap/react @tiptap/starter-kit` |
+| `RichTextEditor` (core) | `@tiptap/core @tiptap/react @tiptap/starter-kit` |
+| `createMentionExtension` preset | above + `@tiptap/extension-mention @tiptap/suggestion` |
+| `createSlashCommandExtension` preset | above + `@tiptap/suggestion` |
+| `createImageUploadExtension` preset | above + `@tiptap/extension-image @tiptap/pm` |
 | `VisualGraphEditor` | `@xyflow/react` |
 | `Globe3D`, `Scene3D`, `Mindmap3D` | `three @react-three/fiber @react-three/drei` |
 | `Network3D` | `three @react-three/fiber @react-three/drei react-force-graph-3d` |
@@ -313,8 +315,8 @@ All canvas-based unless noted. `width` accepts number or string (default 100% re
 
 | Component | Backed by | Best for |
 |---|---|---|
-| `LineChart` | ApexCharts | Time-series, multi-series line chart with hover. |
-| `DonutChart` | ApexCharts | Part-to-whole circular breakdown. |
+| `LineChart` | Canvas | Time-series, multi-series line chart with hover. |
+| `DonutChart` | SVG | Part-to-whole circular breakdown. |
 | `AreaChart` | Native canvas | Smoothed trend with gradient fill (Catmull-Rom). Stackable. |
 | `BarChart` | Native canvas | Vertical/horizontal bars; stacked or grouped. |
 | `HeatmapChart` | Native canvas | Matrix of values (cohort retention, traffic by hour-of-day). |
@@ -441,7 +443,7 @@ Distilled from `docs/COMPONENT_PICKER.md`. When in doubt, follow these rules.
 
 | Need | Use |
 |---|---|
-| Time-series line | `LineChart` (Apex) or `AreaChart` (canvas, lighter, no Apex peer) |
+| Time-series line | `LineChart` or `AreaChart` (both canvas, no chart-engine peer) |
 | Multiple lines stacked-area-style | `AreaChart` with `stacked={true}` |
 | Bars (vertical/horizontal/stacked/grouped) | `BarChart` |
 | Donut breakdown | `DonutChart` |
@@ -596,7 +598,7 @@ Run `pnpm typecheck && pnpm test`. **Stop. Get approval.**
 
 For each existing chart:
 
-- Time-series line → `LineChart` (Apex) or `AreaChart` (canvas, lighter — preferred when no `apexcharts` peer is wanted).
+- Time-series line → `LineChart` or `AreaChart` (both canvas, no chart-engine peer needed).
 - Bar → `BarChart`.
 - Donut → `DonutChart`.
 - Heatmap → `HeatmapChart`.
@@ -617,6 +619,7 @@ Install the four optional peers, add components that fit (`Network3D` / `Globe3D
 - Remove leftover wrapper components in the consumer repo that simply re-export the above.
 - Grep for hardcoded hex (`#[0-9A-Fa-f]{3,8}`) and px (`\b\d{1,3}px\b` outside layout-critical contexts). Convert to tokens.
 - Remove any light/dark theme toggle. Set `<html data-theme="dark">` (or remove the attribute) and standardize on the dark palette.
+- Don't pin optional peers you don't use. If no rich-text editing, don't install `@tiptap/*`. If no 3D, don't install `three` / `@react-three/*`. The point of optional peers is paying only for what you import.
 
 Run `pnpm typecheck && pnpm lint && pnpm test && pnpm build`. Final spot-check via `pnpm dev`. Report summary. **Stop. Get approval to merge.**
 
@@ -858,7 +861,7 @@ export default function AppLayout({ children, crumbs }: { children: React.ReactN
 4. **Don't add a light theme.** Dark-mode-only is intentional. Strip any `data-theme` toggles that pivot the palette. (You may keep a "dark / system" UI toggle if it does nothing — but better to delete it.)
 5. **Don't use `Notification`** for new code (`@deprecated` in v1.1, removal in v2.0). Use `Toaster` + `toast`.
 6. **Don't render 3D components on the server.** Add `'use client'` at the top of files that import `Network3D` / `Globe3D` / `Scene3D` / `Mindmap3D`. Or wrap them in `next/dynamic({ ssr: false })`.
-7. **Don't pin optional peers you don't use.** If the app doesn't render charts via Apex, don't install `apexcharts`. If no rich-text, no `@tiptap/*`. The point of optional peers is paying only for what you import.
+7. **Don't pin optional peers you don't use.** If no rich-text editing, don't install `@tiptap/*`. If no 3D, don't install `three` / `@react-three/*`. The point of optional peers is paying only for what you import.
 8. **Don't change product behavior** during the migration. If the existing modal closes on backdrop-click, the replacement should too. Surface unintended differences to the human as findings, not silently "improvements."
 9. **Don't wrap every primitive in a one-line consumer wrapper** ("just to add our class"). The library tokens already cover the brand. Wrappers proliferate and obscure the source.
 10. **Don't leave `console.warn` calls** about missing peer dependencies. If a 3D component prints "install three to use Network3D", install three (or remove the import). Don't ship the warning.
