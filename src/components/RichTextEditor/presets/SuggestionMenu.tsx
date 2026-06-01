@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
+import { useEffect, useRef, forwardRef, useImperativeHandle, useReducer } from 'react';
 import { createPortal } from 'react-dom';
+import { ReactRenderer } from '@tiptap/react';
 import classNames from 'classnames';
 import type { MentionItem, SlashCommand } from './types';
 
@@ -105,19 +106,12 @@ export interface SuggestionPortalHandle {
 export const SuggestionPortal = forwardRef<SuggestionPortalHandle, SuggestionPortalProps>(
   function SuggestionPortal({ items, onSelect, clientRect, dir = 'ltr' }, ref) {
     const menuRef = useRef<HTMLDivElement>(null);
+    // selectedIndex lives in a ref so onKeyDown reads it synchronously without a
+    // stale closure; forceUpdate (a real useReducer dispatch) re-renders so the
+    // SuggestionMenu reflects the new selection. The previous renderRef/countRef
+    // trick never wired up a setState, so the highlight stayed frozen on item 0.
     const selectedRef = useRef(0);
-    // We re-render using a forceUpdate trick because we need the selectedIndex
-    // to be synchronously readable in onKeyDown without a stale closure.
-    const renderRef = useRef<(() => void) | null>(null);
-
-    // selectedIndex is stored as a ref for synchronous keyboard handling,
-    // but we also need to feed it into the rendered component. We use a
-    // separate state counter to force re-renders.
-    const countRef = useRef(0);
-    const forceUpdate = () => {
-      countRef.current += 1;
-      renderRef.current?.();
-    };
+    const [, forceUpdate] = useReducer((n: number) => n + 1, 0);
 
     // Keep a stable ref to items for keyboard handler
     const itemsRef = useRef(items);
@@ -146,7 +140,7 @@ export const SuggestionPortal = forwardRef<SuggestionPortalHandle, SuggestionPor
 
       el.style.top = `${top}px`;
       el.style.left = `${rect.left}px`;
-    });
+    }, [clientRect, items]);
 
     useImperativeHandle(ref, () => ({
       onKeyDown(event: KeyboardEvent): boolean {
@@ -173,10 +167,6 @@ export const SuggestionPortal = forwardRef<SuggestionPortalHandle, SuggestionPor
         return false;
       },
     }));
-
-    // Register a forceUpdate callback so useImperativeHandle can trigger renders
-    const [, setTick] = [countRef.current, (n: number) => { countRef.current = n; }];
-    void setTick;
 
     if (items.length === 0) return null;
 
@@ -210,51 +200,64 @@ export interface SuggestionRendererCallbacks {
  */
 export function createSuggestionRenderer(callbacks: SuggestionRendererCallbacks) {
   return () => {
-    // Dynamic import keeps @tiptap/react out of the module parse at load time
-    // for consumers who don't use suggestions. We use a closure-local ref.
+    // ReactRenderer instance for the mounted SuggestionPortal (typed loosely —
+    // its generic signature varies across TipTap versions).
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let rendererInstance: any = null;
     let portalHandle: SuggestionPortalHandle | null = null;
+    // The TipTap suggestion `command` (range-aware item dispatch) and the live
+    // item list are held in the closure so the portal's onSelect can actually
+    // commit the chosen item. Selecting MUST call `command(item)` — without it
+    // the trigger text stays a "suggestion" decoration and nothing is inserted.
+    let currentItems: (MentionItem | SlashCommand)[] = [];
+    let currentCommand: ((item: MentionItem | SlashCommand) => void) | null = null;
+
+    const handleSelect = (index: number) => {
+      const item = currentItems[index];
+      if (item) currentCommand?.(item);
+      callbacks.onSelectItem(index, currentItems);
+      rendererInstance?.destroy();
+      rendererInstance = null;
+      portalHandle = null;
+    };
 
     return {
       onStart(props: {
         items: (MentionItem | SlashCommand)[];
         clientRect?: (() => DOMRect | null) | null;
         editor: unknown;
+        command?: (item: MentionItem | SlashCommand) => void;
       }) {
-        // Lazy import ReactRenderer to avoid bundling @tiptap/react at module level
-        void import('@tiptap/react').then(({ ReactRenderer }) => {
-          const handle = { current: null as SuggestionPortalHandle | null };
+        currentItems = props.items;
+        currentCommand = props.command ?? null;
 
-          rendererInstance = new ReactRenderer(SuggestionPortal, {
-            // @ts-expect-error — editor type varies across TipTap versions
-            editor: props.editor,
-            props: {
-              items: props.items,
-              clientRect: props.clientRect ?? null,
-              dir: callbacks.dir ?? 'ltr',
-              ref: (h: SuggestionPortalHandle | null) => {
-                handle.current = h;
-                portalHandle = h;
-              },
-              onSelect: (index: number) => {
-                callbacks.onSelectItem(index, props.items);
-                rendererInstance?.destroy();
-                rendererInstance = null;
-              },
+        // Mount synchronously. @tiptap/react is a required peer that is already
+        // statically imported by RichTextEditor itself, so a dynamic import here
+        // bought nothing (same chunk) and opened a race: a keypress arriving
+        // before the promise resolved found portalHandle === null and fell
+        // through to TipTap's default Enter handling instead of selecting.
+        rendererInstance = new ReactRenderer(SuggestionPortal, {
+          // @ts-expect-error — editor type varies across TipTap versions
+          editor: props.editor,
+          props: {
+            items: props.items,
+            clientRect: props.clientRect ?? null,
+            dir: callbacks.dir ?? 'ltr',
+            ref: (h: SuggestionPortalHandle | null) => {
+              portalHandle = h;
             },
-          });
-
-          // The ReactRenderer mounts synchronously — portalHandle may already
-          // be set via the ref callback above.
-          if (handle.current) portalHandle = handle.current;
+            onSelect: handleSelect,
+          },
         });
       },
 
       onUpdate(props: {
         items: (MentionItem | SlashCommand)[];
         clientRect?: (() => DOMRect | null) | null;
+        command?: (item: MentionItem | SlashCommand) => void;
       }) {
+        currentItems = props.items;
+        if (props.command) currentCommand = props.command;
         if (!rendererInstance) return;
         rendererInstance.updateProps({
           items: props.items,

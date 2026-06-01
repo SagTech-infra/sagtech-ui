@@ -67,12 +67,14 @@ export function createMentionExtension(opts: CreateMentionOptions) {
               items: props.items,
               clientRect: props.clientRect,
               editor: props.editor,
+              command: (item) => props.command(item as MentionItem),
             });
           },
           onUpdate(props: SuggestionProps<MentionItem>) {
             inner.onUpdate({
               items: props.items,
               clientRect: props.clientRect,
+              command: (item) => props.command(item as MentionItem),
             });
           },
           onKeyDown(props: SuggestionKeyDownProps): boolean {

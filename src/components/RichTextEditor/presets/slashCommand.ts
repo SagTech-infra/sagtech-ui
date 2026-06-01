@@ -126,12 +126,14 @@ export function createSlashCommandExtension(opts: CreateSlashCommandOptions = {}
                   items: props.items,
                   clientRect: props.clientRect,
                   editor: props.editor,
+                  command: (item) => props.command(item as SlashCommand),
                 });
               },
               onUpdate(props: SuggestionProps<SlashCommand>) {
                 inner.onUpdate({
                   items: props.items,
                   clientRect: props.clientRect,
+                  command: (item) => props.command(item as SlashCommand),
                 });
               },
               onKeyDown(props: SuggestionKeyDownProps): boolean {
