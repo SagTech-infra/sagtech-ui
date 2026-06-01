@@ -153,3 +153,35 @@ consumer-facing breaking changes see [`MIGRATION.md`](./MIGRATION.md).
 - test: pass (164/164)
 - typecheck: pass
 - build: pass (no warnings)
+
+## 2026-06-01 — v1.7.0 release sweep
+
+### Added
+
+- **`createMentionExtension({ items, char })`** (new export from main entry) — `@`-trigger TipTap extension with an in-house suggestion popover (`ReactRenderer` + ProseMirror `clientRect`; no `floating-ui` dependency). `items` accepts a sync `MentionItem[]` or an async fetcher `(query: string) => Promise<MentionItem[]>`. Requires new optional peer `@tiptap/extension-mention` + `@tiptap/suggestion`.
+- **`createSlashCommandExtension({ commands })` + `defaultSlashCommands`** (new exports from main entry) — `/`-command menu built on `@tiptap/suggestion`. `defaultSlashCommands` covers H2, H3, bullet list, ordered list, quote, code. Requires new optional peer `@tiptap/suggestion`.
+- **`createImageUploadExtension({ upload, accept, maxSize, onError })` + `validateImageFile`** (new exports from main entry) — paste/drop image handling with file-type and file-size validation at the boundary before upload. `upload: (file: File) => Promise<string>` returns the final URL; inline base64 fallback when no uploader is provided. Errors reported via `onError` — never silently swallowed. Requires new optional peer `@tiptap/extension-image`.
+- **Three new optional peers** declared in all four required places (`peerDependencies >=2.0.0`, `peerDependenciesMeta.optional: true`, `tsup.config.ts` `external`, `.size-limit` ignore): `@tiptap/extension-mention`, `@tiptap/suggestion`, `@tiptap/extension-image`. Needed only when the matching preset is used.
+- **`Calendar.weekStartsOn` prop** — explicit override for first day of week. Without the prop, `Calendar` derives the value from `Intl.Locale().weekInfo` (Monday fallback for environments that don't support `weekInfo`). en-US now correctly defaults to Sunday. `DatePicker` and `DateRangePicker` consume the same util and are consistent.
+
+### Fixed
+
+- **`TreeView` type-ahead cycling** — pressing a letter key repeatedly now cycles through all items sharing the same first character (matches ARIA APG spec). Previously stopped at the first match.
+- **`TreeView` lazy empty-loader** — a lazy node whose loader resolves to `[]` now collapses to a leaf node and removes `aria-expanded`. Previously left the node in an expanded-but-empty dead-end state.
+- **`Carousel` autoplay with `loop=false`** — autoplay now stops at the last slide. Previously wrapped around even when `loop` was `false`.
+- **`apexcharts` / `react-apexcharts` removed from devDependencies** — `LineChart` and `DonutChart` are pure canvas/SVG implementations; they never used the ApexCharts API. Chart-related docs corrected.
+- **Publish workflow display name** renamed to `@sagtech-infra/ui` (cosmetic — no functional change to the publish step).
+
+### Refactored
+
+- **RSC hygiene — `Modal`, `Drawer`, `ConfirmDialog`**: pure types and constants extracted into sibling non-client files so Server Components can import types without pulling in the client boundary. Runtime behavior and public API unchanged.
+- **RSC hygiene — providers** (`SagtechUIProvider`, `ThemeProvider`, `LocaleProvider`, `UIComponentsProvider`): same split — types live in non-client modules, the `'use client'` directive stays only on the provider implementation. Runtime-neutral.
+
+### Toolchain status
+
+- lint: pass (0 errors, 0 warnings)
+- test: pass (600/600)
+- typecheck: pass
+- build: pass (no warnings)
+- check:contrast: pass (AA both themes)
+- check:size: pass (main entry 415/515 KB gzip)

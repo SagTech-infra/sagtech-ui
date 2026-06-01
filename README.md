@@ -44,6 +44,8 @@ pnpm build
 | `@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities` | `SortableList` |
 | `@tanstack/react-virtual` | `VirtualList` |
 | `@tiptap/react`, `@tiptap/core`, `@tiptap/starter-kit` | `RichTextEditor` |
+| `@tiptap/extension-mention`, `@tiptap/suggestion` | `RichTextEditor` — `createMentionExtension` / `createSlashCommandExtension` presets |
+| `@tiptap/extension-image` | `RichTextEditor` — `createImageUploadExtension` preset |
 | `@xyflow/react` | `VisualGraphEditor` |
 | `react-resizable-panels` | `PanelGroup` / `Panel` / `PanelResizeHandle` |
 | `three`, `@react-three/fiber`, `@react-three/drei` | `Globe3D`, `Scene3D`, `Mindmap3D` |
@@ -183,7 +185,7 @@ Reaching for the subpath makes the dependency boundary explicit and keeps the 3D
 | `SearchBar` | Debounced search input. |
 | `InlineEdit` | Click-to-edit. Enter/Esc to save/cancel, `multiline` with Cmd+Enter, `validate`, async `onSave`. |
 | `VariablePicker` | Modal with searchable + source-filtered list of template variables. Double-click / Insert returns the picked token. |
-| `RichTextEditor` | TipTap wrapper with bold/italic/strike/heading/list/quote/code/undo/redo toolbar. Extensions prop for custom nodes. |
+| `RichTextEditor` | TipTap wrapper with bold/italic/strike/heading/list/quote/code/undo/redo toolbar. Extensions prop for custom nodes. Extension presets (all tree-shakable, exported from main entry): `createMentionExtension({ items, char })` (@-trigger mentions, sync or async `items`), `createSlashCommandExtension({ commands })` + `defaultSlashCommands` (H2/H3/lists/quote/code, built on `@tiptap/suggestion`), `createImageUploadExtension({ upload, accept, maxSize, onError })` (paste/drop with file-boundary validation, inline base64 fallback) + `validateImageFile` helper. |
 | `SegmentedControl` | iOS-style segmented toggle group. Controlled `value`/`onChange`, sizes, full-width, disabled, keyboard arrow navigation. |
 
 ### Layout & overlays
