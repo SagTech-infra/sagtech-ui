@@ -56,6 +56,7 @@
     "prepublishOnly": "pnpm build",
     "generate:tokens": "node scripts/generate-tokens.mjs",
     "check:contrast": "node scripts/check-contrast.mjs",
+    "check:directives": "node scripts/check-directives.mjs",
     "check:size": "size-limit",
     "prebuild": "node scripts/generate-tokens.mjs"
   },

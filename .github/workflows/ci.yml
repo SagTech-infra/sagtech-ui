@@ -31,4 +31,6 @@ jobs:
 
       - run: pnpm check:contrast
 
+      - run: pnpm check:directives
+
       - run: pnpm check:size

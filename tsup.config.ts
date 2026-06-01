@@ -10,6 +10,14 @@ export default defineConfig({
   format: ['esm', 'cjs'],
   dts: true,
   sourcemap: false,
+  // esbuild strips module-level "use client" directives when bundling, breaking
+  // React Server Components consumers. tsup's pipeline re-strips anything an
+  // esbuild plugin re-injects, so instead we stamp the directive onto the client
+  // entry files after a successful build: the directive on the entry makes the
+  // whole imported graph a client boundary in RSC, so the shared chunks don't
+  // each need it, and icons stays server-safe. See scripts/add-use-client.mjs,
+  // scripts/check-directives.mjs, and ADR-0005.
+  onSuccess: 'node scripts/add-use-client.mjs',
   external: [
     'react',
     'react-dom',
