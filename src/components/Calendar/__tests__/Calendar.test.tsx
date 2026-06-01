@@ -64,11 +64,12 @@ describe("Calendar", () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
-  it("marks the selected day with aria-pressed and aria-selected", () => {
+  it("marks the selected day with aria-pressed (and not the invalid aria-selected on a button)", () => {
     render(<Calendar value={JAN_2026} />);
     const selected = screen.getByRole("button", { name: /January 15, 2026/ });
     expect(selected).toHaveAttribute("aria-pressed", "true");
-    expect(selected).toHaveAttribute("aria-selected", "true");
+    // aria-selected is not valid on role="button"; selection is conveyed via aria-pressed.
+    expect(selected).not.toHaveAttribute("aria-selected");
   });
 
   it("renders locale-driven weekday labels from LocaleProvider (de-DE)", () => {

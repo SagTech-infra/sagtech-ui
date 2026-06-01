@@ -105,9 +105,9 @@ function formatRelative(
   const day = 24 * hour;
   const week = 7 * day;
 
-  if (abs < minute) return 'just now';
   try {
     const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
+    if (abs < minute) return rtf.format(0, 'second');
     if (abs < hour) return rtf.format(Math.round(diffMs / minute), 'minute');
     if (abs < day) return rtf.format(Math.round(diffMs / hour), 'hour');
     if (abs < week) return rtf.format(Math.round(diffMs / day), 'day');

@@ -49,7 +49,8 @@ function clamp(value: number, min: number, max: number): number {
 function roundToStep(value: number, min: number, step: number): number {
   if (step <= 0) return value;
   const steps = Math.round((value - min) / step);
-  return min + steps * step;
+  // toFixed avoids float drift like 0.1 * 3 = 0.30000000000000004
+  return parseFloat((min + steps * step).toFixed(10));
 }
 
 function percent(value: number, min: number, max: number): number {
@@ -121,6 +122,12 @@ export default function Slider(props: SliderProps) {
     },
     [emit, isRange, max, min, step, values],
   );
+
+  // Keep the latest commitThumb reachable from the imperative pointermove
+  // listener, which is registered once per drag and would otherwise close over
+  // a stale `values` (letting range thumbs cross during a fast drag).
+  const commitThumbRef = useRef(commitThumb);
+  commitThumbRef.current = commitThumb;
 
   const nextForKey = (key: string, current: number): number | null => {
     switch (key) {
@@ -194,7 +201,7 @@ export default function Slider(props: SliderProps) {
       thumb.setPointerCapture(event.pointerId);
 
       const move = (moveEvent: globalThis.PointerEvent) => {
-        commitThumb(thumbIndex, valueFromPointer(moveEvent.clientX));
+        commitThumbRef.current(thumbIndex, valueFromPointer(moveEvent.clientX));
       };
       const up = (upEvent: globalThis.PointerEvent) => {
         thumb.releasePointerCapture(upEvent.pointerId);
@@ -279,8 +286,14 @@ export default function Slider(props: SliderProps) {
                 aria-valuemax={maxBound}
                 aria-valuenow={value}
                 aria-disabled={disabled || undefined}
-                aria-label={!labelId ? label : undefined}
-                aria-labelledby={labelId}
+                aria-label={
+                  isRange
+                    ? `${label ?? "Value"} ${index === 0 ? "minimum" : "maximum"}`
+                    : !labelId
+                      ? label
+                      : undefined
+                }
+                aria-labelledby={isRange ? undefined : labelId}
                 onKeyDown={handleKeyDown(index)}
                 onPointerDown={handleThumbPointerDown(index)}
                 style={{ [startSide]: `${valuePct}%` }}

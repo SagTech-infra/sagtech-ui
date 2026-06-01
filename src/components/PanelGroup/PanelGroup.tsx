@@ -34,6 +34,54 @@ export interface PanelGroupProps {
   ref?: Ref<GroupImperativeHandle | null>;
 }
 
+interface InnerGroupProps {
+  direction: 'horizontal' | 'vertical';
+  className?: string;
+  children?: ReactNode;
+  groupRef?: Ref<GroupImperativeHandle | null>;
+}
+
+/**
+ * Renders the lib `Group` with persistence wired in. `useDefaultLayout` runs
+ * here — and only here — so non-persisted groups never invoke it (avoids the
+ * shared-key collision when many PanelGroups mount without an `autoSaveId`).
+ */
+function PersistedGroup({
+  autoSaveId,
+  direction,
+  className,
+  children,
+  groupRef,
+}: InnerGroupProps & { autoSaveId: string }) {
+  const { defaultLayout, onLayoutChanged } = useDefaultLayout({ id: autoSaveId });
+
+  return (
+    <RRGroup
+      groupRef={groupRef}
+      id={autoSaveId}
+      orientation={direction}
+      defaultLayout={defaultLayout}
+      onLayoutChanged={onLayoutChanged}
+      className={classNames('flex', className)}
+    >
+      {children}
+    </RRGroup>
+  );
+}
+
+/** Renders the lib `Group` with no persistence (no `useDefaultLayout`). */
+function PlainGroup({ direction, className, children, groupRef }: InnerGroupProps) {
+  return (
+    <RRGroup
+      groupRef={groupRef}
+      orientation={direction}
+      className={classNames('flex', className)}
+    >
+      {children}
+    </RRGroup>
+  );
+}
+
 export function PanelGroup({
   direction,
   autoSaveId,
@@ -41,25 +89,25 @@ export function PanelGroup({
   children,
   ref,
 }: PanelGroupProps) {
-  // Hooks must run unconditionally; only wire the result when persisting.
-  const persistence = useDefaultLayout({ id: autoSaveId ?? '__panel-group__' });
-  const persistenceProps = autoSaveId
-    ? {
-        id: autoSaveId,
-        defaultLayout: persistence.defaultLayout,
-        onLayoutChanged: persistence.onLayoutChanged,
-      }
-    : {};
+  // Branch at the component boundary so the persistence hook is only invoked
+  // when an `autoSaveId` is provided (keeps hooks-rules valid per render).
+  if (autoSaveId) {
+    return (
+      <PersistedGroup
+        autoSaveId={autoSaveId}
+        direction={direction}
+        className={className}
+        groupRef={ref}
+      >
+        {children}
+      </PersistedGroup>
+    );
+  }
 
   return (
-    <RRGroup
-      groupRef={ref}
-      orientation={direction}
-      className={classNames('flex', className)}
-      {...persistenceProps}
-    >
+    <PlainGroup direction={direction} className={className} groupRef={ref}>
       {children}
-    </RRGroup>
+    </PlainGroup>
   );
 }
 
@@ -116,7 +164,10 @@ export function PanelResizeHandle({
       className={classNames(
         'group relative flex shrink-0 items-center justify-center',
         'bg-border-default transition-colors duration-150',
-        'hover:bg-border-strong data-[separator-active]:bg-border-strong',
+        // react-resizable-panels@4 emits a single `data-separator` whose VALUE
+        // changes ("active" while dragging, "focus" on keyboard focus). Match the
+        // value rather than a never-present `data-separator-active` attribute.
+        'hover:bg-border-strong data-[separator=active]:bg-border-strong data-[separator=focus]:bg-border-strong',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pr_purple',
         direction === 'horizontal' ? 'w-[6px] cursor-col-resize' : 'h-[6px] cursor-row-resize',
         className,

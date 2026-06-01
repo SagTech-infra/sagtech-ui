@@ -82,7 +82,6 @@ export default function Switch({
         ref={ref}
         type="button"
         role="switch"
-        name={name}
         aria-checked={checked}
         aria-labelledby={labelId}
         aria-describedby={descId}
@@ -109,6 +108,9 @@ export default function Switch({
         />
       </button>
       {text}
+      {name && (
+        <input type="hidden" name={name} value={checked ? "on" : "off"} />
+      )}
     </div>
   );
 }

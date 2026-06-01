@@ -35,15 +35,17 @@ export default function TimePicker({
   const hours = value?.hours ?? 0;
   const minutes = value?.minutes ?? 0;
 
+  // Guard against step <= 0 (would yield Infinity options) or > 60.
+  const safeStep = Math.min(Math.max(Math.floor(step) || 1, 1), 60);
   const minuteOptions = useMemo(
     () =>
-      Array.from({ length: Math.ceil(60 / step) }, (_, i) => i * step),
-    [step],
+      Array.from({ length: Math.ceil(60 / safeStep) }, (_, i) => i * safeStep),
+    [safeStep],
   );
 
   // Snap the displayed minute to the nearest lower step so a controlled value
   // off the step grid still selects a valid option.
-  const selectedMinute = minutes - (minutes % step);
+  const selectedMinute = minutes - (minutes % safeStep);
 
   const handleHoursChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     onChange?.({ hours: parseInt(e.target.value, 10), minutes });

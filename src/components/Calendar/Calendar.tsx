@@ -196,7 +196,6 @@ export default function Calendar({
               disabled={day.isDisabled}
               aria-disabled={day.isDisabled || undefined}
               aria-pressed={isSelected}
-              aria-selected={isSelected}
               aria-current={isTodayDay ? "date" : undefined}
               aria-label={dayLabelFmt.format(day.date)}
               className={classNames(

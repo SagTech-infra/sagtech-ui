@@ -71,8 +71,8 @@ describe("alpha handling", () => {
     expect(hexAlpha("#000000FF")).toBe(100);
   });
 
-  it("appends alpha and drops it at full opacity", () => {
-    expect(withAlpha("#3B82F6", 100)).toBe("#3B82F6");
+  it("always emits an 8-digit hex (FF at full opacity)", () => {
+    expect(withAlpha("#3B82F6", 100)).toBe("#3B82F6FF");
     expect(withAlpha("#3B82F6", 0)).toBe("#3B82F600");
     expect(hexAlpha(withAlpha("#3B82F6", 50))).toBe(50);
   });

@@ -92,7 +92,8 @@ export function hexAlpha(hex: string): number {
 export function withAlpha(hex: string, alpha: number): string {
   const base = normalizeHex(hex, false) ?? "#000000";
   const clamped = clamp(alpha, 0, 100);
-  if (clamped >= 100) return base;
+  // Always emit the 8-digit form (FF at 100%) so alpha-mode callers never
+  // silently downgrade to a 6-digit hex.
   const alphaByte = toHexByte((clamped / 100) * 255);
   return `${base}${alphaByte}`;
 }

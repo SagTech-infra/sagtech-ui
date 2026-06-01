@@ -56,10 +56,33 @@ export default function TreeView({
     : internalExpanded;
   const expandedSet = useMemo(() => new Set(expanded), [expanded]);
 
+  // Always-fresh snapshot of `expanded` so async callbacks (lazy load) compute
+  // their payload from the latest value rather than a stale closure capture.
+  const expandedRef = useRef(expanded);
+  expandedRef.current = expanded;
+
   const setExpanded = useCallback(
     (next: string[]) => {
       if (!expandedIsControlled) setInternalExpanded(next);
       onExpandedChange?.(next);
+    },
+    [expandedIsControlled, onExpandedChange],
+  );
+
+  // Adds `id` to the expanded set without dropping concurrent additions:
+  // uncontrolled uses a functional updater, controlled derives from the freshest
+  // value via `expandedRef`.
+  const addExpanded = useCallback(
+    (id: string) => {
+      if (!expandedIsControlled) {
+        setInternalExpanded((prev) =>
+          prev.includes(id) ? prev : [...prev, id],
+        );
+      }
+      const current = expandedRef.current;
+      if (!current.includes(id)) {
+        onExpandedChange?.([...current, id]);
+      }
     },
     [expandedIsControlled, onExpandedChange],
   );
@@ -153,12 +176,41 @@ export default function TreeView({
   });
 
   // --- expand / collapse helpers ---
+
+  // True when `candidate` is the collapsing node or any of its descendants in
+  // the currently-visible traversal (i.e. it sits below `id` and at a deeper
+  // level until the next sibling at `id`'s level).
+  const isWithinSubtree = useCallback(
+    (id: string, candidate: string): boolean => {
+      if (id === candidate) return true;
+      const startIdx = flat.findIndex((f) => f.node.id === id);
+      if (startIdx === -1) return false;
+      const baseLevel = flat[startIdx].level;
+      for (let i = startIdx + 1; i < flat.length; i += 1) {
+        if (flat[i].level <= baseLevel) break;
+        if (flat[i].node.id === candidate) return true;
+      }
+      return false;
+    },
+    [flat],
+  );
+
   const collapse = useCallback(
     (id: string) => {
       if (!expandedSet.has(id)) return;
+      // If the roving active row is a descendant about to leave the visible set,
+      // move the active value up to the collapsing node so Tab re-entry lands on
+      // the logically-current row instead of the fallback first row.
+      if (
+        activeValue !== null &&
+        activeValue !== id &&
+        isWithinSubtree(id, activeValue)
+      ) {
+        setActiveValue(id);
+      }
       setExpanded(expanded.filter((e) => e !== id));
     },
-    [expandedSet, expanded, setExpanded],
+    [expandedSet, expanded, setExpanded, activeValue, isWithinSubtree, setActiveValue],
   );
 
   const expandNode = useCallback(
@@ -176,7 +228,9 @@ export default function TreeView({
         loadChildren(node)
           .then((resolved) => {
             setLoadedChildren((prev) => ({ ...prev, [node.id]: resolved }));
-            setExpanded([...expanded, node.id]);
+            // Use the concurrency-safe adder so a sibling expansion that landed
+            // while this promise was in flight is not clobbered.
+            addExpanded(node.id);
           })
           .finally(() => {
             setLoadingIds((prev) => {
@@ -188,9 +242,9 @@ export default function TreeView({
         return;
       }
 
-      setExpanded([...expanded, node.id]);
+      addExpanded(node.id);
     },
-    [expandedSet, childrenOf, loadChildren, loadingIds, expanded, setExpanded],
+    [expandedSet, childrenOf, loadChildren, loadingIds, addExpanded],
   );
 
   const toggle = useCallback(

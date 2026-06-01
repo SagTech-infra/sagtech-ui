@@ -285,9 +285,13 @@ export default function ColorPicker({
           {label}
         </span>
       )}
-      <Popover trigger={trigger} position="bottom" align="start">
-        {panel}
-      </Popover>
+      {disabled ? (
+        trigger
+      ) : (
+        <Popover trigger={trigger} position="bottom" align="start">
+          {panel}
+        </Popover>
+      )}
       {name && <input type="hidden" name={name} value={value} />}
     </div>
   );
