@@ -47,20 +47,24 @@ const Stack = forwardRef<HTMLElement, StackProps>(
     },
     ref,
   ) => {
-    return (
-      <Tag
-        ref={ref}
-        className={classNames(
+    // Render via createElement: with the polymorphic `as` typed as
+    // React.ElementType, JSX would intersect every intrinsic (incl. r3f's
+    // ThreeElements) and collapse `children` to `never`. createElement sidesteps
+    // that intrinsic-union resolution.
+    return React.createElement(
+      Tag,
+      {
+        ref,
+        className: classNames(
           "flex flex-col",
           gapMap[gap],
           align && alignMap[align],
           justify && justifyMap[justify],
           className,
-        )}
-        {...rest}
-      >
-        {children}
-      </Tag>
+        ),
+        ...rest,
+      },
+      children,
     );
   },
 );
