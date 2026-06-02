@@ -50,9 +50,9 @@ export const colors = {
 } as const;
 
 export const fonts = {
-  orbitron: "var(--font-orbitron), serif",
-  roboto: "var(--font-roboto), serif",
-  manrope: "var(--font-manrope), serif",
+  orbitron: "var(--font-orbitron), sans-serif",
+  roboto: "var(--font-roboto), sans-serif",
+  manrope: "var(--font-manrope), sans-serif",
 } as const;
 
 export const textSizes = {

@@ -40,9 +40,9 @@
   );
 
   /* Font families */
-  --font-orbitron: var(--font-orbitron), serif;
-  --font-roboto: var(--font-roboto), serif;
-  --font-manrope: var(--font-manrope), serif;
+  --font-orbitron: var(--font-orbitron), sans-serif;
+  --font-roboto: var(--font-roboto), sans-serif;
+  --font-manrope: var(--font-manrope), sans-serif;
 
   /* Font sizes */
   --text-64: 64px;
