@@ -8,6 +8,15 @@
 @source "../../../src";
 @source "..";
 
+/* The library's --font-* tokens are self-referential (var(--font-x), <fallback>),
+   expecting the consumer to supply the real fonts. Map them onto the next/font
+   variables loaded in layout.tsx; this also breaks the self-reference cycle. */
+:root {
+  --font-orbitron: var(--font-orbitron-src), sans-serif;
+  --font-manrope: var(--font-manrope-src), sans-serif;
+  --font-roboto: var(--font-roboto-src), sans-serif;
+}
+
 html,
 body {
   min-height: 100%;

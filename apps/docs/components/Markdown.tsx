@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { CodeBlock } from '@sagtech-infra/ui';
@@ -15,10 +16,22 @@ const LANG_MAP: Record<string, Lang> = {
 /** Renders a library /docs markdown file using the real CodeBlock for fenced
     code, so guides share the exact look of component examples. */
 export function Markdown({ source }: { source: string }) {
+  // react-markdown's server/client output can differ (autolinks, code blocks),
+  // tripping hydration. The page shell still SSRs; render the markdown body
+  // client-side after mount so there is nothing to hydrate-mismatch.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) {
+    return <p className="text-14 text-grey_3">Loading…</p>;
+  }
+
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
       components={{
+        // Unwrap the default <pre> so our block <CodeBlock> (a <div>) is not
+        // nested inside <pre> (invalid HTML → hydration mismatch / React #418).
+        pre: ({ children }) => <>{children}</>,
         code({ className, children }) {
           const match = /language-(\w+)/.exec(className ?? '');
           const text = String(children).replace(/\n$/, '');
