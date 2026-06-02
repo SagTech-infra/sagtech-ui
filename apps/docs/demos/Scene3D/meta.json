@@ -1,0 +1,1 @@
+{ "description": "Generic 3D canvas wrapper for ad-hoc react-three-fiber scenes, providing configurable camera, lighting, orbit controls, and background for rendering arbitrary meshes." }

@@ -11,7 +11,6 @@ import React, {
 } from 'react';
 import useOutsideClick from '@/hooks/useOutsideClick';
 import { AnimatePresence } from 'framer-motion';
-import { FieldPath, FieldValues, UseFormRegister } from 'react-hook-form';
 import type { SelectOption } from './types';
 import SelectDropdownLayout from './SelectDropdownLayout';
 import SelectOptionItem from './SelectOption';
@@ -27,42 +26,27 @@ type VariableValuePropType =
       multiple?: true;
     };
 
-type Props<T extends FieldValues> = {
+type Props = {
   options: Array<SelectOption<string>>;
   placeholder: string;
   valueAsPlaceholder?: boolean;
   className?: string;
   disabled?: boolean;
   onChange?: (value: string) => void;
-  /**
-   * @deprecated Use `onChange` instead. Kept for backwards compat.
-   */
-  onSelect?: (value: string) => void;
-  /**
-   * @deprecated `register` is optional; prefer controlled `value` + `onChange`.
-   */
-  register?: UseFormRegister<T>;
-  /**
-   * @deprecated See `register`.
-   */
-  name?: FieldPath<T>;
 } & VariableValuePropType &
   PropsWithChildren;
 
-function Select<T extends FieldValues>({
+function Select({
   options,
   value,
-  name,
   placeholder,
-  register,
   onChange,
-  onSelect,
   children,
   multiple,
   disabled = false,
   valueAsPlaceholder = false,
   className = '',
-}: Props<T>) {
+}: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number>(-1);
   const reactId = useId();
@@ -80,23 +64,15 @@ function Select<T extends FieldValues>({
     setActiveIndex(-1);
   });
 
-  const emitChange = useCallback(
-    (next: string) => {
-      if (onChange) onChange(next);
-      if (onSelect && onSelect !== onChange) onSelect(next);
-    },
-    [onChange, onSelect],
-  );
-
   const handleSelect = useCallback(
     (newValue: string) => {
       if (disabled) return;
-      emitChange(newValue);
+      onChange?.(newValue);
       if (!multiple) {
         closeAndRestore();
       }
     },
-    [emitChange, multiple, disabled, closeAndRestore],
+    [onChange, multiple, disabled, closeAndRestore],
   );
 
   const handleOpen = useCallback(
@@ -206,7 +182,6 @@ function Select<T extends FieldValues>({
     Array.isArray(value) ? value.includes(option.value) : value === option.value;
 
   const unifiedValue = multiple ? (value as string[]).join(', ') : (value as string);
-  const hasRhf = Boolean(register && name);
 
   return (
     <div
@@ -214,22 +189,6 @@ function Select<T extends FieldValues>({
       aria-disabled={disabled || undefined}
       data-disabled={disabled || undefined}
     >
-      {hasRhf && (
-        <select
-          {...register!(name as FieldPath<T>)}
-          id={reactId}
-          name={name as string}
-          multiple={multiple}
-          disabled={disabled}
-          className="hidden"
-        >
-          {options.map((item) => (
-            <option key={item.value} value={item.value}>
-              {item.label}
-            </option>
-          ))}
-        </select>
-      )}
       <SelectFakeInput
         ref={triggerInputRef}
         isOpen={isOpen}
@@ -266,4 +225,4 @@ function Select<T extends FieldValues>({
   );
 }
 
-export default memo(Select) as <T extends FieldValues>(props: Props<T>) => React.ReactElement;
+export default memo(Select) as (props: Props) => React.ReactElement;

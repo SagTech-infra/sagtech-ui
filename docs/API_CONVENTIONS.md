@@ -19,10 +19,10 @@
 
 ## Legacy-разногласия
 
-Некоторые существующие компоненты расходятся с конвенцией. Изменение = breaking, поэтому оставлены как есть с deprecated-алиасами:
+В v2.0 накопленные расхождения с конвенцией устранены (breaking, см. `docs/MIGRATION.md`):
 
-- **`SelectInput`** — `onSelect` помечен `@deprecated`; новый путь `onChange`.
-- **`Attachment`** — `onUpload` (custom) вместо `onChange`. Обозначен как legacy-компонент; для новых полей предпочтительнее `FileDropzone`.
+- **`SelectInput`** — controlled-only: `onSelect` / `register` / `name` удалены, используйте `value` + `onChange`.
+- **`Attachment`** — `onUpload` → `onChange` (сигнатура идентична). Для новых полей по-прежнему предпочтительнее `FileDropzone`.
 
 При создании новых компонентов следуйте таблице выше — не плодите custom-имена без нужды.
 
@@ -34,7 +34,7 @@
 
 ## Labels и a11y
 
-- Label над input-ом: `label?: string` (рендерит `<Typography tag="label">` с `htmlFor`, если применимо). Для трёх legacy-компонентов (`Input`, `PhoneInput`, `Dropzone`) оставлено `externalLabel` до унификации — новые компоненты используют `label`.
+- Label над input-ом: `label?: string` (рендерит `<Typography tag="label">` с `htmlFor`, если применимо). С v2.0 `Input` и `PhoneInput` используют `label` (бывший `externalLabel`); у `Input` старый floating-label теперь `floatingLabel`. `Dropzone` label-пропа не имеет.
 - Hint/help-text: `hint?: string` (под контролом, `text-grey_2`).
 - Для ошибок: `error?: boolean` + `errorMessage?: string`. `aria-invalid` и `aria-describedby` проставляются автоматически.
 

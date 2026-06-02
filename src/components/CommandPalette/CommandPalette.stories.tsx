@@ -187,7 +187,7 @@ const sampleItems: CommandItem[] = [
 ];
 
 const meta = {
-  title: 'Layout/CommandPalette',
+  title: 'Overlays/CommandPalette',
   component: CommandPalette,
   tags: ['autodocs'],
   argTypes: {

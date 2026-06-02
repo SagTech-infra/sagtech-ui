@@ -1,55 +1,34 @@
-'use client';
+"use client";
 
-import React, { forwardRef, useEffect, useId, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
+import React, { forwardRef, useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   getOverlayDepth,
   registerOverlay,
   subscribeOverlayStack,
   unregisterOverlay,
-} from './ModalStack';
+} from "./ModalStack";
+import { useLocale } from "@/providers/LocaleContext";
+import type { ModalMotionVariants, ModalProps } from "./types";
+import { Z_MODAL_BACKDROP, Z_MODAL, Z_STEP, FOCUSABLE_SELECTOR } from "./modal.const";
 
-export interface ModalMotionVariants {
-  initial?: Record<string, unknown>;
-  animate?: Record<string, unknown>;
-  exit?: Record<string, unknown>;
-}
-
-interface ModalProps {
-  children?: React.ReactNode;
-  isOpen?: boolean;
-  toggle?: () => void;
-  size?: 'sm' | 'md';
-  title?: React.ReactNode;
-  footer?: React.ReactNode;
-  /**
-   * Optional overrides for the modal's framer-motion variants. Pass any subset;
-   * unspecified entries fall back to the default scale/opacity behavior.
-   */
-  motionVariants?: ModalMotionVariants;
-  'aria-label'?: string;
-}
-
-const Z_MODAL_BACKDROP = 3000;
-const Z_MODAL = 3001;
-const Z_STEP = 10;
-
-const FOCUSABLE_SELECTOR =
-  'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex]:not([tabindex="-1"]), [contenteditable="true"]';
+export type { ModalMotionVariants };
 
 export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
   {
     children,
     isOpen,
     toggle,
-    size = 'sm',
+    size = "sm",
     title,
     footer,
     motionVariants,
-    'aria-label': ariaLabel,
+    "aria-label": ariaLabel,
+    initialFocusTarget,
   },
   ref,
 ) {
+  const { dir } = useLocale();
   const idRef = useRef<number | null>(null);
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
@@ -65,6 +44,22 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
     const frame = requestAnimationFrame(() => {
       const dialog = dialogRef.current;
       if (!dialog) return;
+      if (initialFocusTarget === null) return;
+      if (initialFocusTarget !== undefined) {
+        let target: HTMLElement | null = null;
+        if (typeof initialFocusTarget === "string") {
+          target = dialog.querySelector<HTMLElement>(initialFocusTarget);
+        } else if (initialFocusTarget instanceof HTMLElement) {
+          target = initialFocusTarget;
+        } else if (
+          typeof initialFocusTarget === "object" &&
+          "current" in initialFocusTarget
+        ) {
+          target = initialFocusTarget.current;
+        }
+        target?.focus();
+        return;
+      }
       const focusable = dialog.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
       (focusable ?? dialog).focus();
     });
@@ -78,7 +73,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
       cancelAnimationFrame(frame);
       previousFocusRef.current?.focus?.();
     };
-  }, [isOpen, toggle]);
+  }, [isOpen, toggle, initialFocusTarget]);
 
   if (!isOpen) return null;
 
@@ -87,12 +82,12 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
   const modalZ = Z_MODAL + depth * Z_STEP;
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key !== 'Tab') return;
+    if (event.key !== "Tab") return;
     const dialog = dialogRef.current;
     if (!dialog) return;
     const focusables = Array.from(
       dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
-    ).filter((el) => !el.hasAttribute('disabled') && el.offsetParent !== null);
+    ).filter((el) => !el.hasAttribute("disabled") && el.offsetParent !== null);
     if (focusables.length === 0) {
       event.preventDefault();
       dialog.focus();
@@ -121,12 +116,14 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
 
   const setRefs = (node: HTMLDivElement | null) => {
     dialogRef.current = node;
-    if (typeof ref === 'function') ref(node);
-    else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+    if (typeof ref === "function") ref(node);
+    else if (ref)
+      (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
   };
 
   return createPortal(
     <div
+      dir={dir}
       data-tid="modal"
       className="fixed inset-0 flex w-full justify-center h-full items-center"
       style={{ zIndex: modalZ }}
@@ -145,20 +142,22 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
         aria-label={labelledBy ? undefined : ariaLabel}
         tabIndex={-1}
         onKeyDown={handleKeyDown}
-        className={`modalAnim mx-8px flex flex-col w-full h-auto max-h-[90vh] rounded-24px border-[1px] border-solid border-black_3 bg-black_1 p-24px shadow-4xl overflow-hidden outline-none ${
-          size === 'md' ? 'xs:w-[670px]' : 'xs:w-[454px]'
+        className={`modalAnim mx-8px flex flex-col w-full h-auto max-h-[90vh] rounded-24px border-[1px] border-solid border-border-default bg-surface-overlay p-24px shadow-4xl overflow-hidden outline-none ${
+          size === "md" ? "xs:w-[670px]" : "xs:w-[454px]"
         } xs:p-32px sm:rounded-40px`}
         style={{ zIndex: modalZ, ...motionStyle }}
       >
         {title && (
           <div
             id={titleId}
-            className="font-manrope text-18 font-bold text-white_4 mb-16px flex-shrink-0"
+            className="font-manrope text-18 font-bold text-fg-primary mb-16px flex-shrink-0"
           >
             {title}
           </div>
         )}
-        <div className="flex-1 overflow-y-auto custom-scrollbar min-h-0">{children}</div>
+        <div className="flex-1 overflow-y-auto custom-scrollbar min-h-0">
+          {children}
+        </div>
         {footer && (
           <div className="mt-24px pt-16px flex items-center justify-end gap-12px flex-shrink-0">
             {footer}

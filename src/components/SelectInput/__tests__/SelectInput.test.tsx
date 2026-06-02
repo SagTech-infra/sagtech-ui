@@ -16,7 +16,7 @@ function openDropdown(container: HTMLElement) {
 }
 
 describe('SelectInput (controlled)', () => {
-  it('renders without register/name (no hidden native select)', () => {
+  it('renders no hidden native select (controlled-only)', () => {
     const { container } = render(
       <SelectInput options={options} value="" onChange={() => {}} placeholder="pick one" />,
     );
@@ -32,16 +32,6 @@ describe('SelectInput (controlled)', () => {
     openDropdown(container);
     fireEvent.click(screen.getByText('Vue'));
     expect(handleChange).toHaveBeenCalledWith('vue');
-  });
-
-  it('falls back to deprecated onSelect when onChange is absent', () => {
-    const legacy = vi.fn();
-    const { container } = render(
-      <SelectInput options={options} value="" onSelect={legacy} placeholder="pick one" />,
-    );
-    openDropdown(container);
-    fireEvent.click(screen.getByText('React'));
-    expect(legacy).toHaveBeenCalledWith('react');
   });
 
   it('supports multiple selection via onChange', () => {
@@ -88,22 +78,5 @@ describe('SelectInput (controlled)', () => {
     );
     const root = container.firstElementChild;
     expect(root).toHaveAttribute('aria-disabled', 'true');
-  });
-
-  it('renders the hidden native <select> when register + name are provided (back-compat)', () => {
-    const register = vi.fn(() => ({ onChange: () => {}, onBlur: () => {}, ref: () => {}, name: 'framework' }));
-    const { container } = render(
-      <SelectInput
-        options={options}
-        value=""
-        onChange={() => {}}
-        placeholder="pick one"
-        register={register as never}
-        name={'framework' as never}
-      />,
-    );
-    const nativeSelect = container.querySelector('select.hidden');
-    expect(nativeSelect).not.toBeNull();
-    expect(register).toHaveBeenCalledWith('framework');
   });
 });

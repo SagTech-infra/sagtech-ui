@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import GanttTimeline, { type GanttItem } from './GanttTimeline';
+import { LocaleProvider } from '@/providers/LocaleProvider';
 
 const meta = {
   title: 'Data Display/GanttTimeline',
@@ -55,6 +56,22 @@ export const Flat: Story = {
   args: {
     items: items.map((it) => ({ ...it, lane: undefined })),
   },
+};
+
+export const RTL: Story = {
+  name: 'RTL (mirrored axis)',
+  args: {
+    items,
+    scale: 'day',
+    laneHeaderLabel: 'مسار',
+  },
+  decorators: [
+    (Story) => (
+      <LocaleProvider locale="ar" dir="rtl">
+        <Story />
+      </LocaleProvider>
+    ),
+  ],
 };
 
 export const WithDetailModal: Story = {

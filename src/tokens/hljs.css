@@ -1,0 +1,99 @@
+/*
+ * Syntax-highlight theming for RichTextEditor code blocks.
+ *
+ * Consumed by `createSyntaxHighlightExtension()` (lowlight / highlight.js),
+ * which renders <pre class="sagtech-code-block"><code> with `.hljs-*` token
+ * spans inside.
+ *
+ * The RichTextEditor surface is dark-only (the wrapper is `bg-black_1`), so the
+ * code block always sits on a dark surface regardless of the active theme.
+ * These rules therefore use raw palette tokens (which have NO light-theme
+ * override) rather than semantic `--color-fg/bg-*` tokens (which flip under
+ * `[data-theme="light"]` and would render dark-on-dark inside the dark editor).
+ */
+
+.sagtech-code-block {
+  background: var(--color-black_2);
+  color: var(--color-white_1);
+  border-radius: var(--radius-10px, 10px);
+  padding: 12px 14px;
+  margin: 8px 0;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.sagtech-code-block code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+/* Comments & quotes */
+.sagtech-code-block .hljs-comment,
+.sagtech-code-block .hljs-quote {
+  color: var(--color-grey_2);
+  font-style: italic;
+}
+
+/* Keywords, tags, control flow */
+.sagtech-code-block .hljs-keyword,
+.sagtech-code-block .hljs-selector-tag,
+.sagtech-code-block .hljs-literal,
+.sagtech-code-block .hljs-section,
+.sagtech-code-block .hljs-name,
+.sagtech-code-block .hljs-tag,
+.sagtech-code-block .hljs-built_in {
+  color: var(--color-sec_purple);
+}
+
+/* Strings & added lines */
+.sagtech-code-block .hljs-string,
+.sagtech-code-block .hljs-regexp,
+.sagtech-code-block .hljs-addition,
+.sagtech-code-block .hljs-selector-attr,
+.sagtech-code-block .hljs-selector-pseudo {
+  color: var(--color-success);
+}
+
+/* Numbers, types, params, meta */
+.sagtech-code-block .hljs-number,
+.sagtech-code-block .hljs-type,
+.sagtech-code-block .hljs-params,
+.sagtech-code-block .hljs-meta,
+.sagtech-code-block .hljs-class .hljs-title {
+  color: var(--color-sec_blue);
+}
+
+/* Function / class titles */
+.sagtech-code-block .hljs-title,
+.sagtech-code-block .hljs-title.function_,
+.sagtech-code-block .hljs-title.class_ {
+  color: var(--color-white_2);
+  font-weight: 600;
+}
+
+/* Attributes, variables, symbols */
+.sagtech-code-block .hljs-attr,
+.sagtech-code-block .hljs-attribute,
+.sagtech-code-block .hljs-variable,
+.sagtech-code-block .hljs-template-variable,
+.sagtech-code-block .hljs-symbol,
+.sagtech-code-block .hljs-bullet,
+.sagtech-code-block .hljs-selector-id,
+.sagtech-code-block .hljs-selector-class {
+  color: var(--color-warning);
+}
+
+/* Inline emphasis */
+.sagtech-code-block .hljs-emphasis {
+  font-style: italic;
+}
+.sagtech-code-block .hljs-strong {
+  font-weight: 700;
+}
+.sagtech-code-block .hljs-link {
+  text-decoration: underline;
+}

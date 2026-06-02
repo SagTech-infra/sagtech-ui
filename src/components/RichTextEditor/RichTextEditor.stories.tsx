@@ -1,6 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import RichTextEditor from './RichTextEditor';
+import { createMentionExtension } from './presets/mention';
+import { createSlashCommandExtension, defaultSlashCommands } from './presets/slashCommand';
+import { createImageUploadExtension } from './presets/imageUpload';
+import { createSyntaxHighlightExtension } from './presets/syntaxHighlight';
 
 const meta = {
   title: 'Form Controls/RichTextEditor',
@@ -50,4 +54,131 @@ export const Disabled: Story = {
       disabled
     />
   ),
+};
+
+// ---------------------------------------------------------------------------
+// Presets
+// ---------------------------------------------------------------------------
+
+const USERS = [
+  { id: 'u1', label: 'Alice Nakamura' },
+  { id: 'u2', label: 'Bob Okafor' },
+  { id: 'u3', label: 'Charlie Dupont' },
+  { id: 'u4', label: 'Diana Chen' },
+  { id: 'u5', label: 'Ethan Rossi' },
+];
+
+export const Mentions: Story = {
+  name: 'Preset — Mentions (@)',
+  render: function MentionsStory() {
+    const [html, setHtml] = useState('<p>Type <strong>@</strong> to mention a team member.</p>');
+    const ext = createMentionExtension({
+      items: (query) =>
+        query
+          ? USERS.filter((u) => u.label.toLowerCase().includes(query.toLowerCase()))
+          : USERS,
+    });
+    return (
+      <RichTextEditor
+        value={html}
+        onChange={setHtml}
+        extensions={[ext]}
+        placeholder="Type @ to mention someone…"
+      />
+    );
+  },
+};
+
+export const SlashCommand: Story = {
+  name: 'Preset — Slash Commands (/)',
+  render: function SlashCommandStory() {
+    const [html, setHtml] = useState('<p>Type <strong>/</strong> to open the command menu.</p>');
+    const ext = createSlashCommandExtension({ commands: defaultSlashCommands });
+    return (
+      <RichTextEditor
+        value={html}
+        onChange={setHtml}
+        extensions={[ext]}
+        placeholder="Type / for commands…"
+      />
+    );
+  },
+};
+
+export const ImageUpload: Story = {
+  name: 'Preset — Image Upload (paste/drop)',
+  render: function ImageUploadStory() {
+    const [html, setHtml] = useState('<p>Paste or drop an image here.</p>');
+    const [error, setError] = useState<string | null>(null);
+
+    const ext = createImageUploadExtension({
+      accept: 'image/*',
+      maxSize: 5 * 1024 * 1024, // 5 MB
+      upload: async (file) => {
+        // Fake upload — use an object URL for demo purposes
+        return URL.createObjectURL(file);
+      },
+      onError: (err) => setError(err.message),
+    });
+
+    return (
+      <div className="flex flex-col gap-8px">
+        <RichTextEditor
+          value={html}
+          onChange={setHtml}
+          extensions={[ext]}
+          placeholder="Paste or drop an image…"
+        />
+        {error && (
+          <p className="text-error text-14 font-manrope">{error}</p>
+        )}
+      </div>
+    );
+  },
+};
+
+export const ImageUploadBase64: Story = {
+  name: 'Preset — Image Upload (base64 fallback)',
+  render: function ImageUploadBase64Story() {
+    const [html, setHtml] = useState('<p>No upload handler — images are inserted as base64.</p>');
+
+    const ext = createImageUploadExtension({
+      accept: 'image/*',
+      maxSize: 2 * 1024 * 1024, // 2 MB
+    });
+
+    return (
+      <RichTextEditor
+        value={html}
+        onChange={setHtml}
+        extensions={[ext]}
+        placeholder="Paste an image to embed as base64…"
+      />
+    );
+  },
+};
+
+const CODE_SAMPLE = `<p>Code blocks are syntax-highlighted via lowlight:</p><pre><code class="language-javascript">function greet(name) {
+  // a friendly greeting
+  const msg = \`Hello, \${name}!\`;
+  return msg.toUpperCase();
+}</code></pre>`;
+
+export const SyntaxHighlight: Story = {
+  name: 'Preset — Syntax Highlight (code block)',
+  render: function SyntaxHighlightStory() {
+    const [html, setHtml] = useState(CODE_SAMPLE);
+    // NOTE: disable StarterKit's built-in codeBlock — CodeBlockLowlight
+    // registers the same node and the two would otherwise collide.
+    const ext = createSyntaxHighlightExtension({ languages: 'common' });
+    return (
+      <RichTextEditor
+        value={html}
+        onChange={setHtml}
+        extensions={[ext]}
+        starterKitOptions={{ codeBlock: false }}
+        placeholder="Write some code…"
+      />
+    );
+  },
 };

@@ -6,7 +6,7 @@ import { TextArea } from '@/components/TextArea/TextArea';
 import Button from '@/components/Button/Button';
 
 const meta = {
-  title: 'Layout/Drawer',
+  title: 'Overlays/Drawer',
   component: Drawer,
   tags: ['autodocs'],
   argTypes: {

@@ -1,8 +1,9 @@
 {
   "name": "@sagtech-infra/ui",
-  "version": "1.2.0",
+  "version": "2.2.0",
   "description": "SagTech UI component library with Storybook",
   "type": "module",
+  "sideEffects": false,
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -16,6 +17,16 @@
     "./icons": {
       "types": "./dist/icons/index.d.ts",
       "import": "./dist/icons/index.js"
+    },
+    "./3d": {
+      "types": "./dist/3d/index.d.ts",
+      "import": "./dist/3d/index.js",
+      "require": "./dist/3d/index.cjs"
+    },
+    "./charts": {
+      "types": "./dist/charts/index.d.ts",
+      "import": "./dist/charts/index.js",
+      "require": "./dist/charts/index.cjs"
     }
   },
   "files": [
@@ -40,27 +51,39 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:ct": "playwright test -c playwright-ct.config.ts",
+    "coverage": "vitest run --coverage",
+    "test:a11y": "vitest run src/__tests__/a11y.test.tsx",
     "prepublishOnly": "pnpm build",
     "generate:tokens": "node scripts/generate-tokens.mjs",
+    "check:contrast": "node scripts/check-contrast.mjs",
+    "check:directives": "node scripts/check-directives.mjs",
+    "check:size": "size-limit",
     "prebuild": "node scripts/generate-tokens.mjs"
   },
   "peerDependencies": {
     "@dnd-kit/core": ">=6.0.0",
     "@dnd-kit/sortable": ">=8.0.0",
     "@dnd-kit/utilities": ">=3.0.0",
-    "@react-three/drei": ">=9.100.0",
-    "@react-three/fiber": ">=8.16.0",
+    "@react-three/drei": ">=10.0.0",
+    "@react-three/fiber": ">=9.0.0",
     "@tanstack/react-virtual": ">=3.0.0",
     "@tiptap/core": ">=2.0.0",
+    "@tiptap/extension-code-block-lowlight": ">=2.0.0",
+    "@tiptap/extension-image": ">=2.0.0",
+    "@tiptap/extension-mention": ">=2.0.0",
     "@tiptap/react": ">=2.0.0",
     "@tiptap/starter-kit": ">=2.0.0",
+    "@tiptap/suggestion": ">=2.0.0",
     "@xyflow/react": ">=12.0.0",
     "classnames": "^2.3.0",
     "framer-motion": ">=11.0.0",
+    "lowlight": ">=3.0.0",
     "next": ">=15.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-force-graph-3d": ">=1.24.0",
+    "react-resizable-panels": ">=2.0.0",
     "three": ">=0.160.0"
   },
   "peerDependenciesMeta": {
@@ -85,10 +108,22 @@
     "@tiptap/core": {
       "optional": true
     },
+    "@tiptap/extension-code-block-lowlight": {
+      "optional": true
+    },
+    "@tiptap/extension-image": {
+      "optional": true
+    },
+    "@tiptap/extension-mention": {
+      "optional": true
+    },
     "@tiptap/react": {
       "optional": true
     },
     "@tiptap/starter-kit": {
+      "optional": true
+    },
+    "@tiptap/suggestion": {
       "optional": true
     },
     "@xyflow/react": {
@@ -103,19 +138,19 @@
     "react-force-graph-3d": {
       "optional": true
     },
+    "react-resizable-panels": {
+      "optional": true
+    },
     "react-hook-form": {
       "optional": true
     },
     "react-international-phone": {
       "optional": true
     },
-    "react-apexcharts": {
-      "optional": true
-    },
-    "apexcharts": {
-      "optional": true
-    },
     "libphonenumber-js": {
+      "optional": true
+    },
+    "lowlight": {
       "optional": true
     },
     "three": {
@@ -127,8 +162,11 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@eslint/js": "^10.0.1",
-    "@react-three/drei": "^9.110.0",
-    "@react-three/fiber": "^8.17.0",
+    "@playwright/experimental-ct-react": "1.60.0",
+    "@playwright/test": "1.60.0",
+    "@react-three/drei": "^10.0.0",
+    "@react-three/fiber": "^9.0.0",
+    "@size-limit/preset-small-lib": "^12.1.0",
     "@storybook/addon-a11y": "^10.3.4",
     "@storybook/react-vite": "^10.3.4",
     "@tailwindcss/postcss": "^4.2.2",
@@ -137,13 +175,21 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@tiptap/core": "^3.22.4",
+    "@tiptap/extension-code-block-lowlight": "^3.24.0",
+    "@tiptap/extension-image": "^3.24.0",
+    "@tiptap/extension-mention": "^3.24.0",
+    "@tiptap/pm": "^3.22.4",
     "@tiptap/react": "^3.22.4",
     "@tiptap/starter-kit": "^3.22.4",
+    "@tiptap/suggestion": "^3.24.0",
+    "@types/jest-axe": "^3.5.9",
+    "@types/jscodeshift": "^17.3.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/three": "^0.165.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "@vitest/coverage-v8": "^2.1.9",
     "@xyflow/react": "^12.10.2",
-    "apexcharts": "^5.10.4",
     "classnames": "^2.5.1",
     "eslint": "^10.2.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
@@ -152,16 +198,20 @@
     "framer-motion": "^12.38.0",
     "globals": "^17.6.0",
     "happy-dom": "^15.11.7",
+    "jest-axe": "^10.0.0",
+    "jscodeshift": "^17.1.2",
     "libphonenumber-js": "^1.12.41",
+    "lowlight": "^3.3.0",
     "next": "^16.2.2",
     "postcss": "^8.5.8",
     "prettier": "^3.8.1",
     "react": "^19.2.4",
-    "react-apexcharts": "^2.1.0",
     "react-dom": "^19.2.4",
     "react-force-graph-3d": "^1.24.0",
     "react-hook-form": "^7.72.1",
     "react-international-phone": "^4.8.0",
+    "react-resizable-panels": "^4.11.2",
+    "size-limit": "^12.1.0",
     "storybook": "^10.3.4",
     "swiper": "^12.1.3",
     "tailwindcss": "^4.2.2",

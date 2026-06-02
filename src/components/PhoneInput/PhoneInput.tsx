@@ -8,12 +8,12 @@ import { detectCountry } from '@/utils/detectCountry';
 
 function PhoneInput({
   error,
-  externalLabel,
+  label,
   ref,
   ...props
 }: PhoneInputProps & {
   error?: boolean;
-  externalLabel?: string;
+  label?: string;
   ref?: React.Ref<HTMLDivElement>;
 }) {
   const [detectedCountry, setDetectedCountry] = useState<CountryIso2>('us');
@@ -30,9 +30,9 @@ function PhoneInput({
 
   return (
     <div ref={ref} className="flex flex-col gap-6px">
-      {externalLabel && (
+      {label && (
         <label htmlFor={props.name} className="text-12 font-bold leading-18 text-white_1">
-          {externalLabel}
+          {label}
         </label>
       )}
       <PhoneInputEl

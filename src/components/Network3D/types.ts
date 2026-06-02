@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 export interface Network3DNode {
   id: string;
   label?: string;
@@ -30,4 +32,9 @@ export interface Network3DProps {
   /** Canvas background color. Defaults to tokens.colors.black_1. */
   backgroundColor?: string;
   className?: string;
+  /**
+   * Rendered inside the sized container while the 3D engine chunk loads (and
+   * during SSR). Defaults to `null`.
+   */
+  loadingFallback?: ReactNode;
 }

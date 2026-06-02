@@ -1,8 +1,9 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import classNames from 'classnames';
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { tokenTransition } from "@/utils/motion";
+import classNames from "classnames";
 
 export interface CommandItem {
   id: string;
@@ -24,7 +25,13 @@ export interface CommandPaletteProps {
 
 function SearchIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      className="flex-shrink-0"
+    >
       <path
         d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16ZM19 19l-4.35-4.35"
         stroke="currentColor"
@@ -40,10 +47,11 @@ export default function CommandPalette({
   isOpen,
   onClose,
   items,
-  placeholder = 'Search commands...',
+  placeholder = "Search commands...",
   className,
 }: CommandPaletteProps) {
-  const [query, setQuery] = useState('');
+  const reduceMotion = useReducedMotion();
+  const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
@@ -54,7 +62,8 @@ export default function CommandPalette({
     return items.filter(
       (item) =>
         item.label.toLowerCase().includes(lowerQuery) ||
-        (item.description && item.description.toLowerCase().includes(lowerQuery)),
+        (item.description &&
+          item.description.toLowerCase().includes(lowerQuery)),
     );
   }, [items, query]);
 
@@ -73,19 +82,20 @@ export default function CommandPalette({
       }
     }
 
-    const flatList: Array<{ type: 'header'; label: string } | { type: 'item'; item: CommandItem }> =
-      [];
+    const flatList: Array<
+      { type: "header"; label: string } | { type: "item"; item: CommandItem }
+    > = [];
 
     for (const [groupName, groupItems] of Object.entries(groups)) {
-      flatList.push({ type: 'header', label: groupName });
+      flatList.push({ type: "header", label: groupName });
       for (const item of groupItems) {
-        flatList.push({ type: 'item', item });
+        flatList.push({ type: "item", item });
       }
     }
 
     if (ungrouped.length > 0) {
       for (const item of ungrouped) {
-        flatList.push({ type: 'item', item });
+        flatList.push({ type: "item", item });
       }
     }
 
@@ -93,24 +103,26 @@ export default function CommandPalette({
   }, [filteredItems]);
 
   const selectableItems = useMemo(
-    () => groupedItems.filter((entry) => entry.type === 'item'),
+    () => groupedItems.filter((entry) => entry.type === "item"),
     [groupedItems],
   );
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         onClose();
         return;
       }
 
-      if (e.key === 'ArrowDown') {
+      if (e.key === "ArrowDown") {
         e.preventDefault();
-        setActiveIndex((prev) => (prev + 1) % Math.max(selectableItems.length, 1));
+        setActiveIndex(
+          (prev) => (prev + 1) % Math.max(selectableItems.length, 1),
+        );
         return;
       }
 
-      if (e.key === 'ArrowUp') {
+      if (e.key === "ArrowUp") {
         e.preventDefault();
         setActiveIndex((prev) =>
           prev <= 0 ? Math.max(selectableItems.length - 1, 0) : prev - 1,
@@ -118,22 +130,22 @@ export default function CommandPalette({
         return;
       }
 
-      if (e.key === 'Home') {
+      if (e.key === "Home") {
         e.preventDefault();
         setActiveIndex(0);
         return;
       }
 
-      if (e.key === 'End') {
+      if (e.key === "End") {
         e.preventDefault();
         setActiveIndex(Math.max(selectableItems.length - 1, 0));
         return;
       }
 
-      if (e.key === 'Enter') {
+      if (e.key === "Enter") {
         e.preventDefault();
         const selected = selectableItems[activeIndex];
-        if (selected && selected.type === 'item') {
+        if (selected && selected.type === "item") {
           selected.item.onSelect();
           onClose();
         }
@@ -144,18 +156,18 @@ export default function CommandPalette({
 
   useEffect(() => {
     if (isOpen) {
-      document.addEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'hidden';
+      document.addEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "hidden";
       setTimeout(() => inputRef.current?.focus(), 50);
     }
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
     };
   }, [isOpen, handleKeyDown]);
 
   useEffect(() => {
-    setQuery('');
+    setQuery("");
     setActiveIndex(0);
   }, [isOpen]);
 
@@ -167,7 +179,7 @@ export default function CommandPalette({
     if (!listRef.current) return;
     const activeEl = listRef.current.querySelector('[data-active="true"]');
     if (activeEl) {
-      activeEl.scrollIntoView({ block: 'nearest' });
+      activeEl.scrollIntoView({ block: "nearest" });
     }
   }, [activeIndex]);
 
@@ -177,27 +189,29 @@ export default function CommandPalette({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          style={{ zIndex: 'var(--z-modal)' }}
+          style={{ zIndex: "var(--z-modal)" }}
           className="fixed inset-0 bg-backdrop flex items-start justify-center pt-[20vh]"
-          initial={{ opacity: 0 }}
+          initial={reduceMotion ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.15 }}
+          transition={reduceMotion ? { duration: 0 } : tokenTransition("fast")}
           onClick={onClose}
         >
           <motion.div
             className={classNames(
-              'w-full max-w-[560px] bg-black_2 border border-black_3 rounded-16px overflow-hidden shadow-6xl',
+              "w-full max-w-[560px] bg-surface-overlay border border-border-default rounded-16px overflow-hidden shadow-6xl",
               className,
             )}
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={reduceMotion ? false : { opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.15 }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.95 }}
+            transition={
+              reduceMotion ? { duration: 0 } : tokenTransition("fast")
+            }
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-16px border-b border-black_3 flex items-center gap-12px">
-              <span className="text-grey_2">
+            <div className="p-16px border-b border-border-default flex items-center gap-12px">
+              <span className="text-fg-muted">
                 <SearchIcon />
               </span>
               <input
@@ -206,25 +220,30 @@ export default function CommandPalette({
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={placeholder}
-                className="bg-transparent text-white_4 font-manrope text-16 outline-none w-full placeholder:text-grey_2"
+                className="bg-transparent text-fg-primary font-manrope text-16 outline-none w-full placeholder:text-fg-muted"
               />
-              <span className="text-10 text-grey_2 border border-black_3 rounded-[4px] px-6px py-[2px] flex-shrink-0 select-none">
+              <span className="text-10 text-fg-muted border border-border-default rounded-[4px] px-6px py-[2px] flex-shrink-0 select-none">
                 ESC
               </span>
             </div>
 
-            <div ref={listRef} className="max-h-[320px] overflow-y-auto custom-scrollbar">
+            <div
+              ref={listRef}
+              className="max-h-[320px] overflow-y-auto custom-scrollbar"
+            >
               {filteredItems.length === 0 ? (
                 <div className="py-40px flex items-center justify-center">
-                  <p className="font-manrope text-14 text-grey_2">No results found</p>
+                  <p className="font-manrope text-14 text-fg-muted">
+                    No results found
+                  </p>
                 </div>
               ) : (
                 groupedItems.map((entry) => {
-                  if (entry.type === 'header') {
+                  if (entry.type === "header") {
                     return (
                       <div
                         key={`header-${entry.label}`}
-                        className="px-16px py-8px text-10 text-grey_1 uppercase tracking-wider font-semibold font-manrope"
+                        className="px-16px py-8px text-10 text-fg-muted uppercase tracking-wider font-semibold font-manrope"
                       >
                         {entry.label}
                       </div>
@@ -241,10 +260,10 @@ export default function CommandPalette({
                       key={item.id}
                       data-active={isActive}
                       className={classNames(
-                        'px-16px py-12px flex items-center gap-12px cursor-pointer transition-colors',
+                        "px-16px py-12px flex items-center gap-12px cursor-pointer transition-colors",
                         {
-                          'bg-pr_purple/10': isActive,
-                          'hover:bg-black_3': !isActive,
+                          "bg-pr_purple/10": isActive,
+                          "hover:bg-bg-tertiary": !isActive,
                         },
                       )}
                       onClick={() => {
@@ -255,9 +274,9 @@ export default function CommandPalette({
                     >
                       {item.icon && (
                         <span
-                          className={classNames('flex-shrink-0', {
-                            'text-pr_purple': isActive,
-                            'text-grey_2': !isActive,
+                          className={classNames("flex-shrink-0", {
+                            "text-pr_purple": isActive,
+                            "text-fg-muted": !isActive,
                           })}
                         >
                           {item.icon}
@@ -265,19 +284,21 @@ export default function CommandPalette({
                       )}
                       <div className="flex flex-col min-w-0">
                         <span
-                          className={classNames('text-14 font-manrope', {
-                            'text-pr_purple': isActive,
-                            'text-white_4': !isActive,
+                          className={classNames("text-14 font-manrope", {
+                            "text-pr_purple": isActive,
+                            "text-fg-primary": !isActive,
                           })}
                         >
                           {item.label}
                         </span>
                         {item.description && (
-                          <span className="text-12 text-grey_2 truncate">{item.description}</span>
+                          <span className="text-12 text-fg-muted truncate">
+                            {item.description}
+                          </span>
                         )}
                       </div>
                       {item.shortcut && (
-                        <span className="ml-auto text-10 text-grey_2 border border-black_3 rounded-[4px] px-6px py-[2px] flex-shrink-0 select-none">
+                        <span className="ml-auto text-10 text-fg-muted border border-border-default rounded-[4px] px-6px py-[2px] flex-shrink-0 select-none">
                           {item.shortcut}
                         </span>
                       )}

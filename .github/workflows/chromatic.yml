@@ -1,0 +1,52 @@
+name: Chromatic
+
+# Publishes the Storybook showcase to Chromatic and runs visual-regression
+# snapshots. Requires a CHROMATIC_PROJECT_TOKEN repo secret (create the project
+# at https://www.chromatic.com → grab the project token → add it under
+# Settings → Secrets and variables → Actions). Until the secret is set the
+# Publish step is skipped, so this workflow never reports a false failure.
+
+on:
+  push:
+    branches: ['**']
+  workflow_dispatch:
+
+# Avoid piling up Chromatic builds for the same branch.
+concurrency:
+  group: chromatic-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  chromatic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # Chromatic needs full git history to establish visual baselines
+          # and to power TurboSnap (snapshot only changed stories).
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10.28.1
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Publish to Chromatic
+        # Skip cleanly when the token has not been configured yet.
+        if: ${{ env.CHROMATIC_PROJECT_TOKEN != '' }}
+        env:
+          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+        uses: chromaui/action@latest
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          buildScriptName: build-storybook
+          # Review visual diffs in the Chromatic UI instead of failing CI.
+          exitZeroOnChanges: true
+          # TurboSnap: only re-snapshot stories whose code actually changed.
+          onlyChanged: true

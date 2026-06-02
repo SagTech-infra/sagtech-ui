@@ -1,12 +1,15 @@
-'use client';
+"use client";
 
-import { useCallback, useMemo, useState, type Ref } from 'react';
-import classNames from 'classnames';
-import { AnimatePresence, motion } from 'framer-motion';
-import useOutsideClick from '@/hooks/useOutsideClick';
-import { mergeRefs } from '@/utils/mergeRefs';
+import { useCallback, useMemo, useState, type Ref } from "react";
+import classNames from "classnames";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { tokenTransition } from "@/utils/motion";
+import { dropdownFadeSlideVariants as dropdownVariants } from "@/motion/overlayVariants";
+import useOutsideClick from "@/hooks/useOutsideClick";
+import { mergeRefs } from "@/utils/mergeRefs";
+import { useLocale } from "@/providers/LocaleContext";
 import {
-  WEEKDAYS,
+  getWeekdayLabels,
   formatDisplayDate,
   formatMonthLabel,
   getCalendarDays,
@@ -15,7 +18,7 @@ import {
   isToday,
   stripTime,
   type CalendarDay,
-} from './calendar';
+} from "./calendar";
 
 export interface DateRange {
   from: Date | null;
@@ -32,19 +35,22 @@ export interface DateRangePickerProps {
   error?: string;
   label?: string;
   className?: string;
+  /** BCP-47 locale; falls back to LocaleProvider, then 'en-US'. */
+  locale?: string;
   ref?: Ref<HTMLDivElement>;
 }
 
 const EMPTY_RANGE: DateRange = { from: null, to: null };
 
-const dropdownVariants = {
-  open: { opacity: 1, y: 0 },
-  closed: { opacity: 0, y: -4 },
-};
-
 function CalendarIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      className="flex-shrink-0"
+    >
       <path
         d="M6.67 1.67V4.17M13.33 1.67V4.17M2.92 7.58H17.08M17.5 7.08V14.17C17.5 16.67 16.25 18.33 13.33 18.33H6.67C3.75 18.33 2.5 16.67 2.5 14.17V7.08C2.5 4.58 3.75 2.92 6.67 2.92H13.33C16.25 2.92 17.5 4.58 17.5 7.08Z"
         stroke="currentColor"
@@ -87,15 +93,19 @@ function ChevronRight() {
 export default function DateRangePicker({
   value = EMPTY_RANGE,
   onChange,
-  placeholder = 'Select range',
+  placeholder = "Select range",
   minDate,
   maxDate,
   disabled = false,
   error,
   label,
   className,
+  locale: localeProp,
   ref,
 }: DateRangePickerProps) {
+  const { locale: ctxLocale, dir } = useLocale();
+  const locale = localeProp ?? ctxLocale;
+  const reduceMotion = useReducedMotion();
   const [isOpen, setIsOpen] = useState(false);
   const [viewYear, setViewYear] = useState(() =>
     (value.from ?? new Date()).getFullYear(),
@@ -112,9 +122,11 @@ export default function DateRangePicker({
     [viewYear, viewMonth, minDate, maxDate],
   );
 
+  const weekdays = useMemo(() => getWeekdayLabels(locale), [locale]);
+
   const monthLabel = useMemo(
-    () => formatMonthLabel(viewYear, viewMonth),
-    [viewYear, viewMonth],
+    () => formatMonthLabel(viewYear, viewMonth, locale),
+    [viewYear, viewMonth, locale],
   );
 
   const handlePrev = useCallback(() => {
@@ -164,19 +176,29 @@ export default function DateRangePicker({
 
   const triggerText = useMemo(() => {
     if (value.from && value.to) {
-      return `${formatDisplayDate(value.from)} – ${formatDisplayDate(value.to)}`;
+      return `${formatDisplayDate(value.from, locale)} – ${formatDisplayDate(value.to, locale)}`;
     }
     if (value.from) {
-      return `${formatDisplayDate(value.from)} – …`;
+      return `${formatDisplayDate(value.from, locale)} – …`;
     }
     return placeholder;
-  }, [value, placeholder]);
+  }, [value, placeholder, locale]);
 
-  const effectiveTo = value.to ?? (value.from && hoverDate && hoverDate > value.from ? hoverDate : null);
+  const effectiveTo =
+    value.to ??
+    (value.from && hoverDate && hoverDate > value.from ? hoverDate : null);
 
   return (
-    <div ref={mergeRefs(outsideRef, ref)} className={classNames('flex flex-col gap-6px relative', className)}>
-      {label && <label className="text-12 font-bold leading-18 text-white_4">{label}</label>}
+    <div
+      ref={mergeRefs(outsideRef, ref)}
+      dir={dir}
+      className={classNames("flex flex-col gap-6px relative", className)}
+    >
+      {label && (
+        <label className="text-12 font-bold leading-18 text-white_4">
+          {label}
+        </label>
+      )}
       <button
         type="button"
         onClick={handleToggle}
@@ -184,16 +206,18 @@ export default function DateRangePicker({
         aria-haspopup="dialog"
         aria-expanded={isOpen}
         className={classNames(
-          'bg-black_1 border border-solid rounded-16px h-[56px] px-24px font-manrope text-14 w-full text-left flex items-center justify-between transition-colors duration-200',
+          "bg-black_1 border border-solid rounded-16px h-[56px] px-24px font-manrope text-14 w-full text-left flex items-center justify-between transition-colors duration-200",
           {
-            'border-pr_purple': !error,
-            'border-error': error,
-            'cursor-pointer': !disabled,
-            'cursor-not-allowed opacity-50': disabled,
+            "border-pr_purple": !error,
+            "border-error": error,
+            "cursor-pointer": !disabled,
+            "cursor-not-allowed opacity-50": disabled,
           },
         )}
       >
-        <span className={value.from ? 'text-grey_4' : 'text-grey_2'}>{triggerText}</span>
+        <span className={value.from ? "text-grey_4" : "text-grey_2"}>
+          {triggerText}
+        </span>
         <span className="text-grey_2">
           <CalendarIcon />
         </span>
@@ -206,7 +230,9 @@ export default function DateRangePicker({
             animate="open"
             exit="closed"
             variants={dropdownVariants}
-            transition={{ duration: 0.15 }}
+            transition={
+              reduceMotion ? { duration: 0 } : tokenTransition("fast")
+            }
             className="absolute z-50 mt-4px top-full bg-black_2 border border-black_3 rounded-16px p-20px shadow-6xl min-w-[320px]"
             role="dialog"
             aria-label="Date range picker"
@@ -234,7 +260,7 @@ export default function DateRangePicker({
             </div>
 
             <div className="grid grid-cols-7 gap-[2px] mb-4px">
-              {WEEKDAYS.map((d) => (
+              {weekdays.map((d) => (
                 <div
                   key={d}
                   className="text-10 text-grey_1 uppercase text-center font-manrope py-4px"
@@ -246,7 +272,9 @@ export default function DateRangePicker({
 
             <div className="grid grid-cols-7 gap-[2px]">
               {days.map((day, index) => {
-                const isFrom = value.from ? isSameDay(day.date, value.from) : false;
+                const isFrom = value.from
+                  ? isSameDay(day.date, value.from)
+                  : false;
                 const isTo = value.to ? isSameDay(day.date, value.to) : false;
                 const isEndpoint = isFrom || isTo;
                 const isInRange =
@@ -265,16 +293,21 @@ export default function DateRangePicker({
                     }}
                     disabled={day.isDisabled}
                     className={classNames(
-                      'w-[36px] h-[36px] rounded-8px text-14 font-manrope flex items-center justify-center mx-auto transition-colors duration-100',
+                      "w-[36px] h-[36px] rounded-8px text-14 font-manrope flex items-center justify-center mx-auto transition-colors duration-100",
                       {
-                        'bg-pr_purple text-white': isEndpoint,
-                        'bg-pr_purple/20 text-white_4': !isEndpoint && isInRange,
-                        'text-pr_purple font-semibold':
+                        "bg-pr_purple text-white": isEndpoint,
+                        "bg-pr_purple/20 text-white_4":
+                          !isEndpoint && isInRange,
+                        "text-pr_purple font-semibold":
                           todayFlag && !isEndpoint && !isInRange,
-                        'text-grey_4 hover:bg-black_3 cursor-pointer':
-                          day.isCurrentMonth && !isEndpoint && !isInRange && !day.isDisabled,
-                        'text-grey_1': !day.isCurrentMonth && !isEndpoint && !isInRange,
-                        'opacity-50 cursor-not-allowed': day.isDisabled,
+                        "text-grey_4 hover:bg-black_3 cursor-pointer":
+                          day.isCurrentMonth &&
+                          !isEndpoint &&
+                          !isInRange &&
+                          !day.isDisabled,
+                        "text-grey_1":
+                          !day.isCurrentMonth && !isEndpoint && !isInRange,
+                        "opacity-50 cursor-not-allowed": day.isDisabled,
                       },
                     )}
                   >
@@ -303,7 +336,9 @@ export default function DateRangePicker({
       </AnimatePresence>
 
       {error && (
-        <p className="px-24px pt-4px text-12 font-medium leading-16 text-error">{error}</p>
+        <p className="px-24px pt-4px text-12 font-medium leading-16 text-error">
+          {error}
+        </p>
       )}
     </div>
   );

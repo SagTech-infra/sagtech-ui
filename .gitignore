@@ -1,6 +1,15 @@
 node_modules/
 dist/
+coverage/
 storybook-static/
 .next/
 *.tsbuildinfo
 .DS_Store
+.env
+.env.local
+.env.*.local
+
+# Playwright Component Testing (browsers/artifacts are local-only — see ADR-0004)
+playwright-report/
+test-results/
+playwright/.cache/

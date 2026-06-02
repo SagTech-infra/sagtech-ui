@@ -1,0 +1,1 @@
+{ "description": "Efficiently renders very large lists by virtualizing rows, mounting only the items currently visible in the scroll viewport." }

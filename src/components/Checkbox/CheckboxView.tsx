@@ -53,9 +53,9 @@ export default function CheckboxView({ checked }: Props) {
         }}
         animate={checked ? 'checked' : 'notChecked'}
       >
-        <CheckedIcon className="text-grey_4 absolute z-10" />
+        <CheckedIcon className="text-fg-muted absolute z-10" />
       </motion.div>
-      <NotCheckedIcon className="text-grey_4 absolute z-5" />
+      <NotCheckedIcon className="text-fg-muted absolute z-5" />
     </div>
   );
 }

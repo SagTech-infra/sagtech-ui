@@ -1,0 +1,142 @@
+import { describe, expect, it, vi } from "vitest";
+import { createRef } from "react";
+import { render, screen, fireEvent, within } from "@testing-library/react";
+import Calendar from "../Calendar";
+import { LocaleProvider } from "@/providers/LocaleProvider";
+
+// A fixed month avoids flakiness around month boundaries / "today".
+const JAN_2026 = new Date(2026, 0, 15);
+
+describe("Calendar", () => {
+  it("renders the current month grid with a locale-driven weekday header (en-US → Sunday-first)", () => {
+    render(<Calendar value={JAN_2026} />);
+    // 7 weekday columnheaders
+    const headers = document.querySelectorAll(".grid-cols-7 .text-10");
+    expect(headers).toHaveLength(7);
+    // en-US is Sunday-first; first header should be the Sunday short label
+    const sunLabel = new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(
+      new Date(Date.UTC(2024, 0, 7)), // 2024-01-07 is a Sunday
+    );
+    expect(headers[0].textContent).toBe(sunLabel);
+    // Month label is rendered.
+    const label = document.querySelector("span.font-semibold");
+    expect(label?.textContent).toMatch(/January 2026/);
+  });
+
+  it("de-DE locale renders Monday-first weekday header", () => {
+    render(
+      <LocaleProvider locale="de-DE">
+        <Calendar value={JAN_2026} />
+      </LocaleProvider>,
+    );
+    const headers = document.querySelectorAll(".grid-cols-7 .text-10");
+    expect(headers).toHaveLength(7);
+    // de-DE is Monday-first; first header should be Monday short label in German
+    const monLabel = new Intl.DateTimeFormat("de-DE", { weekday: "short" }).format(
+      new Date(Date.UTC(2024, 0, 1)), // 2024-01-01 is a Monday
+    );
+    expect(headers[0].textContent).toBe(monLabel);
+  });
+
+  it("weekStartsOn prop overrides the locale-derived value", () => {
+    // Force Sunday-first on a Monday-first locale
+    render(
+      <LocaleProvider locale="de-DE">
+        <Calendar value={JAN_2026} weekStartsOn={0} />
+      </LocaleProvider>,
+    );
+    const headers = document.querySelectorAll(".grid-cols-7 .text-10");
+    const sunLabel = new Intl.DateTimeFormat("de-DE", { weekday: "short" }).format(
+      new Date(Date.UTC(2024, 0, 7)),
+    );
+    expect(headers[0].textContent).toBe(sunLabel);
+  });
+
+  it("calls onChange with the clicked day's Date", () => {
+    const onChange = vi.fn();
+    render(<Calendar value={JAN_2026} onChange={onChange} />);
+    // Day "20" of January 2026 is in the current month.
+    fireEvent.click(
+      screen.getByRole("button", { name: /January 20, 2026/ }),
+    );
+    expect(onChange).toHaveBeenCalledTimes(1);
+    const arg = onChange.mock.calls[0][0] as Date;
+    expect(arg.getFullYear()).toBe(2026);
+    expect(arg.getMonth()).toBe(0);
+    expect(arg.getDate()).toBe(20);
+  });
+
+  it("navigates to the previous month", () => {
+    render(<Calendar value={JAN_2026} />);
+    fireEvent.click(screen.getByRole("button", { name: "Previous month" }));
+    const label = document.querySelector("span.font-semibold");
+    expect(label?.textContent).toMatch(/December 2025/);
+  });
+
+  it("navigates to the next month", () => {
+    render(<Calendar value={JAN_2026} />);
+    fireEvent.click(screen.getByRole("button", { name: "Next month" }));
+    const label = document.querySelector("span.font-semibold");
+    expect(label?.textContent).toMatch(/February 2026/);
+  });
+
+  it("disables days outside [minDate, maxDate] and does not call onChange", () => {
+    const onChange = vi.fn();
+    render(
+      <Calendar
+        value={JAN_2026}
+        onChange={onChange}
+        minDate={new Date(2026, 0, 10)}
+        maxDate={new Date(2026, 0, 20)}
+      />,
+    );
+    const outOfRange = screen.getByRole("button", { name: /January 5, 2026/ });
+    expect(outOfRange).toBeDisabled();
+    expect(outOfRange).toHaveAttribute("aria-disabled", "true");
+    fireEvent.click(outOfRange);
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it("marks the selected day with aria-pressed (and not the invalid aria-selected on a button)", () => {
+    render(<Calendar value={JAN_2026} />);
+    const selected = screen.getByRole("button", { name: /January 15, 2026/ });
+    expect(selected).toHaveAttribute("aria-pressed", "true");
+    // aria-selected is not valid on role="button"; selection is conveyed via aria-pressed.
+    expect(selected).not.toHaveAttribute("aria-selected");
+  });
+
+  it("renders locale-driven weekday labels from LocaleProvider (de-DE)", () => {
+    render(
+      <LocaleProvider locale="de-DE">
+        <Calendar value={JAN_2026} />
+      </LocaleProvider>,
+    );
+    const headers = Array.from(
+      document.querySelectorAll(".grid-cols-7 .text-10"),
+    ).map((h) => h.textContent ?? "");
+    expect(headers).toHaveLength(7);
+    expect(headers.every((t) => t.length > 0)).toBe(true);
+    // German January month label is "Januar", not "January".
+    const label = document.querySelector("span.font-semibold");
+    expect(label?.textContent).not.toMatch(/^January/);
+    expect(label?.textContent).toMatch(/Januar/);
+  });
+
+  it("locale prop overrides the LocaleProvider value", () => {
+    render(
+      <LocaleProvider locale="de-DE">
+        <Calendar value={JAN_2026} locale="en-US" />
+      </LocaleProvider>,
+    );
+    const label = document.querySelector("span.font-semibold");
+    expect(label?.textContent).toMatch(/January 2026/);
+  });
+
+  it("forwards ref to the root div", () => {
+    const ref = createRef<HTMLDivElement>();
+    render(<Calendar value={JAN_2026} ref={ref} />);
+    expect(ref.current).toBeInstanceOf(HTMLDivElement);
+    // The root contains the weekday grid.
+    expect(within(ref.current!).getAllByRole("columnheader")).toHaveLength(7);
+  });
+});

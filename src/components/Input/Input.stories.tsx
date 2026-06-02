@@ -12,8 +12,8 @@ const meta = {
     },
     isError: { control: 'boolean' },
     disabled: { control: 'boolean' },
+    floatingLabel: { control: 'text' },
     label: { control: 'text' },
-    externalLabel: { control: 'text' },
     errorMessage: { control: 'text' },
     placeholder: { control: 'text' },
   },
@@ -29,10 +29,10 @@ export const Default: Story = {
   },
 };
 
-export const WithExternalLabel: Story = {
+export const WithLabel: Story = {
   args: {
     placeholder: 'Enter your email',
-    externalLabel: 'Email address',
+    label: 'Email address',
     name: 'email',
   },
 };
@@ -40,7 +40,7 @@ export const WithExternalLabel: Story = {
 export const Active: Story = {
   args: {
     state: 'active',
-    label: 'Name',
+    floatingLabel: 'Name',
     value: 'John Doe',
     name: 'name',
   },
@@ -67,10 +67,10 @@ export const AllStates: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '400px' }}>
       <Input placeholder="Default state" name="default" />
-      <Input state="active" label="Active Label" value="Active value" name="active" />
+      <Input state="active" floatingLabel="Active Label" value="Active value" name="active" />
       <Input isError errorMessage="Error message" placeholder="Error state" name="error" />
       <Input disabled placeholder="Disabled state" name="disabled" />
-      <Input externalLabel="With label" placeholder="Has external label" name="labeled" />
+      <Input label="With label" placeholder="Has external label" name="labeled" />
     </div>
   ),
 };

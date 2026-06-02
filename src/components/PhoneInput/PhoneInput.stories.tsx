@@ -8,7 +8,7 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {
     error: { control: 'boolean' },
-    externalLabel: { control: 'text' },
+    label: { control: 'text' },
   },
 } satisfies Meta<typeof PhoneInput>;
 
@@ -29,7 +29,7 @@ export const WithLabel: Story = {
       <PhoneInput
         value={value}
         onChange={setValue}
-        externalLabel="Phone number"
+        label="Phone number"
         name="phone"
       />
     );
@@ -43,7 +43,7 @@ export const WithError: Story = {
       <PhoneInput
         value={value}
         onChange={setValue}
-        externalLabel="Phone number"
+        label="Phone number"
         name="phone"
         error
       />

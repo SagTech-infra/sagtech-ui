@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useCallback } from 'react';
-import * as tokens from '@/tokens/tokens';
+import { useThemeColors } from '@/hooks/useThemeColors';
 
 export interface SparklineChartProps {
   data: number[];
@@ -12,13 +12,6 @@ export interface SparklineChartProps {
   showArea?: boolean;
 }
 
-const TONE_COLORS: Record<NonNullable<SparklineChartProps['tone']>, string> = {
-  success: tokens.colors.success,
-  warning: tokens.colors.warning,
-  error: tokens.colors.error,
-  neutral: tokens.colors.pr_purple,
-};
-
 function SparklineChart({
   data,
   width = 80,
@@ -27,6 +20,15 @@ function SparklineChart({
   showArea = false,
 }: SparklineChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { colors } = useThemeColors();
+  const toneColor =
+    tone === 'success'
+      ? colors.success
+      : tone === 'warning'
+        ? colors.warning
+        : tone === 'error'
+          ? colors.error
+          : colors.pr_purple;
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
@@ -54,7 +56,7 @@ function SparklineChart({
       y: pad + innerH - ((v - minV) / range) * innerH,
     }));
 
-    const color = TONE_COLORS[tone];
+    const color = toneColor;
 
     if (showArea) {
       const grad = ctx.createLinearGradient(0, 0, 0, height);
@@ -90,7 +92,7 @@ function SparklineChart({
     ctx.arc(last.x, last.y, 2, 0, Math.PI * 2);
     ctx.fillStyle = color;
     ctx.fill();
-  }, [data, width, height, tone, showArea]);
+  }, [data, width, height, showArea, toneColor]);
 
   useEffect(() => {
     draw();

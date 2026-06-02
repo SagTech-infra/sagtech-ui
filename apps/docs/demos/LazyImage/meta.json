@@ -1,0 +1,1 @@
+{ "description": "An image that defers loading until it scrolls into the viewport using an intersection observer, reducing initial page weight for below-the-fold media." }

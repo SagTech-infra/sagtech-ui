@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { useLinkComponent } from '@/providers';
+import { useLocale } from '@/providers/LocaleContext';
 
 export type NotificationVariant = 'info' | 'success' | 'warning' | 'error';
 
@@ -52,11 +53,11 @@ function BellIcon() {
 function VariantIcon({ variant }: { variant: NotificationVariant }) {
   const colorClass =
     variant === 'success'
-      ? 'text-success'
+      ? 'text-fg-success'
       : variant === 'error'
-        ? 'text-error'
+        ? 'text-fg-error'
         : variant === 'warning'
-          ? 'text-warning'
+          ? 'text-fg-warning'
           : 'text-sec_blue';
 
   if (variant === 'success') {
@@ -91,7 +92,10 @@ function VariantIcon({ variant }: { variant: NotificationVariant }) {
   );
 }
 
-function formatRelative(timestamp: Date | string | number): string {
+function formatRelative(
+  timestamp: Date | string | number,
+  locale?: string,
+): string {
   const date = new Date(timestamp);
   const now = Date.now();
   const diffMs = date.getTime() - now;
@@ -101,9 +105,9 @@ function formatRelative(timestamp: Date | string | number): string {
   const day = 24 * hour;
   const week = 7 * day;
 
-  if (abs < minute) return 'just now';
   try {
-    const rtf = new Intl.RelativeTimeFormat(undefined, { numeric: 'auto' });
+    const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
+    if (abs < minute) return rtf.format(0, 'second');
     if (abs < hour) return rtf.format(Math.round(diffMs / minute), 'minute');
     if (abs < day) return rtf.format(Math.round(diffMs / hour), 'hour');
     if (abs < week) return rtf.format(Math.round(diffMs / day), 'day');
@@ -129,6 +133,7 @@ export default function NotificationCenter({
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const Link = useLinkComponent();
+  const { locale, dir } = useLocale();
 
   const computedUnread =
     unreadCount ?? notifications.filter((n) => !n.read).length;
@@ -172,7 +177,7 @@ export default function NotificationCenter({
             <span
               className={classNames(
                 'flex-1 font-manrope text-14 font-semibold break-words',
-                notification.read ? 'text-grey_4' : 'text-white_4',
+                notification.read ? 'text-fg-muted' : 'text-fg-primary',
               )}
             >
               {notification.title}
@@ -185,13 +190,13 @@ export default function NotificationCenter({
             )}
           </div>
           {notification.description && (
-            <p className="font-manrope text-12 text-grey_4 mt-2px break-words">
+            <p className="font-manrope text-12 text-fg-muted mt-2px break-words">
               {notification.description}
             </p>
           )}
           {notification.timestamp && (
-            <span className="font-manrope text-10 text-grey_2 mt-4px block">
-              {formatRelative(notification.timestamp)}
+            <span className="font-manrope text-10 text-fg-muted mt-4px block">
+              {formatRelative(notification.timestamp, locale)}
             </span>
           )}
         </div>
@@ -199,8 +204,8 @@ export default function NotificationCenter({
     );
 
     const rowClasses = classNames(
-      'block w-full text-left px-16px py-12px transition-colors border-b border-solid border-black_3',
-      'hover:bg-black_2 focus:bg-black_2 outline-none',
+      'block w-full text-left px-16px py-12px transition-colors border-b border-solid border-border-default',
+      'hover:bg-bg-secondary focus:bg-bg-secondary outline-none',
       !notification.read && 'bg-pr_purple/5',
     );
 
@@ -229,8 +234,17 @@ export default function NotificationCenter({
     );
   };
 
+  // Treat `position` as the LTR-side; flip it under RTL so the dropdown
+  // opens mirrored. `right` anchors to the inline-end in LTR, inline-start in RTL.
+  const anchorClass =
+    (position === 'right') === (dir !== 'rtl') ? 'end-0' : 'start-0';
+
   return (
-    <div ref={containerRef} className={classNames('relative inline-block', className)}>
+    <div
+      ref={containerRef}
+      dir={dir}
+      className={classNames('relative inline-block', className)}
+    >
       <button
         ref={triggerRef}
         type="button"
@@ -238,13 +252,13 @@ export default function NotificationCenter({
         aria-expanded={isOpen}
         aria-haspopup="dialog"
         onClick={() => setIsOpen((v) => !v)}
-        className="relative flex items-center justify-center w-[40px] h-[40px] rounded-[50%] text-grey_4 hover:text-white_4 hover:bg-black_2 cursor-pointer transition-colors"
+        className="relative flex items-center justify-center w-[40px] h-[40px] rounded-[50%] text-fg-muted hover:text-fg-primary hover:bg-bg-secondary cursor-pointer transition-colors"
       >
         <BellIcon />
         {computedUnread > 0 && (
           <span
             aria-hidden="true"
-            className="absolute top-6px right-6px min-w-[16px] h-[16px] px-4px rounded-[50px] bg-error text-white text-10 font-manrope font-bold flex items-center justify-center"
+            className="absolute top-6px end-6px min-w-[16px] h-[16px] px-4px rounded-[50px] bg-error text-white text-10 font-manrope font-bold flex items-center justify-center"
           >
             {computedUnread > 99 ? '99+' : computedUnread}
           </span>
@@ -256,13 +270,13 @@ export default function NotificationCenter({
           role="dialog"
           aria-label={label}
           className={classNames(
-            'absolute mt-8px w-[360px] max-h-[480px] flex flex-col bg-black_1 border border-solid border-black_3 rounded-16px shadow-6xl overflow-hidden',
-            position === 'right' ? 'right-0' : 'left-0',
+            'absolute mt-8px w-[360px] max-h-[480px] flex flex-col bg-surface-overlay border border-solid border-border-default rounded-16px shadow-6xl overflow-hidden',
+            anchorClass,
           )}
           style={{ zIndex: 1000 }}
         >
-          <header className="flex items-center justify-between px-16px py-12px border-b border-solid border-black_3">
-            <span className="font-manrope text-14 font-bold text-white_4">{label}</span>
+          <header className="flex items-center justify-between px-16px py-12px border-b border-solid border-border-default">
+            <span className="font-manrope text-14 font-bold text-fg-primary">{label}</span>
             <div className="flex items-center gap-8px">
               {onMarkAllRead && computedUnread > 0 && (
                 <button
@@ -277,7 +291,7 @@ export default function NotificationCenter({
                 <button
                   type="button"
                   onClick={() => onClearAll()}
-                  className="text-12 font-manrope text-grey_4 hover:text-white_4 cursor-pointer"
+                  className="text-12 font-manrope text-fg-muted hover:text-fg-primary cursor-pointer"
                 >
                   Clear all
                 </button>
@@ -288,7 +302,7 @@ export default function NotificationCenter({
             {notifications.length === 0 ? (
               <div className="flex flex-col items-center justify-center text-center py-48px px-24px">
                 <BellIcon />
-                <p className="font-manrope text-14 text-grey_2 mt-12px">
+                <p className="font-manrope text-14 text-fg-muted mt-12px">
                   {emptyMessage}
                 </p>
               </div>

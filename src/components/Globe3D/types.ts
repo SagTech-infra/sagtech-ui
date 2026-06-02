@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 export interface Globe3DMarker {
   lat: number;
   lng: number;
@@ -21,4 +23,9 @@ export interface Globe3DProps {
   globeColor?: string;
   /** Background CSS color. */
   backgroundColor?: string;
+  /**
+   * Rendered inside the sized container while the 3D engine chunk loads (and
+   * during SSR). Defaults to `null`.
+   */
+  loadingFallback?: ReactNode;
 }

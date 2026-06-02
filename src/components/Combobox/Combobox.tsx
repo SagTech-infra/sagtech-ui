@@ -242,7 +242,7 @@ function Combobox<V extends string = string>(props: ComboboxProps<V>) {
       <span className="truncate">{selectedOptions[0]?.label}</span>
     )
   ) : (
-    <span className="truncate text-grey_2">{placeholder}</span>
+    <span className="truncate text-fg-muted">{placeholder}</span>
   );
 
   const dropdown = open ? (
@@ -263,12 +263,12 @@ function Combobox<V extends string = string>(props: ComboboxProps<V>) {
           : undefined
       }
       className={classNames(
-        'bg-black_2 border border-black_3 rounded-8px shadow-6xl overflow-hidden font-manrope',
+        'bg-surface-overlay border border-border-default rounded-8px shadow-6xl overflow-hidden font-manrope',
         !portal && 'absolute left-0 right-0 top-full mt-4px z-50',
       )}
     >
       {showSearch && (
-        <div className="p-8px border-b border-black_3">
+        <div className="p-8px border-b border-border-default">
           <input
             ref={searchInputRef}
             type="text"
@@ -276,7 +276,7 @@ function Combobox<V extends string = string>(props: ComboboxProps<V>) {
             onChange={(e) => handleQueryChange(e.target.value)}
             onKeyDown={handleSearchKeyDown}
             placeholder="Search..."
-            className="w-full bg-black_1 text-white_4 placeholder:text-grey_2 rounded-8px px-12px py-6px text-14 outline-none border border-transparent focus:border-pr_purple"
+            className="w-full bg-bg-primary text-fg-primary placeholder:text-fg-muted rounded-8px px-12px py-6px text-14 outline-none border border-transparent focus:border-pr_purple"
           />
         </div>
       )}
@@ -285,10 +285,10 @@ function Combobox<V extends string = string>(props: ComboboxProps<V>) {
         style={{ maxHeight: `${maxHeight}px` }}
       >
         {loading && (
-          <li className="px-12px py-8px text-14 text-grey_4">Loading…</li>
+          <li className="px-12px py-8px text-14 text-fg-muted">Loading…</li>
         )}
         {!loading && visibleOptions.length === 0 && (
-          <li className="px-12px py-8px text-14 text-grey_2">{emptyText}</li>
+          <li className="px-12px py-8px text-14 text-fg-muted">{emptyText}</li>
         )}
         {!loading &&
           visibleOptions.map((option, index) => {
@@ -305,9 +305,9 @@ function Combobox<V extends string = string>(props: ComboboxProps<V>) {
                 className={classNames(
                   'px-12px py-8px text-14 cursor-pointer flex items-center justify-between gap-8px',
                   {
-                    'bg-black_3 text-white_4': active && !option.disabled,
-                    'text-grey_4': !active && !option.disabled,
-                    'text-grey_1 cursor-not-allowed': option.disabled,
+                    'bg-bg-tertiary text-fg-primary': active && !option.disabled,
+                    'text-fg-muted': !active && !option.disabled,
+                    'text-fg-muted cursor-not-allowed': option.disabled,
                   },
                 )}
               >
@@ -335,7 +335,7 @@ function Combobox<V extends string = string>(props: ComboboxProps<V>) {
   return (
     <div className={classNames('flex flex-col gap-6px relative', className)}>
       {label && (
-        <label htmlFor={triggerId} className="text-12 font-bold leading-18 text-white_4">
+        <label htmlFor={triggerId} className="text-12 font-bold leading-18 text-fg-primary">
           {label}
         </label>
       )}
@@ -353,9 +353,9 @@ function Combobox<V extends string = string>(props: ComboboxProps<V>) {
         onClick={toggleDropdown}
         onKeyDown={handleKeyDown}
         className={classNames(
-          'w-full flex items-center justify-between bg-black_1 border border-solid rounded-16px h-[56px] px-24px text-left font-manrope text-14 transition-colors gap-8px',
+          'w-full flex items-center justify-between bg-bg-primary border border-solid rounded-16px h-[56px] px-24px text-left font-manrope text-14 transition-colors gap-8px',
           {
-            'border-grey_2': disabled,
+            'border-border-strong': disabled,
             'border-pr_purple': !error && !disabled,
             'border-error': error,
             'cursor-pointer hover:border-sec_purple': !disabled,
@@ -365,8 +365,8 @@ function Combobox<V extends string = string>(props: ComboboxProps<V>) {
       >
         <span
           className={classNames('flex-1 min-w-0 flex items-center gap-8px', {
-            'text-white_4': hasValue,
-            'text-grey_2': !hasValue,
+            'text-fg-primary': hasValue,
+            'text-fg-muted': !hasValue,
           })}
         >
           {triggerLabel}
@@ -378,7 +378,7 @@ function Combobox<V extends string = string>(props: ComboboxProps<V>) {
               aria-label="Clear selection"
               tabIndex={-1}
               onClick={handleClear}
-              className="text-grey_4 hover:text-white_4 cursor-pointer w-[16px] h-[16px] flex items-center justify-center"
+              className="text-fg-muted hover:text-fg-primary cursor-pointer w-[16px] h-[16px] flex items-center justify-center"
             >
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                 <path
@@ -396,7 +396,7 @@ function Combobox<V extends string = string>(props: ComboboxProps<V>) {
             viewBox="0 0 16 16"
             fill="none"
             aria-hidden="true"
-            className={classNames('text-grey_4 transition-transform', {
+            className={classNames('text-fg-muted transition-transform', {
               'rotate-180': open,
             })}
           >

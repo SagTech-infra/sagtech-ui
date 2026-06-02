@@ -1,7 +1,7 @@
 'use client';
 
 import { useEditor, EditorContent, type Extensions, type Editor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
+import StarterKit, { type StarterKitOptions } from '@tiptap/starter-kit';
 import classNames from 'classnames';
 import { useEffect } from 'react';
 
@@ -12,6 +12,13 @@ export interface RichTextEditorProps {
   disabled?: boolean;
   /** Extra TipTap extensions appended to StarterKit. */
   extensions?: Extensions;
+  /**
+   * Options passed to `StarterKit.configure(...)`. Use this to disable a
+   * built-in node when replacing it via `extensions` — e.g. pair the
+   * `createSyntaxHighlightExtension()` preset with `{ codeBlock: false }` to
+   * avoid a duplicate `codeBlock` node. Defaults to `{}` (full StarterKit).
+   */
+  starterKitOptions?: Partial<StarterKitOptions>;
   /** Show the minimal formatting toolbar. Defaults to true. */
   showToolbar?: boolean;
   className?: string;
@@ -152,6 +159,7 @@ export default function RichTextEditor({
   placeholder,
   disabled,
   extensions = [],
+  starterKitOptions = {},
   showToolbar = true,
   className,
   minHeight = 160,
@@ -160,7 +168,7 @@ export default function RichTextEditor({
     // Tiptap v3 throws an SSR warning when it renders synchronously during
     // server-side rendering. Defer the first render to the client.
     immediatelyRender: false,
-    extensions: [StarterKit, ...extensions],
+    extensions: [StarterKit.configure(starterKitOptions), ...extensions],
     content: value,
     editable: !disabled,
     onUpdate: ({ editor: ed }) => {

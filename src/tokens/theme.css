@@ -1,39 +1,72 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @theme {
   /* Colors */
   --color-black_1: #070715;
-  --color-black_2: #20202D;
+  --color-black_1_5: #1b1b27;
+  --color-black_2: #20202d;
   --color-black_3: #393944;
-  --color-black_4: #51515B;
-  --color-grey_1: #6A6A73;
-  --color-grey_2: #83838A;
-  --color-grey_3: #9C9CA1;
-  --color-grey_4: #B5B5B9;
-  --color-white_1: #CDCDD0;
-  --color-white_2: #E6E6E8;
-  --color-white_3: #F3F3F3;
-  --color-white_4: #F8F8F8;
-  --color-white: #FFFFFF;
-  --color-pr_purple: #6D3EF1;
-  --color-sec_purple: #B69FF8;
-  --color-pr_blue: #292A94;
-  --color-sec_blue: #9494C9;
-  --color-error: #992D2D;
-  --color-warning: #C6A328;
-  --color-success: #58A61B;
-  --color-shape_stroke_1_part_one: #0C0C1E;
+  --color-black_4: #51515b;
+  --color-grey_1: #6a6a73;
+  --color-grey_2: #83838a;
+  --color-grey_3: #9c9ca1;
+  --color-grey_4: #b5b5b9;
+  --color-white_1: #cdcdd0;
+  --color-white_2: #e6e6e8;
+  --color-white_3: #f3f3f3;
+  --color-white_4: #f8f8f8;
+  --color-white: #ffffff;
+  --color-pr_purple: #6d3ef1;
+  --color-sec_purple: #b69ff8;
+  --color-pr_blue: #292a94;
+  --color-sec_blue: #9494c9;
+  --color-error: #992d2d;
+  --color-warning: #c6a328;
+  --color-success: #58a61b;
+  --color-shape_stroke_1_part_one: #0c0c1e;
   --color-shape_stroke_1_part_two: #221546;
-  --color-shape_stroke_2_part_one: #1F1F38;
-  --color-shape_stroke_2_part_two: #2F1E5E;
+  --color-shape_stroke_2_part_one: #1f1f38;
+  --color-shape_stroke_2_part_two: #2f1e5e;
   --color-backdrop: rgba(0, 0, 0, 0.56);
   --color-backdrop_2: rgba(255, 255, 255, 0.04);
   --color-back_load: rgba(7, 7, 15, 0.05);
 
+  /* Gradients */
+  --gradient-accent: linear-gradient(
+    135deg,
+    var(--color-pr_purple) 0%,
+    #5b54ee 50%,
+    #292a94 100%
+  );
+  /* Brand gradients (additive). Utility classes in gradients.css. */
+  --gradient-hero: linear-gradient(
+    135deg,
+    var(--color-pr_purple) 0%,
+    #7c5cf5 40%,
+    var(--color-pr_blue) 100%
+  );
+  --gradient-subtle: linear-gradient(
+    180deg,
+    rgba(109, 62, 241, 0.08) 0%,
+    rgba(109, 62, 241, 0) 100%
+  );
+  --gradient-glow: radial-gradient(
+    circle at 50% 0%,
+    rgba(109, 62, 241, 0.35) 0%,
+    rgba(109, 62, 241, 0) 70%
+  );
+
   /* Font families */
-  --font-orbitron: var(--font-orbitron), serif;
-  --font-roboto: var(--font-roboto), serif;
-  --font-manrope: var(--font-manrope), serif;
+  --font-orbitron: var(--font-orbitron), sans-serif;
+  /* @deprecated — prefer --font-body (Manrope). Kept for back-compat. */
+  --font-roboto: var(--font-roboto), sans-serif;
+  --font-manrope: var(--font-manrope), sans-serif;
+
+  /* Semantic font roles (additive). Map onto the raw families above; consumers
+     set --font-orbitron / --font-manrope to real fonts (e.g. via next/font). */
+  --font-display: var(--font-orbitron), sans-serif;
+  --font-body: var(--font-manrope), sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
 
   /* Font sizes */
   --text-64: 64px;
@@ -94,7 +127,9 @@
   --breakpoint-xs: 500px;
   --breakpoint-mds: 600px;
   --breakpoint-sm: 768px;
-  --breakpoint-sl: 1025px;
+  /* sl is an alias of xl (1024px). Previously 1025px — a 1px duplicate; aligned
+     to xl. Name kept for back-compat with consumers using the `sl:` prefix. */
+  --breakpoint-sl: 1024px;
   --breakpoint-xl: 1024px;
   --breakpoint-md: 1100px;
   --breakpoint-lg: 1300px;
@@ -107,6 +142,9 @@
   --shadow-4xl: 0px -8px 24px 0px rgba(255, 255, 255, 0.04);
   --shadow-5xl: 0px 0px 4px 0px rgba(109, 62, 241, 0.64);
   --shadow-6xl: 0px 0px 16px rgba(109, 62, 241, 0.56);
+  --shadow-glow-purple: 0 0 24px rgba(109, 62, 241, 0.2);
+  --shadow-elevate-md: 0 18px 36px rgba(0, 0, 0, 0.55);
+  --shadow-elevate-lg: 0 24px 64px rgba(0, 0, 0, 0.5);
 
   /* Drop shadows */
   --drop-shadow-3xl: -1px 1px 1px rgba(17, 17, 30, 1);
@@ -115,7 +153,11 @@
   --radius-circle: 50px;
   --radius-40px: 40px;
   --radius-24px: 24px;
+  --radius-18px: 18px;
   --radius-16px: 16px;
+  --radius-14px: 14px;
+  --radius-12px: 12px;
+  --radius-10px: 10px;
   --radius-8px: 8px;
   --radius-50%: 50%;
   --radius-halfRound: 40px 40px 0px 0px;
@@ -165,4 +207,112 @@
   --aspect-384: 384;
   --aspect-528: 528;
   --aspect-704: 704;
+
+  /* Motion — durations */
+  --motion-duration-fast: 120ms;
+  --motion-duration-normal: 200ms;
+  --motion-duration-slow: 320ms;
+
+  /* Motion — easing */
+  --motion-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --motion-ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --motion-ease-decelerated: cubic-bezier(0, 0, 0.2, 1);
+  /* Brand "tech snap" — fast out, settled in. Use for hovers/expansions. */
+  --motion-ease-tech: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* Semantic — backgrounds (dark default) */
+  --color-bg-primary: #070715;
+  --color-bg-secondary: #1b1b27;
+  --color-bg-tertiary: #393944;
+
+  /* Semantic — foregrounds (dark default) */
+  --color-fg-primary: #f8f8f8;
+  --color-fg-secondary: #cdcdd0;
+  --color-fg-muted: #83838a;
+
+  /* Semantic — borders (dark default) */
+  --color-border-default: #393944;
+  --color-border-strong: #5c5c66;
+
+  /* Semantic — surfaces (dark default) */
+  --color-surface-overlay: #20202d;
+  /* Subtle purple-tinted surface for cards/tertiary regions (brand depth). */
+  --color-surface-wash: rgba(109, 62, 241, 0.06);
+
+  /* Semantic — status foregrounds (dark default) */
+  --color-fg-success: #7bc242;
+  --color-fg-warning: #c6a328;
+  --color-fg-error: #e0675e;
+  --color-fg-info: #9494c9;
+
+  /* Semantic — status backgrounds (dark default) */
+  --color-bg-success: rgba(88, 166, 27, 0.16);
+  --color-bg-warning: rgba(198, 163, 40, 0.16);
+  --color-bg-error: rgba(153, 45, 45, 0.24);
+  --color-bg-info: rgba(148, 148, 201, 0.16);
+}
+
+/* Light theme overrides. Applied when data-theme="light" is set (ThemeProvider).
+   Dual selector for cascade robustness:
+   - :root[data-theme="light"] (specificity 0,2,0) beats @theme's :root (0,1,0)
+     when the attribute is on <html> (default target).
+   - [data-theme="light"] covers target="body" via custom-property inheritance
+     proximity (body is a closer ancestor than html for body's subtree). */
+:root[data-theme="light"],
+[data-theme="light"] {
+  /* Semantic — backgrounds */
+  --color-bg-primary: #f7f7fa;
+  --color-bg-secondary: #ffffff;
+  --color-bg-tertiary: #e6e6e8;
+
+  /* Semantic — foregrounds */
+  --color-fg-primary: #070715;
+  --color-fg-secondary: #393944;
+  --color-fg-muted: #51515b;
+
+  /* Semantic — borders */
+  --color-border-default: #d8d8dc;
+  --color-border-strong: #8f8f94;
+
+  /* Semantic — surfaces */
+  --color-surface-overlay: #ffffff;
+
+  /* Semantic — status foregrounds */
+  --color-fg-success: #2e7d12;
+  --color-fg-warning: #8a6d00;
+  --color-fg-error: #992d2d;
+  --color-fg-info: #292a94;
+
+  /* Semantic — status backgrounds */
+  --color-bg-success: #e6f4df;
+  --color-bg-warning: #fbf3d5;
+  --color-bg-error: #f7e3e3;
+  --color-bg-info: #e4e4f0;
+
+  /* Raw-scale override (hybrid): existing bg-black, text-white and border-grey
+     utility classes get a sensible light rendering without per-component edits. */
+  --color-black_1: #f7f7fa;
+  --color-black_1_5: #ffffff;
+  --color-black_2: #ffffff;
+  --color-black_3: #d8d8dc;
+  --color-black_4: #c2c2c8;
+  --color-grey_1: #51515b;
+  --color-grey_2: #6a6a73;
+  --color-grey_3: #83838a;
+  --color-grey_4: #9c9ca1;
+  --color-white_1: #51515b;
+  --color-white_2: #393944;
+  --color-white_3: #20202d;
+  --color-white_4: #070715;
+  /* Accents — tuned for AA contrast on light surfaces; brand hue preserved.
+     (In dark mode these keep their vivid values from @theme.) */
+  --color-pr_purple: #5a2fd6;
+  --color-sec_purple: #7c5cf5;
+  --color-pr_blue: #21228a;
+  --color-sec_blue: #5b5ba8;
+
+  /* Surface wash (light) */
+  --color-surface-wash: rgba(109, 62, 241, 0.05);
+
+  /* NOT overridden by design: --color-white (#ffffff), backdrop/shape tokens. */
 }

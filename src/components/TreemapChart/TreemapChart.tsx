@@ -2,15 +2,9 @@
 
 import { useRef, useEffect, useCallback, useState } from 'react';
 import * as tokens from '@/tokens/tokens';
+import { useThemeColors } from '@/hooks/useThemeColors';
+import { useLocale } from '@/providers/LocaleContext';
 import type { TreemapChartProps, TreemapNode } from './types';
-
-const PALETTE = [
-  tokens.colors.pr_purple,
-  tokens.colors.sec_purple,
-  tokens.colors.success,
-  tokens.colors.warning,
-  tokens.colors.sec_blue,
-];
 
 interface TreemapRect {
   node: TreemapNode;
@@ -40,6 +34,7 @@ function squarify(
   depth: number,
   pad: number,
   out: TreemapRect[],
+  palette: string[],
 ) {
   if (!nodes.length || w <= 0 || h <= 0) return;
   const total = nodes.reduce((acc, n) => acc + n.value, 0);
@@ -84,10 +79,10 @@ function squarify(
       const rh = horizontal ? thickness : length;
 
       // Build child color (rotate palette so siblings differ a bit).
-      const idx = out.length % PALETTE.length;
+      const idx = out.length % palette.length;
       const color =
         depth === 0
-          ? r.node.color ?? PALETTE[idx]
+          ? r.node.color ?? palette[idx]
           : r.node.color ?? baseColor;
 
       if (r.node.children && r.node.children.length) {
@@ -101,6 +96,7 @@ function squarify(
           depth + 1,
           pad,
           out,
+          palette,
         );
       } else {
         out.push({ node: r.node, x: rx + pad / 2, y: ry + pad / 2, w: Math.max(0, rw - pad), h: Math.max(0, rh - pad), color });
@@ -142,6 +138,8 @@ function squarify(
 function TreemapChart({ data, width = '100%', height = 400, padding = 2 }: TreemapChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hover, setHover] = useState<HoverState | null>(null);
+  const { palette: PALETTE } = useThemeColors();
+  const { locale } = useLocale();
   const rectsRef = useRef<TreemapRect[]>([]);
 
   const draw = useCallback(() => {
@@ -162,7 +160,7 @@ function TreemapChart({ data, width = '100%', height = 400, padding = 2 }: Treem
     ctx.clearRect(0, 0, w, h);
 
     const out: TreemapRect[] = [];
-    squarify(data, 0, 0, w, h, PALETTE[0], 0, padding, out);
+    squarify(data, 0, 0, w, h, PALETTE[0], 0, padding, out, PALETTE);
     rectsRef.current = out;
 
     out.forEach((r) => {
@@ -204,11 +202,15 @@ function TreemapChart({ data, width = '100%', height = 400, padding = 2 }: Treem
         if (r.h > 38) {
           ctx.fillStyle = tokens.colors.white_2;
           ctx.font = '11px Manrope, sans-serif';
-          ctx.fillText(String(r.node.value), r.x + 6, r.y + 22);
+          ctx.fillText(
+            new Intl.NumberFormat(locale).format(r.node.value),
+            r.x + 6,
+            r.y + 22,
+          );
         }
       }
     });
-  }, [data, hover, padding]);
+  }, [data, hover, padding, PALETTE, locale]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {

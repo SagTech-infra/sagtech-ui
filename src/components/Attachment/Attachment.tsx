@@ -13,11 +13,15 @@ import attachmentConsts from './attachment.const';
 import Typography from '@/components/Typography/Typography';
 
 interface AttachmentTypes
-  extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
+  extends Omit<
+    DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>,
+    'onChange'
+  > {
   state?: 'active' | 'default' | 'disabled';
   accept?: string;
   isError?: boolean;
-  onUpload?: (files: Array<File> | undefined) => void;
+  /** Fired with the selected files whenever the input changes. */
+  onChange?: (files: Array<File> | undefined) => void;
   multiple?: boolean;
   errorMessage?: string;
   getFiles?: (files: Array<File>) => void;
@@ -29,7 +33,7 @@ export function Attachment({
   state = 'default',
   accept = '.png, .jpg, .pdf, .gif',
   isError = false,
-  onUpload,
+  onChange,
   multiple = true,
   clearField,
   errorMessage,
@@ -77,8 +81,8 @@ export function Attachment({
     if (input.files) {
       const filesArr = Array.from(input.files);
 
-      if (onUpload) {
-        onUpload(filesArr);
+      if (onChange) {
+        onChange(filesArr);
       }
 
       setFiles(filesArr);

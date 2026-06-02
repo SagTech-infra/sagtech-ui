@@ -1,0 +1,12 @@
+/*
+ * CT global stylesheet. Mirrors the Storybook harness but adds an explicit
+ * `@source` so Tailwind v4 generates the utilities the components actually use.
+ *
+ * Tailwind v4 auto-detects sources relative to the file that declares
+ * `@import "tailwindcss"` — here that is `src/tokens/theme.css`, so without help
+ * it only scans `src/tokens/**` and utilities used in `src/components/**`
+ * (e.g. `overflow-auto` on VirtualList's scroll container) are never emitted.
+ * Registering `src` explicitly makes the CT build match what ships.
+ */
+@import "../src/tokens/index.css";
+@source "../src";

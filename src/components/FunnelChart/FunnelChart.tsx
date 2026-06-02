@@ -2,15 +2,9 @@
 
 import { useRef, useEffect, useCallback, useState } from 'react';
 import * as tokens from '@/tokens/tokens';
+import { useThemeColors } from '@/hooks/useThemeColors';
+import { useLocale } from '@/providers/LocaleContext';
 import type { FunnelChartProps } from './types';
-
-const PALETTE = [
-  tokens.colors.pr_purple,
-  tokens.colors.sec_purple,
-  tokens.colors.success,
-  tokens.colors.warning,
-  tokens.colors.sec_blue,
-];
 
 interface HoverState {
   index: number;
@@ -48,6 +42,8 @@ function FunnelChart({
 }: FunnelChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hover, setHover] = useState<HoverState | null>(null);
+  const { palette: PALETTE } = useThemeColors();
+  const { locale } = useLocale();
   const stageRectsRef = useRef<StageRect[]>([]);
 
   const draw = useCallback(() => {
@@ -121,7 +117,11 @@ function FunnelChart({
         ctx.font = 'bold 13px Manrope, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(`${s.label} · ${s.value}`, cx, (top + bottom) / 2);
+        ctx.fillText(
+          `${s.label} · ${new Intl.NumberFormat(locale).format(s.value)}`,
+          cx,
+          (top + bottom) / 2,
+        );
 
         // Percent annotation between this and next stage
         if (showPercents && i < stages.length - 1) {
@@ -186,7 +186,11 @@ function FunnelChart({
         ctx.fillText(`${s.label}`, (left + right) / 2, cy - 6);
         ctx.fillStyle = tokens.colors.grey_3;
         ctx.font = '11px Manrope, sans-serif';
-        ctx.fillText(String(s.value), (left + right) / 2, cy + 10);
+        ctx.fillText(
+          new Intl.NumberFormat(locale).format(s.value),
+          (left + right) / 2,
+          cy + 10,
+        );
 
         if (showPercents && i < stages.length - 1) {
           const pct = Math.round((stages[i + 1].value / fromV) * 100);
@@ -201,7 +205,7 @@ function FunnelChart({
     }
 
     stageRectsRef.current = stageRects;
-  }, [stages, hover, orientation, showPercents]);
+  }, [stages, hover, orientation, showPercents, PALETTE, locale]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {

@@ -1,29 +1,26 @@
-'use client';
+"use client";
 
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import classNames from 'classnames';
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { useLocale } from "@/providers/LocaleContext";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { tokenTransition } from "@/utils/motion";
+import { edgeSlideVariants } from "@/motion/overlayVariants";
+import classNames from "classnames";
 import {
   getOverlayDepth,
   registerOverlay,
   subscribeOverlayStack,
   unregisterOverlay,
-} from '@/components/Modal/ModalStack';
-
-export interface DrawerProps {
-  isOpen: boolean;
-  onClose: () => void;
-  position?: 'left' | 'right';
-  width?: string;
-  title?: string;
-  children: React.ReactNode;
-  showOverlay?: boolean;
-  className?: string;
-}
-
-const Z_DRAWER_BACKDROP = 4000;
-const Z_DRAWER = 4001;
-const Z_STEP = 10;
+} from "@/components/Modal/ModalStack";
+import type { DrawerProps } from "./types";
+import { Z_DRAWER_BACKDROP, Z_DRAWER, Z_STEP } from "./drawer.const";
+import { FOCUSABLE_SELECTOR } from "../Modal/modal.const";
 
 function CloseIcon() {
   return (
@@ -39,22 +36,30 @@ function CloseIcon() {
   );
 }
 
-export default function Drawer({
-  isOpen,
-  onClose,
-  position = 'right',
-  width,
-  title,
-  children,
-  showOverlay = true,
-  className,
-}: DrawerProps) {
+const Drawer = forwardRef<HTMLElement, DrawerProps>(function Drawer(
+  {
+    isOpen,
+    onClose,
+    position = "right",
+    width,
+    title,
+    children,
+    showOverlay = true,
+    className,
+    initialFocusTarget,
+  },
+  ref,
+) {
+  const { dir } = useLocale();
+  const reduceMotion = useReducedMotion();
   const idRef = useRef<number | null>(null);
+  const panelRef = useRef<HTMLElement | null>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
   const [, forceRender] = useState(0);
 
   const handleEscape = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         onClose();
       }
     },
@@ -63,9 +68,33 @@ export default function Drawer({
 
   useEffect(() => {
     if (!isOpen) return;
+    previousFocusRef.current = document.activeElement as HTMLElement | null;
     idRef.current = registerOverlay(onClose);
     const unsubscribe = subscribeOverlayStack(() => forceRender((v) => v + 1));
-    document.addEventListener('keydown', handleEscape);
+    document.addEventListener("keydown", handleEscape);
+
+    const frame = requestAnimationFrame(() => {
+      const panel = panelRef.current;
+      if (!panel) return;
+      if (initialFocusTarget === null) return;
+      if (initialFocusTarget !== undefined) {
+        let target: HTMLElement | null = null;
+        if (typeof initialFocusTarget === "string") {
+          target = panel.querySelector<HTMLElement>(initialFocusTarget);
+        } else if (initialFocusTarget instanceof HTMLElement) {
+          target = initialFocusTarget;
+        } else if (
+          typeof initialFocusTarget === "object" &&
+          "current" in initialFocusTarget
+        ) {
+          target = initialFocusTarget.current;
+        }
+        target?.focus();
+        return;
+      }
+      const focusable = panel.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+      focusable?.focus();
+    });
 
     return () => {
       if (idRef.current !== null) {
@@ -73,19 +102,24 @@ export default function Drawer({
         idRef.current = null;
       }
       unsubscribe();
-      document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener("keydown", handleEscape);
+      cancelAnimationFrame(frame);
+      previousFocusRef.current?.focus?.();
     };
-  }, [isOpen, handleEscape, onClose]);
+  }, [isOpen, handleEscape, onClose, initialFocusTarget]);
+
+  const setRefs = (node: HTMLElement | null) => {
+    panelRef.current = node;
+    if (typeof ref === "function") ref(node);
+    else if (ref)
+      (ref as React.MutableRefObject<HTMLElement | null>).current = node;
+  };
 
   const depth = idRef.current !== null ? getOverlayDepth(idRef.current) : 0;
   const drawerZ = Z_DRAWER + depth * Z_STEP;
   const backdropZ = Z_DRAWER_BACKDROP + depth * Z_STEP;
 
-  const slideVariants = {
-    hidden: { x: position === 'right' ? '100%' : '-100%' },
-    visible: { x: 0 },
-    exit: { x: position === 'right' ? '100%' : '-100%' },
-  };
+  const slideVariants = edgeSlideVariants(position, dir);
 
   return (
     <AnimatePresence>
@@ -95,22 +129,26 @@ export default function Drawer({
             <motion.div
               className="fixed inset-0 bg-backdrop"
               style={{ zIndex: backdropZ }}
-              initial={{ opacity: 0 }}
+              initial={reduceMotion ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              transition={
+                reduceMotion ? { duration: 0 } : tokenTransition("normal")
+              }
               onClick={onClose}
             />
           )}
 
           <motion.aside
+            ref={setRefs}
+            dir={dir}
             className={classNames(
-              'fixed top-0 h-full bg-black_1 flex flex-col',
+              "fixed top-0 h-full bg-surface-overlay flex flex-col",
               {
-                'right-0 border-l border-black_3': position === 'right',
-                'left-0 border-r border-black_3': position === 'left',
+                "end-0 border-s border-border-default": position === "right",
+                "start-0 border-e border-border-default": position === "left",
               },
-              width ? undefined : 'w-[400px]',
+              width ? undefined : "w-[400px]",
               className,
             )}
             style={{ zIndex: drawerZ, ...(width ? { width } : {}) }}
@@ -118,26 +156,33 @@ export default function Drawer({
             initial="hidden"
             animate="visible"
             exit="exit"
-            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
           >
-            <div className="flex items-center justify-between p-24px border-b border-black_3">
+            <div className="flex items-center justify-between p-24px border-b border-border-default">
               {title && (
-                <h2 className="font-manrope text-18 font-semibold text-white_4">{title}</h2>
+                <h2 className="font-manrope text-18 font-semibold text-fg-primary">
+                  {title}
+                </h2>
               )}
               <button
                 type="button"
                 onClick={onClose}
-                className="text-grey_4 hover:text-white_4 cursor-pointer transition-colors duration-200 ml-auto"
+                className="text-fg-muted hover:text-fg-primary cursor-pointer transition-colors duration-200 ms-auto"
                 aria-label="Close drawer"
               >
                 <CloseIcon />
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-24px custom-scrollbar">{children}</div>
+            <div className="flex-1 overflow-y-auto p-24px custom-scrollbar">
+              {children}
+            </div>
           </motion.aside>
         </>
       )}
     </AnimatePresence>
   );
-}
+});
+
+Drawer.displayName = "Drawer";
+export default Drawer;

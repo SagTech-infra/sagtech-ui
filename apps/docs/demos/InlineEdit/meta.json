@@ -1,0 +1,1 @@
+{ "description": "Displays a value as text that turns into an editable input on click, committing changes via onSave (Enter to save, Esc to cancel)." }

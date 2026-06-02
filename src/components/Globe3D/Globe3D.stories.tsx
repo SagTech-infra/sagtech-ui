@@ -3,7 +3,7 @@ import Globe3D from './Globe3D';
 import type { Globe3DMarker } from './types';
 
 const meta = {
-  title: 'Data Display/Globe3D',
+  title: '3D/Globe3D',
   component: Globe3D,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },

@@ -1,0 +1,1 @@
+{ "description": "A drag-and-drop reorderable list that renders custom items with a drag handle and reports the new order through an onReorder callback, supporting both vertical and horizontal layouts." }

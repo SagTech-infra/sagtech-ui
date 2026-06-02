@@ -3,7 +3,7 @@ import * as tokens from '@/tokens/tokens';
 import Scene3D from './Scene3D';
 
 const meta = {
-  title: 'Data Display/Scene3D',
+  title: '3D/Scene3D',
   component: Scene3D,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },

@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useCallback, useState } from 'react';
 import * as tokens from '@/tokens/tokens';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import type { HeatmapChartProps } from './types';
 
 interface HoverState {
@@ -60,9 +61,10 @@ function HeatmapChart({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hover, setHover] = useState<HoverState | null>(null);
   const cellsRef = useRef<CellRect[]>([]);
+  const { colors } = useThemeColors();
 
-  const fromColor = colorScale?.[0] ?? tokens.colors.pr_blue;
-  const toColor = colorScale?.[1] ?? tokens.colors.pr_purple;
+  const fromColor = colorScale?.[0] ?? colors.pr_blue;
+  const toColor = colorScale?.[1] ?? colors.pr_purple;
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;

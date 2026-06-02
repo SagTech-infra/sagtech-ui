@@ -1,0 +1,83 @@
+[
+  {
+    "name": "main entry (@sagtech-infra/ui)",
+    "path": "dist/index.js",
+    "limit": "515 KB",
+    "gzip": true,
+    "ignore": [
+      "react",
+      "react-dom",
+      "next",
+      "next/image",
+      "next/link",
+      "next/dynamic",
+      "classnames",
+      "framer-motion",
+      "swiper",
+      "swiper/react",
+      "swiper/modules",
+      "react-hook-form",
+      "react-international-phone",
+      "libphonenumber-js",
+      "@dnd-kit/core",
+      "@dnd-kit/sortable",
+      "@dnd-kit/utilities",
+      "@tanstack/react-virtual",
+      "@tiptap/core",
+      "@tiptap/extension-code-block-lowlight",
+      "@tiptap/extension-image",
+      "@tiptap/extension-mention",
+      "@tiptap/pm",
+      "@tiptap/pm/state",
+      "@tiptap/pm/view",
+      "@tiptap/react",
+      "@tiptap/starter-kit",
+      "@tiptap/suggestion",
+      "@xyflow/react",
+      "lowlight",
+      "three",
+      "@react-three/fiber",
+      "@react-three/drei",
+      "react-force-graph-3d",
+      "react-resizable-panels"
+    ]
+  },
+  {
+    "name": "icons entry (@sagtech-infra/ui/icons)",
+    "path": "dist/icons/index.js",
+    "limit": "410 KB",
+    "gzip": true,
+    "ignore": [
+      "react",
+      "react-dom"
+    ]
+  },
+  {
+    "name": "3d entry (@sagtech-infra/ui/3d)",
+    "path": "dist/3d/index.js",
+    "limit": "5 KB",
+    "gzip": true,
+    "ignore": [
+      "react",
+      "react-dom",
+      "framer-motion",
+      "classnames",
+      "three",
+      "@react-three/fiber",
+      "@react-three/drei",
+      "react-force-graph-3d"
+    ]
+  },
+  {
+    "name": "charts entry (@sagtech-infra/ui/charts)",
+    "path": "dist/charts/index.js",
+    "limit": "19 KB",
+    "gzip": true,
+    "ignore": [
+      "react",
+      "react-dom",
+      "framer-motion",
+      "classnames"
+    ]
+  }
+]

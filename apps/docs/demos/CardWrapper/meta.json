@@ -1,0 +1,1 @@
+{ "description": "A surface wrapper that renders content inside a gradient-stroke border with configurable corner radius. Optionally becomes a link when given an href." }

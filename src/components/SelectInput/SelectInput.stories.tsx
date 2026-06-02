@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
 import SelectInput from './SelectInput';
 import type { SelectOption } from './types';
 
@@ -101,30 +100,6 @@ export const Disabled: Story = {
         onChange={() => {}}
         placeholder="Select a framework"
         disabled
-      />
-    );
-  },
-};
-
-interface FormValues {
-  framework: string;
-}
-
-export const WithReactHookForm: Story = {
-  name: 'With react-hook-form (legacy register + name)',
-  render: function RhfSelect() {
-    const { register, watch, setValue } = useForm<FormValues>({
-      defaultValues: { framework: 'react' },
-    });
-    const value = watch('framework');
-    return (
-      <SelectInput
-        options={sampleOptions}
-        value={value}
-        register={register}
-        name="framework"
-        onChange={(v) => setValue('framework', v)}
-        placeholder="Select a framework"
       />
     );
   },

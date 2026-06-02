@@ -2,16 +2,10 @@
 
 import { useRef, useEffect, useCallback, useState } from 'react';
 import * as tokens from '@/tokens/tokens';
+import { useThemeColors } from '@/hooks/useThemeColors';
+import { useLocale } from '@/providers/LocaleContext';
 import { catmullRomSpline } from '../LineChart/spline';
 import type { AreaChartProps } from './types';
-
-const COLORS = [
-  tokens.colors.pr_purple,
-  tokens.colors.sec_purple,
-  tokens.colors.success,
-  tokens.colors.warning,
-  tokens.colors.sec_blue,
-];
 
 interface HoverState {
   dataIndex: number;
@@ -28,6 +22,8 @@ function AreaChart({
 }: AreaChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hover, setHover] = useState<HoverState | null>(null);
+  const { palette: COLORS } = useThemeColors();
+  const { locale } = useLocale();
   const layoutRef = useRef<{
     padding: { top: number; right: number; bottom: number; left: number };
     chartW: number;
@@ -96,7 +92,7 @@ function AreaChart({
       ctx.font = '11px Manrope, sans-serif';
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
-      ctx.fillText(String(val), padding.left - 12, y);
+      ctx.fillText(new Intl.NumberFormat(locale).format(val), padding.left - 12, y);
     }
 
     // X axis labels
@@ -218,7 +214,7 @@ function AreaChart({
       ctx.fillText(s.name, legendX + 14, legendY);
       legendX += 14 + ctx.measureText(s.name).width + 28;
     });
-  }, [series, hover, stacked, gradient]);
+  }, [series, hover, stacked, gradient, COLORS, locale]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {

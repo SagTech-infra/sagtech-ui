@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Tooltip from './Tooltip';
 
 const meta = {
-  title: 'Data Display/Tooltip',
+  title: 'Overlays/Tooltip',
   component: Tooltip,
   tags: ['autodocs'],
   argTypes: {

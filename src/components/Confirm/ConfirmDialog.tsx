@@ -1,71 +1,76 @@
-'use client';
+"use client";
 
-import { useCallback, useEffect, useRef, type ReactNode } from 'react';
-import { createPortal } from 'react-dom';
-import { AnimatePresence, motion } from 'framer-motion';
-import Typography from '@/components/Typography/Typography';
-import Button from '@/components/Button/Button';
-import type { ConfirmVariant } from './types';
+import React, { useCallback, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { tokenTransition } from "@/utils/motion";
+import Typography from "@/components/Typography/Typography";
+import Button from "@/components/Button/Button";
+import type { ConfirmDialogProps } from "./types";
 
-export interface ConfirmDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  title: string;
-  description?: ReactNode;
-  confirmText?: string;
-  cancelText?: string;
-  variant?: ConfirmVariant;
-  icon?: ReactNode;
-  loading?: boolean;
-  /**
-   * When true, the primary confirm button is disabled (e.g. while a parent
-   * form is invalid). The cancel/close path remains active. Default: false.
-   */
-  confirmDisabled?: boolean;
-  onConfirm?: () => void;
-}
+export type { ConfirmDialogProps };
 
 export default function ConfirmDialog({
   open,
   onOpenChange,
   title,
   description,
-  confirmText = 'Confirm',
-  cancelText = 'Cancel',
-  variant = 'default',
+  confirmText = "Confirm",
+  cancelText = "Cancel",
+  variant = "default",
   icon,
   loading = false,
   confirmDisabled = false,
   onConfirm,
+  initialFocusTarget,
 }: ConfirmDialogProps) {
+  const reduceMotion = useReducedMotion();
   const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!open) return;
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && !loading) onOpenChange(false);
+      if (e.key === "Escape" && !loading) onOpenChange(false);
     };
-    document.addEventListener('keydown', handleKey);
+    document.addEventListener("keydown", handleKey);
     const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    const focusTimer = window.setTimeout(() => {
-      const primary = dialogRef.current?.querySelector<HTMLButtonElement>(
+    document.body.style.overflow = "hidden";
+    const frame = requestAnimationFrame(() => {
+      const dialog = dialogRef.current;
+      if (!dialog) return;
+      if (initialFocusTarget === null) return;
+      if (initialFocusTarget !== undefined) {
+        let target: HTMLElement | null = null;
+        if (typeof initialFocusTarget === "string") {
+          target = dialog.querySelector<HTMLElement>(initialFocusTarget);
+        } else if (initialFocusTarget instanceof HTMLElement) {
+          target = initialFocusTarget;
+        } else if (
+          typeof initialFocusTarget === "object" &&
+          "current" in initialFocusTarget
+        ) {
+          target = initialFocusTarget.current;
+        }
+        target?.focus();
+        return;
+      }
+      const primary = dialog.querySelector<HTMLButtonElement>(
         'button[data-sagtech-confirm-primary="true"]',
       );
       primary?.focus();
-    }, 0);
+    });
     return () => {
-      document.removeEventListener('keydown', handleKey);
+      document.removeEventListener("keydown", handleKey);
       document.body.style.overflow = prevOverflow;
-      window.clearTimeout(focusTimer);
+      cancelAnimationFrame(frame);
     };
-  }, [open, loading, onOpenChange]);
+  }, [open, loading, onOpenChange, initialFocusTarget]);
 
   const handleBackdropClick = useCallback(() => {
     if (!loading) onOpenChange(false);
   }, [loading, onOpenChange]);
 
-  if (typeof document === 'undefined') return null;
+  if (typeof document === "undefined") return null;
 
   return createPortal(
     <AnimatePresence>
@@ -74,8 +79,8 @@ export default function ConfirmDialog({
           role="dialog"
           aria-modal="true"
           aria-labelledby="sagtech-confirm-title"
-          aria-describedby={description ? 'sagtech-confirm-desc' : undefined}
-          style={{ zIndex: 'var(--z-modal)' }}
+          aria-describedby={description ? "sagtech-confirm-desc" : undefined}
+          style={{ zIndex: "var(--z-modal)" }}
           className="fixed inset-0 flex items-center justify-center p-16px"
         >
           <motion.div
@@ -83,7 +88,9 @@ export default function ConfirmDialog({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
+            transition={
+              reduceMotion ? { duration: 0 } : tokenTransition("fast")
+            }
             onClick={handleBackdropClick}
           />
           <motion.div
@@ -91,12 +98,20 @@ export default function ConfirmDialog({
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
-            transition={{ duration: 0.15 }}
-            className="relative w-full max-w-[420px] rounded-24px border border-black_3 bg-black_1 p-24px shadow-4xl"
+            transition={
+              reduceMotion ? { duration: 0 } : tokenTransition("fast")
+            }
+            className="relative w-full max-w-[420px] rounded-24px border border-border-default bg-surface-overlay p-24px shadow-4xl"
           >
             <div className="flex flex-col gap-16px">
-              {icon && <div className="flex items-center justify-center">{icon}</div>}
-              <Typography tag="h3" color="text-white_4" id="sagtech-confirm-title">
+              {icon && (
+                <div className="flex items-center justify-center">{icon}</div>
+              )}
+              <Typography
+                tag="h3"
+                color="text-white_4"
+                id="sagtech-confirm-title"
+              >
                 {title}
               </Typography>
               {description && (
@@ -121,7 +136,7 @@ export default function ConfirmDialog({
                   data-sagtech-confirm-primary="true"
                   text={confirmText}
                   buttonSize="small"
-                  variant={variant === 'danger' ? 'danger' : 'primary'}
+                  variant={variant === "danger" ? "danger" : "primary"}
                   onClick={onConfirm}
                   loadingType={loading}
                   disabled={loading || confirmDisabled}

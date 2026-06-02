@@ -29,14 +29,15 @@
 | **`Drawer`** | Боковая панель, не отрывающая от основного контекста — detail view, bulk edit, filter sidebar. |
 | **`CommandPalette`** | Глобальный Cmd+K для быстрой навигации и запуска команд. |
 
-## `Notification` vs `Toast` vs `Alert` vs `NotificationCenter`
+## `Toast` vs `Alert` vs `NotificationCenter`
 
 | Компонент | Когда использовать |
 |---|---|
 | **`Toast` / `Toaster`** | Короткоживущие (2–5с) сообщения — «Saved», «Copied to clipboard», «Upload failed». Floating в углу экрана, стэкуются. Для imperative `toast.success()`. |
-| **`Notification`** | Legacy компонент — оставлен для backward-compat с `NotificationContext`. В новом коде предпочитайте `Toast`. |
 | **`Alert`** | Inline-сообщение в потоке страницы — warnings под формой, rate-limit на дашборде, upgrade-prompts. Persistent (не авто-исчезает). |
 | **`NotificationCenter`** | Widget-колокольчик в header'е с историей нотификаций. Prop-driven (консьюмер передаёт `notifications[]` + колбэки). |
+
+> Семейство `Notification` (`Notification` / `NotificationWrapper` / `NotificationContext` / `NotificationContextProvider`) **удалено в v2.0** — используйте `Toaster` + `toast`. См. `docs/MIGRATION.md`.
 
 ## `SelectInput` vs `Combobox`
 
@@ -91,6 +92,6 @@ They serve different jobs — pick the one that matches the task, not the one th
 - **`Steps`** (v1.0) — simple numbered indicator with animated progress line. Presentational only, no per-step state.
 - **`Stepper`** (v1.1) — richer indicator with per-step `status: 'pending' \| 'active' \| 'complete' \| 'error'`, optional `description`, and click-to-jump (`clickableSteps: 'all' \| 'completed' \| 'none'`). Supports both `horizontal` and `vertical` orientation. Use when steps can fail, can be revisited, or need supplementary text per step.
 
-### `Toast` (preferred) vs `Notification` (legacy, `@deprecated` in v1.1)
+### `Toast` (the transient-feedback API) — `Notification` removed in v2.0
 
-`Notification`, `NotificationWrapper`, `NotificationContext`, `NotificationContextProvider` are now `@deprecated`. They still work at runtime, but new code should use `Toaster` + the imperative `toast.success()` / `toast.error()` / `toast.info()` / `toast.warning()` / `toast.loading()` / `toast.promise()` API. Removal is scheduled for **v2.0** — see `docs/MIGRATION.md`.
+`Notification`, `NotificationWrapper`, `NotificationContext`, `NotificationContextProvider` were `@deprecated` since v1.1 and are **removed in v2.0**. Use `Toaster` + the imperative `toast.success()` / `toast.error()` / `toast.info()` / `toast.warning()` / `toast.loading()` / `toast.promise()` API. See `docs/MIGRATION.md` (v1.9 → v2.0).

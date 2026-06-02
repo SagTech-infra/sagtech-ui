@@ -1,65 +1,68 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import classNames from 'classnames';
+import { forwardRef } from "react";
+import type { ReactNode } from "react";
+import TabsRoot from "./TabsRoot";
+import TabsList from "./TabsList";
+import TabsTrigger from "./TabsTrigger";
+import TabsContent from "./TabsContent";
 
 export interface TabItem {
   label: string;
-  content: React.ReactNode;
+  content: ReactNode;
 }
 
 export interface TabsProps {
   items: TabItem[];
-  defaultIndex?: number;
+  /** Default active tab id (`tab-<index>`); defaults to the first tab. */
+  defaultValue?: string;
   className?: string;
   onChange?: (index: number) => void;
 }
 
-export default function Tabs({ items, defaultIndex = 0, className, onChange }: TabsProps) {
-  const [activeIndex, setActiveIndex] = useState(defaultIndex);
-
-  const handleTabClick = (index: number) => {
-    if (index !== activeIndex) {
-      setActiveIndex(index);
-      onChange?.(index);
+const TabsBase = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
+  { items, defaultValue = "tab-0", className, onChange },
+  ref,
+) {
+  function handleValueChange(value: string) {
+    if (onChange) {
+      const index = parseInt(value.replace("tab-", ""), 10);
+      if (!isNaN(index)) onChange(index);
     }
-  };
+  }
 
   return (
-    <div className={classNames('flex flex-col', className)}>
-      <div className="flex flex-wrap gap-8px">
+    <TabsRoot
+      ref={ref}
+      defaultValue={defaultValue}
+      onValueChange={handleValueChange}
+      className={className}
+    >
+      <TabsList>
         {items.map((item, index) => (
-          <button
-            key={item.label}
-            type="button"
-            onClick={() => handleTabClick(index)}
-            className={classNames(
-              'leading-24 flex justify-center items-center text-14 px-16px py-7px rounded-circle transition-all duration-200 font-manrope cursor-pointer',
-              {
-                'bg-pr_purple border border-solid border-pr_purple text-white_4':
-                  index === activeIndex,
-                'border border-solid border-grey_4 text-grey_4 hover:border-white_4 hover:text-white_4':
-                  index !== activeIndex,
-              },
-            )}
-          >
+          <TabsTrigger key={item.label} value={`tab-${index}`}>
             {item.label}
-          </button>
+          </TabsTrigger>
         ))}
-      </div>
-      <div className="grid">
+      </TabsList>
+      <div className="mt-0">
         {items.map((item, index) => (
-          <div
-            key={item.label}
-            className={classNames('transition-opacity duration-200 col-start-1 row-start-1', {
-              'opacity-100 visible': index === activeIndex,
-              'opacity-0 invisible pointer-events-none': index !== activeIndex,
-            })}
-          >
+          <TabsContent key={item.label} value={`tab-${index}`}>
             {item.content}
-          </div>
+          </TabsContent>
         ))}
       </div>
-    </div>
+    </TabsRoot>
   );
-}
+});
+
+TabsBase.displayName = "Tabs";
+
+const Tabs = Object.assign(TabsBase, {
+  Root: TabsRoot,
+  List: TabsList,
+  Trigger: TabsTrigger,
+  Content: TabsContent,
+});
+
+export default Tabs;

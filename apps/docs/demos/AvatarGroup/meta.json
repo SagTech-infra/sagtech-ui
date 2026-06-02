@@ -1,0 +1,1 @@
+{ "description": "Renders a stack of overlapping avatars with a configurable maximum, collapsing the remainder into a +N overflow indicator." }

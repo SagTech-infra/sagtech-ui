@@ -3,38 +3,60 @@
 
 export const colors = {
   black_1: "#070715",
-  black_2: "#20202D",
+  black_1_5: "#1b1b27",
+  black_2: "#20202d",
   black_3: "#393944",
-  black_4: "#51515B",
-  grey_1: "#6A6A73",
-  grey_2: "#83838A",
-  grey_3: "#9C9CA1",
-  grey_4: "#B5B5B9",
-  white_1: "#CDCDD0",
-  white_2: "#E6E6E8",
-  white_3: "#F3F3F3",
-  white_4: "#F8F8F8",
-  white: "#FFFFFF",
-  pr_purple: "#6D3EF1",
-  sec_purple: "#B69FF8",
-  pr_blue: "#292A94",
-  sec_blue: "#9494C9",
-  error: "#992D2D",
-  warning: "#C6A328",
-  success: "#58A61B",
-  shape_stroke_1_part_one: "#0C0C1E",
+  black_4: "#51515b",
+  grey_1: "#6a6a73",
+  grey_2: "#83838a",
+  grey_3: "#9c9ca1",
+  grey_4: "#b5b5b9",
+  white_1: "#cdcdd0",
+  white_2: "#e6e6e8",
+  white_3: "#f3f3f3",
+  white_4: "#f8f8f8",
+  white: "#ffffff",
+  pr_purple: "#6d3ef1",
+  sec_purple: "#b69ff8",
+  pr_blue: "#292a94",
+  sec_blue: "#9494c9",
+  error: "#992d2d",
+  warning: "#c6a328",
+  success: "#58a61b",
+  shape_stroke_1_part_one: "#0c0c1e",
   shape_stroke_1_part_two: "#221546",
-  shape_stroke_2_part_one: "#1F1F38",
-  shape_stroke_2_part_two: "#2F1E5E",
+  shape_stroke_2_part_one: "#1f1f38",
+  shape_stroke_2_part_two: "#2f1e5e",
   backdrop: "rgba(0, 0, 0, 0.56)",
   backdrop_2: "rgba(255, 255, 255, 0.04)",
   back_load: "rgba(7, 7, 15, 0.05)",
+  'bg-primary': "#070715",
+  'bg-secondary': "#1b1b27",
+  'bg-tertiary': "#393944",
+  'fg-primary': "#f8f8f8",
+  'fg-secondary': "#cdcdd0",
+  'fg-muted': "#83838a",
+  'border-default': "#393944",
+  'border-strong': "#5c5c66",
+  'surface-overlay': "#20202d",
+  'surface-wash': "rgba(109, 62, 241, 0.06)",
+  'fg-success': "#7bc242",
+  'fg-warning': "#c6a328",
+  'fg-error': "#e0675e",
+  'fg-info': "#9494c9",
+  'bg-success': "rgba(88, 166, 27, 0.16)",
+  'bg-warning': "rgba(198, 163, 40, 0.16)",
+  'bg-error': "rgba(153, 45, 45, 0.24)",
+  'bg-info': "rgba(148, 148, 201, 0.16)",
 } as const;
 
 export const fonts = {
-  orbitron: "var(--font-orbitron), serif",
-  roboto: "var(--font-roboto), serif",
-  manrope: "var(--font-manrope), serif",
+  orbitron: "var(--font-orbitron), sans-serif",
+  roboto: "var(--font-roboto), sans-serif",
+  manrope: "var(--font-manrope), sans-serif",
+  display: "var(--font-orbitron), sans-serif",
+  body: "var(--font-manrope), sans-serif",
+  mono: "ui-monospace, \"SF Mono\", \"JetBrains Mono\", Menlo, Consolas, monospace",
 } as const;
 
 export const textSizes = {
@@ -99,7 +121,7 @@ export const breakpoints = {
   xs: "500px",
   mds: "600px",
   sm: "768px",
-  sl: "1025px",
+  sl: "1024px",
   xl: "1024px",
   md: "1100px",
   lg: "1300px",
@@ -113,6 +135,9 @@ export const shadows = {
   '4xl': "0px -8px 24px 0px rgba(255, 255, 255, 0.04)",
   '5xl': "0px 0px 4px 0px rgba(109, 62, 241, 0.64)",
   '6xl': "0px 0px 16px rgba(109, 62, 241, 0.56)",
+  'glow-purple': "0 0 24px rgba(109, 62, 241, 0.2)",
+  'elevate-md': "0 18px 36px rgba(0, 0, 0, 0.55)",
+  'elevate-lg': "0 24px 64px rgba(0, 0, 0, 0.5)",
 } as const;
 
 export const dropShadows = {
@@ -123,7 +148,11 @@ export const radius = {
   circle: "50px",
   '40px': "40px",
   '24px': "24px",
+  '18px': "18px",
   '16px': "16px",
+  '14px': "14px",
+  '12px': "12px",
+  '10px': "10px",
   '8px': "8px",
   halfRound: "40px 40px 0px 0px",
 } as const;
@@ -174,8 +203,29 @@ export const aspect = {
   '704': "704",
 } as const;
 
+export const motionDuration = {
+  fast: "120ms",
+  normal: "200ms",
+  slow: "320ms",
+} as const;
+
+export const motionEase = {
+  standard: "cubic-bezier(0.4, 0, 0.2, 1)",
+  emphasized: "cubic-bezier(0.2, 0, 0, 1)",
+  decelerated: "cubic-bezier(0, 0, 0.2, 1)",
+  tech: "cubic-bezier(0.2, 0.8, 0.2, 1)",
+} as const;
+
 
 export type ColorToken = keyof typeof colors;
+export type SemanticColorToken = Extract<
+  ColorToken,
+  | "bg-primary" | "bg-secondary" | "bg-tertiary"
+  | "fg-primary" | "fg-secondary" | "fg-muted"
+  | "border-default" | "border-strong" | "surface-overlay"
+  | "fg-success" | "fg-warning" | "fg-error" | "fg-info"
+  | "bg-success" | "bg-warning" | "bg-error" | "bg-info"
+>;
 export type FontToken = keyof typeof fonts;
 export type TextSizeToken = keyof typeof textSizes;
 export type SpacingToken = keyof typeof spacing;
@@ -183,3 +233,5 @@ export type BreakpointToken = keyof typeof breakpoints;
 export type RadiusToken = keyof typeof radius;
 export type ShadowToken = keyof typeof shadows;
 export type ZIndexToken = keyof typeof zIndex;
+export type MotionDurationToken = keyof typeof motionDuration;
+export type MotionEaseToken = keyof typeof motionEase;

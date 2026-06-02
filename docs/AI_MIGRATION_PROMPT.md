@@ -36,7 +36,7 @@ You are migrating a consumer React app to `@sagtech-infra/ui` — SagTech's inte
 ### Soft rules
 
 - Lean on the library's hooks (`useConfirm`, `useWizard`, `useStatusColor`, etc.) before writing your own.
-- Use `Toaster` + the imperative `toast` API for transient feedback. Avoid `Notification` (it's `@deprecated` in v1.1).
+- Use `Toaster` + the imperative `toast` API for transient feedback (`Notification` was removed in v2.0).
 - For multi-step flows, prefer `Wizard` over hand-rolled stepper state machines.
 - For tables with sort/select/sticky-header needs, use `DataTable` (richer) over `Table` (simple).
 
@@ -91,11 +91,13 @@ Skip any row whose component the app does not use.
 | `Steps`, `InfoTabs`, `Point`, `CardWrapper` (with `href`) | `next` (already there if it's a Next app); else use `<SagtechUIProvider>` (step 6) |
 | `Form` + `FormField`/`FormControl`/`FormError`/etc. | `react-hook-form` |
 | `PhoneInput` | `react-international-phone libphonenumber-js` |
-| `LineChart`, `DonutChart` | `apexcharts react-apexcharts` |
 | `Timeline` | `swiper` |
 | `SortableList` | `@dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities` |
 | `VirtualList` | `@tanstack/react-virtual` |
-| `RichTextEditor` | `@tiptap/core @tiptap/react @tiptap/starter-kit` |
+| `RichTextEditor` (core) | `@tiptap/core @tiptap/react @tiptap/starter-kit` |
+| `createMentionExtension` preset | above + `@tiptap/extension-mention @tiptap/suggestion` |
+| `createSlashCommandExtension` preset | above + `@tiptap/suggestion` |
+| `createImageUploadExtension` preset | above + `@tiptap/extension-image @tiptap/pm` |
 | `VisualGraphEditor` | `@xyflow/react` |
 | `Globe3D`, `Scene3D`, `Mindmap3D` | `three @react-three/fiber @react-three/drei` |
 | `Network3D` | `three @react-three/fiber @react-three/drei react-force-graph-3d` |
@@ -237,20 +239,20 @@ Use the **right column** to decide what to import. If the entry says "(legacy)" 
 | Component | What it is | Use when |
 |---|---|---|
 | `Button` | `variant: 'primary' \| 'secondary' \| 'danger' \| 'tabButton' \| 'tabButtonWhite'`, `buttonSize: 'small' \| 'large' \| 'tabSize'`, `loadingType`, `disabled` | Any button. `variant="danger"` for destructive actions (delete, etc.). |
-| `Input` | Text input with `state`/`isError`/`errorMessage`/`externalLabel` | Plain text/number/email/password. |
+| `Input` | Text input with `state`/`isError`/`errorMessage`/`label` (static) + `floatingLabel` | Plain text/number/email/password. |
 | `TextArea` | Multi-line input, same contract as `Input` | Multi-line free-form text. |
 | `Checkbox` | Controlled, `label` rendered inside `<label>` | Boolean choice. |
 | `Toggle` | `checked` + `onChange(boolean)`, sizes | On/off setting where toggle metaphor is right. |
 | `RadioGroup` | `options` + `value` + `onChange` | Mutually-exclusive choice in a small fixed set. |
 | `SegmentedControl` | iOS-style toggle group: `options`, `value`, `onChange`, sizes, `fullWidth` | Mutually-exclusive choice with chip aesthetic (view-mode toggle, time-range picker). |
-| `SelectInput` | Native select with full keyboard nav, optional multi-select. `onSelect` is `@deprecated` — use `onChange`. | Short fixed list of options (≤ ~20). |
+| `SelectInput` | Native select with full keyboard nav, optional multi-select. Controlled-only: `value` + `onChange` (the old `onSelect`/`register`/`name` were removed in v2.0). | Short fixed list of options (≤ ~20). |
 | `Combobox` | Searchable select, async-loading, custom render-per-option | Long lists, async-loaded options, free-typed search. |
 | `SearchBar` | Debounced search input | Top-of-page search affordance. |
 | `DatePicker` | Single date, optional `showTime` (hours+minutes, `timeStep` default 5) | Pick one date or one date+time. |
 | `DateRangePicker` | `{ start, end }` range | Pick a date range. |
 | `Dropzone` | Basic drag-and-drop, returns `File[]` via `onDrop` | CSV import, simple file pickup with no per-file tracking. |
 | `FileDropzone` | Controlled `files: FileUploadItem[]`, per-file progress/status/retry, image preview, `maxFiles`/`maxSize` | Async upload with a progress bar per file. |
-| `Attachment` | Inline paperclip-style single-file picker (legacy — `onUpload`, not `onChange`) | Existing forms expecting `multipart/form-data` with a single file. For new code, prefer `FileDropzone` with `maxFiles={1}`. |
+| `Attachment` | Inline paperclip-style single-file picker; `onChange(files)` (renamed from `onUpload` in v2.0) | Existing forms expecting `multipart/form-data` with a single file. For new code, prefer `FileDropzone` with `maxFiles={1}`. |
 | `PhoneInput` | International phone with auto-country-detection | Phone number input. |
 | `TagInput` | Tag/chip editor (Enter or comma to add) | Tag editor (skills, keywords). |
 | `DropdownMenu` | Trigger + items (danger, disabled, divider) with full keyboard nav | Action menus on a row, "more options" buttons. |
@@ -313,8 +315,8 @@ All canvas-based unless noted. `width` accepts number or string (default 100% re
 
 | Component | Backed by | Best for |
 |---|---|---|
-| `LineChart` | ApexCharts | Time-series, multi-series line chart with hover. |
-| `DonutChart` | ApexCharts | Part-to-whole circular breakdown. |
+| `LineChart` | Canvas | Time-series, multi-series line chart with hover. |
+| `DonutChart` | SVG | Part-to-whole circular breakdown. |
 | `AreaChart` | Native canvas | Smoothed trend with gradient fill (Catmull-Rom). Stackable. |
 | `BarChart` | Native canvas | Vertical/horizontal bars; stacked or grouped. |
 | `HeatmapChart` | Native canvas | Matrix of values (cohort retention, traffic by hour-of-day). |
@@ -344,20 +346,21 @@ These require optional peers (`three`, `@react-three/fiber`, `@react-three/drei`
 | `Alert` | Inline banner — `variant: 'info' \| 'success' \| 'warning' \| 'error'`, optional title/body/icon/action/close, optional `autoDismiss` ms | Inline status message in a layout. Stays in document flow. |
 | `Banner` | Page-level sticky banner (`position: 'top' \| 'bottom'`), variants like `Alert` | System-status announcements, trial-expiring warnings, "you are viewing as another user". |
 | `Spotlight` | Onboarding/feature highlight — clip-path-style cutout around a `targetRef` + tooltip card with optional Next/Skip + step counter | Product tours, "what's new" highlights. |
-| `Toaster` + `toast` | Global toast API — `toast.success/error/info/warning/loading/promise`. Compact, auto-sized, stacks. | Transient feedback ("Saved", "Copied"). **Preferred** over `Notification`. |
+| `Toaster` + `toast` | Global toast API — `toast.success/error/info/warning/loading/promise`. Compact, auto-sized, stacks. | Transient feedback ("Saved", "Copied"). The transient-feedback API in v2.0. |
 | `NotificationCenter` | Bell icon + dropdown with notifications list, badge count, mark-as-read | Header bell with notification history. Prop-driven. |
 | `EmptyState` | `variant: 'inline' \| 'card'` | Empty page or empty list-section. |
 | `ProgressBar` | Determinate bar with variants + animation | Operation progress. |
 | `AnimationButton` | Branded pill-style CTA with hover-expand (desktop only) | Hero/landing CTAs. |
 | `SliderArrow` | Reusable nav arrow | Carousel/slider arrows. |
-| `Notification` + `NotificationContext` + `NotificationContextProvider` + `NotificationWrapper` | **Legacy / `@deprecated` in v1.1.** Removal in v2.0. | Existing v1.0 code only. New code uses `Toaster` + `toast`. |
+
+> The `Notification` family (`Notification` / `NotificationContext` / `NotificationContextProvider` / `NotificationWrapper`) was **removed in v2.0** — use `Toaster` + `toast`.
 
 ### Providers (wrap once at root)
 
 - `SagtechUIProvider` — link/image component injection. Wrap the entire app.
 - `ConfirmProvider` — required if you use `useConfirm` / `useConfirmWithNote`.
 - `CommandPaletteProvider` — required if you use Cmd+K palette.
-- `NotificationContextProvider` — `@deprecated`. Don't wire up for new apps.
+- (`NotificationContextProvider` was removed in v2.0 — use `<Toaster />` instead.)
 
 ### Hooks
 
@@ -398,7 +401,7 @@ Distilled from `docs/COMPONENT_PICKER.md`. When in doubt, follow these rules.
 ### Toast vs Notification vs Alert vs Banner vs CookieBanner vs NotificationCenter
 
 - **Toast** *(preferred)* — short-lived (2–5s) feedback, floating in corner, stacks. `toast.success("Saved")`.
-- **Notification** — `@deprecated`. Existing code only.
+- **Notification** — removed in v2.0. Use `Toaster` + `toast`.
 - **Alert** — inline, persistent, in document flow. Errors under a form, rate-limit on a card.
 - **Banner** — page-level, sticky, persistent, viewport-anchored. System announcements.
 - **CookieBanner** — legal cookie consent only.
@@ -441,7 +444,7 @@ Distilled from `docs/COMPONENT_PICKER.md`. When in doubt, follow these rules.
 
 | Need | Use |
 |---|---|
-| Time-series line | `LineChart` (Apex) or `AreaChart` (canvas, lighter, no Apex peer) |
+| Time-series line | `LineChart` or `AreaChart` (both canvas, no chart-engine peer) |
 | Multiple lines stacked-area-style | `AreaChart` with `stacked={true}` |
 | Bars (vertical/horizontal/stacked/grouped) | `BarChart` |
 | Donut breakdown | `DonutChart` |
@@ -596,7 +599,7 @@ Run `pnpm typecheck && pnpm test`. **Stop. Get approval.**
 
 For each existing chart:
 
-- Time-series line → `LineChart` (Apex) or `AreaChart` (canvas, lighter — preferred when no `apexcharts` peer is wanted).
+- Time-series line → `LineChart` or `AreaChart` (both canvas, no chart-engine peer needed).
 - Bar → `BarChart`.
 - Donut → `DonutChart`.
 - Heatmap → `HeatmapChart`.
@@ -617,6 +620,7 @@ Install the four optional peers, add components that fit (`Network3D` / `Globe3D
 - Remove leftover wrapper components in the consumer repo that simply re-export the above.
 - Grep for hardcoded hex (`#[0-9A-Fa-f]{3,8}`) and px (`\b\d{1,3}px\b` outside layout-critical contexts). Convert to tokens.
 - Remove any light/dark theme toggle. Set `<html data-theme="dark">` (or remove the attribute) and standardize on the dark palette.
+- Don't pin optional peers you don't use. If no rich-text editing, don't install `@tiptap/*`. If no 3D, don't install `three` / `@react-three/*`. The point of optional peers is paying only for what you import.
 
 Run `pnpm typecheck && pnpm lint && pnpm test && pnpm build`. Final spot-check via `pnpm dev`. Report summary. **Stop. Get approval to merge.**
 
@@ -856,9 +860,9 @@ export default function AppLayout({ children, crumbs }: { children: React.ReactN
 2. **Don't deep-import** `@sagtech-infra/ui/dist/components/Foo/Foo`. Always `from '@sagtech-infra/ui'`.
 3. **Don't hardcode** hex (`#070715`) or px (`24px`) — use `bg-black_1` and `p-24px` (Tailwind utilities) or `tokens.colors.black_1` and `tokens.spacing['24px']` (TS constants).
 4. **Don't add a light theme.** Dark-mode-only is intentional. Strip any `data-theme` toggles that pivot the palette. (You may keep a "dark / system" UI toggle if it does nothing — but better to delete it.)
-5. **Don't use `Notification`** for new code (`@deprecated` in v1.1, removal in v2.0). Use `Toaster` + `toast`.
+5. **Don't use `Notification`** — it was removed in v2.0. Use `Toaster` + `toast`.
 6. **Don't render 3D components on the server.** Add `'use client'` at the top of files that import `Network3D` / `Globe3D` / `Scene3D` / `Mindmap3D`. Or wrap them in `next/dynamic({ ssr: false })`.
-7. **Don't pin optional peers you don't use.** If the app doesn't render charts via Apex, don't install `apexcharts`. If no rich-text, no `@tiptap/*`. The point of optional peers is paying only for what you import.
+7. **Don't pin optional peers you don't use.** If no rich-text editing, don't install `@tiptap/*`. If no 3D, don't install `three` / `@react-three/*`. The point of optional peers is paying only for what you import.
 8. **Don't change product behavior** during the migration. If the existing modal closes on backdrop-click, the replacement should too. Surface unintended differences to the human as findings, not silently "improvements."
 9. **Don't wrap every primitive in a one-line consumer wrapper** ("just to add our class"). The library tokens already cover the brand. Wrappers proliferate and obscure the source.
 10. **Don't leave `console.warn` calls** about missing peer dependencies. If a 3D component prints "install three to use Network3D", install three (or remove the import). Don't ship the warning.

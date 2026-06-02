@@ -5,3 +5,15 @@ export { default as useOutsideClick } from './useOutsideClick';
 export { default as useModals } from './useModals';
 export { useStatusColor } from './useStatusColor';
 export type { StatusMeta, StatusTone } from './useStatusColor';
+export { useRovingTabindex } from './useRovingTabindex';
+export type {
+  UseRovingTabindexOptions,
+  UseRovingTabindexResult,
+} from './useRovingTabindex';
+export { useTypeahead } from './useTypeahead';
+export type { UseTypeaheadOptions, UseTypeaheadResult } from './useTypeahead';
+export { useThemeColors } from './useThemeColors';
+export type {
+  UseThemeColorsResult,
+  ThemeColorRecord,
+} from './useThemeColors';

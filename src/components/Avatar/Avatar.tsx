@@ -1,15 +1,17 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import classNames from 'classnames';
+import { useState } from "react";
+import classNames from "classnames";
+
+export type AvatarSize = "xs" | "sm" | "md" | "lg" | "xl";
 
 export interface AvatarProps {
   src?: string;
   alt?: string;
   name?: string;
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: AvatarSize | number;
   className?: string;
-  status?: 'online' | 'offline' | 'away';
+  status?: "online" | "offline" | "away";
 }
 
 const sizeMap = {
@@ -37,17 +39,17 @@ const statusDotSizeMap = {
 } as const;
 
 const statusColorMap = {
-  online: 'bg-success',
-  offline: 'bg-grey_2',
-  away: 'bg-warning',
+  online: "bg-success",
+  offline: "bg-grey_2",
+  away: "bg-warning",
 } as const;
 
 function getInitials(name: string): string {
   return name
-    .split(' ')
+    .split(" ")
     .filter(Boolean)
     .map((word) => word[0])
-    .join('')
+    .join("")
     .toUpperCase()
     .slice(0, 2);
 }
@@ -73,36 +75,41 @@ export default function Avatar({
   src,
   alt,
   name,
-  size = 'md',
+  size = "md",
   className,
   status,
 }: AvatarProps) {
   const [imgError, setImgError] = useState(false);
 
-  const dimension = sizeMap[size];
-  const fontSize = fontSizeMap[size];
+  const isNumeric = typeof size === "number";
+  const dimension = isNumeric ? size : sizeMap[size];
+  const fontSize = isNumeric ? Math.round(size * 0.4) : fontSizeMap[size];
+  const statusDotSize = isNumeric
+    ? Math.max(4, Math.round(size * 0.15))
+    : statusDotSizeMap[size];
+
   const showImage = src && !imgError;
   const showInitials = !showImage && name;
   const showFallbackIcon = !showImage && !name;
 
   return (
     <div
-      className={classNames('relative inline-flex flex-shrink-0', className)}
+      className={classNames("relative inline-flex flex-shrink-0", className)}
       style={{ width: dimension, height: dimension }}
     >
       <div
         className={classNames(
-          'rounded-full overflow-hidden flex items-center justify-center w-full h-full',
+          "rounded-full overflow-hidden flex items-center justify-center w-full h-full",
           {
-            'bg-pr_purple': showInitials,
-            'bg-black_3': showFallbackIcon,
+            "bg-pr_purple": showInitials,
+            "bg-black_3": showFallbackIcon,
           },
         )}
       >
         {showImage && (
           <img
             src={src}
-            alt={alt || name || 'Avatar'}
+            alt={alt || name || "Avatar"}
             className="w-full h-full object-cover"
             onError={() => setImgError(true)}
           />
@@ -121,12 +128,12 @@ export default function Avatar({
       {status && (
         <span
           className={classNames(
-            'absolute bottom-0 right-0 rounded-full border-2 border-black_1',
+            "absolute bottom-0 right-0 rounded-full border-2 border-black_1",
             statusColorMap[status],
           )}
           style={{
-            width: statusDotSizeMap[size],
-            height: statusDotSizeMap[size],
+            width: statusDotSize,
+            height: statusDotSize,
           }}
         />
       )}

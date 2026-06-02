@@ -40,12 +40,14 @@ pnpm build
 | `next@^15` | `Steps`, `InfoTabs`, `Point`, `CardWrapper` (can be bypassed via `<SagtechUIProvider imageComponent={...} linkComponent={...}>`) |
 | `react-hook-form` | `Form` + `FormField`/`FormLabel`/`FormControl`/`FormError`/`FormHint` |
 | `react-international-phone`, `libphonenumber-js` | `PhoneInput` |
-| `apexcharts`, `react-apexcharts` | `LineChart`, `DonutChart` |
 | `swiper` | `Timeline` |
 | `@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities` | `SortableList` |
 | `@tanstack/react-virtual` | `VirtualList` |
 | `@tiptap/react`, `@tiptap/core`, `@tiptap/starter-kit` | `RichTextEditor` |
+| `@tiptap/extension-mention`, `@tiptap/suggestion` | `RichTextEditor` — `createMentionExtension` / `createSlashCommandExtension` presets |
+| `@tiptap/extension-image` | `RichTextEditor` — `createImageUploadExtension` preset |
 | `@xyflow/react` | `VisualGraphEditor` |
+| `react-resizable-panels` | `PanelGroup` / `Panel` / `PanelResizeHandle` |
 | `three`, `@react-three/fiber`, `@react-three/drei` | `Globe3D`, `Scene3D`, `Mindmap3D` |
 | `three`, `@react-three/fiber`, `@react-three/drei`, `react-force-graph-3d` | `Network3D` (in addition to the three packages above) |
 
@@ -122,6 +124,27 @@ function DeleteButton({ onDelete }: { onDelete: () => Promise<void> }) {
 
 ---
 
+## Imports & bundle isolation
+
+The main entry re-exports everything, so `import { ... } from '@sagtech-infra/ui'` keeps working for all components. The package is marked `"sideEffects": false`, so a tree-shaking bundler (Webpack/Turbopack/Vite/Rollup) drops anything you don't import — importing only what you use keeps heavy peers (notably `three`) out of your bundle. CSS is shipped separately via the `./tokens` export, so it is never tree-shaken away.
+
+For explicit isolation of the heavy families, two **additive** subpath exports are available alongside the main entry:
+
+```tsx
+// Main entry — everything (still works, non-breaking)
+import { Button, AreaChart, Globe3D } from '@sagtech-infra/ui';
+
+// 3D / WebGL family only (pulls in three + @react-three/* peers)
+import { Network3D, Globe3D, Scene3D, Mindmap3D } from '@sagtech-infra/ui/3d';
+
+// The 12 canvas charts only (no extra peers)
+import { AreaChart, BarChart, GaugeChart } from '@sagtech-infra/ui/charts';
+```
+
+Reaching for the subpath makes the dependency boundary explicit and keeps the 3D peers off any code path that imports from `@sagtech-infra/ui/3d` nowhere. `size-limit` budgets guard each entry (`main` / `icons` / `3d` / `charts`); run `pnpm check:size` to verify locally — CI runs it on every push and PR.
+
+---
+
 ## Component overview
 
 ### Foundations
@@ -139,10 +162,14 @@ function DeleteButton({ onDelete }: { onDelete: () => Promise<void> }) {
 | Component | Purpose |
 |---|---|
 | `Button` | `variant: 'primary' \| 'secondary' \| 'danger' \| 'tabButton' \| 'tabButtonWhite'`, `buttonSize: 'small' \| 'large' \| 'tabSize'`, `loadingType`, `disabled`. |
-| `Input` | Dark text input with `state='default'\|'active'`, `isError` + `errorMessage` (wired to `aria-invalid`/`aria-describedby`), `externalLabel`. |
+| `Input` | Dark text input with `state='default'\|'active'`, `isError` + `errorMessage` (wired to `aria-invalid`/`aria-describedby`), static `label` + floating `floatingLabel`. |
 | `TextArea` | Same contract as `Input`, multi-line. |
 | `Checkbox` | Controlled; `label` rendered inside a native `<label>`. |
 | `Toggle` | `checked` + `onChange(boolean)`, `size: 'sm' \| 'md'`. |
+| `Switch` | Labeled form switch — `checked` + `onCheckedChange(boolean)`, label slot, `disabled`. Use when you need an inline `<label>` association; `Toggle` for the bare control. |
+| `Slider` / `RangeInput` | Single-thumb `Slider` and two-thumb `RangeInput` — `min`/`max`/`step`, `marks`, keyboard nav, RTL, ARIA `slider`. |
+| `TimePicker` | Standalone hours + minutes picker (`timeStep` default 5). Extracted from `DatePicker.showTime`; compose either independently. |
+| `ColorPicker` | HSL + alpha editing via reused `Slider` inside a `Popover`, validated hex input, preset swatches. |
 | `RadioGroup` | `options: { label, value }[]` + `value` + `onChange`. |
 | `SelectInput` | Controlled select with optional multi-select. Full keyboard nav (Arrow/Home/End/Enter/Esc, open-to-selected). Deprecated `onSelect` alias. |
 | `Combobox` | Searchable single/multi select with async-options support, portal dropdown. |
@@ -158,7 +185,7 @@ function DeleteButton({ onDelete }: { onDelete: () => Promise<void> }) {
 | `SearchBar` | Debounced search input. |
 | `InlineEdit` | Click-to-edit. Enter/Esc to save/cancel, `multiline` with Cmd+Enter, `validate`, async `onSave`. |
 | `VariablePicker` | Modal with searchable + source-filtered list of template variables. Double-click / Insert returns the picked token. |
-| `RichTextEditor` | TipTap wrapper with bold/italic/strike/heading/list/quote/code/undo/redo toolbar. Extensions prop for custom nodes. |
+| `RichTextEditor` | TipTap wrapper with bold/italic/strike/heading/list/quote/code/undo/redo toolbar. Extensions prop for custom nodes. Extension presets (all tree-shakable, exported from main entry): `createMentionExtension({ items, char })` (@-trigger mentions, sync or async `items`), `createSlashCommandExtension({ commands })` + `defaultSlashCommands` (H2/H3/lists/quote/code, built on `@tiptap/suggestion`), `createImageUploadExtension({ upload, accept, maxSize, onError })` (paste/drop with file-boundary validation, inline base64 fallback) + `validateImageFile` helper. |
 | `SegmentedControl` | iOS-style segmented toggle group. Controlled `value`/`onChange`, sizes, full-width, disabled, keyboard arrow navigation. |
 
 ### Layout & overlays
@@ -181,6 +208,8 @@ function DeleteButton({ onDelete }: { onDelete: () => Promise<void> }) {
 | `BottomSheet` | Mobile-first bottom drawer with drag-to-dismiss + multi-snap-points (framer-motion `drag="y"`). |
 | `FAB` | Floating action button anchored to viewport (`bottom-right`/`bottom-left`/`top-right`/`top-left`), optional `extended` pill with label, `loading` state. |
 | `Toolbar` (+ `Toolbar.Separator` / `ToolbarSeparator`) | Action bar — group of buttons with arrow-key roving focus, `role="toolbar"`, optional separators. |
+| `Carousel` | Peer-free slider on CSS scroll-snap. Autoplay (honors `prefers-reduced-motion`), dots/arrows, keyboard nav, RTL. No `swiper` peer required. |
+| `PanelGroup` (+ `Panel` / `PanelResizeHandle`) | Resizable split layout — horizontal/vertical, drag handles, optional persistence. Wraps `react-resizable-panels` (optional peer). |
 
 ### Data display
 
@@ -190,6 +219,9 @@ function DeleteButton({ onDelete }: { onDelete: () => Promise<void> }) {
 | `DataTable` | Richer version — controlled sort, selection (checkbox column), sticky header, loading skeleton, empty state. |
 | `Badge` | `variant: 'filled' \| 'outlined' \| 'subtle'`, `color`, `size`, optional `dot`. |
 | `Avatar` / `AvatarCard` | Picture + initials fallback. Card variant adds name + role. |
+| `AvatarGroup` | Overlapping avatar stack with a `+N` overflow counter (`max` cap). |
+| `TreeView` | ARIA `tree` — expandable nodes, roving tabindex + type-ahead, lazy-loaded children, controlled-first, RTL. |
+| `Calendar` | Standalone date grid (Monday-first, RTL) extracted from `DatePicker`. Use directly for inline date selection. |
 | `Tabs` | In-app tab navigation (controlled). |
 | `InfoTabs` | Marketing tabs with icons + rich content panes. |
 | `Timeline` | Swiper-based horizontal image timeline. |
@@ -237,7 +269,6 @@ function DeleteButton({ onDelete }: { onDelete: () => Promise<void> }) {
 | `Banner` | Page-level sticky banner (top/bottom). Variants like `Alert` but persistent and viewport-anchored — distinct from inline `Alert` and legal `CookieBanner`. |
 | `Spotlight` | Onboarding/feature highlight — clip-path-style cutout around a `targetRef` + tooltip card with optional Next/Skip + step counter. |
 | `Toaster` + `toast` | Global toast API — `toast.success()`/`.error()`/`.info()`/`.warning()`/`.loading()` + `toast.promise()`. Compact layout, auto-sized to content. |
-| `Notification` + `NotificationWrapper` + `NotificationContext` + `NotificationContextProvider` | Legacy notification API (kept for back-compat). Prefer `Toast`. |
 | `NotificationCenter` | Bell icon + dropdown with notifications list, badge count, mark-as-read / mark-all-read / clear-all. Prop-driven (consumer owns data fetching). |
 | `EmptyState` | Empty placeholder — `variant: 'inline' \| 'card'`, optional icon/description/action. |
 | `ProgressBar` | Determinate bar with variants + optional animation. |
@@ -245,7 +276,7 @@ function DeleteButton({ onDelete }: { onDelete: () => Promise<void> }) {
 | `AnimationButton` | Branded pill-style CTA with hover expand (desktop only). |
 | `CookieBanner` | (also in Layout) |
 | `SliderArrow` | Reusable nav arrow for Swiper carousels. |
-| `LineChart` / `DonutChart` | ApexCharts wrappers with the SagTech palette. |
+| `LineChart` / `DonutChart` | Canvas/SVG charts (theme-aware) with the SagTech palette. |
 
 ### Providers & hooks
 
@@ -255,6 +286,8 @@ function DeleteButton({ onDelete }: { onDelete: () => Promise<void> }) {
 | `ConfirmProvider` | Root provider for imperative confirm modals. |
 | `CommandPaletteProvider` | Global Cmd+K palette provider. |
 | `useWindowSize`, `useDeviceType`, `useIntersectionObserver`, `useOutsideClick`, `useModals`, `useStatusColor` | Utility hooks. |
+| `useRovingTabindex`, `useTypeahead` | A11y primitives behind `TreeView` / list-style keyboard nav — reusable in custom widgets. |
+| `useThemeColors` | Reads the active palette from CSS custom properties and re-reads on `data-theme` change. Powers theme-aware canvas charts; usable in any canvas/SVG renderer. |
 | `useConfirm`, `useConfirmWithNote` | Imperative dialog APIs. |
 | `useCommandPalette`, `useRegisterCommand` | Register/open command palette. |
 | `useWizard` | Stand-alone hook (with `Wizard` compound). |
@@ -283,6 +316,7 @@ Or render via the `<Icon>` component: `<Icon icon="menu" size={20} color="#CDCDD
 | `pnpm typecheck` | `tsc --noEmit` |
 | `pnpm lint` | ESLint |
 | `pnpm generate:tokens` | Parses `src/tokens/theme.css` → `src/tokens/tokens.ts` (typed constants) |
+| `pnpm check:size` | `size-limit` budgets for the `main` / `icons` / `3d` / `charts` entries (also run in CI) |
 
 ## Docs
 
