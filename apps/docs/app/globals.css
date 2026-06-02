@@ -1,0 +1,18 @@
+/* Design tokens + Tailwind v4 come from the library's published `./tokens` entry
+   (the exact import a real consumer writes — see README). It pulls in
+   `@import "tailwindcss"` plus the @theme block. */
+@import "@sagtech-infra/ui/tokens";
+
+/* Tailwind v4 ignores node_modules when scanning for utility classes, so point
+   it explicitly at the library source (symlinked via link:../..) and this app. */
+@source "../../../src";
+@source "..";
+
+html,
+body {
+  min-height: 100%;
+  background: var(--color-bg-primary);
+  color: var(--color-fg-primary);
+  font-family: var(--font-manrope), var(--font-roboto), sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
