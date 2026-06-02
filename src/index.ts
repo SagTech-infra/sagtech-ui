@@ -126,6 +126,8 @@ export type {
 export { default as Divider } from "./components/Divider/Divider";
 export { default as KBD } from "./components/KBD/KBD";
 export type { KBDProps, KBDSize } from "./components/KBD/KBD";
+export { default as VisuallyHidden } from "./components/VisuallyHidden/VisuallyHidden";
+export type { VisuallyHiddenProps } from "./components/VisuallyHidden/VisuallyHidden";
 
 // Components — Form Controls
 export { default as Button } from "./components/Button/Button";
@@ -209,6 +211,12 @@ export type {
   SegmentedOption,
   SegmentedSize,
 } from "./components/SegmentedControl/SegmentedControl";
+export { default as Label } from "./components/Label/Label";
+export type { LabelProps } from "./components/Label/Label";
+export { default as FieldSet } from "./components/FieldSet/FieldSet";
+export type { FieldSetProps } from "./components/FieldSet/FieldSet";
+export { default as NumberInput } from "./components/NumberInput/NumberInput";
+export type { NumberInputProps } from "./components/NumberInput/NumberInput";
 
 export { default as FaqDropdown } from "./components/FaqDropdown/FaqDropdown";
 export { default as FaqList } from "./components/FaqDropdown/FaqList";
@@ -308,6 +316,15 @@ export { default as Inline } from "./components/Inline/Inline";
 export type { InlineProps } from "./components/Inline/Inline";
 export { default as PageHeader } from "./components/PageHeader/PageHeader";
 export type { PageHeaderProps } from "./components/PageHeader/PageHeader";
+export { default as AspectRatio } from "./components/AspectRatio/AspectRatio";
+export type { AspectRatioProps } from "./components/AspectRatio/AspectRatio";
+export { default as ContextMenu } from "./components/ContextMenu/ContextMenu";
+export type {
+  ContextMenuProps,
+  MenuItem as ContextMenuItem,
+} from "./components/ContextMenu/ContextMenu";
+export { default as ScrollArea } from "./components/ScrollArea/ScrollArea";
+export type { ScrollAreaProps } from "./components/ScrollArea/ScrollArea";
 export type {
   ToolbarProps,
   ToolbarSeparatorProps,
@@ -337,6 +354,14 @@ export { default as Badge } from "./components/Badge/Badge";
 export { default as Tooltip } from "./components/Tooltip/Tooltip";
 export { default as Popover } from "./components/Popover/Popover";
 export type { PopoverProps } from "./components/Popover/Popover";
+export { Accordion, AccordionItem } from "./components/Accordion";
+export type {
+  AccordionProps,
+  AccordionItemProps,
+  AccordionType,
+} from "./components/Accordion";
+export { default as HoverCard } from "./components/HoverCard/HoverCard";
+export type { HoverCardProps } from "./components/HoverCard/HoverCard";
 export { default as Tabs } from "./components/Tabs/Tabs";
 export { default as TabsRoot } from "./components/Tabs/TabsRoot";
 export { default as TabsList } from "./components/Tabs/TabsList";

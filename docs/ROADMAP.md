@@ -2,6 +2,14 @@
 
 Сжатая выжимка из мультиаудита 2026-04-22. Исходный документ со всеми file:line-доказательствами и обоснованиями лежит в `~/.claude/plans/transient-roaming-panda.md`.
 
+## v2.2.0 — компоненты + a11y (additive)
+
+- **Новые компоненты**: Accordion (WAI-ARIA, клавиатура Up/Down/Home/End), ContextMenu (right-click/long-press), ScrollArea, HoverCard, NumberInput, AspectRatio.
+- **a11y-утилиты**: VisuallyHidden, Label, FieldSet.
+- **Тесты**: добавлены для Input/TextArea/RadioGroup/PhoneInput — всего **749** (+112).
+- **a11y-скан**: `jest-axe` + `pnpm test:a11y` (курируемый набор), matcher в `vitest.setup.ts`; гоняется в CI через `pnpm test`.
+- Reuse-first: на `Popover`/`DropdownMenu`/`Input`/`Slider`/`scrollbar.css` + хуки `useRovingTabindex`/`useTypeahead`/`useOutsideClick`/`Portal`.
+
 ## v2.1.0 — бренд-слой (additive, non-breaking)
 
 - **Шрифт-роли**: `--font-display` (Orbitron), `--font-body` (Manrope), `--font-mono` (системный mono-стек); старые `font-orbitron/roboto/manrope` сохранены, `roboto` помечен `@deprecated`.

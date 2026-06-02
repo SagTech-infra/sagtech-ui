@@ -1,5 +1,9 @@
 import "@testing-library/jest-dom/vitest";
-import { vi } from "vitest";
+import { vi, expect } from "vitest";
+import { toHaveNoViolations } from "jest-axe";
+
+// jest-axe accessibility matcher — used by src/__tests__/a11y.test.tsx.
+expect.extend(toHaveNoViolations);
 
 // framer-motion's exit animations rely on transitionend events that
 // happy-dom does not fire reliably, which leaves elements stuck in the
