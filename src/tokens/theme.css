@@ -38,11 +38,35 @@
     #5b54ee 50%,
     #292a94 100%
   );
+  /* Brand gradients (additive). Utility classes in gradients.css. */
+  --gradient-hero: linear-gradient(
+    135deg,
+    var(--color-pr_purple) 0%,
+    #7c5cf5 40%,
+    var(--color-pr_blue) 100%
+  );
+  --gradient-subtle: linear-gradient(
+    180deg,
+    rgba(109, 62, 241, 0.08) 0%,
+    rgba(109, 62, 241, 0) 100%
+  );
+  --gradient-glow: radial-gradient(
+    circle at 50% 0%,
+    rgba(109, 62, 241, 0.35) 0%,
+    rgba(109, 62, 241, 0) 70%
+  );
 
   /* Font families */
   --font-orbitron: var(--font-orbitron), sans-serif;
+  /* @deprecated — prefer --font-body (Manrope). Kept for back-compat. */
   --font-roboto: var(--font-roboto), sans-serif;
   --font-manrope: var(--font-manrope), sans-serif;
+
+  /* Semantic font roles (additive). Map onto the raw families above; consumers
+     set --font-orbitron / --font-manrope to real fonts (e.g. via next/font). */
+  --font-display: var(--font-orbitron), sans-serif;
+  --font-body: var(--font-manrope), sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
 
   /* Font sizes */
   --text-64: 64px;
@@ -103,7 +127,9 @@
   --breakpoint-xs: 500px;
   --breakpoint-mds: 600px;
   --breakpoint-sm: 768px;
-  --breakpoint-sl: 1025px;
+  /* sl is an alias of xl (1024px). Previously 1025px — a 1px duplicate; aligned
+     to xl. Name kept for back-compat with consumers using the `sl:` prefix. */
+  --breakpoint-sl: 1024px;
   --breakpoint-xl: 1024px;
   --breakpoint-md: 1100px;
   --breakpoint-lg: 1300px;
@@ -191,6 +217,8 @@
   --motion-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --motion-ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
   --motion-ease-decelerated: cubic-bezier(0, 0, 0.2, 1);
+  /* Brand "tech snap" — fast out, settled in. Use for hovers/expansions. */
+  --motion-ease-tech: cubic-bezier(0.2, 0.8, 0.2, 1);
 
   /* Semantic — backgrounds (dark default) */
   --color-bg-primary: #070715;
@@ -208,6 +236,8 @@
 
   /* Semantic — surfaces (dark default) */
   --color-surface-overlay: #20202d;
+  /* Subtle purple-tinted surface for cards/tertiary regions (brand depth). */
+  --color-surface-wash: rgba(109, 62, 241, 0.06);
 
   /* Semantic — status foregrounds (dark default) */
   --color-fg-success: #7bc242;
@@ -274,6 +304,15 @@
   --color-white_2: #393944;
   --color-white_3: #20202d;
   --color-white_4: #070715;
-  /* NOT overridden by design: --color-white (#ffffff), accents
-     (pr_purple/sec_purple/pr_blue/sec_blue), backdrop/shape tokens. */
+  /* Accents — tuned for AA contrast on light surfaces; brand hue preserved.
+     (In dark mode these keep their vivid values from @theme.) */
+  --color-pr_purple: #5a2fd6;
+  --color-sec_purple: #7c5cf5;
+  --color-pr_blue: #21228a;
+  --color-sec_blue: #5b5ba8;
+
+  /* Surface wash (light) */
+  --color-surface-wash: rgba(109, 62, 241, 0.05);
+
+  /* NOT overridden by design: --color-white (#ffffff), backdrop/shape tokens. */
 }

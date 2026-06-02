@@ -39,6 +39,7 @@ export const colors = {
   'border-default': "#393944",
   'border-strong': "#5c5c66",
   'surface-overlay': "#20202d",
+  'surface-wash': "rgba(109, 62, 241, 0.06)",
   'fg-success': "#7bc242",
   'fg-warning': "#c6a328",
   'fg-error': "#e0675e",
@@ -53,6 +54,9 @@ export const fonts = {
   orbitron: "var(--font-orbitron), sans-serif",
   roboto: "var(--font-roboto), sans-serif",
   manrope: "var(--font-manrope), sans-serif",
+  display: "var(--font-orbitron), sans-serif",
+  body: "var(--font-manrope), sans-serif",
+  mono: "ui-monospace, \"SF Mono\", \"JetBrains Mono\", Menlo, Consolas, monospace",
 } as const;
 
 export const textSizes = {
@@ -117,7 +121,7 @@ export const breakpoints = {
   xs: "500px",
   mds: "600px",
   sm: "768px",
-  sl: "1025px",
+  sl: "1024px",
   xl: "1024px",
   md: "1100px",
   lg: "1300px",
@@ -209,6 +213,7 @@ export const motionEase = {
   standard: "cubic-bezier(0.4, 0, 0.2, 1)",
   emphasized: "cubic-bezier(0.2, 0, 0, 1)",
   decelerated: "cubic-bezier(0, 0, 0.2, 1)",
+  tech: "cubic-bezier(0.2, 0.8, 0.2, 1)",
 } as const;
 
 

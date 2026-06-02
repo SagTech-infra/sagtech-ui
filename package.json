@@ -1,6 +1,6 @@
 {
   "name": "@sagtech-infra/ui",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "SagTech UI component library with Storybook",
   "type": "module",
   "sideEffects": false,

@@ -1,5 +1,13 @@
 # Migration notes
 
+## v2.1.0 — additive, no breaking changes
+
+All v2.1 token work is backwards-compatible. The `sl` breakpoint was aligned
+`1025px → 1024px` (it duplicated `xl`); the `sl:` prefix keeps working, with its
+boundary shifted by 1px. New additive tokens: `--font-display/body/mono`,
+`--gradient-hero/subtle/glow`, `--motion-ease-tech`, `--color-surface-wash`.
+`--font-roboto` is deprecated in favour of `--font-body` (Manrope).
+
 ## Package name — `@sagtech-infra/ui` (final)
 
 Пакет опубликован в GitHub Packages как **`@sagtech-infra/ui`**. Некоторые потребители исторически импортируют его как `@sagtech/ui` через локальный `file:`-alias в их `package.json` / `tsconfig.json`. **Для новых проектов используйте официальное имя.**

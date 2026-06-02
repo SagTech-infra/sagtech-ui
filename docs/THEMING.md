@@ -1,6 +1,8 @@
 # Theming
 
-`@sagtech-infra/ui` ships a dark-first design. Light theme is opt-in via `ThemeProvider`.
+`@sagtech-infra/ui` ships a dark-first design. **Light theme is fully supported** (opt-in via `ThemeProvider`): semantic tokens flip and the brand accents are tuned for AA contrast on light surfaces. See the `Theming/Light Showcase` story.
+
+**Font roles (v2.1):** prefer `font-display` (Orbitron), `font-body` (Manrope), and `font-mono` for new work; the raw `font-orbitron`/`font-roboto`/`font-manrope` utilities remain (`roboto` is deprecated — use `font-body`).
 
 > For locale-aware dates and right-to-left (RTL) layout, see [I18N.md](./I18N.md).
 

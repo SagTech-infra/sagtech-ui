@@ -175,3 +175,16 @@
   -webkit-mask-composite: xor;
   mask-composite: exclude;
 }
+
+/* Brand background gradients (v2.1) — reference --gradient-* tokens (theme.css). */
+.bg-gradient-hero {
+  background: var(--gradient-hero);
+}
+
+.bg-gradient-subtle {
+  background: var(--gradient-subtle);
+}
+
+.bg-gradient-glow {
+  background: var(--gradient-glow);
+}

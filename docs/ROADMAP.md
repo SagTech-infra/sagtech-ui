@@ -2,6 +2,16 @@
 
 Сжатая выжимка из мультиаудита 2026-04-22. Исходный документ со всеми file:line-доказательствами и обоснованиями лежит в `~/.claude/plans/transient-roaming-panda.md`.
 
+## v2.1.0 — бренд-слой (additive, non-breaking)
+
+- **Шрифт-роли**: `--font-display` (Orbitron), `--font-body` (Manrope), `--font-mono` (системный mono-стек); старые `font-orbitron/roboto/manrope` сохранены, `roboto` помечен `@deprecated`.
+- **Брейкпоинт `sl`** выровнен `1025px → 1024px` (алиас `xl`; имя сохранено, `sl:` продолжает работать).
+- **Light-mode — полноценная фича**: акценты (`pr_purple/sec_purple/pr_blue/sec_blue`) инвертированы под AA-контраст на светлом фоне; `check:contrast` зелёный для обоих тем; добавлена витрина `Theming/Light Showcase`.
+- **Брендовые градиенты**: `--gradient-hero/subtle/glow` (+ утилиты `bg-gradient-*`).
+- **Фирменный motion-ease**: `--motion-ease-tech` (резкий «снэп»).
+- **Purple-wash фоны**: `--color-surface-wash` (лёгкий бренд-тинт для tertiary-поверхностей).
+- **Showcase**: дог-фуд доку-портал `apps/docs` (Next, 108 компонент-страниц, гайды, charts/3D-галереи) + Chromatic CI; фикс serif→sans-serif fallback.
+
 ## Уже смержено
 
 **Первая волна (Critical + базовый High):**
