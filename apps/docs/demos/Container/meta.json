@@ -1,0 +1,1 @@
+{ "description": "A centred, horizontally-padded layout wrapper. The size prop caps its max-width (sm/md/lg/xl/full) and the as prop sets the rendered HTML element." }

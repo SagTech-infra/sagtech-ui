@@ -1,0 +1,1 @@
+{ "description": "Transient stacked toast notifications fired imperatively via the toast() API, with success/error/warning/info variants, descriptions, actions, and promise helpers, rendered by a single Toaster outlet." }

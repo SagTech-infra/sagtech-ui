@@ -1,0 +1,1 @@
+{ "description": "A progress indicator for multi-step flows, showing each step's label, description, and status (complete, active, pending, or error) in horizontal or vertical layout." }

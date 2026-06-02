@@ -4,12 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "predev": "node scripts/gen-props.mjs",
+    "predev": "node scripts/gen-props.mjs && node scripts/gen-demos-index.mjs",
     "dev": "next dev -p 3000",
-    "prebuild": "node scripts/gen-props.mjs",
+    "prebuild": "node scripts/gen-props.mjs && node scripts/gen-demos-index.mjs",
     "build": "next build",
     "start": "next start -p 3000",
-    "gen:props": "node scripts/gen-props.mjs"
+    "gen:props": "node scripts/gen-props.mjs",
+    "gen:demos": "node scripts/gen-demos-index.mjs"
   },
   "dependencies": {
     "@sagtech-infra/ui": "link:../..",
@@ -36,12 +37,19 @@
     "react-hook-form": "^7.72.1",
     "react-international-phone": "^4.8.0",
     "react-resizable-panels": "^4.11.2",
-    "swiper": "^12.1.3"
+    "swiper": "^12.1.3",
+    "three": "^0.165.0",
+    "@react-three/fiber": "^9.0.0",
+    "@react-three/drei": "^10.0.0",
+    "react-force-graph-3d": "^1.24.0",
+    "react-markdown": "^9.0.1",
+    "remark-gfm": "^4.0.0"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@types/three": "^0.165.0",
     "@tailwindcss/postcss": "^4.2.2",
     "postcss": "^8.5.8",
     "react-docgen-typescript": "^2.4.0",

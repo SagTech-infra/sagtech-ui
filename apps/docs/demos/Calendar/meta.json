@@ -1,0 +1,1 @@
+{ "description": "A date picker that displays a month grid and lets the user select a single day, with controlled value/onChange and optional min/max date and locale support." }

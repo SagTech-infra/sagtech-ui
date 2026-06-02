@@ -1,0 +1,1 @@
+{ "description": "A confirmation dialog for guarding destructive or important actions. Use <ConfirmDialog> declaratively, or the <ConfirmProvider> + useConfirm() hook to await a user's decision imperatively." }

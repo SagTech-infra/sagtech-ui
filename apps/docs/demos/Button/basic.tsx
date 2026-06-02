@@ -1,25 +1,13 @@
 'use client';
-
 import { Button } from '@sagtech-infra/ui';
 
-export function ButtonBasicDemo() {
+export default function Demo() {
   return (
     <div className="flex flex-wrap items-center gap-16px">
-      <Button variant="primary">Primary</Button>
-      <Button variant="secondary">Secondary</Button>
-      <Button variant="danger">Danger</Button>
-      <Button variant="primary" shape="pill">
-        Pill
-      </Button>
-      <Button variant="primary" useIcon>
-        With icon
-      </Button>
-      <Button variant="primary" loadingType>
-        Loading
-      </Button>
-      <Button variant="primary" disabled>
-        Disabled
-      </Button>
+      <Button text="Primary" variant="primary" buttonSize="large" />
+      <Button text="Secondary" variant="secondary" buttonSize="large" />
+      <Button text="Danger" variant="danger" buttonSize="large" />
+      <Button text="Disabled" variant="primary" buttonSize="large" disabled />
     </div>
   );
 }

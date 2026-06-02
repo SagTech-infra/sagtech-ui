@@ -1,0 +1,1 @@
+{ "description": "A controlled input for entering a list of tags, adding each on Enter and removing them individually, with optional max-tag and error states." }

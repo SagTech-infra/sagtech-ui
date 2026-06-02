@@ -1,0 +1,39 @@
+name: Docs
+
+# Build-guard for the dogfooded docs portal (apps/docs). Runs only when the docs,
+# the library source, or the guide markdown change — keeps it off the library's
+# hot path while ensuring the showcase never breaks.
+
+on:
+  push:
+    paths:
+      - 'apps/docs/**'
+      - 'src/**'
+      - 'docs/**'
+  pull_request:
+    paths:
+      - 'apps/docs/**'
+      - 'src/**'
+      - 'docs/**'
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10.28.1
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Docs consume the library's built dist via the workspace link.
+      - run: pnpm --filter @sagtech-infra/ui build
+
+      - run: pnpm --filter @sagtech-infra/docs build
