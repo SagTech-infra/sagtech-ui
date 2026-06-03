@@ -53,12 +53,30 @@ const STATS = [
 ];
 
 const FEATURES = [
-  { title: 'Dark-first', description: 'Tokenized theme; light mode tuned for AA contrast.' },
-  { title: 'Charts & 3D', description: '12 canvas charts + WebGL scenes, lazy-loaded behind subpaths.' },
-  { title: 'Accessible', description: 'WAI-ARIA patterns, focus management, jest-axe in CI.' },
-  { title: 'Tree-shakeable', description: 'sideEffects:false + /charts and /3d subpath exports.' },
-  { title: 'SSR / Next', description: 'Framework-agnostic via SagtechUIProvider image/link injection.' },
-  { title: 'Dogfooded', description: 'This entire site is built from the library it documents.' },
+  {
+    title: 'Dark by default',
+    description: 'Sharp in dark mode out of the box — with a polished light theme when you need it.',
+  },
+  {
+    title: 'Charts & 3D included',
+    description: 'From simple line charts to interactive 3D globes — data visuals that just work.',
+  },
+  {
+    title: 'Accessible by default',
+    description: 'Keyboard and screen-reader support are built in, not bolted on later.',
+  },
+  {
+    title: 'Only ship what you use',
+    description: 'Import a button, ship a button. The heavy parts load only when you need them.',
+  },
+  {
+    title: 'Fits your stack',
+    description: 'Drop it into Next.js or any React app — server rendering included.',
+  },
+  {
+    title: 'Proven in production',
+    description: 'This whole site is built with it. We use what we ship.',
+  },
 ];
 
 const FAQ = [
@@ -96,7 +114,7 @@ export default function HomePage() {
         background="glow"
         eyebrow="SagTech UI"
         title="Components that ship as fast as you do"
-        subtitle="A dark-first React component library — 107 components, charts, 3D and accessibility, dogfooded by these very docs."
+        subtitle="107 polished React components — buttons, forms, charts, 3D — ready to drop into your product. Dark by default, accessible by default."
         actions={
           <>
             <LinkButton href="/components/button">Browse components</LinkButton>
