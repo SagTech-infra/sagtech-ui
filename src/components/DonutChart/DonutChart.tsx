@@ -29,6 +29,7 @@ function DonutChart({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hover, setHover] = useState<HoverState | null>(null);
   const segmentsRef = useRef<{ startAngle: number; endAngle: number }[]>([]);
+  const layoutRef = useRef({ cx: 0, cy: 0, outerR: 0, innerR: 0 });
   const { colors: themeColors } = useThemeColors();
 
   // Segment palette. The first three values come straight from the (theme-aware)
@@ -46,16 +47,8 @@ function DonutChart({
   );
   const colors = colorsProp ?? DEFAULT_COLORS;
 
-  const dim = typeof width === 'number' ? width : 300;
-  const hasLabels = labels && labels.length > 0;
-  const chartArea = hasLabels ? dim - 40 : dim;
-  const cx = dim / 2;
-  const cy = chartArea / 2 + 4;
-  const outerR = chartArea / 2 - 12;
-  const innerR = outerR * (size / 100);
-  const ringWidth = outerR - innerR;
+  const maxDim = typeof width === 'number' ? width : 300;
   const total = value.reduce((a, b) => a + b, 0) || 1;
-  const gap = value.length > 1 ? 0.04 : 0;
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
@@ -64,12 +57,25 @@ function DonutChart({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    const rect = canvas.getBoundingClientRect();
+    const actualDim = rect.width || maxDim;
     const dpr = window.devicePixelRatio || 1;
-    canvas.width = dim * dpr;
-    canvas.height = dim * dpr;
+    canvas.width = actualDim * dpr;
+    canvas.height = actualDim * dpr;
     ctx.scale(dpr, dpr);
 
-    ctx.clearRect(0, 0, dim, dim);
+    const hasLabelsLocal = labels && labels.length > 0;
+    const chartArea = hasLabelsLocal ? actualDim - 40 : actualDim;
+    const cx = actualDim / 2;
+    const cy = chartArea / 2 + 4;
+    const outerR = chartArea / 2 - 12;
+    const innerR = outerR * (size / 100);
+    const ringWidth = outerR - innerR;
+    const gap = value.length > 1 ? 0.04 : 0;
+
+    layoutRef.current = { cx, cy, outerR, innerR };
+
+    ctx.clearRect(0, 0, actualDim, actualDim);
 
     // Track background
     ctx.beginPath();
@@ -150,9 +156,9 @@ function DonutChart({
     }
 
     // Legend
-    if (hasLabels) {
+    if (hasLabelsLocal) {
       ctx.font = '11px Manrope, sans-serif';
-      const legendY = dim - 10;
+      const legendY = actualDim - 10;
 
       let totalWidth = 0;
       labels!.forEach((label) => {
@@ -160,7 +166,7 @@ function DonutChart({
       });
       totalWidth -= 20;
 
-      let lx = (dim - totalWidth) / 2;
+      let lx = (actualDim - totalWidth) / 2;
 
       labels!.forEach((label, i) => {
         const segColor = (colors[i] || DEFAULT_COLORS[i % DEFAULT_COLORS.length]).bgColor;
@@ -177,7 +183,7 @@ function DonutChart({
         lx += 14 + ctx.measureText(label).width + 20;
       });
     }
-  }, [value, colors, DEFAULT_COLORS, labels, hover, cx, cy, outerR, innerR, ringWidth, dim, total, gap, hasLabels]);
+  }, [value, colors, DEFAULT_COLORS, labels, hover, size, total, maxDim]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -188,6 +194,7 @@ function DonutChart({
       const mx = e.clientX - rect.left;
       const my = e.clientY - rect.top;
 
+      const { cx, cy, innerR, outerR } = layoutRef.current;
       const dx = mx - cx;
       const dy = my - cy;
       const dist = Math.sqrt(dx * dx + dy * dy);
@@ -217,7 +224,7 @@ function DonutChart({
 
       if (hover !== null) setHover(null);
     },
-    [cx, cy, innerR, outerR, hover],
+    [hover],
   );
 
   const handleMouseLeave = useCallback(() => {
@@ -242,10 +249,13 @@ function DonutChart({
       : '';
 
   return (
-    <div data-tid="DonutChart" style={{ position: 'relative', display: 'inline-block' }}>
+    <div
+      data-tid="DonutChart"
+      style={{ position: 'relative', width: '100%', maxWidth: `${maxDim}px`, aspectRatio: '1' }}
+    >
       <canvas
         ref={canvasRef}
-        style={{ width: `${dim}px`, height: `${dim}px`, display: 'block', cursor: 'pointer' }}
+        style={{ width: '100%', height: '100%', display: 'block', cursor: 'pointer' }}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       />

@@ -5,6 +5,9 @@ import Slider from "./Slider";
 const meta = {
   title: "Form Controls/Slider",
   component: Slider,
+  parameters: {
+    layout: "padded",
+  },
   tags: ["autodocs"],
   argTypes: {
     min: { control: "number" },

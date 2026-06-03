@@ -63,6 +63,7 @@ const Particles = forwardRef<HTMLDivElement, ParticlesProps>(
       staticity: _staticity = 50,
       size = 0.4,
       style,
+      children,
       ...rest
     },
     forwardedRef,
@@ -180,7 +181,9 @@ const Particles = forwardRef<HTMLDivElement, ParticlesProps>(
           ref={setWrapperRef}
           style={{ position: "relative", ...style }}
           {...rest}
-        />
+        >
+          {children}
+        </div>
       );
     }
 
@@ -199,6 +202,7 @@ const Particles = forwardRef<HTMLDivElement, ParticlesProps>(
             pointerEvents: "none",
           }}
         />
+        {children}
       </div>
     );
   },

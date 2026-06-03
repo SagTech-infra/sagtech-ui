@@ -64,7 +64,7 @@ function Progress({ className }: { className?: string }) {
               <div className="flex items-center gap-8px">
                 <span
                   className={classNames(
-                    'w-[24px] h-[24px] rounded-[50%] flex items-center justify-center text-12 font-manrope font-bold flex-shrink-0',
+                    'w-24px h-24px rounded-[50%] flex items-center justify-center text-12 font-manrope font-bold shrink-0',
                     {
                       'bg-pr_purple text-white': isCurrent,
                       'bg-success text-white': isCompleted && !isCurrent,
@@ -96,7 +96,7 @@ function Progress({ className }: { className?: string }) {
                 </span>
               </div>
               {step.description && (
-                <span className="text-12 text-grey_2 font-manrope pl-32px truncate">
+                <span className="text-12 text-grey_2 font-manrope pl-32px truncate hidden sm:inline">
                   {step.description}
                 </span>
               )}

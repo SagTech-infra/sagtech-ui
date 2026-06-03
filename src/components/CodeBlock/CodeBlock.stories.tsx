@@ -5,10 +5,10 @@ const meta = {
   title: 'Data Display/CodeBlock',
   component: CodeBlock,
   tags: ['autodocs'],
-  parameters: { layout: 'centered' },
+  parameters: { layout: 'padded' },
   decorators: [
     (Story) => (
-      <div className="w-[640px]">
+      <div className="max-w-160 w-full">
         <Story />
       </div>
     ),

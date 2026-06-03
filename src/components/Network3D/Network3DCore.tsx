@@ -46,8 +46,8 @@ export default function Network3DCore({
   return (
     <ForceGraph3D
       graphData={data}
-      width={width}
-      height={height}
+      width={width as number}
+      height={height as number}
       backgroundColor={backgroundColor}
       nodeLabel={(n: Network3DNode) => n.label ?? n.id}
       nodeColor={resolveNodeColor}

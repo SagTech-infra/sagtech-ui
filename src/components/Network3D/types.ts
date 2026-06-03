@@ -20,8 +20,8 @@ export interface Network3DLink {
 export interface Network3DProps {
   nodes: Network3DNode[];
   links: Network3DLink[];
-  width?: number;
-  height?: number;
+  width?: number | string;
+  height?: number | string;
   /** Per-node color override. Falls back to node.color, then default token. */
   nodeColor?: (node: Network3DNode) => string;
   /** Per-link color override. Falls back to default token. */

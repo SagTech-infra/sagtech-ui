@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     children: "Hello, world!",
-    startOnView: false,
+    startOnView: true,
   },
   render: (args) => (
     <span className="font-manrope text-24 text-white_4">
@@ -29,7 +29,7 @@ export const SlowTyping: Story = {
   args: {
     children: "Typing slowly…",
     duration: 120,
-    startOnView: false,
+    startOnView: true,
   },
   render: (args) => (
     <span className="font-manrope text-24 text-pr_purple">
@@ -43,7 +43,7 @@ export const WithDelay: Story = {
     children: "Delayed start.",
     delay: 800,
     duration: 60,
-    startOnView: false,
+    startOnView: true,
   },
   render: (args) => (
     <span className="font-manrope text-24 text-sec_blue">
@@ -56,7 +56,7 @@ export const ReducedMotion: Story = {
   name: "Reduced Motion (full text, no animation)",
   args: {
     children: "Reduced motion — full text shown immediately.",
-    startOnView: false,
+    startOnView: true,
   },
   render: (args) => (
     <div className="flex flex-col gap-8px items-center">

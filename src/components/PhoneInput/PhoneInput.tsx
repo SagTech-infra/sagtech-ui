@@ -1,10 +1,11 @@
 'use client';
 
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { PhoneInput as PhoneInputEl, type PhoneInputProps, type CountryIso2 } from 'react-international-phone';
 import 'react-international-phone/style.css';
 import { detectCountry } from '@/utils/detectCountry';
+import { mergeRefs } from '@/utils/mergeRefs';
 
 function PhoneInput({
   error,
@@ -17,6 +18,8 @@ function PhoneInput({
   ref?: React.Ref<HTMLDivElement>;
 }) {
   const [detectedCountry, setDetectedCountry] = useState<CountryIso2>('us');
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [dropdownWidth, setDropdownWidth] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     try {
@@ -28,8 +31,18 @@ function PhoneInput({
     }
   }, []);
 
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([entry]) => {
+      setDropdownWidth(entry.contentRect.width);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   return (
-    <div ref={ref} className="flex flex-col gap-6px">
+    <div ref={mergeRefs(containerRef, ref)} className="flex flex-col gap-6px">
       {label && (
         <label htmlFor={props.name} className="text-12 font-bold leading-18 text-white_1">
           {label}
@@ -37,14 +50,29 @@ function PhoneInput({
       )}
       <PhoneInputEl
         countrySelectorStyleProps={{
-          buttonClassName: classNames('!p-12px', {
-            '!border-error': error,
-          }),
+          buttonClassName:
+            'bg-transparent! border-0! border-r! border-solid! border-r-grey_2! rounded-l-16px! rounded-r-none! px-12px! h-full!',
+          dropdownStyleProps: {
+            className: 'bg-black_1! rounded-16px! z-50! custom-scrollbar',
+            style: {
+              boxShadow: `0 0 0 1px ${error ? '#992d2d' : '#6d3ef1'}`,
+              outline: 'none',
+              width: dropdownWidth ? `${dropdownWidth}px` : undefined,
+            },
+            listItemClassName:
+              'px-12px! py-8px! text-14! cursor-pointer! hover:bg-black_2! text-white_4!',
+            listItemCountryNameClassName: 'text-white_4!',
+            listItemDialCodeClassName: 'text-grey_4!',
+          },
         }}
-        inputClassName={classNames('w-full', {
-          '!border-error': error,
-        })}
-        className="w-full relative "
+        inputClassName="bg-transparent! border-0! text-white_4! placeholder:text-grey_4 h-full! flex-1! text-14! focus:outline-none! focus:ring-0! px-16px!"
+        className={classNames(
+          'w-full bg-black_1! border! border-solid! rounded-16px! h-56px!',
+          {
+            'border-pr_purple!': !error,
+            'border-error!': error,
+          },
+        )}
         defaultCountry={detectedCountry}
         key={error ? 'error' : 'no-error'}
         {...props}

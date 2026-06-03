@@ -44,7 +44,7 @@ function CalendarIcon() {
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="flex-shrink-0"
+      className="shrink-0"
     >
       <path
         d="M6.66667 1.66667V4.16667M13.3333 1.66667V4.16667M2.91667 7.575H17.0833M17.5 7.08333V14.1667C17.5 16.6667 16.25 18.3333 13.3333 18.3333H6.66667C3.75 18.3333 2.5 16.6667 2.5 14.1667V7.08333C2.5 4.58333 3.75 2.91667 6.66667 2.91667H13.3333C16.25 2.91667 17.5 4.58333 17.5 7.08333Z"
@@ -88,6 +88,7 @@ export default function DatePicker({
     top: number;
     left: number;
     minWidth: number;
+    maxHeight: number;
   } | null>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
@@ -121,10 +122,19 @@ export default function DatePicker({
     const rect = trigger.getBoundingClientRect();
     const popHeight =
       popoverRef.current?.offsetHeight ?? ESTIMATED_POPOVER_HEIGHT;
-    const spaceBelow = window.innerHeight - rect.bottom;
+    const margin = 8;
+    const spaceBelow = window.innerHeight - rect.bottom - margin;
+    const spaceAbove = rect.top - margin;
     const flipUp = spaceBelow < popHeight + 12 && rect.top > spaceBelow;
-    const top = flipUp ? rect.top - popHeight - 4 : rect.bottom + 4;
-    setPopoverStyle({ top, left: rect.left, minWidth: rect.width });
+    const maxHeight = Math.max(flipUp ? spaceAbove : spaceBelow, 200);
+    const top = flipUp ? rect.top - Math.min(popHeight, spaceAbove) - 4 : rect.bottom + 4;
+    const availableWidth = window.innerWidth - 2 * margin;
+    const popWidth = Math.min(
+      Math.max(popoverRef.current?.offsetWidth ?? 0, Math.max(rect.width, 320)),
+      availableWidth,
+    );
+    const left = Math.max(margin, Math.min(rect.left, window.innerWidth - popWidth - margin));
+    setPopoverStyle({ top, left, minWidth: popWidth, maxHeight });
   }, [ESTIMATED_POPOVER_HEIGHT]);
 
   useLayoutEffect(() => {
@@ -190,7 +200,7 @@ export default function DatePicker({
           onClick={handleToggle}
           disabled={disabled}
           className={classNames(
-            "bg-black_1 border border-solid rounded-16px h-[56px] px-24px font-manrope text-14 w-full text-left flex items-center justify-between transition-colors duration-200",
+            "bg-black_1 border border-solid rounded-16px h-56px px-24px font-manrope text-14 w-full text-left flex items-center justify-between transition-colors duration-200",
             {
               "border-pr_purple": !error,
               "border-error": error,
@@ -229,7 +239,9 @@ export default function DatePicker({
                     position: "fixed",
                     top: popoverStyle.top,
                     left: popoverStyle.left,
-                    minWidth: Math.max(popoverStyle.minWidth, 320),
+                    minWidth: popoverStyle.minWidth,
+                    maxHeight: popoverStyle.maxHeight,
+                    overflowY: "auto",
                   }}
                   className="z-50 bg-black_2 border border-black_3 rounded-16px p-20px shadow-6xl"
                 >

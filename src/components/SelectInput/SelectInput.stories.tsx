@@ -15,9 +15,10 @@ const meta = {
   title: 'Form Controls/SelectInput',
   component: SelectInput,
   tags: ['autodocs'],
+  parameters: { layout: 'padded' },
   decorators: [
     (Story) => (
-      <div className="min-h-[300px] w-[400px]">
+      <div className="min-h-75 max-w-100 w-full">
         <Story />
       </div>
     ),

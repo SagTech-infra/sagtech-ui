@@ -39,7 +39,7 @@ export default function SearchBar({
   return (
     <label
       htmlFor={id}
-      className="bg-black_1 border-[1px] border-solid rounded-[5em] flex w-full min-w-[320px] max-w-[650px] px-24px py-12px border-pr_purple items-center gap-12px"
+      className="bg-black_1 border-[1px] border-solid rounded-[5em] flex w-full sm:min-w-[320px] max-w-162.5 px-24px py-12px border-pr_purple items-center gap-12px"
     >
       <input
         id={id}

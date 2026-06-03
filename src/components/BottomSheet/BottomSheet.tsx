@@ -174,7 +174,7 @@ export function BottomSheet({
             tabIndex={-1}
             drag="y"
             dragConstraints={{ top: 0, bottom: 0 }}
-            dragElastic={{ top: 0, bottom: 0.4 }}
+            dragElastic={{ top: 0.4, bottom: 0.4 }}
             style={{
               y,
               height: `${activeFraction * 100}vh`,
@@ -191,13 +191,13 @@ export function BottomSheet({
             onDragEnd={handleDragEnd}
           >
             {/* Drag handle */}
-            <div className="flex flex-col items-center pt-12px pb-8px flex-shrink-0 cursor-grab active:cursor-grabbing">
+            <div className="flex flex-col items-center pt-12px pb-8px shrink-0 cursor-grab active:cursor-grabbing">
               <div
                 aria-hidden="true"
-                className="w-[36px] h-[4px] rounded-circle bg-bg-tertiary"
+                className="w-9 h-4px rounded-circle bg-bg-tertiary"
               />
               {title && (
-                <h2 className="mt-12px font-manrope text-16 font-semibold text-fg-primary px-24px text-center break-words">
+                <h2 className="mt-12px font-manrope text-16 font-semibold text-fg-primary px-24px text-center wrap-break-word">
                   {title}
                 </h2>
               )}

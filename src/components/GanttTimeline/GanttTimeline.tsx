@@ -128,10 +128,12 @@ export default function GanttTimeline({
   const locale = localeProp ?? ctxLocale;
   const [openItem, setOpenItem] = useState<GanttItem | null>(null);
 
-  const { start, end, ticks, dayWidth } = useMemo(() => {
+  const { start, end, ticks, dayWidth, tickStep, contentWidth } = useMemo(() => {
+    const dw = scale === 'day' ? 48 : scale === 'week' ? 22 : 4;
+    const ts = scale === 'day' ? 1 : scale === 'week' ? 7 : 30;
     if (items.length === 0) {
       const now = startOfDay(new Date());
-      return { start: now, end: now, ticks: [now], dayWidth: 32 };
+      return { start: now, end: now, ticks: [now], dayWidth: dw, tickStep: ts, contentWidth: dw };
     }
     const starts = items.map((i) => toDate(i.start).getTime());
     const ends = items.map((i) => toDate(i.end).getTime());
@@ -143,18 +145,22 @@ export default function GanttTimeline({
       Math.ceil((resolvedEnd.getTime() - resolvedStart.getTime()) / DAY_MS) + 1,
     );
 
-    const tickStep = scale === 'day' ? 1 : scale === 'week' ? 7 : 30;
+    // Daily: extend by 1 extra day so the buffer shows 2 ticks past the last item (feels natural).
+    // Weekly/monthly: the tick column already spans ts days, one extra tick is enough.
+    const spanWithBuffer = scale === 'day' ? daysSpan + 1 : daysSpan;
+
     const tickList: Date[] = [];
-    for (let i = 0; i <= daysSpan; i += tickStep) {
-      const d = new Date(resolvedStart.getTime() + i * DAY_MS);
-      tickList.push(d);
+    for (let i = 0; i <= spanWithBuffer; i += ts) {
+      tickList.push(new Date(resolvedStart.getTime() + i * DAY_MS));
     }
 
     return {
       start: resolvedStart,
       end: resolvedEnd,
       ticks: tickList,
-      dayWidth: scale === 'day' ? 48 : scale === 'week' ? 22 : 4,
+      dayWidth: dw,
+      tickStep: ts,
+      contentWidth: (spanWithBuffer + ts) * dw,
     };
   }, [items, scale, rangeStart, rangeEnd]);
 
@@ -178,10 +184,6 @@ export default function GanttTimeline({
     return Array.from(map.entries()).map(([lane, lineItems]) => buildLane(lane, lineItems));
   }, [items]);
 
-  const totalDays =
-    Math.max(1, Math.ceil((end.getTime() - start.getTime()) / DAY_MS) + 1);
-  const contentWidth = totalDays * dayWidth;
-
   const computeX = (date: Date) =>
     Math.max(0, (startOfDay(date).getTime() - start.getTime()) / DAY_MS) * dayWidth;
 
@@ -203,7 +205,7 @@ export default function GanttTimeline({
           {/* Header row with ticks */}
           <div className="flex border-b border-solid border-border-default bg-bg-secondary">
             <div
-              className="flex-shrink-0 px-16px py-10px font-manrope text-10 font-bold text-fg-muted uppercase tracking-[0.12em] border-r border-solid border-border-default flex items-end"
+              className="shrink-0 px-16px py-10px font-manrope text-10 font-bold text-fg-muted uppercase tracking-[0.12em] border-r border-solid border-border-default flex items-end"
               style={{ width: rowLabelWidth, height: 48 }}
             >
               {laneHeaderLabel}
@@ -226,7 +228,7 @@ export default function GanttTimeline({
                       isMonthStart ? 'border-l-pr_purple/40' : 'border-l-black_3',
                       isWeekend && 'bg-bg-tertiary/30',
                     )}
-                    style={{ insetInlineStart: computeX(tick), width: dayWidth }}
+                    style={{ insetInlineStart: computeX(tick), width: tickStep * dayWidth }}
                   >
                     {scale === 'day' && (
                       <>
@@ -278,7 +280,7 @@ export default function GanttTimeline({
                 className="flex border-b border-solid border-border-default last:border-b-0"
               >
                 <div
-                  className="flex-shrink-0 px-12px py-8px font-manrope text-12 text-fg-primary border-r border-solid border-border-default flex items-center"
+                  className="shrink-0 px-12px py-8px font-manrope text-12 text-fg-primary border-r border-solid border-border-default flex items-center"
                   style={{ width: rowLabelWidth, minHeight: actualLaneHeight }}
                 >
                   {lane || '—'}
@@ -349,7 +351,7 @@ export default function GanttTimeline({
                             }}
                           />
                         )}
-                        <span className="relative z-[1] px-8px font-manrope text-12 text-fg-primary truncate block leading-[30px]">
+                        <span className="relative z-1 px-8px font-manrope text-12 text-fg-primary truncate block leading-30px">
                           {it.label}
                         </span>
                       </button>

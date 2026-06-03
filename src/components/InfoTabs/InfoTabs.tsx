@@ -35,29 +35,29 @@ export default function InfoTabs({ title, list, renderModal }: Props) {
   };
 
   return (
-    <div className="flex flex-col justify-between gap-40px w-full max-w-[1200px]">
+    <div className="flex flex-col justify-between gap-40px w-full max-w-300">
       <Typography tag="h2" color="text-white_4" className="w-full">
         {title}
       </Typography>
       <div className="grid grid-cols-1 xs:grid-cols-[1fr_1fr] gap-24px w-full">
         <div className="flex flex-col gap-4 min-w-0">
           <CardWrapper stoke="1">
-            <ul className="flex flex-col sm:py-12px py-[8px] sm:px-24px px-12px">
+            <ul className="flex flex-col sm:py-12px py-8px sm:px-24px px-12px">
               {list.map((item) => (
                 <li
                   key={item.title}
-                  className="h-min flex flex-col py-8px justify-start border-b-1 last:border-[transparent] border-solid border-b-[#2F1E5E]"
+                  className="h-min flex flex-col py-8px justify-start border-b-1 last:border-transparent border-solid border-b-[#2F1E5E]"
                 >
                   <button
                     type="button"
                     aria-label="set tab"
                     onClick={() => handleSelectTab(item.title, item.role || '')}
-                    className="flex items-center  gap-8px justify-between xl:h-72px my-8px"
+                    className="flex items-center  gap-8px justify-between xl:h-72px my-8px cursor-pointer"
                   >
                     <Typography
                       tag="h4"
                       color={activeTab.title === item.title ? 'text-pr_purple' : 'text-white_4'}
-                      className="sm:!text-[24px] sm:leading-[48px] 2xl:!text-24px text-left"
+                      className="sm:text-[24px]! sm:leading-48px 2xl:text-24px! text-left"
                       text={item.title}
                     />
                     <Image
@@ -72,7 +72,7 @@ export default function InfoTabs({ title, list, renderModal }: Props) {
             </ul>
           </CardWrapper>
         </div>
-        <div className="mt-10px min-h-[200px] min-w-0 overflow-hidden">
+        <div className="mt-10px min-h-50 min-w-0 overflow-hidden">
           <AnimatePresence mode="wait">
             {activeTab && (
               <motion.div

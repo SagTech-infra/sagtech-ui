@@ -10,10 +10,10 @@ const meta = {
   title: 'Form Controls/RichTextEditor',
   component: RichTextEditor,
   tags: ['autodocs'],
-  parameters: { layout: 'centered' },
+  parameters: { layout: 'padded' },
   decorators: [
     (Story) => (
-      <div className="w-[560px]">
+      <div className="max-w-140 w-full">
         <Story />
       </div>
     ),

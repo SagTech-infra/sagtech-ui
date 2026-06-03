@@ -281,7 +281,7 @@ function Combobox<V extends string = string>(props: ComboboxProps<V>) {
         </div>
       )}
       <ul
-        className="overflow-y-auto"
+        className="overflow-y-auto custom-scrollbar"
         style={{ maxHeight: `${maxHeight}px` }}
       >
         {loading && (
@@ -317,7 +317,7 @@ function Combobox<V extends string = string>(props: ComboboxProps<V>) {
                   <>
                     <span className="truncate">{option.label}</span>
                     {selected && (
-                      <span aria-hidden="true" className="text-pr_purple flex-shrink-0">
+                      <span aria-hidden="true" className="text-pr_purple shrink-0">
                         ✓
                       </span>
                     )}
@@ -353,7 +353,7 @@ function Combobox<V extends string = string>(props: ComboboxProps<V>) {
         onClick={toggleDropdown}
         onKeyDown={handleKeyDown}
         className={classNames(
-          'w-full flex items-center justify-between bg-bg-primary border border-solid rounded-16px h-[56px] px-24px text-left font-manrope text-14 transition-colors gap-8px',
+          'w-full flex items-center justify-between bg-bg-primary border border-solid rounded-16px h-56px px-24px text-left font-manrope text-14 transition-colors gap-8px',
           {
             'border-border-strong': disabled,
             'border-pr_purple': !error && !disabled,
@@ -371,14 +371,14 @@ function Combobox<V extends string = string>(props: ComboboxProps<V>) {
         >
           {triggerLabel}
         </span>
-        <span className="flex items-center gap-4px flex-shrink-0">
+        <span className="flex items-center gap-4px shrink-0">
           {showClear && (
             <span
               role="button"
               aria-label="Clear selection"
               tabIndex={-1}
               onClick={handleClear}
-              className="text-fg-muted hover:text-fg-primary cursor-pointer w-[16px] h-[16px] flex items-center justify-center"
+              className="text-fg-muted hover:text-fg-primary cursor-pointer w-16px h-16px flex items-center justify-center"
             >
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                 <path

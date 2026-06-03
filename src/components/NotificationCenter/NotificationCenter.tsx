@@ -62,7 +62,7 @@ function VariantIcon({ variant }: { variant: NotificationVariant }) {
 
   if (variant === 'success') {
     return (
-      <svg width="16" height="16" viewBox="0 0 20 20" fill="none" className={classNames('flex-shrink-0', colorClass)} aria-hidden="true">
+      <svg width="16" height="16" viewBox="0 0 20 20" fill="none" className={classNames('shrink-0', colorClass)} aria-hidden="true">
         <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.5" />
         <path d="M6 10l3 3 5-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
@@ -70,7 +70,7 @@ function VariantIcon({ variant }: { variant: NotificationVariant }) {
   }
   if (variant === 'error') {
     return (
-      <svg width="16" height="16" viewBox="0 0 20 20" fill="none" className={classNames('flex-shrink-0', colorClass)} aria-hidden="true">
+      <svg width="16" height="16" viewBox="0 0 20 20" fill="none" className={classNames('shrink-0', colorClass)} aria-hidden="true">
         <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.5" />
         <path d="M7 7l6 6M13 7l-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
       </svg>
@@ -78,14 +78,14 @@ function VariantIcon({ variant }: { variant: NotificationVariant }) {
   }
   if (variant === 'warning') {
     return (
-      <svg width="16" height="16" viewBox="0 0 20 20" fill="none" className={classNames('flex-shrink-0', colorClass)} aria-hidden="true">
+      <svg width="16" height="16" viewBox="0 0 20 20" fill="none" className={classNames('shrink-0', colorClass)} aria-hidden="true">
         <path d="M10 2l8 15H2L10 2z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
         <path d="M10 8v4M10 14.5v.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
       </svg>
     );
   }
   return (
-    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" className={classNames('flex-shrink-0', colorClass)} aria-hidden="true">
+    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" className={classNames('shrink-0', colorClass)} aria-hidden="true">
       <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.5" />
       <path d="M10 9v5M10 6v.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
@@ -130,6 +130,7 @@ export default function NotificationCenter({
   label = 'Notifications',
 }: NotificationCenterProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [panelStyle, setPanelStyle] = useState<React.CSSProperties>({});
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const Link = useLinkComponent();
@@ -139,6 +140,23 @@ export default function NotificationCenter({
     unreadCount ?? notifications.filter((n) => !n.read).length;
 
   const handleClose = useCallback(() => setIsOpen(false), []);
+
+  const handleToggle = useCallback(() => {
+    if (!isOpen && containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      const w = Math.min(360, window.innerWidth - 16);
+      const vw = window.innerWidth;
+      const margin = 8;
+      const isEndAnchored = (position === 'right') === (dir !== 'rtl');
+      // viewportLeft = desired left edge of panel in viewport coordinates
+      const viewportLeft = isEndAnchored
+        ? Math.max(rect.right - w, margin)
+        : Math.max(Math.min(rect.left, vw - margin - w), margin);
+      // Convert to CSS `left` relative to the container (may be negative)
+      setPanelStyle({ left: viewportLeft - rect.left, right: 'auto' });
+    }
+    setIsOpen((v) => !v);
+  }, [isOpen, position, dir]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -176,7 +194,7 @@ export default function NotificationCenter({
           <div className="flex items-start gap-8px">
             <span
               className={classNames(
-                'flex-1 font-manrope text-14 font-semibold break-words',
+                'flex-1 font-manrope text-14 font-semibold wrap-break-word',
                 notification.read ? 'text-fg-muted' : 'text-fg-primary',
               )}
             >
@@ -185,12 +203,12 @@ export default function NotificationCenter({
             {!notification.read && (
               <span
                 aria-label="Unread"
-                className="w-[8px] h-[8px] rounded-[50%] bg-pr_purple mt-6px flex-shrink-0"
+                className="w-8px h-8px rounded-[50%] bg-pr_purple mt-6px shrink-0"
               />
             )}
           </div>
           {notification.description && (
-            <p className="font-manrope text-12 text-fg-muted mt-2px break-words">
+            <p className="font-manrope text-12 text-fg-muted mt-2px wrap-break-word">
               {notification.description}
             </p>
           )}
@@ -234,11 +252,6 @@ export default function NotificationCenter({
     );
   };
 
-  // Treat `position` as the LTR-side; flip it under RTL so the dropdown
-  // opens mirrored. `right` anchors to the inline-end in LTR, inline-start in RTL.
-  const anchorClass =
-    (position === 'right') === (dir !== 'rtl') ? 'end-0' : 'start-0';
-
   return (
     <div
       ref={containerRef}
@@ -251,14 +264,14 @@ export default function NotificationCenter({
         aria-label={`${label}${computedUnread > 0 ? `, ${computedUnread} unread` : ''}`}
         aria-expanded={isOpen}
         aria-haspopup="dialog"
-        onClick={() => setIsOpen((v) => !v)}
-        className="relative flex items-center justify-center w-[40px] h-[40px] rounded-[50%] text-fg-muted hover:text-fg-primary hover:bg-bg-secondary cursor-pointer transition-colors"
+        onClick={handleToggle}
+        className="relative flex items-center justify-center w-40px h-40px rounded-[50%] text-fg-muted hover:text-fg-primary hover:bg-bg-secondary cursor-pointer transition-colors"
       >
         <BellIcon />
         {computedUnread > 0 && (
           <span
             aria-hidden="true"
-            className="absolute top-6px end-6px min-w-[16px] h-[16px] px-4px rounded-[50px] bg-error text-white text-10 font-manrope font-bold flex items-center justify-center"
+            className="absolute top-6px end-6px min-w-16px h-16px px-4px rounded-circle bg-error text-white text-10 font-manrope font-bold flex items-center justify-center"
           >
             {computedUnread > 99 ? '99+' : computedUnread}
           </span>
@@ -269,11 +282,8 @@ export default function NotificationCenter({
         <div
           role="dialog"
           aria-label={label}
-          className={classNames(
-            'absolute mt-8px w-[360px] max-h-[480px] flex flex-col bg-surface-overlay border border-solid border-border-default rounded-16px shadow-6xl overflow-hidden',
-            anchorClass,
-          )}
-          style={{ zIndex: 1000 }}
+          className="absolute mt-8px w-[min(360px,calc(100vw-16px))] max-h-120 flex flex-col bg-surface-overlay border border-solid border-border-default rounded-16px shadow-6xl overflow-hidden"
+          style={{ zIndex: 1000, ...panelStyle }}
         >
           <header className="flex items-center justify-between px-16px py-12px border-b border-solid border-border-default">
             <span className="font-manrope text-14 font-bold text-fg-primary">{label}</span>

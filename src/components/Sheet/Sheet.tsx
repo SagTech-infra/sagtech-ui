@@ -222,13 +222,13 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(function Sheet(
             className={classNames(
               "fixed bg-surface-overlay flex flex-col outline-none",
               {
-                "top-0 end-0 h-full border-s border-border-default":
+                "top-0 end-0 h-full max-w-full border-s border-border-default":
                   side === "right",
-                "top-0 start-0 h-full border-e border-border-default":
+                "top-0 start-0 h-full max-w-full border-e border-border-default":
                   side === "left",
-                "top-0 left-0 right-0 w-full border-b border-border-default":
+                "top-0 left-0 right-0 w-full max-h-full border-b border-border-default":
                   side === "top",
-                "bottom-0 left-0 right-0 w-full border-t border-border-default":
+                "bottom-0 left-0 right-0 w-full max-h-full border-t border-border-default":
                   side === "bottom",
               },
               sizeClassMap[side][size],
@@ -241,7 +241,7 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(function Sheet(
             exit="exit"
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
           >
-            <div className="flex items-center justify-between p-24px border-b border-border-default flex-shrink-0">
+            <div className="flex items-center justify-between p-24px border-b border-border-default shrink-0">
               {title ? (
                 <h2
                   id={titleId}
@@ -267,7 +267,7 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(function Sheet(
             </div>
 
             {footer && (
-              <div className="flex items-center justify-end gap-12px p-24px border-t border-border-default flex-shrink-0">
+              <div className="flex items-center justify-end gap-12px p-24px border-t border-border-default shrink-0">
                 {footer}
               </div>
             )}

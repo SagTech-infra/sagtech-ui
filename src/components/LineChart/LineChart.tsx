@@ -274,11 +274,11 @@ function LineChart({ series, width = '100%', height = 350 }: LineChartTypes) {
     hover !== null && layoutRef.current ? layoutRef.current.labels[hover.dataIndex] : '';
 
   return (
-    <div style={{ position: 'relative', display: 'inline-block' }}>
+    <div style={{ position: 'relative', width: typeof width === 'number' ? '100%' : width, maxWidth: typeof width === 'number' ? `${width}px` : undefined }}>
       <canvas
         ref={canvasRef}
         style={{
-          width: typeof width === 'number' ? `${width}px` : width,
+          width: '100%',
           height: typeof height === 'number' ? `${height}px` : height,
           display: 'block',
           cursor: 'crosshair',

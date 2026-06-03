@@ -1,20 +1,21 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { useState } from 'react';
-import DatePicker from './DatePicker';
+import type { Meta, StoryObj } from "@storybook/react";
+import { useState } from "react";
+import DatePicker from "./DatePicker";
 
 const meta = {
-  title: 'Form Controls/DatePicker',
+  title: "Form Controls/DatePicker",
   component: DatePicker,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
+  parameters: { layout: "padded" },
   argTypes: {
-    disabled: { control: 'boolean' },
-    placeholder: { control: 'text' },
-    label: { control: 'text' },
-    error: { control: 'text' },
+    disabled: { control: "boolean" },
+    placeholder: { control: "text" },
+    label: { control: "text" },
+    error: { control: "text" },
   },
   decorators: [
     (Story) => (
-      <div style={{ width: '340px' }}>
+      <div className="w-full">
         <Story />
       </div>
     ),
@@ -26,7 +27,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    placeholder: 'Select date',
+    placeholder: "Select date",
   },
 };
 
@@ -38,14 +39,14 @@ export const WithValue: Story = {
 
 export const WithLabel: Story = {
   args: {
-    label: 'Start date',
-    placeholder: 'Pick a start date',
+    label: "Start date",
+    placeholder: "Pick a start date",
   },
 };
 
 export const WithMinMax: Story = {
   args: {
-    label: 'Date (current month only)',
+    label: "Date (current month only)",
     minDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     maxDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0),
   },
@@ -53,8 +54,8 @@ export const WithMinMax: Story = {
 
 export const Interactive: Story = {
   args: {
-    placeholder: 'Choose a date',
-    label: 'Appointment date',
+    placeholder: "Choose a date",
+    label: "Appointment date",
   },
   render: function InteractiveDatePicker(args) {
     const [date, setDate] = useState<Date | undefined>(undefined);
@@ -65,7 +66,7 @@ export const Interactive: Story = {
 export const Disabled: Story = {
   args: {
     disabled: true,
-    placeholder: 'Not available',
-    label: 'Disabled date picker',
+    placeholder: "Not available",
+    label: "Disabled date picker",
   },
 };

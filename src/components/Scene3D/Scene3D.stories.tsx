@@ -6,10 +6,10 @@ const meta = {
   title: '3D/Scene3D',
   component: Scene3D,
   tags: ['autodocs'],
-  parameters: { layout: 'centered' },
+  parameters: { layout: 'fullscreen' },
   decorators: [
     (Story) => (
-      <div style={{ width: 500, height: 500 }}>
+      <div style={{ height: 500 }}>
         <Story />
       </div>
     ),
@@ -21,7 +21,6 @@ type Story = StoryObj<typeof meta>;
 
 export const SpinningCube: Story = {
   args: {
-    width: 500,
     height: 500,
     lighting: 'studio',
     controls: 'orbit',

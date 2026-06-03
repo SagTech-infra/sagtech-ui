@@ -136,6 +136,7 @@ function squarify(
 }
 
 function TreemapChart({ data, width = '100%', height = 400, padding = 2 }: TreemapChartProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hover, setHover] = useState<HoverState | null>(null);
   const { palette: PALETTE } = useThemeColors();
@@ -150,13 +151,15 @@ function TreemapChart({ data, width = '100%', height = 400, padding = 2 }: Treem
     if (!ctx) return;
 
     const rect = canvas.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    ctx.scale(dpr, dpr);
-
     const w = rect.width;
     const h = rect.height;
+    if (!w || !h) return;
+
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    ctx.scale(dpr, dpr);
+
     ctx.clearRect(0, 0, w, h);
 
     const out: TreemapRect[] = [];
@@ -236,22 +239,33 @@ function TreemapChart({ data, width = '100%', height = 400, padding = 2 }: Treem
   const handleMouseLeave = useCallback(() => setHover(null), []);
 
   useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
     draw();
-    window.addEventListener('resize', draw);
-    return () => window.removeEventListener('resize', draw);
+    const ro = new ResizeObserver(() => draw());
+    ro.observe(container);
+    return () => ro.disconnect();
   }, [draw]);
 
   const hovered =
     hover !== null ? rectsRef.current.find((r) => r.node.id === hover.id) : null;
 
   return (
-    <div style={{ position: 'relative', display: 'inline-block', width: typeof width === 'number' ? `${width}px` : width }}>
+    <div
+      ref={containerRef}
+      style={{
+        position: 'relative',
+        display: 'block',
+        width: typeof width === 'number' ? `${width}px` : width,
+        height: typeof height === 'number' ? `${height}px` : height,
+      }}
+    >
       <canvas
         ref={canvasRef}
         style={{
-          width: typeof width === 'number' ? `${width}px` : width,
-          height: `${height}px`,
           display: 'block',
+          width: '100%',
+          height: '100%',
           cursor: 'pointer',
         }}
         onMouseMove={handleMouseMove}

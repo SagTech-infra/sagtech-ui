@@ -6,6 +6,7 @@ const meta = {
   title: 'Form Controls/SegmentedControl',
   component: SegmentedControl,
   tags: ['autodocs'],
+  parameters: { layout: 'padded' },
   argTypes: {
     size: { control: 'radio', options: ['sm', 'md', 'lg'] },
     fullWidth: { control: 'boolean' },
@@ -58,7 +59,7 @@ export const FullWidth: Story = {
   render: function FullWidthStory() {
     const [value, setValue] = useState('list');
     return (
-      <div className="w-[420px]">
+      <div className="w-full">
         <SegmentedControl
           fullWidth
           value={value}

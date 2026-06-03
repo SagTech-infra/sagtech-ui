@@ -121,7 +121,7 @@ export default function VariablePicker({
           onChange={(e) => setQuery(e.target.value)}
           placeholder={searchPlaceholder}
           autoFocus
-          className="bg-black_1 border border-solid border-black_3 focus:border-pr_purple rounded-8px h-[40px] px-12px text-14 text-white_4 font-manrope outline-none transition-colors"
+          className="bg-black_1 border border-solid border-black_3 focus:border-pr_purple rounded-8px h-40px px-12px text-14 text-white_4 font-manrope outline-none transition-colors"
         />
 
         {sources.length > 0 && (
@@ -156,7 +156,7 @@ export default function VariablePicker({
           </div>
         )}
 
-        <div className="border border-solid border-black_3 rounded-8px overflow-hidden max-h-[360px] overflow-y-auto custom-scrollbar">
+        <div className="border border-solid border-black_3 rounded-8px overflow-hidden">
           {filtered.length === 0 ? (
             <div className="py-32px text-center">
               <Typography tag="p" color="text-grey_2" type="BodyS">
@@ -210,7 +210,7 @@ export default function VariablePicker({
                           e.stopPropagation();
                           handleCopy(v.token);
                         }}
-                        className="text-grey_4 hover:text-white_4 cursor-pointer flex-shrink-0 p-4px"
+                        className="text-grey_4 hover:text-white_4 cursor-pointer shrink-0 p-4px"
                       >
                         <CopyIcon />
                       </button>

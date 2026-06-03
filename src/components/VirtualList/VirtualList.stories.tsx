@@ -1,14 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import VirtualList from './VirtualList';
+import type { Meta, StoryObj } from "@storybook/react";
+import VirtualList from "./VirtualList";
 
 const meta = {
-  title: 'Data Display/VirtualList',
+  title: "Data Display/VirtualList",
   component: VirtualList,
-  tags: ['autodocs'],
-  parameters: { layout: 'centered' },
+  tags: ["autodocs"],
+  parameters: { layout: "padded" },
   decorators: [
     (Story) => (
-      <div className="w-[420px]">
+      <div className="max-w-105 w-full">
         <Story />
       </div>
     ),

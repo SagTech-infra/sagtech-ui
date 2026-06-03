@@ -51,7 +51,7 @@ const SelectFakeInput = forwardRef<HTMLInputElement, Props>(
           aria-disabled={disabled || undefined}
           disabled={disabled}
           placeholder={hasSomeValue ? String(displayValue) : placeholder}
-          className={`cursor-pointer bg-bg-secondary border-[1px] border-solid font-medium w-full leading-24 outline-none focus-visible:ring-2 focus-visible:ring-pr_purple rounded-16px h-[56px] placeholder:text-fg-muted text-fg-muted border-pr_purple py-15px px-24px disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+          className={`cursor-pointer bg-bg-secondary border-[1px] border-solid font-medium w-full leading-24 outline-none focus-visible:ring-2 focus-visible:ring-pr_purple rounded-16px h-56px placeholder:text-fg-muted text-fg-muted border-pr_purple py-15px px-24px disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
           onClick={onClick}
           onKeyDown={onKeyDown}
         />
@@ -60,7 +60,7 @@ const SelectFakeInput = forwardRef<HTMLInputElement, Props>(
           animate={{ rotateX: isOpen ? 180 : 0 }}
           transition={{ duration: 0.15 }}
           style={{ perspective: 1000 }}
-          className="absolute end-[24px] top-[16px] pointer-events-none"
+          className="absolute end-24px top-16px pointer-events-none"
         >
           <ChevrondownIcon width={24} height={24} />
         </motion.div>

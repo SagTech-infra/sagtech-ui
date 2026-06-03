@@ -26,7 +26,7 @@ function SelectOptionItem({
     <li
       role="option"
       aria-selected={isActive || undefined}
-      className={`border-black_2 border-b-1 last:border-[0px] border-solid border-1px ${
+      className={`border-black_2 border-b-1 last:border-0 border-solid border-1px ${
         isHighlighted ? 'bg-pr_purple/10' : ''
       }`}
     >
@@ -34,12 +34,12 @@ function SelectOptionItem({
         type="button"
         tabIndex={-1}
         onClick={() => onSelect(value)}
-        className="w-full flex justify-between items-center cursor-pointer transition-[background] py-8px px-[4px]"
+        className="w-full flex justify-between items-center cursor-pointer transition-[background] py-8px px-4px"
       >
         <Typography
           type="Labels"
           color="text-white"
-          className="!font-normal truncate w-[80%] text-left"
+          className="font-normal! truncate w-[80%] text-left"
         >
           {label}
         </Typography>

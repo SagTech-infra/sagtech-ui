@@ -5,6 +5,7 @@ const meta = {
   title: 'Foundations/Divider',
   component: Divider,
   tags: ['autodocs'],
+  parameters: { layout: 'padded' },
   argTypes: {
     orientation: {
       control: 'select',
@@ -18,7 +19,7 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <div style={{ width: '480px' }}>
+      <div className="w-full">
         <Story />
       </div>
     ),

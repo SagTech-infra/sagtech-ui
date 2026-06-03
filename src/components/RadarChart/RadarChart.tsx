@@ -222,11 +222,11 @@ function RadarChart({
   }, [draw]);
 
   return (
-    <div style={{ position: 'relative', display: 'inline-block', width: typeof width === 'number' ? `${width}px` : width }}>
+    <div style={{ position: 'relative', width: typeof width === 'number' ? '100%' : width, maxWidth: typeof width === 'number' ? `${width}px` : undefined }}>
       <canvas
         ref={canvasRef}
         style={{
-          width: typeof width === 'number' ? `${width}px` : width,
+          width: '100%',
           height: `${height}px`,
           display: 'block',
           cursor: 'crosshair',

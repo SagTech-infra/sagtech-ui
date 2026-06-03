@@ -9,7 +9,7 @@ export type TreemapNode = {
 export interface TreemapChartProps {
   data: TreemapNode[];
   width?: number | string;
-  height?: number;
+  height?: number | string;
   /** Inner gap between rectangles in px. Defaults to 2. */
   padding?: number;
 }

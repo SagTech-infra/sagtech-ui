@@ -148,7 +148,7 @@ const Drawer = forwardRef<HTMLElement, DrawerProps>(function Drawer(
                 "end-0 border-s border-border-default": position === "right",
                 "start-0 border-e border-border-default": position === "left",
               },
-              width ? undefined : "w-[400px]",
+              width ? undefined : "w-full",
               className,
             )}
             style={{ zIndex: drawerZ, ...(width ? { width } : {}) }}

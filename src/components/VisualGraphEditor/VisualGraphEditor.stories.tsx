@@ -33,14 +33,12 @@ export const Basic: Story = {
     const [nodes, setNodes] = useState(initialNodes);
     const [edges, setEdges] = useState(initialEdges);
     return (
-      <div className="w-[900px]">
-        <VisualGraphEditor
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={setNodes}
-          onEdgesChange={setEdges}
-        />
-      </div>
+      <VisualGraphEditor
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={setNodes}
+        onEdgesChange={setEdges}
+      />
     );
   },
 };
@@ -53,11 +51,5 @@ export const ReadOnly: Story = {
     onEdgesChange: () => {},
     readOnly: true,
   },
-  decorators: [
-    (Story) => (
-      <div className="w-[900px]">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [],
 };

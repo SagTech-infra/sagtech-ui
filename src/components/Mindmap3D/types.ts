@@ -9,8 +9,8 @@ export interface MindmapNode {
 
 export interface Mindmap3DProps {
   root: MindmapNode;
-  width?: number;
-  height?: number;
+  width?: number | string;
+  height?: number | string;
   onNodeClick?: (node: MindmapNode) => void;
   className?: string;
   /** Background CSS color. Defaults to tokens.colors.black_1. */

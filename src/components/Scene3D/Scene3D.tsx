@@ -15,8 +15,8 @@ import * as tokens from '@/tokens/tokens';
  */
 export interface Scene3DProps {
   children?: ReactNode;
-  width?: number;
-  height?: number;
+  width?: number | string;
+  height?: number | string;
   camera?: {
     position?: [number, number, number];
     fov?: number;
@@ -40,7 +40,7 @@ export default function Scene3D(props: Scene3DProps) {
   // className + loadingFallback are wrapper-only; everything else flows to the core.
   const { className, loadingFallback, ...coreProps } = props;
   const {
-    width = 500,
+    width = '100%',
     height = 500,
     background = tokens.colors.black_1,
   } = coreProps;

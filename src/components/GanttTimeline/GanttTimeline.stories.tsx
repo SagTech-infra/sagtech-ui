@@ -6,10 +6,10 @@ const meta = {
   title: 'Data Display/GanttTimeline',
   component: GanttTimeline,
   tags: ['autodocs'],
-  parameters: { layout: 'centered' },
+  parameters: { layout: 'fullscreen' },
   decorators: [
     (Story) => (
-      <div className="w-[920px]">
+      <div className="w-full">
         <Story />
       </div>
     ),

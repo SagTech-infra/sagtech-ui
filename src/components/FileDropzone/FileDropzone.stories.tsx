@@ -7,11 +7,11 @@ const meta = {
   component: FileDropzone,
   tags: ['autodocs'],
   parameters: {
-    layout: 'centered',
+    layout: 'padded',
   },
   decorators: [
     (Story) => (
-      <div className="w-[520px]">
+      <div className="w-max-130 w-full">
         <Story />
       </div>
     ),

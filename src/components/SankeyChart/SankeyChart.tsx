@@ -101,7 +101,8 @@ function SankeyChart({ nodes, links, width = '100%', height = 400 }: SankeyChart
 
     const w = rect.width;
     const h = rect.height;
-    const padding = { top: 16, right: 100, bottom: 16, left: 100 };
+    const labelPad = Math.max(60, Math.min(100, w * 0.2));
+    const padding = { top: 16, right: labelPad, bottom: 16, left: labelPad };
     const chartW = w - padding.left - padding.right;
     const chartH = h - padding.top - padding.bottom;
 
@@ -330,11 +331,11 @@ function SankeyChart({ nodes, links, width = '100%', height = 400 }: SankeyChart
   }
 
   return (
-    <div style={{ position: 'relative', display: 'inline-block', width: typeof width === 'number' ? `${width}px` : width }}>
+    <div style={{ position: 'relative', width: typeof width === 'number' ? '100%' : width, maxWidth: typeof width === 'number' ? `${width}px` : undefined }}>
       <canvas
         ref={canvasRef}
         style={{
-          width: typeof width === 'number' ? `${width}px` : width,
+          width: '100%',
           height: `${height}px`,
           display: 'block',
           cursor: 'crosshair',

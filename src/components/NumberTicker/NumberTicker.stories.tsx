@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     value: 12345,
-    startOnView: false,
+    startOnView: true,
   },
   render: (args) => (
     <span className="font-orbitron text-48 text-white_4">
@@ -30,7 +30,7 @@ export const CustomFrom: Story = {
     value: 1000,
     from: 500,
     duration: 1500,
-    startOnView: false,
+    startOnView: true,
   },
   render: (args) => (
     <span className="font-orbitron text-48 text-pr_purple">
@@ -44,7 +44,7 @@ export const CustomFormatter: Story = {
     value: 9999.99,
     from: 0,
     duration: 2000,
-    startOnView: false,
+    startOnView: true,
     formatter: (n) =>
       n.toLocaleString("en-US", { style: "currency", currency: "USD" }),
   },
@@ -60,7 +60,7 @@ export const ReducedMotion: Story = {
   args: {
     value: 42000,
     from: 0,
-    startOnView: false,
+    startOnView: true,
   },
   render: (args) => (
     <div className="flex flex-col gap-8px items-center">

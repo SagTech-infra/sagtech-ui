@@ -52,7 +52,7 @@ function ToastIcon({ variant }: { variant: ToastVariant }) {
         viewBox="0 0 20 20"
         fill="none"
         aria-hidden="true"
-        className="flex-shrink-0 text-success"
+        className="shrink-0 text-success"
       >
         <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.5" />
         <path
@@ -73,7 +73,7 @@ function ToastIcon({ variant }: { variant: ToastVariant }) {
         viewBox="0 0 20 20"
         fill="none"
         aria-hidden="true"
-        className="flex-shrink-0 text-error"
+        className="shrink-0 text-error"
       >
         <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.5" />
         <path
@@ -93,7 +93,7 @@ function ToastIcon({ variant }: { variant: ToastVariant }) {
         viewBox="0 0 20 20"
         fill="none"
         aria-hidden="true"
-        className="flex-shrink-0 text-warning"
+        className="shrink-0 text-warning"
       >
         <path
           d="M10 2L18 17H2L10 2Z"
@@ -118,7 +118,7 @@ function ToastIcon({ variant }: { variant: ToastVariant }) {
         viewBox="0 0 20 20"
         fill="none"
         aria-hidden="true"
-        className="flex-shrink-0 text-fg-muted animate-spin"
+        className="shrink-0 text-fg-muted animate-spin"
       >
         <circle
           cx="10"
@@ -145,7 +145,7 @@ function ToastIcon({ variant }: { variant: ToastVariant }) {
         viewBox="0 0 20 20"
         fill="none"
         aria-hidden="true"
-        className="flex-shrink-0 text-pr_blue"
+        className="shrink-0 text-pr_blue"
       >
         <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.5" />
         <path
@@ -196,18 +196,18 @@ function ToastRow({
       layout
       {...motionProps}
       className={classNames(
-        "pointer-events-auto inline-flex w-fit gap-8px rounded-8px border border-solid px-12px py-6px shadow-4xl font-manrope text-14 text-fg-primary max-w-[420px]",
+        "pointer-events-auto inline-flex w-fit gap-8px rounded-8px border border-solid px-12px py-6px shadow-4xl font-manrope text-14 text-fg-primary max-w-[min(420px,calc(100vw-32px))]",
         toast.description ? "items-start" : "items-center",
         variantClasses[toast.variant],
       )}
     >
       <ToastIcon variant={toast.variant} />
       <div className="min-w-0">
-        <div className="font-semibold leading-18 break-words">
+        <div className="font-semibold leading-18 wrap-break-word">
           {toast.message}
         </div>
         {toast.description && (
-          <div className="text-12 text-fg-secondary mt-2px break-words">
+          <div className="text-12 text-fg-secondary mt-2px wrap-break-word">
             {toast.description}
           </div>
         )}
@@ -219,7 +219,7 @@ function ToastRow({
             toast.action!.onClick(e);
             onDismiss(toast.id);
           }}
-          className="text-12 font-bold text-pr_purple hover:text-sec_purple cursor-pointer flex-shrink-0"
+          className="text-12 font-bold text-pr_purple hover:text-sec_purple cursor-pointer shrink-0"
         >
           {toast.action.label}
         </button>
@@ -228,7 +228,7 @@ function ToastRow({
         type="button"
         aria-label="Close notification"
         onClick={() => onDismiss(toast.id)}
-        className="text-fg-muted hover:text-fg-primary cursor-pointer flex-shrink-0"
+        className="text-fg-muted hover:text-fg-primary cursor-pointer shrink-0"
       >
         <svg
           width="16"

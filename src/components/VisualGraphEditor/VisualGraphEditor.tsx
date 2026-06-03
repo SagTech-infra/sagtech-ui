@@ -87,6 +87,14 @@ function VisualGraphEditorInner<NData extends Record<string, unknown>, EData ext
     >
       <style>{`
         .sagtech-graph .react-flow__node { color: #F8F8F8; font-family: var(--font-manrope), sans-serif; }
+        .sagtech-graph .react-flow__node-default,
+        .sagtech-graph .react-flow__node-input,
+        .sagtech-graph .react-flow__node-output {
+          background: #20202D; border-color: #393944; color: #F8F8F8; border-radius: 8px;
+        }
+        .sagtech-graph .react-flow__node-default.selected,
+        .sagtech-graph .react-flow__node-input.selected,
+        .sagtech-graph .react-flow__node-output.selected { border-color: #6D3EF1; box-shadow: 0 0 0 1px #6D3EF1; }
         .sagtech-graph .react-flow__handle { background: #6D3EF1; border-color: #070715; }
         .sagtech-graph .react-flow__edge-path { stroke: #6D3EF1; }
         .sagtech-graph .react-flow__controls { background: #20202D; border-radius: 8px; overflow: hidden; border: 1px solid #393944; }

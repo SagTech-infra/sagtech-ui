@@ -6,6 +6,7 @@ const meta = {
   title: 'Form Controls/SearchBar',
   component: SearchBar,
   tags: ['autodocs'],
+  parameters: { layout: 'padded' },
   argTypes: {
     value: { control: 'text' },
     placeholder: { control: 'text' },

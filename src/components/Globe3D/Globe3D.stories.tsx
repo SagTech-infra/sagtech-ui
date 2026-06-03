@@ -6,10 +6,10 @@ const meta = {
   title: '3D/Globe3D',
   component: Globe3D,
   tags: ['autodocs'],
-  parameters: { layout: 'centered' },
+  parameters: { layout: 'fullscreen' },
   decorators: [
     (Story) => (
-      <div style={{ width: 500, height: 500 }}>
+      <div style={{ height: 500 }}>
         <Story />
       </div>
     ),
@@ -30,7 +30,6 @@ const markers: Globe3DMarker[] = [
 export const Basic: Story = {
   args: {
     markers,
-    width: 500,
     height: 500,
     autoRotate: true,
     onMarkerClick: (m) => console.log('clicked marker', m),

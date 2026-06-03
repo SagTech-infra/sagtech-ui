@@ -19,9 +19,16 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {
     width: { control: 'text' },
-    height: { control: 'number' },
+    height: { control: 'text' },
     padding: { control: 'number' },
   },
+  decorators: [
+    (Story) => (
+      <div style={{ width: '100%', padding: '16px', boxSizing: 'border-box' }}>
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof TreemapChart>;
 
 export default meta;
@@ -30,14 +37,14 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     data: sampleData,
-    width: 600,
+    width: '100%',
     height: 400,
   },
 };
 
 export const Nested: Story = {
   args: {
-    width: 600,
+    width: '100%',
     height: 400,
     data: [
       {

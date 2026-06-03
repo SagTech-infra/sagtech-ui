@@ -5,6 +5,7 @@ const meta = {
   title: 'Data Display/LazyImage',
   component: LazyImage,
   tags: ['autodocs'],
+  parameters: { layout: "padded" },
   argTypes: {
     url: { control: 'text' },
     alt: { control: 'text' },
@@ -23,7 +24,7 @@ export const Default: Story = {
   args: {
     url: 'https://via.placeholder.com/400x300',
     alt: 'Lazy loaded image',
-    className: 'relative w-[400px] h-[300px]',
+    className: 'relative w-full max-w-105 h-[300px]',
   },
 };
 
@@ -37,7 +38,7 @@ export const WithPlaceholder: Story = {
       <LazyImage
         url="https://via.placeholder.com/600x400"
         alt="Lazy loaded on scroll"
-        className="relative w-[600px] h-[400px]"
+        className="relative w-full max-w-105 h-100"
         objectFit="cover"
       />
       <div style={{ height: '40vh' }} />

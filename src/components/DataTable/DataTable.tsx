@@ -12,7 +12,7 @@ const alignClasses = {
 
 function SortIcon({ direction }: { direction: SortDirection | null }) {
   return (
-    <span className="inline-flex flex-col ml-4px items-center justify-center w-[10px] h-[14px] text-[10px]">
+    <span className="inline-flex flex-col ml-4px items-center justify-center w-10px h-3.5 text-10">
       <span
         aria-hidden="true"
         className={classNames('leading-none', {
@@ -164,7 +164,7 @@ export default function DataTable<T, K extends string = string>({
           {hasSelection && (
             <th
               scope="col"
-              className={classNames('w-[40px]', {
+              className={classNames('w-40px', {
                 'py-8px px-12px': compact,
                 'py-12px px-16px': !compact,
               })}
@@ -203,7 +203,7 @@ export default function DataTable<T, K extends string = string>({
               {hasSelection && <td className="py-12px px-16px" />}
               {columns.map((c) => (
                 <td key={c.key} className="py-12px px-20px">
-                  <div className="h-[14px] w-full bg-bg-tertiary rounded-8px" />
+                  <div className="h-3.5 w-full bg-bg-tertiary rounded-8px" />
                 </td>
               ))}
             </tr>
@@ -285,8 +285,8 @@ export default function DataTable<T, K extends string = string>({
       )}
     >
       <div
-        className={classNames({
-          'overflow-auto': Boolean(maxHeight) || stickyHeader,
+        className={classNames('overflow-x-auto custom-scrollbar', {
+          'overflow-y-auto': Boolean(maxHeight) || stickyHeader,
         })}
         style={maxHeight ? { maxHeight } : undefined}
       >

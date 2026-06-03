@@ -6,6 +6,7 @@ const meta = {
   title: "Data Display/Pagination",
   component: Pagination,
   tags: ["autodocs"],
+  parameters: { layout: "padded" },
   argTypes: {
     currentPage: { control: { type: "number", min: 1 } },
     totalPages: { control: { type: "number", min: 1 } },

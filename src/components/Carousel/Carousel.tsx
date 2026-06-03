@@ -5,7 +5,6 @@ import {
   useCallback,
   useEffect,
   useId,
-  useRef,
   useState,
   type Ref,
 } from "react";
@@ -109,25 +108,11 @@ export default function Carousel({
     }
   };
 
-  const trackRef = useRef<HTMLDivElement>(null);
-
-  // Keep native scroll position in sync with the active index (scroll-snap).
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    const slideEl = track.children[activeIndex] as HTMLElement | undefined;
-    if (!slideEl) return;
-    track.scrollTo({
-      left: isRtl
-        ? track.scrollWidth - slideEl.offsetLeft - track.clientWidth
-        : slideEl.offsetLeft,
-      behavior: reduceMotion ? "auto" : "smooth",
-    });
-  }, [activeIndex, isRtl, reduceMotion]);
 
   const slideBasis = `calc((100% - ${(perView - 1) * gap}px) / ${perView})`;
-  const translatePercent = (activeIndex * 100) / perView;
   const translateSign = isRtl ? 1 : -1;
+  // Each slide occupies (containerWidth + gap) / perView, so translate must account for gap.
+  const translateValue = `calc(${translateSign * activeIndex} * (100% + ${gap}px) / ${perView})`;
 
   const atStart = activeIndex <= 0;
   const atEnd = activeIndex >= maxIndex;
@@ -162,12 +147,11 @@ export default function Carousel({
     >
       <div className="relative overflow-hidden">
         <div
-          ref={trackRef}
           aria-live={autoplayEnabled ? "off" : "polite"}
-          className="flex overflow-hidden snap-x snap-mandatory"
+          className="flex"
           style={{
             gap: `${gap}px`,
-            transform: `translateX(${translateSign * translatePercent}%)`,
+            transform: `translateX(${translateValue})`,
             transition: reduceMotion ? undefined : "transform 300ms ease",
           }}
         >
@@ -225,7 +209,7 @@ export default function Carousel({
                 aria-current={isActive ? "true" : undefined}
                 onClick={() => goTo(i)}
                 className={classNames(
-                  "w-[8px] h-[8px] rounded-circle transition-colors duration-200 cursor-pointer",
+                  "w-8px h-8px rounded-circle transition-colors duration-200 cursor-pointer",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pr_purple",
                   isActive ? "bg-pr_purple" : "bg-grey_2",
                 )}

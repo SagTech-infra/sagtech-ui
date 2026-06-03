@@ -11,8 +11,8 @@ export interface Globe3DMarker {
 
 export interface Globe3DProps {
   markers: Globe3DMarker[];
-  width?: number;
-  height?: number;
+  width?: number | string;
+  height?: number | string;
   /** Slow auto-rotation. Defaults to true. */
   autoRotate?: boolean;
   onMarkerClick?: (marker: Globe3DMarker) => void;

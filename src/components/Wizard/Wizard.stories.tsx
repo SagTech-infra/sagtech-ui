@@ -10,11 +10,11 @@ const meta = {
   component: Wizard.Root,
   tags: ['autodocs'],
   parameters: {
-    layout: 'centered',
+    layout: 'fullscreen',
   },
   decorators: [
     (Story) => (
-      <div className="w-[560px]">
+      <div className="w-full">
         <Story />
       </div>
     ),
@@ -34,7 +34,7 @@ export const Basic: Story = {
   render: () => (
     <Wizard.Root steps={steps} onComplete={() => alert('All done!')}>
       <Wizard.Progress />
-      <Wizard.Content className="min-h-[160px] bg-black_2 border border-solid border-black_3 rounded-16px p-24px">
+      <Wizard.Content className="min-h-40 bg-black_2 border border-solid border-black_3 rounded-16px p-24px ">
         {({ currentStep }) => (
           <div className="flex flex-col gap-8px">
             <Typography tag="h3">{currentStep.title}</Typography>
@@ -59,7 +59,7 @@ export const WithValidation: Story = {
         onComplete={() => alert(`Welcome, ${name || 'friend'}!`)}
       >
         <Wizard.Progress />
-        <Wizard.Content className="min-h-[200px] bg-black_2 border border-solid border-black_3 rounded-16px p-24px">
+        <Wizard.Content className="min-h-50 bg-black_2 border border-solid border-black_3 rounded-16px p-24px">
           {({ currentStep }) => {
             if (currentStep.id === 'profile') {
               return (
@@ -116,14 +116,14 @@ export const HookOnly: Story = {
             type="button"
             onClick={wiz.back}
             disabled={wiz.isFirst}
-            className="px-16px py-8px border border-white text-white rounded-[50px] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            className="px-16px py-8px border border-white text-white rounded-circle disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             Back
           </button>
           <button
             type="button"
             onClick={wiz.next}
-            className="px-16px py-8px bg-pr_purple text-white rounded-[50px] cursor-pointer"
+            className="px-16px py-8px bg-pr_purple text-white rounded-circle cursor-pointer"
           >
             {wiz.isLast ? 'Done' : 'Continue'}
           </button>

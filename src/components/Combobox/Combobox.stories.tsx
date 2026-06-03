@@ -20,9 +20,10 @@ const meta = {
   title: 'Form Controls/Combobox',
   component: Combobox,
   tags: ['autodocs'],
+  parameters: { layout: 'padded' },
   decorators: [
     (Story) => (
-      <div className="min-h-[420px] w-[400px]">
+      <div className="min-h-105 w-full">
         <Story />
       </div>
     ),

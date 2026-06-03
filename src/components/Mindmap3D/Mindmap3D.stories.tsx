@@ -6,10 +6,10 @@ const meta = {
   title: '3D/Mindmap3D',
   component: Mindmap3D,
   tags: ['autodocs'],
-  parameters: { layout: 'centered' },
+  parameters: { layout: 'fullscreen' },
   decorators: [
     (Story) => (
-      <div style={{ width: 600, height: 500 }}>
+      <div style={{ height: 500 }}>
         <Story />
       </div>
     ),
@@ -54,7 +54,6 @@ const tree: MindmapNode = {
 export const Basic: Story = {
   args: {
     root: tree,
-    width: 600,
     height: 500,
     onNodeClick: (n) => console.log('clicked node', n),
   },

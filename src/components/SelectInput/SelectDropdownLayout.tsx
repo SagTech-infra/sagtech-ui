@@ -25,7 +25,7 @@ export default function SelectDropdownLayout({ onClose, children }: Props) {
           onClose();
         }
       }}
-      className="absolute mt-8px z-20 py-8px bg-surface-overlay border-pr_purple top-[100%] border-[1px] border-solid font-medium w-full leading-24 outline-none rounded-16px"
+      className="absolute mt-8px z-20 py-8px bg-surface-overlay border-pr_purple top-full border-[1px] border-solid font-medium w-full leading-24 outline-none rounded-16px"
     >
       {children}
     </motion.div>

@@ -40,7 +40,7 @@ export default function VirtualList<T>({
   return (
     <div
       ref={parentRef}
-      className={classNames('overflow-auto custom-scrollbar', className)}
+      className={classNames('overflow-y-auto overflow-x-hidden custom-scrollbar', className)}
       style={{ height }}
     >
       <div

@@ -28,17 +28,19 @@ function GaugeChart({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    const rect = canvas.getBoundingClientRect();
+    const w = rect.width || width;
     const dpr = window.devicePixelRatio || 1;
-    canvas.width = width * dpr;
+    canvas.width = w * dpr;
     canvas.height = height * dpr;
     ctx.scale(dpr, dpr);
 
-    ctx.clearRect(0, 0, width, height);
+    ctx.clearRect(0, 0, w, height);
 
-    const cx = width / 2;
+    const cx = w / 2;
     const cy = height - 16;
     const ringWidth = 14;
-    const radius = Math.min(width / 2, height) - ringWidth - 8;
+    const radius = Math.min(w / 2, height) - ringWidth - 8;
 
     const startAngle = Math.PI;
     const endAngle = Math.PI * 2;
@@ -137,14 +139,16 @@ function GaugeChart({
   }, [draw]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      style={{
-        width: `${width}px`,
-        height: `${height}px`,
-        display: 'block',
-      }}
-    />
+    <div style={{ position: 'relative', width: '100%', maxWidth: `${width}px` }}>
+      <canvas
+        ref={canvasRef}
+        style={{
+          width: '100%',
+          height: `${height}px`,
+          display: 'block',
+        }}
+      />
+    </div>
   );
 }
 

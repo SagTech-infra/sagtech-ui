@@ -2,18 +2,22 @@
 // from the client wrapper (Globe3D.tsx), which owns the client boundary.
 // Keeping the directive off the split chunk avoids esbuild's "directive ignored"
 // build warning.
-import { useMemo } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Stars, Sphere, Html } from '@react-three/drei';
-import * as tokens from '@/tokens/tokens';
-import type { Globe3DProps, Globe3DMarker } from './types';
+import { useMemo } from "react";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, Stars, Sphere, Html } from "@react-three/drei";
+import * as tokens from "@/tokens/tokens";
+import type { Globe3DProps, Globe3DMarker } from "./types";
 
 /**
  * Heavy core for {@link Globe3D}. Imported lazily by the wrapper so the
  * `@react-three/fiber` / `@react-three/drei` / `three` peers are split into an
  * async chunk and stay out of the consumer's initial bundle.
  */
-function latLngToVec3(lat: number, lng: number, radius: number): [number, number, number] {
+function latLngToVec3(
+  lat: number,
+  lng: number,
+  radius: number,
+): [number, number, number] {
   // Standard sphere coords: lat is +90..-90 (north pole = +y),
   // lng is -180..+180 (Greenwich = +x).
   const phi = (90 - lat) * (Math.PI / 180);
@@ -32,7 +36,13 @@ interface SceneProps {
   globeColor: string;
 }
 
-function GlobeScene({ markers, autoRotate, onMarkerClick, radius, globeColor }: SceneProps) {
+function GlobeScene({
+  markers,
+  autoRotate,
+  onMarkerClick,
+  radius,
+  globeColor,
+}: SceneProps) {
   const markerPositions = useMemo(
     () =>
       markers.map((m) => ({
@@ -49,11 +59,20 @@ function GlobeScene({ markers, autoRotate, onMarkerClick, radius, globeColor }: 
       <Stars radius={50} depth={50} count={2000} factor={2} fade speed={0.5} />
       {/* Wireframe globe */}
       <Sphere args={[radius, 32, 32]}>
-        <meshBasicMaterial color={globeColor} wireframe transparent opacity={0.35} />
+        <meshBasicMaterial
+          color={globeColor}
+          wireframe
+          transparent
+          opacity={0.35}
+        />
       </Sphere>
       {/* Subtle solid sphere for depth */}
       <Sphere args={[radius * 0.99, 32, 32]}>
-        <meshStandardMaterial color={tokens.colors.black_2} roughness={0.8} metalness={0.2} />
+        <meshStandardMaterial
+          color={tokens.colors.black_2}
+          roughness={0.8}
+          metalness={0.2}
+        />
       </Sphere>
       {markerPositions.map(({ marker, position }, i) => (
         <group key={i} position={position}>
@@ -71,17 +90,23 @@ function GlobeScene({ markers, autoRotate, onMarkerClick, radius, globeColor }: 
             />
           </mesh>
           {marker.label && (
-            <Html distanceFactor={6} style={{ pointerEvents: 'none' }}>
+            <Html
+              distanceFactor={5}
+              style={{ pointerEvents: "none" }}
+              transform
+              sprite
+            >
               <div
                 style={{
-                  fontFamily: 'var(--font-manrope), sans-serif',
+                  fontFamily: "var(--font-manrope), sans-serif",
                   fontSize: 11,
                   color: tokens.colors.white_4,
-                  background: 'rgba(7, 7, 21, 0.85)',
-                  padding: '2px 6px',
+                  background: "rgba(7, 7, 21, 0.85)",
+                  padding: "2px 6px",
                   borderRadius: 6,
-                  whiteSpace: 'nowrap',
-                  transform: 'translate(8px, -50%)',
+                  whiteSpace: "nowrap",
+                  translate: "8px -50%",
+                  willChange: "transform",
                 }}
               >
                 {marker.label}
@@ -90,7 +115,11 @@ function GlobeScene({ markers, autoRotate, onMarkerClick, radius, globeColor }: 
           )}
         </group>
       ))}
-      <OrbitControls enablePan={false} autoRotate={autoRotate} autoRotateSpeed={0.6} />
+      <OrbitControls
+        enablePan={false}
+        autoRotate={autoRotate}
+        autoRotateSpeed={0.6}
+      />
     </>
   );
 }
@@ -104,7 +133,10 @@ export default function Globe3DCore({
   backgroundColor = tokens.colors.black_1,
 }: Globe3DProps) {
   return (
-    <Canvas camera={{ position: [0, 0, 3], fov: 50 }} style={{ background: backgroundColor }}>
+    <Canvas
+      camera={{ position: [0, 0, 3], fov: 50 }}
+      style={{ background: backgroundColor }}
+    >
       <GlobeScene
         markers={markers}
         autoRotate={autoRotate}

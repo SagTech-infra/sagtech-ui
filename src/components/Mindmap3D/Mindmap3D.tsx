@@ -22,7 +22,7 @@ export default function Mindmap3D(props: Mindmap3DProps) {
   // className + loadingFallback are wrapper-only; everything else flows to the core.
   const { className, loadingFallback, ...coreProps } = props;
   const {
-    width = 600,
+    width = '100%',
     height = 500,
     backgroundColor = tokens.colors.black_1,
   } = coreProps;

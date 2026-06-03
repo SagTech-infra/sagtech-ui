@@ -6,9 +6,10 @@ const meta = {
   title: 'Form Controls/DateRangePicker',
   component: DateRangePicker,
   tags: ['autodocs'],
+  parameters: { layout: 'padded' },
   decorators: [
     (Story) => (
-      <div className="min-h-[500px] w-[360px]">
+      <div className="min-h-125 w-full">
         <Story />
       </div>
     ),

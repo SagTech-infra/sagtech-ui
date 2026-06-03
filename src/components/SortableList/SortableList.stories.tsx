@@ -7,11 +7,11 @@ const meta = {
   component: SortableList,
   tags: ['autodocs'],
   parameters: {
-    layout: 'centered',
+    layout: 'padded',
   },
   decorators: [
     (Story) => (
-      <div className="w-[420px]">
+      <div className="max-w-105 w-full">
         <Story />
       </div>
     ),
@@ -89,7 +89,7 @@ export const Horizontal: Story = {
           <button
             type="button"
             {...(dragHandleProps as Record<string, unknown>)}
-            className="w-[48px] h-[48px] rounded-8px bg-black_2 border border-solid border-black_3 text-24 cursor-grab active:cursor-grabbing"
+            className="w-48px h-48px rounded-8px bg-black_2 border border-solid border-black_3 text-24 cursor-grab active:cursor-grabbing"
           >
             {item}
           </button>

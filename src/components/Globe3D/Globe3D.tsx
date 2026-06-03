@@ -22,7 +22,7 @@ export default function Globe3D(props: Globe3DProps) {
   // className + loadingFallback are wrapper-only; everything else flows to the core.
   const { className, loadingFallback, ...coreProps } = props;
   const {
-    width = 500,
+    width = '100%',
     height = 500,
     backgroundColor = tokens.colors.black_1,
   } = coreProps;

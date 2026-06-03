@@ -6,10 +6,10 @@ const meta = {
   title: '3D/Network3D',
   component: Network3D,
   tags: ['autodocs'],
-  parameters: { layout: 'centered' },
+  parameters: { layout: 'fullscreen' },
   decorators: [
     (Story) => (
-      <div style={{ width: 600, height: 400 }}>
+      <div style={{ height: 400 }}>
         <Story />
       </div>
     ),
@@ -49,7 +49,6 @@ export const Basic: Story = {
   args: {
     nodes,
     links,
-    width: 600,
     height: 400,
     onNodeClick: (n) => console.log('clicked node', n),
   },

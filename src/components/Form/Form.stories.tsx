@@ -12,11 +12,11 @@ const meta = {
   component: Form,
   tags: ['autodocs'],
   parameters: {
-    layout: 'centered',
+    layout: 'padded',
   },
   decorators: [
     (Story) => (
-      <div className="flex items-center justify-center w-full min-h-[420px] py-32px">
+      <div className="flex items-center justify-center w-full min-h-105 py-32px">
         <Story />
       </div>
     ),
@@ -39,7 +39,7 @@ export const Basic: Story = {
       defaultValues: { displayName: '', bio: '', notifications: true },
     });
     return (
-      <div className="w-[420px]">
+      <div className="w-full max-w-105">
         <Form {...methods}>
           <form
             onSubmit={methods.handleSubmit((data) => {
