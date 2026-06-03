@@ -21,7 +21,6 @@ const TILES: Tile[] = [
   { slug: 'button', name: 'Button', description: 'Variants, sizes, loading, icons.' },
   { slug: 'alert', name: 'Alert', description: 'Status messages with actions.', span: 'sm:col-span-2 lg:col-span-1' },
   { slug: 'rate', name: 'Rate', description: 'Star rating input.' },
-  { slug: 'bar-chart', name: 'BarChart', description: 'Bar and grouped series.' },
   { slug: 'avatar-group', name: 'AvatarGroup', description: 'Stacked avatars with overflow.' },
   { slug: 'switch', name: 'Switch', description: 'Accessible toggle.' },
 ];
