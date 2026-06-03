@@ -6,10 +6,12 @@ import { usePathname } from 'next/navigation';
 import { useCommandPalette } from '@sagtech-infra/ui';
 import { categories, componentsByCategory } from '@/content/registry';
 import { guides } from '@/content/guides';
+import { templates } from '@/content/templates';
 import { ThemeToggle } from './ThemeToggle';
 
 const TOP_LINKS = [
   { href: '/', label: 'Overview' },
+  { href: '/templates', label: 'Templates' },
   { href: '/brand', label: 'Brand' },
   { href: '/charts', label: 'Charts gallery' },
   { href: '/three', label: '3D gallery' },
@@ -88,6 +90,17 @@ export function DocsShell({ children }: { children: ReactNode }) {
                 href={`/guides/${g.slug}`}
                 label={g.title}
                 active={pathname === `/guides/${g.slug}`}
+              />
+            ))}
+          </NavGroup>
+
+          <NavGroup title="Templates">
+            {templates.map((t) => (
+              <NavLink
+                key={t.slug}
+                href={`/templates/${t.slug}`}
+                label={t.name}
+                active={pathname === `/templates/${t.slug}`}
               />
             ))}
           </NavGroup>
