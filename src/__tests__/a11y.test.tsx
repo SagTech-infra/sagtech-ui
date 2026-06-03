@@ -9,6 +9,10 @@ import Label from "@/components/Label/Label";
 import FieldSet from "@/components/FieldSet/FieldSet";
 import VisuallyHidden from "@/components/VisuallyHidden/VisuallyHidden";
 import AspectRatio from "@/components/AspectRatio/AspectRatio";
+import Hero from "@/components/Hero/Hero";
+import FeatureGrid from "@/components/FeatureGrid/FeatureGrid";
+import StatGrid from "@/components/StatGrid/StatGrid";
+import CTASection from "@/components/CTASection/CTASection";
 
 // Curated accessibility smoke. Renders a representative set (including the new
 // v2.2 primitives) and asserts axe finds no violations. Not exhaustive — covers
@@ -41,6 +45,21 @@ const cases: Array<[string, ReactElement]> = [
       <div>media</div>
     </AspectRatio>,
   ],
+  [
+    "Hero",
+    <Hero eyebrow="UI" title="Title" subtitle="Subtitle" actions={<button type="button">Go</button>} />,
+  ],
+  [
+    "FeatureGrid",
+    <FeatureGrid
+      items={[
+        { title: "A", description: "first" },
+        { title: "B", description: "second" },
+      ]}
+    />,
+  ],
+  ["StatGrid", <StatGrid items={[{ value: 107, label: "Components" }]} />],
+  ["CTASection", <CTASection title="Build on it" subtitle="Now" actions={<button type="button">Go</button>} />],
 ];
 
 describe("a11y (jest-axe)", () => {

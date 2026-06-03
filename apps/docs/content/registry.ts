@@ -10,7 +10,8 @@ export type Category =
   | 'Data Display'
   | 'Charts'
   | '3D'
-  | 'Feedback';
+  | 'Feedback'
+  | 'Marketing';
 
 export interface ComponentEntry {
   name: string;
@@ -62,6 +63,7 @@ const GROUPS: Record<Category, string[]> = {
     'NotificationCenter', 'Toast', 'Banner', 'Spotlight', 'NumberTicker',
     'TypingAnimation', 'Particles',
   ],
+  Marketing: ['Hero', 'FeatureGrid', 'StatGrid', 'CTASection'],
 };
 
 const importPathFor = (category: Category): ComponentEntry['importPath'] =>
