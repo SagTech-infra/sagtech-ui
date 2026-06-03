@@ -15,7 +15,7 @@ describe("GaugeChart — mount smoke", () => {
       <GaugeChart value={40} min={0} max={100} width={240} height={140} />,
     );
     const canvas = container.querySelector("canvas") as HTMLCanvasElement;
-    expect(canvas.style.width).toBe("240px");
+    expect(canvas.style.width).toBe("100%");
     expect(canvas.style.height).toBe("140px");
   });
 

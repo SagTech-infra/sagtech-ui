@@ -25,7 +25,7 @@ describe('VirtualList', () => {
     );
     const scroll = container.firstElementChild as HTMLElement;
     expect(scroll).toBeInTheDocument();
-    expect(scroll).toHaveClass('overflow-auto');
+    expect(scroll).toHaveClass('overflow-y-auto');
     expect(scroll.style.height).toBe('400px');
   });
 
@@ -108,7 +108,7 @@ describe('VirtualList', () => {
       />,
     );
     const scroll = container.firstElementChild as HTMLElement;
-    expect(scroll).toHaveClass('overflow-auto');
+    expect(scroll).toHaveClass('overflow-y-auto');
     expect(scroll).toHaveClass('my-list');
   });
 

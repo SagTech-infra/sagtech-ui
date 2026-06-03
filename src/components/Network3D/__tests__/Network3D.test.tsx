@@ -14,12 +14,14 @@ const links = [{ source: 'a', target: 'b' }];
 
 describe('Network3D', () => {
   it('mounts and resolves the lazy core without throwing', async () => {
-    render(<Network3D nodes={nodes} links={links} />);
+    // Pass numeric width so coreWidth is non-null — happy-dom's ResizeObserver
+    // stub never fires, so string '100%' would leave coreWidth as null forever.
+    render(<Network3D nodes={nodes} links={links} width={300} />);
     expect(await screen.findByTestId('force-graph-3d')).toBeInTheDocument();
   });
 
   it('renders the outer wrapper synchronously and the graph after load', async () => {
-    render(<Network3D nodes={nodes} links={links} />);
+    render(<Network3D nodes={nodes} links={links} width={300} />);
     // Outer div carries the component CSS class and renders before the chunk.
     expect(document.querySelector('.sagtech-network3d')).not.toBeNull();
     // react-force-graph-3d is mocked to render this testid once the core loads.
@@ -35,6 +37,7 @@ describe('Network3D', () => {
       <Network3D
         nodes={nodes}
         links={links}
+        width={300}
         loadingFallback={<div data-testid="net-fallback" />}
       />,
     );

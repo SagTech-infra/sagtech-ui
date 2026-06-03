@@ -8,6 +8,10 @@ This repo is published as **`@sagtech-infra/ui`** (not `@sagtech/ui`) to GitHub 
 
 Publishing is tag-driven: pushing a `v*.*.*` tag triggers `.github/workflows/publish.yml`, which verifies the tag matches `package.json#version`, then runs `pnpm build && pnpm publish`. Bump the version in `package.json` before tagging — the workflow fails otherwise.
 
+## Component catalog
+
+[`COMPONENTS.md`](./COMPONENTS.md) lists every exported component with when-to-use guidance and code examples. It is written for AI agents consuming this library — reference it when reviewing or suggesting component usage in consumer projects.
+
 ## Commands
 
 Always use `pnpm` (pinned to 10.28.1 via `packageManager`).

@@ -4,6 +4,8 @@ Internal React component library for SagTech products. Dark-mode-only, Tailwind 
 
 Storybook covers every component with live examples — run `pnpm dev` and open [localhost:6006](http://localhost:6006).
 
+> **Building a new project with this library?** See [`COMPONENTS.md`](./COMPONENTS.md) — full component catalog with usage examples, designed for AI agents to quickly find the right component.
+
 > **Migrating an existing React app to this library?** See [`docs/AI_MIGRATION_PROMPT.md`](./docs/AI_MIGRATION_PROMPT.md) — a paste-ready prompt for Claude / Cursor / Copilot that walks an AI assistant through a phased, non-breaking migration (setup → forms → overlays → data → charts), with picker rules, worked examples, and anti-patterns. It also ships inside the package at `node_modules/@sagtech-infra/ui/docs/AI_MIGRATION_PROMPT.md`.
 
 ---
