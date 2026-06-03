@@ -123,7 +123,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonTypes>(function Button(
       {text && (
         <Typography
           type={typeText}
-          color="text-white"
+          // Secondary is an outline variant on a transparent background, so its
+          // label must follow the (theme-aware) button text color rather than a
+          // hardcoded white — otherwise it is invisible on light surfaces.
+          // `text-current` makes the label inherit the button's own text color.
+          color={variant === "secondary" ? "text-current" : "text-white"}
           className="hidde-paragraph"
         >
           {text}

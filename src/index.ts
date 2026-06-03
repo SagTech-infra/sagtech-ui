@@ -695,6 +695,16 @@ export type {
   StepperClickable,
 } from "./components/Stepper/types";
 
+// Components — Marketing
+export { default as Hero } from "./components/Hero/Hero";
+export type { HeroProps } from "./components/Hero/Hero";
+export { default as FeatureGrid } from "./components/FeatureGrid/FeatureGrid";
+export type { FeatureGridProps, FeatureItem } from "./components/FeatureGrid/FeatureGrid";
+export { default as StatGrid } from "./components/StatGrid/StatGrid";
+export type { StatGridProps, StatItem } from "./components/StatGrid/StatGrid";
+export { default as CTASection } from "./components/CTASection/CTASection";
+export type { CTASectionProps } from "./components/CTASection/CTASection";
+
 // Components — 3D / WebGL (all lazy-load their Three.js core)
 
 /** Interactive 3D force-directed node-link graph. Use for network topology, knowledge graphs. */

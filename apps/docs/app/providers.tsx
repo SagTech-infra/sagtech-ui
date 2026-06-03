@@ -8,6 +8,7 @@ import NextLink from 'next/link';
 import { SagtechUIProvider, CommandPaletteProvider } from '@sagtech-infra/ui';
 import { components } from '@/content/registry';
 import { guides } from '@/content/guides';
+import { templates } from '@/content/templates';
 
 /* Adapt next/image + next/link to the library's injection contracts so
    framework-agnostic components render with real Next primitives. */
@@ -58,6 +59,13 @@ function PaletteProvider({ children }: { children: ReactNode }) {
         group: 'Navigate',
         onSelect: () => router.push('/three'),
       },
+      ...templates.map((t) => ({
+        id: `template-${t.slug}`,
+        label: `${t.name} template`,
+        description: t.description,
+        group: 'Templates',
+        onSelect: () => router.push(`/templates/${t.slug}`),
+      })),
       ...guides.map((g) => ({
         id: `guide-${g.slug}`,
         label: g.title,

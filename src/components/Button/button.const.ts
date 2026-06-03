@@ -18,10 +18,10 @@ const buttonConst = {
   secondaryDisabledStyles: 'disabled:border-grey_2 disabled:text-grey_2',
   loadingPrimary: 'bg-[#545259] text-grey_2 cursor-not-allowed',
   loadingSecondary: ' border-[2px] border-solid border-grey_2 text-grey_2 cursor-not-allowed',
-  secondaryButton: 'border-[2px] border-solid border-white_4 bg-none text-white_4',
+  secondaryButton: 'border-[2px] border-solid border-border-strong bg-none text-fg-primary',
   tabButtonHover:
     'hover:border-white_4 hover:text-white_4 hover:bg-white/5 hover:transition-all hover:duration-800',
-  secondaryAnimation: 'hover:drop-shadow-3xl hover:bg-white_4/10 active:bg-white_4/20 transition-colors',
+  secondaryAnimation: 'hover:drop-shadow-3xl hover:bg-fg-primary/10 active:bg-fg-primary/20 transition-colors',
   dangerButton: 'bg-error text-white',
   dangerAnimation: 'hover:bg-error/85 hover:shadow-[0_0_16px_0_rgba(153,45,45,0.32)] active:bg-error/70 transition-colors',
   dangerDisabledStyles: 'disabled:bg-[#545259] disabled:text-grey_2',

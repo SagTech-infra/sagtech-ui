@@ -2,6 +2,12 @@
 
 Сжатая выжимка из мультиаудита 2026-04-22. Исходный документ со всеми file:line-доказательствами и обоснованиями лежит в `~/.claude/plans/transient-roaming-panda.md`.
 
+## v2.3.0 — marketing-блоки + лендинг (additive)
+
+- **Новые компоненты** (категория Marketing): `Hero`, `FeatureGrid`, `StatGrid` (анимация на `NumberTicker`), `CTASection` — переиспользуемые блоки для лендингов.
+- **Лендинг докпортала** (`apps/docs/app/page.tsx`) пересобран из них (sagtech.io-inspired структура: hero → stats → features → live showcase → FAQ на `Accordion` → CTA + футер); догфуд.
+- Опираются на бренд-токены v2.1 (`--gradient-hero/glow`, `font-display`, `--motion-ease-tech`, `--color-surface-wash`).
+
 ## v2.2.0 — компоненты + a11y (additive)
 
 - **Новые компоненты**: Accordion (WAI-ARIA, клавиатура Up/Down/Home/End), ContextMenu (right-click/long-press), ScrollArea, HoverCard, NumberInput, AspectRatio.
