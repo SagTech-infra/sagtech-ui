@@ -53,3 +53,23 @@ describe("Button — iconOnly prop", () => {
     warn.mockRestore();
   });
 });
+
+describe("Button — theme-aware secondary label color", () => {
+  it("secondary uses semantic border/text tokens, not hardcoded white", () => {
+    render(<Button variant="secondary" text="Cancel" />);
+    const btn = screen.getByRole("button");
+    expect(btn).toHaveClass("border-border-strong");
+    expect(btn).toHaveClass("text-fg-primary");
+    expect(btn).not.toHaveClass("border-white");
+  });
+
+  it("secondary label inherits the button color via text-current", () => {
+    render(<Button variant="secondary" text="Cancel" />);
+    expect(screen.getByText("Cancel")).toHaveClass("text-current");
+  });
+
+  it("non-secondary variants keep a white label (no regression)", () => {
+    render(<Button variant="primary" text="Save" />);
+    expect(screen.getByText("Save")).toHaveClass("text-white");
+  });
+});
