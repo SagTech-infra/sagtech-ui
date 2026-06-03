@@ -13,23 +13,27 @@ import { LandingShowcase } from '@/components/LandingShowcase';
 
 const PACKAGES_URL = 'https://github.com/orgs/SagTech-infra/packages/npm/package/ui';
 const REPO_URL = 'https://github.com/SagTech-infra/sagtech-ui';
+const SAGTECH_URL = 'https://sagtech.io';
 
 function LinkButton({
   href,
   children,
   variant = 'primary',
   external,
+  className,
 }: {
   href: string;
   children: ReactNode;
   variant?: 'primary' | 'secondary';
   external?: boolean;
+  className?: string;
 }) {
   const cls =
     'inline-flex items-center rounded-12px px-20px py-10px font-manrope text-14 transition-colors ' +
     (variant === 'primary'
       ? 'bg-pr_purple text-white hover:opacity-90'
-      : 'border border-border-strong text-fg-primary hover:bg-bg-secondary');
+      : 'border border-border-strong text-fg-primary hover:bg-bg-secondary') +
+    (className ? ` ${className}` : '');
   return external ? (
     <a href={href} className={cls} target="_blank" rel="noreferrer">
       {children}
@@ -43,9 +47,9 @@ function LinkButton({
 
 const STATS = [
   { value: 107, label: 'Components' },
-  { value: 749, label: 'Tests' },
   { value: 12, label: 'Chart types' },
   { value: 4, label: '3D scenes' },
+  { value: 2, label: 'Themes' },
 ];
 
 const FEATURES = [
@@ -109,6 +113,24 @@ export default function HomePage() {
         </section>
 
         <section className="mt-72px">
+          <SectionHeading>Built by SagTech</SectionHeading>
+          <div className="rounded-24px border border-border-default bg-surface-wash p-32px">
+            <p className="max-w-[760px] text-18 leading-28 text-fg-secondary">
+              SagTech ships prototypes in 48 hours and production-ready code after — no fluff.
+              We move that fast because we build on our own reusable foundations. This component
+              library is one of them, now open for your products too.
+            </p>
+            <p className="mt-16px max-w-[760px] text-14 leading-24 text-fg-muted">
+              No black box. Direct communication with the people building your product. Clean code
+              you can actually own. And support that doesn&apos;t disappear after launch.
+            </p>
+            <LinkButton href={SAGTECH_URL} variant="secondary" external className="mt-24px">
+              Learn more about SagTech →
+            </LinkButton>
+          </div>
+        </section>
+
+        <section className="mt-72px">
           <SectionHeading>Why this library</SectionHeading>
           <FeatureGrid items={FEATURES} columns={3} />
         </section>
@@ -154,6 +176,9 @@ export default function HomePage() {
             SagTech <span className="text-pr_purple">UI</span>
           </span>
           <nav className="flex flex-wrap gap-20px">
+            <a href={SAGTECH_URL} target="_blank" rel="noreferrer" className="hover:text-fg-primary">
+              SagTech.io
+            </a>
             <a href={REPO_URL} target="_blank" rel="noreferrer" className="hover:text-fg-primary">
               GitHub
             </a>
