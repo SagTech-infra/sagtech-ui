@@ -59,7 +59,8 @@ describe("PhoneInput", () => {
 
   it("applies the error styling to the input", () => {
     render(<PhoneInput value="" onChange={() => {}} error />);
-    expect(getPhoneInput().className).toContain("!border-error");
+    // border-error is on the PhoneInputEl container div, not the <input> itself
+    expect(getPhoneInput().closest('[class*="border-error"]')).not.toBeNull();
   });
 
   it("forwards ref to the outer container div", () => {

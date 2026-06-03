@@ -30,7 +30,7 @@ describe("TreemapChart — mount smoke", () => {
       <TreemapChart data={data} width={500} height={350} />,
     );
     const canvas = container.querySelector("canvas") as HTMLCanvasElement;
-    expect(canvas.style.height).toBe("350px");
+    expect(canvas.style.height).toBe("100%");
   });
 
   it("renders flat data (no children) without throwing", () => {

@@ -9,8 +9,8 @@ export function DemoBlock({ slug, source }: { slug: string; source: string }) {
   const Demo = demoRegistry[slug];
 
   return (
-    <div className="overflow-hidden rounded-16px border border-border-default">
-      <div className="flex min-h-[200px] items-center justify-center p-24px bg-bg-secondary">
+    <div className="overflow-hidden rounded-16px border border-border-default flex flex-col gap-8px">
+      <div className="flex min-h-50 items-center justify-center p-24px bg-bg-secondary">
         {Demo ? (
           <Demo />
         ) : (
