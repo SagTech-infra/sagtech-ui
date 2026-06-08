@@ -57,7 +57,7 @@ jobs:
 
       - uses: appleboy/ssh-action@v1
         with:
-          host: ${{ secrets.EXT1_HOST }}
+          host: ${{ secrets.SERVER_HOST }}
           username: deploy
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
