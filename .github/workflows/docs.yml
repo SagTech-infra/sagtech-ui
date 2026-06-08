@@ -33,7 +33,9 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      # Docs consume the library's built dist via the workspace link.
-      - run: pnpm --filter @sagtech-infra/ui build
+      # Docs consume the library's built dist via the workspace link. Build the
+      # root library by script (not by package name) so an upstream rename
+      # (@sagtech-infra/ui -> @sagtech_llc/ui) can't turn this into a no-op.
+      - run: pnpm build
 
       - run: pnpm --filter @sagtech-infra/docs build
