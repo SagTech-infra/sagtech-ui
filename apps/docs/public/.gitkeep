@@ -1,0 +1,2 @@
+# Keeps apps/docs/public present so the Docker build's `COPY public` step never
+# fails on a missing directory. Drop static assets (favicon, og images, …) here.

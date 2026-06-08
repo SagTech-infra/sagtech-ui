@@ -1,0 +1,32 @@
+# Build context for apps/docs/Dockerfile is the repo root. Keep it lean and
+# avoid copying host artifacts that are reinstalled / rebuilt inside the image.
+# `**/` globs are required to catch nested dirs (e.g. apps/docs/node_modules).
+
+# deps & build output — reinstalled / rebuilt in-image
+**/node_modules
+**/.next
+**/dist
+**/.turbo
+**/*.tsbuildinfo
+
+# vcs, ci, local env
+.git
+.gitignore
+.github
+.env
+.env.*
+**/.env
+**/.env.*
+
+# test / storybook / playwright artifacts (not needed for the docs build)
+coverage
+storybook-static
+test-results
+playwright-report
+playwright/.cache
+debug-storybook.log
+
+# editor / os
+.vscode
+.idea
+.DS_Store
