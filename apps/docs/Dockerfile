@@ -1,4 +1,7 @@
-# syntax=docker/dockerfile:1
+# No `# syntax=` directive on purpose: this Dockerfile uses only classic syntax
+# (multi-stage, COPY --from, COPY --chown), so it needs no external frontend.
+# Pulling docker/dockerfile:1 from Docker Hub just added a flaky dependency
+# (auth.docker.io 504s); the bundled BuildKit frontend handles everything here.
 #
 # Docker image for apps/docs (@sagtech-infra/docs) — the Next.js 16 showcase that
 # serves ui.sagtech.io. Build context is the REPO ROOT (`context: .`).
