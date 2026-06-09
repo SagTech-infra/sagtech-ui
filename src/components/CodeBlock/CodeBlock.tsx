@@ -20,58 +20,79 @@ export interface CodeBlockProps {
   maxHeight?: string | number;
 }
 
-// Minimal tokenizer for js/ts/json/bash — no peer-dep. For richer languages,
-// consumers can pass a custom `highlight` (Prism/Shiki) through the prop.
+// Single-pass tokenizer for js/ts/json/bash/css/html — no peer-dep. For richer
+// languages, consumers can pass a custom `highlight` (Prism/Shiki) via the prop.
+type HlRule = { re: RegExp; cls: string };
+
+// Each rule's regex MUST have ZERO capturing groups (use (?:…) and look-arounds)
+// so the rules merge into one alternation — one capture group per rule. They run
+// as a SINGLE String.replace pass: the engine resumes *after* each match, so an
+// emitted <span> is never re-scanned by a later rule. (The previous multi-pass
+// version corrupted output — e.g. the string rule wrapped the `class="…"` of a
+// comment span emitted earlier, surfacing literal `tok-string` text.)
+function tokenize(escaped: string, rules: HlRule[]): string {
+  const combined = new RegExp(rules.map((r) => `(${r.re.source})`).join('|'), 'g');
+  return escaped.replace(combined, (match: string, ...rest: unknown[]) => {
+    for (let i = 0; i < rules.length; i++) {
+      if (typeof rest[i] === 'string') return `<span class="${rules[i].cls}">${rest[i]}</span>`;
+    }
+    return match;
+  });
+}
+
+const JS_RULES: HlRule[] = [
+  { re: /\/\/[^\n]*/, cls: 'tok-comment' },
+  { re: /\/\*[\s\S]*?\*\//, cls: 'tok-comment' },
+  { re: /`(?:\\.|[^\\`])*`/, cls: 'tok-string' },
+  { re: /"(?:\\.|[^\\"])*"/, cls: 'tok-string' },
+  { re: /'(?:\\.|[^\\'])*'/, cls: 'tok-string' },
+  {
+    re: /\b(?:const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|new|class|extends|implements|interface|type|enum|export|import|from|as|async|await|yield|typeof|instanceof|in|of|try|catch|finally|throw)\b/,
+    cls: 'tok-kw',
+  },
+  { re: /\b(?:true|false|null|undefined|this|super)\b/, cls: 'tok-const' },
+  { re: /\b\d+(?:\.\d+)?\b/, cls: 'tok-num' },
+];
+
+const BASH_RULES: HlRule[] = [
+  { re: /#[^\n]*/, cls: 'tok-comment' },
+  { re: /"(?:\\.|[^\\"])*"/, cls: 'tok-string' },
+  { re: /'[^']*'/, cls: 'tok-string' },
+  { re: /\b(?:cd|ls|rm|cp|mv|mkdir|git|pnpm|npm|yarn|node|echo|export)\b/, cls: 'tok-kw' },
+  { re: /(?:^|\s)-{1,2}[A-Za-z][\w-]*/, cls: 'tok-flag' },
+];
+
+const HL_RULES: Partial<Record<CodeLanguage, HlRule[]>> = {
+  ts: JS_RULES,
+  tsx: JS_RULES,
+  js: JS_RULES,
+  jsx: JS_RULES,
+  bash: BASH_RULES,
+  shell: BASH_RULES,
+  json: [
+    { re: /"(?:\\.|[^\\"])*"(?=\s*:)/, cls: 'tok-key' },
+    { re: /"(?:\\.|[^\\"])*"/, cls: 'tok-string' },
+    { re: /\b(?:true|false|null)\b/, cls: 'tok-const' },
+    { re: /-?\b\d+(?:\.\d+)?\b/, cls: 'tok-num' },
+  ],
+  css: [
+    { re: /\/\*[\s\S]*?\*\//, cls: 'tok-comment' },
+    { re: /"(?:\\.|[^\\"])*"/, cls: 'tok-string' },
+    { re: /'[^']*'/, cls: 'tok-string' },
+    { re: /[.#][A-Za-z_][\w-]*/, cls: 'tok-key' },
+    { re: /@[a-z-]+/, cls: 'tok-kw' },
+    { re: /\b[a-z-]+(?=\s*:)/, cls: 'tok-prop' },
+  ],
+  html: [
+    { re: /&lt;\/?[\w-]+/, cls: 'tok-tag' },
+    { re: /"(?:\\.|[^\\"])*"/, cls: 'tok-string' },
+  ],
+};
+
 function builtInHighlight(code: string, language: CodeLanguage): string {
-  const escape = (s: string) =>
-    s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-  if (language === 'json') {
-    return escape(code)
-      .replace(/("[^"\\]*(?:\\.[^"\\]*)*")(\s*:)/g, '<span class="tok-key">$1</span>$2')
-      .replace(/:\s*("[^"\\]*(?:\\.[^"\\]*)*")/g, ': <span class="tok-string">$1</span>')
-      .replace(/\b(true|false|null)\b/g, '<span class="tok-const">$1</span>')
-      .replace(/(-?\b\d+(?:\.\d+)?\b)/g, '<span class="tok-num">$1</span>');
-  }
-
-  if (language === 'bash' || language === 'shell') {
-    return escape(code)
-      .replace(/(^|\n)(\$|#)\s/g, '$1<span class="tok-prompt">$2</span> ')
-      .replace(/(".*?")/g, '<span class="tok-string">$1</span>')
-      .replace(/('.*?')/g, '<span class="tok-string">$1</span>')
-      .replace(/\b(cd|ls|rm|cp|mv|mkdir|git|pnpm|npm|yarn|node|echo|export)\b/g, '<span class="tok-kw">$1</span>')
-      .replace(/(\s-{1,2}[A-Za-z][\w-]*)/g, '<span class="tok-flag">$1</span>');
-  }
-
-  if (language === 'css') {
-    return escape(code)
-      .replace(/(\/\*[\s\S]*?\*\/)/g, '<span class="tok-comment">$1</span>')
-      .replace(/([.#][A-Za-z_][\w-]*)/g, '<span class="tok-key">$1</span>')
-      .replace(/(\b[a-z-]+)(\s*:)/g, '<span class="tok-prop">$1</span>$2');
-  }
-
-  if (language === 'html') {
-    return escape(code)
-      .replace(/(&lt;\/?)([\w-]+)/g, '$1<span class="tok-tag">$2</span>')
-      .replace(/([\w-]+)(=)(".*?")/g, '<span class="tok-attr">$1</span>$2<span class="tok-string">$3</span>');
-  }
-
-  if (['ts', 'tsx', 'js', 'jsx'].includes(language)) {
-    return escape(code)
-      .replace(/(\/\/[^\n]*)/g, '<span class="tok-comment">$1</span>')
-      .replace(/(\/\*[\s\S]*?\*\/)/g, '<span class="tok-comment">$1</span>')
-      .replace(/(`(?:\\.|[^\\`])*`)/g, '<span class="tok-string">$1</span>')
-      .replace(/("(?:\\.|[^\\"])*")/g, '<span class="tok-string">$1</span>')
-      .replace(/('(?:\\.|[^\\'])*')/g, '<span class="tok-string">$1</span>')
-      .replace(
-        /\b(const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|new|class|extends|implements|interface|type|enum|export|import|from|as|async|await|yield|typeof|instanceof|in|of|try|catch|finally|throw)\b/g,
-        '<span class="tok-kw">$1</span>',
-      )
-      .replace(/\b(true|false|null|undefined|this|super)\b/g, '<span class="tok-const">$1</span>')
-      .replace(/\b(\d+(?:\.\d+)?)\b/g, '<span class="tok-num">$1</span>');
-  }
-
-  return escape(code);
+  const escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const rules = HL_RULES[language];
+  return rules ? tokenize(escaped, rules) : escaped;
 }
 
 function CopyIcon() {
