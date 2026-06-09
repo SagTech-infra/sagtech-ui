@@ -42,14 +42,14 @@ export default function BlogTemplate() {
       <Container size="md" className="py-64px">
         <article className="mx-auto max-w-[720px]">
           {/* Header */}
-          <header className="flex flex-col gap-16px">
+          <header className="flex flex-col items-start gap-16px">
             <Badge variant="subtle" color="purple" size="md">
               Engineering
             </Badge>
             <h1 className="font-orbitron text-40 leading-[1.1] text-fg-primary sm:text-[48px]">
               Building a dark-first design system that scales
             </h1>
-            <p className="text-18 leading-28 text-fg-secondary">
+            <p className="max-w-[680px] text-[20px] leading-[32px] text-fg-secondary">
               How we shipped 120+ typed components from a single Tailwind theme — and why dark mode
               came first, not last.
             </p>
@@ -65,9 +65,25 @@ export default function BlogTemplate() {
             </div>
           </header>
 
-          <div className="my-32px overflow-hidden rounded-24px border border-border-default bg-surface-wash">
-            <div className="flex h-[280px] items-center justify-center">
-              <span className="font-orbitron text-28 text-fg-muted">Cover image</span>
+          {/* Cover — soft purple mesh + dot-grid, no flat placeholder box */}
+          <div className="relative my-40px aspect-[16/7] overflow-hidden rounded-24px border border-border-default bg-surface-wash">
+            <div className="absolute inset-0 bg-gradient-glow opacity-80" />
+            <div
+              className="absolute inset-0 opacity-60 [background-image:radial-gradient(circle_at_center,var(--color-border-default)_1px,transparent_1px)] [background-size:22px_22px]"
+              aria-hidden="true"
+            />
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-12px">
+              <span className="flex h-[56px] w-[56px] items-center justify-center rounded-16px border border-border-strong bg-bg-secondary text-sec_purple shadow-3xl">
+                <svg viewBox="0 0 24 24" fill="none" width="26" height="26" aria-hidden="true">
+                  <rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.8" />
+                  <rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.8" />
+                  <rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.8" />
+                  <rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.8" />
+                </svg>
+              </span>
+              <span className="font-orbitron text-14 uppercase tracking-widest text-fg-muted">
+                Dark-first system
+              </span>
             </div>
           </div>
 
@@ -94,9 +110,12 @@ export default function BlogTemplate() {
 
             <CodeBlock code={SNIPPET} language="tsx" filename="pricing.tsx" showLineNumbers />
 
-            <blockquote className="border-l-2 border-pr_purple bg-surface-wash px-24px py-16px font-manrope text-18 italic leading-28 text-fg-primary">
-              “The best design system is the one your team forgets they are using — it just feels
-              like the product.”
+            <blockquote className="relative my-8px rounded-16px border border-border-default border-l-[3px] border-l-pr_purple bg-surface-wash px-32px py-24px font-orbitron text-[22px] italic leading-[34px] text-fg-primary">
+              <span className="absolute left-16px top-8px font-orbitron text-40 leading-none text-sec_purple opacity-40" aria-hidden="true">
+                “
+              </span>
+              The best design system is the one your team forgets they are using — it just feels
+              like the product.
             </blockquote>
 
             <p>
@@ -123,12 +142,19 @@ export default function BlogTemplate() {
         <h2 className="mb-24px font-orbitron text-28 text-fg-primary">Related articles</h2>
         <div className="grid grid-cols-1 gap-24px sm:grid-cols-2 lg:grid-cols-3">
           {RELATED.map((post) => (
-            <CardWrapper key={post.title} rounded="24" stoke="2" className="p-24px">
-              <div className="flex h-full flex-col gap-12px">
-                <Badge variant="subtle" color="blue" size="sm">
-                  {post.category}
-                </Badge>
-                <h3 className="flex-1 font-orbitron text-18 leading-24 text-fg-primary">
+            <CardWrapper
+              key={post.title}
+              rounded="24"
+              stoke="2"
+              className="group h-full p-24px transition-all hover:-translate-y-[2px] hover:border-border-strong hover:shadow-3xl"
+            >
+              <div className="flex h-full min-h-[180px] flex-col gap-12px">
+                <div>
+                  <Badge variant="subtle" color="blue" size="sm">
+                    {post.category}
+                  </Badge>
+                </div>
+                <h3 className="flex-1 font-orbitron text-18 leading-24 text-fg-primary transition-colors group-hover:text-sec_purple">
                   {post.title}
                 </h3>
                 <span className="font-manrope text-12 text-fg-muted">{post.minutes} min read</span>

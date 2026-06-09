@@ -248,7 +248,7 @@ export default function DashboardTemplate() {
                 {activity.map((event, i) => (
                   <li
                     key={event.id}
-                    className={`flex items-start gap-12px py-12px ${
+                    className={`-mx-8px flex items-start gap-12px rounded-12px px-8px py-12px transition-colors hover:bg-bg-secondary ${
                       i < activity.length - 1 ? 'border-b border-border-default' : ''
                     }`}
                   >

@@ -52,6 +52,12 @@ const AuroraHero = forwardRef<HTMLElement, AuroraHeroProps>(function AuroraHero(
             backgroundSize: "28px 28px",
           }}
         />
+        {/* Dissolve the blob mesh into the page bg so it never ends on a hard
+            horizontal line where overflow-hidden clips the blurred blobs. */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-[180px]"
+          style={{ background: "linear-gradient(to top, var(--color-bg-primary), transparent)" }}
+        />
       </div>
 
       <div className={classNames("relative max-w-[860px]", centered && "mx-auto")}>

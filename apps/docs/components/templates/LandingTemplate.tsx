@@ -231,14 +231,19 @@ export default function LandingTemplate() {
         </div>
         <div className="grid grid-cols-1 gap-24px sm:grid-cols-2 lg:grid-cols-3">
           {TESTIMONIALS.map((t) => (
-            <CardWrapper key={t.name} rounded="24" stoke="2" className="p-24px">
+            <CardWrapper
+              key={t.name}
+              rounded="24"
+              stoke="2"
+              className="h-full p-24px transition-all hover:-translate-y-[2px] hover:border-border-strong hover:shadow-3xl"
+            >
               <div className="flex h-full flex-col gap-16px">
                 <Rate value={t.rating} max={5} size={18} label={t.name} />
                 <p className="flex-1 text-16 leading-24 text-fg-secondary">
                   &ldquo;{t.quote}&rdquo;
                 </p>
                 <div className="flex items-center gap-12px border-t border-border-default pt-16px">
-                  <span className="flex h-[48px] w-[48px] items-center justify-center rounded-full bg-pr_purple font-orbitron text-18 text-white_1">
+                  <span className="flex h-[48px] w-[48px] items-center justify-center rounded-full bg-pr_purple font-orbitron text-18 text-white">
                     {t.initial}
                   </span>
                   <div>

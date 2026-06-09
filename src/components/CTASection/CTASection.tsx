@@ -17,7 +17,7 @@ const CTASection = forwardRef<HTMLElement, CTASectionProps>(
       {...rest}
     >
       <h2 className="font-display text-32 text-white md:text-40">{title}</h2>
-      {subtitle && <p className="mx-auto mt-12px max-w-[560px] text-16 text-white_2">{subtitle}</p>}
+      {subtitle && <p className="mx-auto mt-12px max-w-[560px] text-16 text-white/80">{subtitle}</p>}
       {actions && <div className="mt-24px flex flex-wrap justify-center gap-12px">{actions}</div>}
     </section>
   ),

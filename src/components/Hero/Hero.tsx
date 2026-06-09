@@ -20,6 +20,9 @@ const Hero = forwardRef<HTMLElement, HeroProps>(
     ref,
   ) => {
     const centered = align === "center";
+    // On the fixed purple gradient, text must stay light in BOTH themes —
+    // theme-flipping tokens (fg-primary / white_1) would go dark in light mode.
+    const onGradient = background === "gradient";
     return (
       <section
         ref={ref}
@@ -35,11 +38,21 @@ const Hero = forwardRef<HTMLElement, HeroProps>(
         )}
         <div className={classNames("relative max-w-[820px]", centered && "mx-auto")}>
           {eyebrow && (
-            <p className="mb-12px font-display text-12 uppercase tracking-widest text-pr_purple">{eyebrow}</p>
+            <p className={classNames(
+              "mb-12px font-display text-12 uppercase tracking-widest",
+              onGradient ? "text-white/80" : "text-pr_purple",
+            )}>{eyebrow}</p>
           )}
-          <h1 className="font-display text-48 leading-56 text-fg-primary md:text-64 md:leading-64">{title}</h1>
+          <h1 className={classNames(
+            "font-display text-48 leading-56 md:text-64 md:leading-64",
+            onGradient ? "text-white" : "text-fg-primary",
+          )}>{title}</h1>
           {subtitle && (
-            <p className={classNames("mt-16px max-w-[640px] text-18 leading-28 text-white_1", centered && "mx-auto")}>
+            <p className={classNames(
+              "mt-16px max-w-[640px] text-18 leading-28",
+              onGradient ? "text-white/85" : "text-fg-secondary",
+              centered && "mx-auto",
+            )}>
               {subtitle}
             </p>
           )}
