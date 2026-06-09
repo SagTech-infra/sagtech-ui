@@ -196,13 +196,13 @@ export default function DashboardTemplate() {
           </section>
 
           <section className="grid grid-cols-1 lg:grid-cols-3 gap-16px">
-            <CardWrapper className="lg:col-span-2">
+            <CardWrapper className="lg:col-span-2 p-20px">
               <h2 className="font-orbitron text-18 font-semibold text-fg-primary mb-16px">
                 Revenue vs Refunds
               </h2>
               <AreaChart series={revenueSeries} width="100%" height={280} stacked />
             </CardWrapper>
-            <CardWrapper>
+            <CardWrapper className="p-20px">
               <h2 className="font-orbitron text-18 font-semibold text-fg-primary mb-16px">
                 Traffic Source
               </h2>
@@ -217,13 +217,13 @@ export default function DashboardTemplate() {
           </section>
 
           <section className="grid grid-cols-1 lg:grid-cols-3 gap-16px">
-            <CardWrapper>
+            <CardWrapper className="p-20px">
               <h2 className="font-orbitron text-18 font-semibold text-fg-primary mb-16px">
                 Sales by Channel
               </h2>
               <BarChart series={channelSeries} width="100%" height={260} />
             </CardWrapper>
-            <CardWrapper className="lg:col-span-2">
+            <CardWrapper className="lg:col-span-2 p-20px">
               <div className="flex items-center justify-between mb-16px">
                 <h2 className="font-orbitron text-18 font-semibold text-fg-primary">
                   Recent Orders
