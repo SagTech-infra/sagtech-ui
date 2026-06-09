@@ -181,7 +181,12 @@ function Select({
   const getIsActiveValue = (option: SelectOption<string>) =>
     Array.isArray(value) ? value.includes(option.value) : value === option.value;
 
-  const unifiedValue = multiple ? (value as string[]).join(', ') : (value as string);
+  // Display the selected option's label (e.g. "React"), not the raw value
+  // (e.g. "react"); fall back to the value if no matching option is found.
+  const labelForValue = (v: string) => options.find((o) => o.value === v)?.label ?? v;
+  const unifiedValue = multiple
+    ? (value as string[]).map(labelForValue).join(', ')
+    : labelForValue(value as string);
 
   return (
     <div
