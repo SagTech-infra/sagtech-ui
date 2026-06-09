@@ -61,7 +61,7 @@ export default async function ComponentPage({
       </section>
 
       <p className="mt-32px text-12 text-grey_3">
-        Import from <code className="text-sec_purple">{entry.importPath}</code>
+        Proudly made by <span className="text-sec_purple">SagTech</span>
       </p>
     </Container>
   );

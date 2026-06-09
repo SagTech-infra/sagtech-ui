@@ -12,8 +12,8 @@ export default function ChartsGallery() {
     <Container size="xl" as="main" className="py-48px">
       <h1 className="font-orbitron text-40">Charts</h1>
       <p className="mb-32px mt-8px text-16 text-white_1">
-        Canvas-rendered and theme-aware. Import from{' '}
-        <code className="text-sec_purple">@sagtech-infra/ui/charts</code>.
+        Canvas-rendered and theme-aware. Proudly made by{' '}
+        <span className="text-sec_purple">SagTech</span>.
       </p>
       <div className="grid grid-cols-1 gap-24px md:grid-cols-2">
         {items.map((c) => {

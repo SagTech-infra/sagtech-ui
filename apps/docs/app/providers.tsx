@@ -53,12 +53,6 @@ function PaletteProvider({ children }: { children: ReactNode }) {
         group: 'Navigate',
         onSelect: () => router.push('/charts'),
       },
-      {
-        id: 'nav-three',
-        label: '3D gallery',
-        group: 'Navigate',
-        onSelect: () => router.push('/three'),
-      },
       ...templates.map((t) => ({
         id: `template-${t.slug}`,
         label: `${t.name} template`,

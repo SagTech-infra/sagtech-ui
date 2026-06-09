@@ -14,7 +14,6 @@ const TOP_LINKS = [
   { href: '/templates', label: 'Templates' },
   { href: '/brand', label: 'Brand' },
   { href: '/charts', label: 'Charts gallery' },
-  { href: '/three', label: '3D gallery' },
 ];
 
 function NavLink({ href, label, active }: { href: string; label: string; active: boolean }) {
