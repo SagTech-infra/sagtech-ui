@@ -17,7 +17,12 @@ export async function generateMetadata({
   const { slug } = await params;
   const entry = getTemplate(slug);
   return entry
-    ? { title: `${entry.name} template — SagTech UI`, description: entry.description }
+    ? {
+        title: `${entry.name} template`,
+        description: entry.description,
+        alternates: { canonical: `/templates/${slug}` },
+        openGraph: { title: `${entry.name} template — SagTech UI`, description: entry.description, url: `/templates/${slug}` },
+      }
     : {};
 }
 

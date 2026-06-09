@@ -4,9 +4,10 @@ import NextLink from 'next/link';
 import { Container, PageHeader, CodeBlock, Accordion, AccordionItem } from '@sagtech-infra/ui';
 
 export const metadata: Metadata = {
-  title: 'Overview — SagTech UI',
-  description:
-    'What SagTech UI is, how to install and use it, and where to report bugs.',
+  title: 'Overview',
+  description: 'What SagTech UI is, how to install and use it, and where to report bugs.',
+  alternates: { canonical: '/overview' },
+  openGraph: { title: 'Overview — SagTech UI', description: 'What SagTech UI is, how to install and use it, and where to report bugs.', url: '/overview' },
 };
 
 // Published package name (public npm). Note: inside this monorepo the library is

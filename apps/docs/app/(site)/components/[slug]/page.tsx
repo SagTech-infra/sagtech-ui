@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Container, PageHeader } from '@sagtech-infra/ui';
 import { components, getComponent } from '@/content/registry';
@@ -8,6 +9,24 @@ import { PropsTable } from '@/components/PropsTable';
 
 export function generateStaticParams() {
   return components.map((c) => ({ slug: c.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const entry = getComponent(slug);
+  if (!entry) return {};
+  const description =
+    readDescription(entry.name) || `${entry.name} — a ${entry.category} component from SagTech UI.`;
+  return {
+    title: entry.name,
+    description,
+    alternates: { canonical: `/components/${slug}` },
+    openGraph: { title: `${entry.name} — SagTech UI`, description, url: `/components/${slug}` },
+  };
 }
 
 function readDemoSource(name: string): string {

@@ -1,4 +1,12 @@
+import type { Metadata } from 'next';
 import { Container, PageHeader } from '@sagtech-infra/ui';
+
+export const metadata: Metadata = {
+  title: 'Brand',
+  description: 'The SagTech UI visual language — colors, gradients, greyscale, radii, shadows and typography tokens.',
+  alternates: { canonical: '/brand' },
+  openGraph: { title: 'Brand — SagTech UI', description: 'The SagTech UI design tokens and visual language.', url: '/brand' },
+};
 
 function Swatch({ name, hex }: { name: string; hex: string }) {
   return (

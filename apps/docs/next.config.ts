@@ -14,6 +14,9 @@ const nextConfig: NextConfig = {
   // the linked `dist` into `.next/standalone`. `next build` always runs from
   // this package dir (pnpm --filter sets cwd here), so cwd === apps/docs.
   outputFileTracingRoot: path.join(process.cwd(), '..', '..'),
+  outputFileTracingIncludes: {
+    '/**': ['./app/_og/**'],
+  },
 };
 
 export default nextConfig;

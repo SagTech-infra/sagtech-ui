@@ -4,9 +4,10 @@ import { Container, PageHeader } from '@sagtech-infra/ui';
 import { templates } from '@/content/templates';
 
 export const metadata: Metadata = {
-  title: 'Templates — SagTech UI',
-  description:
-    'Full-page templates assembled entirely from @sagtech-infra/ui components.',
+  title: 'Templates',
+  description: 'Full-page templates assembled entirely from SagTech UI components.',
+  alternates: { canonical: '/templates' },
+  openGraph: { title: 'Templates — SagTech UI', description: 'Full-page templates assembled entirely from SagTech UI components.', url: '/templates' },
 };
 
 // Templates INDEX. Lives inside the (site) route group so it inherits the

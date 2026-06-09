@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import NextLink from 'next/link';
 import {
@@ -11,6 +12,17 @@ import {
 } from '@sagtech-infra/ui';
 import { LandingShowcase } from '@/components/LandingShowcase';
 import { templates } from '@/content/templates';
+
+export const metadata: Metadata = {
+  description:
+    'Components that ship as fast as you do — 107 React components, charts, 3D and full-page templates. Dark by default, accessible by default.',
+  alternates: { canonical: '/' },
+  openGraph: {
+    title: 'SagTech UI',
+    description: 'Components that ship as fast as you do — a production React component library.',
+    url: '/',
+  },
+};
 
 const PACKAGES_URL = 'https://github.com/orgs/SagTech-infra/packages/npm/package/ui';
 const REPO_URL = 'https://github.com/SagTech-infra/sagtech-ui';
