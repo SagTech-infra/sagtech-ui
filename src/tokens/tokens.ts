@@ -48,6 +48,17 @@ export const colors = {
   'bg-warning': "rgba(198, 163, 40, 0.16)",
   'bg-error': "rgba(153, 45, 45, 0.24)",
   'bg-info': "rgba(148, 148, 201, 0.16)",
+  'tok-kw': "#b69ff8",
+  'tok-string': "#58a61b",
+  'tok-num': "#c6a328",
+  'tok-const': "#9494c9",
+  'tok-comment': "#6a6a73",
+  'tok-key': "#9494c9",
+  'tok-prop': "#9494c9",
+  'tok-prompt': "#b69ff8",
+  'tok-flag': "#c6a328",
+  'tok-tag': "#b69ff8",
+  'tok-attr': "#9494c9",
 } as const;
 
 export const fonts = {
