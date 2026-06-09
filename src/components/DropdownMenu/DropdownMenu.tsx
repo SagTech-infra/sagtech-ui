@@ -246,7 +246,7 @@ export default function DropdownMenu({
                 left: pos.left,
                 width,
                 zIndex: 9999,
-                background: 'linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%)',
+                background: 'var(--color-surface-overlay)',
               }}
               initial={{ opacity: 0, y: -8, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}

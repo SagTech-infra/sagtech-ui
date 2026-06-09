@@ -49,3 +49,48 @@ select:-webkit-autofill::first-line {
 .react-international-phone-input:focus:-webkit-autofill {
   -webkit-text-fill-color: rgb(248 248 248) !important;
 }
+
+/* Light theme — warm-white autofill, warm near-black text, purple border. */
+[data-theme="light"] {
+  --react-international-phone-background-color: #ffffff;
+  --react-international-phone-text-color: #1f1c19;
+}
+
+[data-theme="light"] input:-webkit-autofill,
+[data-theme="light"] input:-webkit-autofill:hover,
+[data-theme="light"] input:-webkit-autofill:focus,
+[data-theme="light"] input:-webkit-autofill:active,
+[data-theme="light"] textarea:-webkit-autofill,
+[data-theme="light"] textarea:-webkit-autofill:hover,
+[data-theme="light"] textarea:-webkit-autofill:focus,
+[data-theme="light"] select:-webkit-autofill,
+[data-theme="light"] select:-webkit-autofill:hover,
+[data-theme="light"] select:-webkit-autofill:focus {
+  -webkit-text-fill-color: #1f1c19 !important;
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  border: 1px solid rgb(109 62 241) !important;
+  color: #1f1c19 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+[data-theme="light"] input:-webkit-autofill::first-line,
+[data-theme="light"] textarea:-webkit-autofill::first-line,
+[data-theme="light"] select:-webkit-autofill::first-line {
+  font-size: 16px !important;
+  color: #1f1c19 !important;
+  -webkit-text-fill-color: #1f1c19 !important;
+}
+
+[data-theme="light"] .react-international-phone-input:-webkit-autofill,
+[data-theme="light"] .react-international-phone-input:-webkit-autofill:hover,
+[data-theme="light"] .react-international-phone-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #46423c !important;
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  border: 1px solid rgb(109 62 241) !important;
+}
+
+[data-theme="light"] .react-international-phone-input:focus:-webkit-autofill {
+  -webkit-text-fill-color: #1f1c19 !important;
+}

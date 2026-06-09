@@ -125,16 +125,17 @@ function CheckIcon() {
 
 const codeBlockStyles = `
   .sagtech-code-block pre { tab-size: 2; }
-  .sagtech-code-block .tok-kw { color: #B69FF8; }
-  .sagtech-code-block .tok-string { color: #58A61B; }
-  .sagtech-code-block .tok-num { color: #C6A328; }
-  .sagtech-code-block .tok-const { color: #9494C9; }
-  .sagtech-code-block .tok-comment { color: #6A6A73; font-style: italic; }
-  .sagtech-code-block .tok-key, .sagtech-code-block .tok-prop { color: #9494C9; }
-  .sagtech-code-block .tok-prompt { color: #B69FF8; }
-  .sagtech-code-block .tok-flag { color: #C6A328; }
-  .sagtech-code-block .tok-tag { color: #B69FF8; }
-  .sagtech-code-block .tok-attr { color: #9494C9; }
+  .sagtech-code-block .tok-kw { color: var(--color-tok-kw); }
+  .sagtech-code-block .tok-string { color: var(--color-tok-string); }
+  .sagtech-code-block .tok-num { color: var(--color-tok-num); }
+  .sagtech-code-block .tok-const { color: var(--color-tok-const); }
+  .sagtech-code-block .tok-comment { color: var(--color-tok-comment); font-style: italic; }
+  .sagtech-code-block .tok-key { color: var(--color-tok-key); }
+  .sagtech-code-block .tok-prop { color: var(--color-tok-prop); }
+  .sagtech-code-block .tok-prompt { color: var(--color-tok-prompt); }
+  .sagtech-code-block .tok-flag { color: var(--color-tok-flag); }
+  .sagtech-code-block .tok-tag { color: var(--color-tok-tag); }
+  .sagtech-code-block .tok-attr { color: var(--color-tok-attr); }
 `;
 
 export default function CodeBlock({

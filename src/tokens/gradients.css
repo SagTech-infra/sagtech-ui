@@ -188,3 +188,35 @@
 .bg-gradient-glow {
   background: var(--gradient-glow);
 }
+
+/* Light theme — the gradient-border utilities above bake dark strokes
+   (#0c0c1e/#221546/#1f1f38/#2f1e5e) + white-alpha fills, which read as heavy
+   dark borders on warm-light cards. Override the element fill to a low
+   black-alpha and the ::before stroke to thin warm borders. Gradient mechanics
+   (mask/padding/radius) are inherited from the base rules above. */
+[data-theme="light"] .border_gradient_40_stroke_1,
+[data-theme="light"] .border_gradient_24_stroke_1,
+[data-theme="light"] .border_gradient_8_stroke_1,
+[data-theme="light"] .border_gradient_100_stroke_1,
+[data-theme="light"] .border_gradient_40_stroke_2,
+[data-theme="light"] .border_gradient_24_stroke_2,
+[data-theme="light"] .border_gradient_8_stroke_2,
+[data-theme="light"] .border_gradient_16_stroke_2,
+[data-theme="light"] .border_gradient_12_stroke_2 {
+  background: rgba(31, 28, 25, 0.05);
+}
+
+[data-theme="light"] .border_gradient_40_stroke_1::before,
+[data-theme="light"] .border_gradient_24_stroke_1::before,
+[data-theme="light"] .border_gradient_8_stroke_1::before,
+[data-theme="light"] .border_gradient_100_stroke_1::before {
+  background: linear-gradient(180deg, #efece6 0%, #e4ddf2 100%);
+}
+
+[data-theme="light"] .border_gradient_40_stroke_2::before,
+[data-theme="light"] .border_gradient_24_stroke_2::before,
+[data-theme="light"] .border_gradient_8_stroke_2::before,
+[data-theme="light"] .border_gradient_16_stroke_2::before,
+[data-theme="light"] .border_gradient_12_stroke_2::before {
+  background: linear-gradient(180deg, #efece6 0%, #e4ddf2 100%);
+}

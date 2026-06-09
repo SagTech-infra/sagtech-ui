@@ -28,3 +28,16 @@ html {
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
+
+/* Light theme — lighter purple thumb on warm surfaces. */
+[data-theme="light"] .custom-scrollbar {
+  scrollbar-color: #c4b8f2 transparent;
+}
+
+[data-theme="light"] .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #c4b8f2;
+}
+
+[data-theme="light"] .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #8a6cf0;
+}

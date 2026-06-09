@@ -250,6 +250,20 @@
   --color-bg-warning: rgba(198, 163, 40, 0.16);
   --color-bg-error: rgba(153, 45, 45, 0.24);
   --color-bg-info: rgba(148, 148, 201, 0.16);
+
+  /* Syntax-highlight tokens (dark default).
+     Match the colors CodeBlock previously hardcoded, so dark is unchanged. */
+  --color-tok-kw: #b69ff8;
+  --color-tok-string: #58a61b;
+  --color-tok-num: #c6a328;
+  --color-tok-const: #9494c9;
+  --color-tok-comment: #6a6a73;
+  --color-tok-key: #9494c9;
+  --color-tok-prop: #9494c9;
+  --color-tok-prompt: #b69ff8;
+  --color-tok-flag: #c6a328;
+  --color-tok-tag: #b69ff8;
+  --color-tok-attr: #9494c9;
 }
 
 /* Light theme overrides. Applied when data-theme="light" is set (ThemeProvider).
@@ -260,19 +274,22 @@
      proximity (body is a closer ancestor than html for body's subtree). */
 :root[data-theme="light"],
 [data-theme="light"] {
+  /* Warm neutral (Stripe/Notion) — warm off-white surfaces, warm near-black text,
+     soft neutral shadows; brand purple preserved. */
+
   /* Semantic — backgrounds */
-  --color-bg-primary: #f7f7fa;
+  --color-bg-primary: #f6f5f2;
   --color-bg-secondary: #ffffff;
-  --color-bg-tertiary: #e6e6e8;
+  --color-bg-tertiary: #efece6;
 
   /* Semantic — foregrounds */
-  --color-fg-primary: #070715;
-  --color-fg-secondary: #393944;
-  --color-fg-muted: #51515b;
+  --color-fg-primary: #1f1c19;
+  --color-fg-secondary: #46423c;
+  --color-fg-muted: #78726a;
 
   /* Semantic — borders */
-  --color-border-default: #d8d8dc;
-  --color-border-strong: #8f8f94;
+  --color-border-default: #ece8e1;
+  --color-border-strong: #cfc8bd;
 
   /* Semantic — surfaces */
   --color-surface-overlay: #ffffff;
@@ -280,39 +297,78 @@
   /* Semantic — status foregrounds */
   --color-fg-success: #2e7d12;
   --color-fg-warning: #8a6d00;
-  --color-fg-error: #992d2d;
-  --color-fg-info: #292a94;
+  --color-fg-error: #b3261e;
+  --color-fg-info: #2a2b8f;
 
   /* Semantic — status backgrounds */
-  --color-bg-success: #e6f4df;
-  --color-bg-warning: #fbf3d5;
-  --color-bg-error: #f7e3e3;
-  --color-bg-info: #e4e4f0;
+  --color-bg-success: #e8f3df;
+  --color-bg-warning: #faf1d4;
+  --color-bg-error: #fbe6e3;
+  --color-bg-info: #e7e7f2;
 
-  /* Raw-scale override (hybrid): existing bg-black, text-white and border-grey
-     utility classes get a sensible light rendering without per-component edits. */
-  --color-black_1: #f7f7fa;
+  /* Raw-scale override (hybrid, warm): existing bg-black, text-white and
+     border-grey utility classes get a sensible warm-light rendering without
+     per-component edits. */
+  --color-black_1: #f6f5f2;
   --color-black_1_5: #ffffff;
   --color-black_2: #ffffff;
-  --color-black_3: #d8d8dc;
-  --color-black_4: #c2c2c8;
-  --color-grey_1: #51515b;
-  --color-grey_2: #6a6a73;
-  --color-grey_3: #83838a;
-  --color-grey_4: #9c9ca1;
-  --color-white_1: #51515b;
-  --color-white_2: #393944;
-  --color-white_3: #20202d;
-  --color-white_4: #070715;
-  /* Accents — tuned for AA contrast on light surfaces; brand hue preserved.
+  --color-black_3: #ece8e1;
+  --color-black_4: #d9d3c9;
+  --color-grey_1: #57534b;
+  --color-grey_2: #6f6a61;
+  --color-grey_3: #867f74;
+  --color-grey_4: #9d968a;
+  --color-white_1: #6f6a61;
+  --color-white_2: #46423c;
+  --color-white_3: #2e2a25;
+  --color-white_4: #1f1c19;
+  /* Accents — tuned for AA contrast on warm-light surfaces; brand hue preserved.
      (In dark mode these keep their vivid values from @theme.) */
-  --color-pr_purple: #5a2fd6;
-  --color-sec_purple: #7c5cf5;
-  --color-pr_blue: #21228a;
-  --color-sec_blue: #5b5ba8;
+  --color-pr_purple: #5d33d9;
+  --color-sec_purple: #7c52ec;
+  --color-pr_blue: #2a2b8f;
+  --color-sec_blue: #54559e;
 
   /* Surface wash (light) */
-  --color-surface-wash: rgba(109, 62, 241, 0.05);
+  --color-surface-wash: rgba(109, 62, 241, 0.045);
 
-  /* NOT overridden by design: --color-white (#ffffff), backdrop/shape tokens. */
+  /* Syntax-highlight tokens — readable on warm light. */
+  --color-tok-kw: #5d33d9;
+  --color-tok-string: #3f7a14;
+  --color-tok-num: #8a6d00;
+  --color-tok-const: #4a4b8f;
+  --color-tok-comment: #9d968a;
+  --color-tok-key: #4a4b8f;
+  --color-tok-prop: #4a4b8f;
+  --color-tok-prompt: #5d33d9;
+  --color-tok-flag: #8a6d00;
+  --color-tok-tag: #5d33d9;
+  --color-tok-attr: #4a4b8f;
+
+  /* Shadows — soft warm neutral (override dark glows so they don't bleed). */
+  --shadow-3xl: 0 6px 18px rgba(31, 28, 25, 0.10);
+  --shadow-4xl: 0 -8px 24px rgba(31, 28, 25, 0.04);
+  --shadow-5xl: 0 0 4px rgba(93, 51, 217, 0.22);
+  --shadow-6xl: 0 4px 16px rgba(93, 51, 217, 0.16);
+  --shadow-glow-purple: 0 4px 14px rgba(93, 51, 217, 0.12);
+  --shadow-elevate-md: 0 10px 28px rgba(31, 28, 25, 0.10);
+  --shadow-elevate-lg: 0 20px 48px rgba(31, 28, 25, 0.12);
+
+  /* Drop shadows — warm neutral. */
+  --drop-shadow-3xl: -1px 1px 1px rgba(31, 28, 25, 0.18);
+
+  /* Gradients — soften purple glow on light (keep --gradient-hero/accent). */
+  --gradient-subtle: linear-gradient(
+    180deg,
+    rgba(109, 62, 241, 0.05) 0%,
+    rgba(109, 62, 241, 0) 100%
+  );
+  --gradient-glow: radial-gradient(
+    circle at 50% 0%,
+    rgba(109, 62, 241, 0.10) 0%,
+    rgba(109, 62, 241, 0) 70%
+  );
+
+  /* NOT overridden by design: --color-white (#ffffff), backdrop/shape tokens,
+     --gradient-hero/--gradient-accent. */
 }

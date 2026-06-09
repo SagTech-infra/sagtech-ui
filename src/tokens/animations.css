@@ -98,6 +98,11 @@
   box-shadow: 0 0 0 6px #070715, 0 0 16px 6px rgba(109, 62, 241, 0.24);
 }
 
+/* Light theme — ring uses the warm page color instead of dark #070715. */
+[data-theme="light"] .border-animation:hover {
+  box-shadow: 0 0 0 6px var(--color-bg-primary), 0 0 16px 6px rgba(109, 62, 241, 0.18);
+}
+
 @media screen and (max-width: 1099px) {
   .tech-close {
     max-height: 232px;
