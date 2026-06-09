@@ -684,6 +684,10 @@ export type {
 // Components — Marketing
 export { default as Hero } from "./components/Hero/Hero";
 export type { HeroProps } from "./components/Hero/Hero";
+export { default as AuroraHero } from "./components/AuroraHero/AuroraHero";
+export type { AuroraHeroProps, AuroraStat } from "./components/AuroraHero/AuroraHero";
+export { default as PricingTable } from "./components/PricingTable/PricingTable";
+export type { PricingTableProps, PricingPlan } from "./components/PricingTable/PricingTable";
 export { default as FeatureGrid } from "./components/FeatureGrid/FeatureGrid";
 export type { FeatureGridProps, FeatureItem } from "./components/FeatureGrid/FeatureGrid";
 export { default as StatGrid } from "./components/StatGrid/StatGrid";

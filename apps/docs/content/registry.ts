@@ -62,7 +62,7 @@ const GROUPS: Record<Category, string[]> = {
     'NotificationCenter', 'Toast', 'Banner', 'Spotlight', 'NumberTicker',
     'TypingAnimation', 'Particles',
   ],
-  Marketing: ['Hero', 'FeatureGrid', 'StatGrid', 'CTASection'],
+  Marketing: ['Hero', 'AuroraHero', 'FeatureGrid', 'StatGrid', 'CTASection', 'PricingTable'],
 };
 
 const importPathFor = (category: Category): ComponentEntry['importPath'] =>

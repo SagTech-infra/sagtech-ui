@@ -13,7 +13,7 @@ import {
   type DataTableColumn,
   type SortState,
 } from '@sagtech-infra/ui';
-import { AreaChart, BarChart, DonutChart } from '@sagtech-infra/ui/charts';
+import { AreaChart, DonutChart } from '@sagtech-infra/ui/charts';
 
 const navIcon = (
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -58,17 +58,19 @@ const revenueSeries = [
   },
 ];
 
-const channelSeries = [
-  {
-    name: 'Sales',
-    data: [
-      { x: 'Direct', y: 320 },
-      { x: 'Search', y: 540 },
-      { x: 'Social', y: 410 },
-      { x: 'Email', y: 280 },
-      { x: 'Affiliate', y: 190 },
-    ],
-  },
+interface ActivityEvent {
+  id: string;
+  name: string;
+  action: string;
+  time: string;
+}
+
+const activity: ActivityEvent[] = [
+  { id: 'a1', name: 'Ava Chen', action: 'paid $290 for Scale plan', time: '2m ago' },
+  { id: 'a2', name: 'Liam Brooks', action: 'started a Pro trial', time: '14m ago' },
+  { id: 'a3', name: 'Noah Patel', action: 'requested a refund', time: '38m ago' },
+  { id: 'a4', name: 'Mia Torres', action: 'upgraded to Scale', time: '1h ago' },
+  { id: 'a5', name: 'Ethan Wood', action: 'invited 3 teammates', time: '2h ago' },
 ];
 
 const donutColors = [
@@ -200,7 +202,7 @@ export default function DashboardTemplate() {
               <h2 className="font-orbitron text-18 font-semibold text-fg-primary mb-16px">
                 Revenue vs Refunds
               </h2>
-              <AreaChart series={revenueSeries} width="100%" height={280} stacked />
+              <AreaChart series={revenueSeries} width="100%" height={240} stacked />
             </CardWrapper>
             <CardWrapper className="p-20px">
               <h2 className="font-orbitron text-18 font-semibold text-fg-primary mb-16px">
@@ -217,12 +219,6 @@ export default function DashboardTemplate() {
           </section>
 
           <section className="grid grid-cols-1 lg:grid-cols-3 gap-16px">
-            <CardWrapper className="p-20px">
-              <h2 className="font-orbitron text-18 font-semibold text-fg-primary mb-16px">
-                Sales by Channel
-              </h2>
-              <BarChart series={channelSeries} width="100%" height={260} />
-            </CardWrapper>
             <CardWrapper className="lg:col-span-2 p-20px">
               <div className="flex items-center justify-between mb-16px">
                 <h2 className="font-orbitron text-18 font-semibold text-fg-primary">
@@ -242,6 +238,31 @@ export default function DashboardTemplate() {
               <div className="mt-16px flex justify-end">
                 <Pagination currentPage={page} totalPages={5} onPageChange={setPage} />
               </div>
+            </CardWrapper>
+
+            <CardWrapper className="p-20px">
+              <h2 className="font-orbitron text-18 font-semibold text-fg-primary mb-16px">
+                Activity feed
+              </h2>
+              <ul className="flex flex-col">
+                {activity.map((event, i) => (
+                  <li
+                    key={event.id}
+                    className={`flex items-start gap-12px py-12px ${
+                      i < activity.length - 1 ? 'border-b border-border-default' : ''
+                    }`}
+                  >
+                    <Avatar name={event.name} size="sm" />
+                    <div className="flex min-w-0 flex-1 flex-col gap-2px">
+                      <p className="font-manrope text-14 leading-18 text-fg-primary">
+                        <span className="text-fg-primary">{event.name.split(' ')[0]}</span>{' '}
+                        <span className="text-fg-secondary">{event.action}</span>
+                      </p>
+                      <span className="font-manrope text-12 text-fg-muted">{event.time}</span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
             </CardWrapper>
           </section>
         </main>

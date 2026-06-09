@@ -44,11 +44,39 @@ export const templates: TemplateEntry[] = [
     file: 'PricingTemplate.tsx',
   },
   {
+    name: 'Checkout',
+    slug: 'checkout',
+    description: 'Checkout page — order summary with a shipping & payment form.',
+    kind: 'App',
+    file: 'CheckoutTemplate.tsx',
+  },
+  {
+    name: 'Inbox',
+    slug: 'inbox',
+    description: 'Inbox / chat — conversation list with a message thread and composer.',
+    kind: 'App',
+    file: 'InboxTemplate.tsx',
+  },
+  {
+    name: 'Kanban',
+    slug: 'kanban',
+    description: 'Kanban board — columns of draggable task cards.',
+    kind: 'App',
+    file: 'KanbanTemplate.tsx',
+  },
+  {
     name: 'Landing',
     slug: 'landing',
     description: 'Marketing landing page composed from the marketing blocks.',
     kind: 'Marketing',
     file: 'LandingTemplate.tsx',
+  },
+  {
+    name: 'Blog',
+    slug: 'blog',
+    description: 'Blog article — editorial layout with author, prose, code and related posts.',
+    kind: 'Marketing',
+    file: 'BlogTemplate.tsx',
   },
 ];
 
