@@ -22,11 +22,20 @@ export default function ThreeGallery() {
             <NextLink
               key={c.slug}
               href={`/components/${c.slug}`}
-              className="block rounded-16px border border-border-default p-16px transition-colors hover:border-border-strong"
+              className="block overflow-hidden rounded-16px border border-border-default p-16px transition-colors hover:border-border-strong"
             >
               <p className="mb-12px font-orbitron text-16">{c.name}</p>
-              <div className="flex min-h-[280px] items-center justify-center">
-                {Demo ? <Demo /> : <span className="text-14 text-grey_3">—</span>}
+              {/* Demos render at a fixed pixel size (500–600px); clip + scale so
+                  the preview fits the gallery card. pointer-events-none keeps the
+                  WebGL canvas from swallowing the card's navigation click. */}
+              <div className="flex h-[260px] items-center justify-center overflow-hidden rounded-12px">
+                {Demo ? (
+                  <div className="pointer-events-none origin-center scale-[0.5]">
+                    <Demo />
+                  </div>
+                ) : (
+                  <span className="text-14 text-grey_3">—</span>
+                )}
               </div>
             </NextLink>
           );

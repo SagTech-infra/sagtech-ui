@@ -92,7 +92,7 @@ export default function OverviewPage() {
       />
 
       <Section title="What is it">
-        <p className="max-w-[720px] text-16 leading-26 text-fg-secondary">
+        <p className="max-w-[720px] text-16 leading-24 text-fg-secondary">
           SagTech UI is a React&nbsp;19 + Tailwind&nbsp;v4 component library used across SagTech
           products — this very site is built with it. It ships 107 components across 8 categories,
           12 chart types and 4 interactive 3D scenes. Dark-first, accessible by default, and
@@ -128,7 +128,7 @@ export default function OverviewPage() {
       </Section>
 
       <Section title="Report a bug">
-        <p className="max-w-[720px] text-16 leading-26 text-fg-secondary">
+        <p className="max-w-[720px] text-16 leading-24 text-fg-secondary">
           Found something broken or missing? Open an issue on GitHub with a short repro — it goes
           straight to the team that maintains the library.
         </p>
