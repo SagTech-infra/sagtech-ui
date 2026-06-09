@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Package identity
 
-This repo is published as **`@sagtech-infra/ui`** (not `@sagtech/ui`) to GitHub Packages at `npm.pkg.github.com` under the `@sagtech-infra` scope — see `package.json` and `.npmrc`. Consumers need a `NODE_AUTH_TOKEN` with `read:packages` to install.
+This repo is published as **`@sagtech_llc/ui`** to **public npm** (`registry.npmjs.org`, `publishConfig.access: public`) — see `package.json`. Consumers install with `pnpm add @sagtech_llc/ui` (no auth or registry config needed). Inside this monorepo the library is consumed via the `link:../..` workspace alias **`@sagtech-infra/ui`** — that is an internal alias only, which is why source imports still read `@sagtech-infra/ui`; external consumers use the published `@sagtech_llc/ui` name.
+
+> ⚠️ Migration in progress: the package was renamed from `@sagtech-infra/ui` (GitHub Packages) to `@sagtech_llc/ui` (public npm). `.github/workflows/publish.yml` still targets GitHub Packages (`npm.pkg.github.com`, `@sagtech-infra` scope, `--access restricted`, `GITHUB_TOKEN`) and must be re-pointed to public npm (`registry.npmjs.org`, `--access public`, an `NPM_TOKEN` secret) before a tag actually publishes the new name.
 
 Publishing is tag-driven: pushing a `v*.*.*` tag triggers `.github/workflows/publish.yml`, which verifies the tag matches `package.json#version`, then runs `pnpm build && pnpm publish`. Bump the version in `package.json` before tagging — the workflow fails otherwise.
 
@@ -28,7 +30,7 @@ Always use `pnpm` (pinned to 10.28.1 via `packageManager`).
 | Filter by test name | `pnpm test -t "ref forwarding"` |
 | Build static Storybook | `pnpm build-storybook` |
 
-There is no local `dev server for the library itself` — Storybook is the dev harness. The published package contains only `dist/` plus `src/tokens/` (for the `@sagtech-infra/ui/tokens` CSS export).
+There is no local `dev server for the library itself` — Storybook is the dev harness. The published package contains only `dist/` plus `src/tokens/` (for the `@sagtech_llc/ui/tokens` CSS export).
 
 ## Architecture
 
@@ -40,7 +42,7 @@ All React, Next, framer-motion, classnames, and optional peers (swiper, react-ho
 
 ### Design tokens — Tailwind v4 `@theme` block
 
-`src/tokens/index.css` bundles `theme.css` + `gradients.css` + `animations.css` + `autofill.css` + `scrollbar.css`. It is exported as `./tokens` (raw CSS, not built) so consumers `@import '@sagtech-infra/ui/tokens'` at the top of their global stylesheet.
+`src/tokens/index.css` bundles `theme.css` + `gradients.css` + `animations.css` + `autofill.css` + `scrollbar.css`. It is exported as `./tokens` (raw CSS, not built) so consumers `@import '@sagtech_llc/ui/tokens'` at the top of their global stylesheet.
 
 `theme.css` is the **single source of design truth**: colors (`black_1..4`, `white_1..4`, `grey_1..4`, `pr_purple`, `sec_purple`, `pr_blue`, `sec_blue`, `error`/`warning`/`success`), spacing (`*px` named scale, e.g. `--spacing-24px`), breakpoints (`ls/es/xs/mds/sm/sl/xl/md/lg/2xl/xh/3xl`), fonts (`--font-orbitron|roboto|manrope`), radii, shadows. Components use these tokens via Tailwind utility classes (`bg-black_1`, `p-24px`, `rounded-24px`, etc.) — avoid hardcoded hex/px values.
 

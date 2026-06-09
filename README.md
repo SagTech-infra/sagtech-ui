@@ -1,4 +1,4 @@
-# @sagtech-infra/ui
+# @sagtech_llc/ui
 
 Internal React component library for SagTech products. Dark-mode-only, Tailwind v4, React 19 / Next 15+.
 
@@ -6,20 +6,16 @@ Storybook covers every component with live examples — run `pnpm dev` and open 
 
 > **Building a new project with this library?** See [`COMPONENTS.md`](./COMPONENTS.md) — full component catalog with usage examples, designed for AI agents to quickly find the right component.
 
-> **Migrating an existing React app to this library?** See [`docs/AI_MIGRATION_PROMPT.md`](./docs/AI_MIGRATION_PROMPT.md) — a paste-ready prompt for Claude / Cursor / Copilot that walks an AI assistant through a phased, non-breaking migration (setup → forms → overlays → data → charts), with picker rules, worked examples, and anti-patterns. It also ships inside the package at `node_modules/@sagtech-infra/ui/docs/AI_MIGRATION_PROMPT.md`.
+> **Migrating an existing React app to this library?** See [`docs/AI_MIGRATION_PROMPT.md`](./docs/AI_MIGRATION_PROMPT.md) — a paste-ready prompt for Claude / Cursor / Copilot that walks an AI assistant through a phased, non-breaking migration (setup → forms → overlays → data → charts), with picker rules, worked examples, and anti-patterns. It also ships inside the package at `node_modules/@sagtech_llc/ui/docs/AI_MIGRATION_PROMPT.md`.
 
 ---
 
 ## Install
 
 ```bash
-# Package is published to GitHub Packages under the @sagtech-infra scope.
-# Consumers need a PAT with read:packages. Add to ~/.npmrc or the project's .npmrc:
-#
-#   @sagtech-infra:registry=https://npm.pkg.github.com
-#   //npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
+# Published to public npm — no auth or registry config required.
 
-pnpm add @sagtech-infra/ui
+pnpm add @sagtech_llc/ui
 ```
 
 For local development against a checked-out copy:
@@ -59,7 +55,7 @@ Import the design tokens (raw CSS `@theme` block) once at the top of your global
 
 ```css
 /* app/globals.css or similar */
-@import '@sagtech-infra/ui/tokens';
+@import '@sagtech_llc/ui/tokens';
 ```
 
 The token scale covers: colors (`black_1..4`, `white_1..4`, `grey_1..4`, `pr_purple`, `sec_purple`, `pr_blue`, `sec_blue`, `success`, `warning`, `error`), spacing (`4/6/7/8/10/11/12/15/16/20/23/24/30/32/40/48/52/56/60/62/64/72/88/117/157` px), z-index overlay layers (`--z-dropdown/popover/modal/drawer/toast/tooltip`), breakpoints, fonts, radii, shadows.
@@ -67,7 +63,7 @@ The token scale covers: colors (`black_1..4`, `white_1..4`, `grey_1..4`, `pr_pur
 Typed constants are also exported as `tokens`:
 
 ```tsx
-import { tokens } from '@sagtech-infra/ui';
+import { tokens } from '@sagtech_llc/ui';
 tokens.colors.pr_purple; // '#6D3EF1'
 tokens.spacing['16px']; // '16px'
 ```
@@ -86,7 +82,7 @@ import {
   Button,
   useConfirm,
   toast,
-} from '@sagtech-infra/ui';
+} from '@sagtech_llc/ui';
 import Link from 'next/link';
 
 export default function Root({ children }: { children: React.ReactNode }) {
@@ -128,22 +124,22 @@ function DeleteButton({ onDelete }: { onDelete: () => Promise<void> }) {
 
 ## Imports & bundle isolation
 
-The main entry re-exports everything, so `import { ... } from '@sagtech-infra/ui'` keeps working for all components. The package is marked `"sideEffects": false`, so a tree-shaking bundler (Webpack/Turbopack/Vite/Rollup) drops anything you don't import — importing only what you use keeps heavy peers (notably `three`) out of your bundle. CSS is shipped separately via the `./tokens` export, so it is never tree-shaken away.
+The main entry re-exports everything, so `import { ... } from '@sagtech_llc/ui'` keeps working for all components. The package is marked `"sideEffects": false`, so a tree-shaking bundler (Webpack/Turbopack/Vite/Rollup) drops anything you don't import — importing only what you use keeps heavy peers (notably `three`) out of your bundle. CSS is shipped separately via the `./tokens` export, so it is never tree-shaken away.
 
 For explicit isolation of the heavy families, two **additive** subpath exports are available alongside the main entry:
 
 ```tsx
 // Main entry — everything (still works, non-breaking)
-import { Button, AreaChart, Globe3D } from '@sagtech-infra/ui';
+import { Button, AreaChart, Globe3D } from '@sagtech_llc/ui';
 
 // 3D / WebGL family only (pulls in three + @react-three/* peers)
-import { Network3D, Globe3D, Scene3D, Mindmap3D } from '@sagtech-infra/ui/3d';
+import { Network3D, Globe3D, Scene3D, Mindmap3D } from '@sagtech_llc/ui/3d';
 
 // The 12 canvas charts only (no extra peers)
-import { AreaChart, BarChart, GaugeChart } from '@sagtech-infra/ui/charts';
+import { AreaChart, BarChart, GaugeChart } from '@sagtech_llc/ui/charts';
 ```
 
-Reaching for the subpath makes the dependency boundary explicit and keeps the 3D peers off any code path that imports from `@sagtech-infra/ui/3d` nowhere. `size-limit` budgets guard each entry (`main` / `icons` / `3d` / `charts`); run `pnpm check:size` to verify locally — CI runs it on every push and PR.
+Reaching for the subpath makes the dependency boundary explicit and keeps the 3D peers off any code path that imports from `@sagtech_llc/ui/3d` nowhere. `size-limit` budgets guard each entry (`main` / `icons` / `3d` / `charts`); run `pnpm check:size` to verify locally — CI runs it on every push and PR.
 
 ---
 
@@ -296,10 +292,10 @@ Reaching for the subpath makes the dependency boundary explicit and keeps the 3D
 
 ### Icons
 
-Icons live at `@sagtech-infra/ui/icons`:
+Icons live at `@sagtech_llc/ui/icons`:
 
 ```tsx
-import { content as iconContent, type IAvailableIcons } from '@sagtech-infra/ui/icons';
+import { content as iconContent, type IAvailableIcons } from '@sagtech_llc/ui/icons';
 ```
 
 Or render via the `<Icon>` component: `<Icon icon="menu" size={20} color="#CDCDD0" />`. Available keys include app-chrome (`menu`, `plus`, `edit`, `trash`, `eye`, `filter`, `search`, `settings`, `calendar`, `users`, `document`, `lock`), status (`info`, `warning`, `error`, `success`, `checkCircle`, `alertTriangle`), navigation (`arrow`, `chevrondown`, `chevronLeft`, `chevronRight`, `close`, `paginationArrow`), and a large tech-stack catalogue (`React`, `TypeScript`, `PostgreSQL`, `Docker`, `AWS`, `OpenAI`, `Anthropic`, …).
@@ -334,6 +330,6 @@ Tag-driven via `.github/workflows/publish.yml`:
 
 1. Bump `version` in `package.json` on `main`.
 2. `git tag v1.0.0 && git push --tags`.
-3. CI verifies the tag matches `package.json#version`, builds, and publishes to GitHub Packages (`@sagtech-infra` scope).
+3. CI verifies the tag matches `package.json#version`, builds, and publishes to public npm (`@sagtech_llc` scope).
 
 Tags that don't match `package.json#version` fail the publish step.
