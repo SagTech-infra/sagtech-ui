@@ -10,7 +10,7 @@ export function DemoBlock({ slug, source }: { slug: string; source: string }) {
 
   return (
     <div className="overflow-hidden rounded-16px border border-border-default flex flex-col gap-8px">
-      <div className="flex min-h-50 items-center justify-center p-24px bg-bg-secondary">
+      <div className="flex min-h-50 items-center justify-center p-16px bg-bg-secondary sm:p-24px">
         {Demo ? (
           <Demo />
         ) : (

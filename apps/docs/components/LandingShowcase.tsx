@@ -69,7 +69,7 @@ function BentoCard({ slug, name, description, span = '' }: Tile) {
 
 export function LandingShowcase() {
   return (
-    <div className="grid auto-rows-[15rem] grid-cols-1 gap-16px [grid-auto-flow:dense] sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid auto-rows-[12rem] grid-cols-1 gap-16px [grid-auto-flow:dense] sm:auto-rows-[15rem] sm:grid-cols-2 lg:grid-cols-3">
       {TILES.map((t) => (
         <BentoCard key={t.slug} {...t} />
       ))}

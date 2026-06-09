@@ -29,22 +29,22 @@ export function TemplateFrame({
 
   return (
     <div className="flex min-h-screen flex-col bg-bg-primary">
-      <header className="sticky top-0 z-10 flex items-center justify-between gap-12px border-b border-border-default bg-bg-primary/80 px-24px py-12px backdrop-blur">
+      <header className="sticky top-0 z-10 flex items-center justify-between gap-12px border-b border-border-default bg-bg-primary/80 px-16px py-12px backdrop-blur sm:px-24px">
         <NextLink
           href="/templates"
-          className="flex items-center gap-8px text-14 text-fg-muted transition-colors hover:text-fg-primary"
+          className="flex shrink-0 items-center gap-8px text-14 text-fg-muted transition-colors hover:text-fg-primary"
         >
           <span aria-hidden>←</span>
-          <span className="font-orbitron">
+          <span className="hidden font-orbitron sm:inline">
             SagTech <span className="text-pr_purple">UI</span>
           </span>
         </NextLink>
 
-        <span className="hidden truncate font-orbitron text-16 text-fg-primary sm:block">
+        <span className="min-w-0 flex-1 truncate text-center font-orbitron text-14 text-fg-primary sm:flex-none sm:text-16">
           {title} template
         </span>
 
-        <div className="flex items-center gap-12px">
+        <div className="flex shrink-0 items-center gap-12px">
           <SegmentedControl
             options={VIEW_OPTIONS}
             value={view}
@@ -60,7 +60,7 @@ export function TemplateFrame({
         {view === 'preview' ? (
           Live ? <Live /> : null
         ) : (
-          <div className="mx-auto max-w-[960px] p-24px">
+          <div className="mx-auto max-w-[960px] p-16px sm:p-24px">
             {source ? (
               <CodeBlock
                 code={source}

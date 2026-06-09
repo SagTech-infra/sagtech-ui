@@ -55,5 +55,11 @@ export function PropsTable({ name }: { name: string }) {
     );
   }
 
-  return <Table columns={columns as never} data={rows} compact />;
+  return (
+    <div className="overflow-x-auto custom-scrollbar">
+      <div className="min-w-[640px]">
+        <Table columns={columns as never} data={rows} compact />
+      </div>
+    </div>
+  );
 }
