@@ -285,11 +285,11 @@
   /* Semantic — foregrounds */
   --color-fg-primary: #1f1c19;
   --color-fg-secondary: #46423c;
-  --color-fg-muted: #78726a;
+  --color-fg-muted: #6e6860;
 
   /* Semantic — borders */
   --color-border-default: #ece8e1;
-  --color-border-strong: #cfc8bd;
+  --color-border-strong: #877f72;
 
   /* Semantic — surfaces */
   --color-surface-overlay: #ffffff;
