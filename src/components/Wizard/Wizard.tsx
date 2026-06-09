@@ -104,7 +104,7 @@ function Progress({ className }: { className?: string }) {
             {index < steps.length - 1 && (
               <span
                 aria-hidden="true"
-                className={classNames('h-px flex-1', {
+                className={classNames('h-px w-[16px] shrink-0', {
                   'bg-pr_purple': index < currentIndex,
                   'bg-black_3': index >= currentIndex,
                 })}

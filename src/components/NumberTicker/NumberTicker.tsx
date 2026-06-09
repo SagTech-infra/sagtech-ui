@@ -1,6 +1,7 @@
 "use client";
 
 import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import classNames from "classnames";
 import { useReducedMotion } from "framer-motion";
 import useIntersectionObserver from "@/hooks/useIntersectionObserver";
 
@@ -26,6 +27,7 @@ const NumberTicker = forwardRef<HTMLSpanElement, NumberTickerProps>(
       duration = 1000,
       formatter = defaultFormatter,
       startOnView = true,
+      className,
       ...rest
     },
     forwardedRef,
@@ -119,7 +121,12 @@ const NumberTicker = forwardRef<HTMLSpanElement, NumberTickerProps>(
     }, [value, from]);
 
     return (
-      <span ref={setRef} {...rest}>
+      <span
+        ref={setRef}
+        className={classNames("tabular-nums", className)}
+        style={{ fontVariantNumeric: "tabular-nums" }}
+        {...rest}
+      >
         {formatter(current)}
       </span>
     );

@@ -3,9 +3,9 @@ import { DropdownMenu } from '@sagtech-infra/ui';
 
 export default function Demo() {
   const trigger = (
-    <div className="w-full px-20px py-12px bg-black_2 border border-black_3 rounded-16px font-manrope text-14 text-grey_4 flex items-center justify-between hover:border-pr_purple transition-colors">
+    <div className="w-full px-20px py-12px bg-black_2 border border-black_3 rounded-16px font-manrope text-14 text-grey_4 flex items-center justify-between gap-12px hover:border-pr_purple transition-colors">
       <span>Actions</span>
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-grey_2">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-grey_2 shrink-0">
         <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </div>

@@ -20,7 +20,7 @@ const StatGrid = forwardRef<HTMLDivElement, StatGridProps>(({ items, className, 
   <div ref={ref} className={classNames("grid grid-cols-2 gap-16px md:grid-cols-4", className)} {...rest}>
     {items.map((s, i) => (
       <div key={i} className="rounded-16px border border-border-default p-24px text-center">
-        <div className="font-display text-40 text-fg-primary">
+        <div className="flex items-baseline justify-center font-display text-40 text-fg-primary tabular-nums">
           {s.prefix}
           <NumberTicker value={s.value} />
           {s.suffix}

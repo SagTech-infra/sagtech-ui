@@ -1,3 +1,10 @@
+/* Reserve space for the scrollbar gutter so locking body scroll (e.g. when a
+   Modal/Drawer/Sheet opens and sets `overflow:hidden`) does not remove the
+   window scrollbar and shift the page width. */
+html {
+  scrollbar-gutter: stable;
+}
+
 /* Custom scrollbar utility */
 
 .custom-scrollbar {

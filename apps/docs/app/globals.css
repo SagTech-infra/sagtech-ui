@@ -17,6 +17,12 @@
   --font-roboto: var(--font-roboto-src), sans-serif;
 }
 
+html {
+  /* Keep the scrollbar gutter reserved so opening an overlay (Modal/Drawer/Sheet)
+     that locks body scroll doesn't remove the scrollbar and shift the page. */
+  scrollbar-gutter: stable;
+}
+
 html,
 body {
   min-height: 100%;

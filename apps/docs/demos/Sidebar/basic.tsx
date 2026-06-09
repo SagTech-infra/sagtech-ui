@@ -19,8 +19,20 @@ const items: SidebarItem[] = [
 
 export default function Demo() {
   return (
-    <div className="h-[480px] bg-black_1">
+    <div className="flex h-[480px] overflow-hidden rounded-16px bg-black_1 border border-black_3">
       <Sidebar items={items} />
+      <div className="flex-1 border-l border-black_3 p-24px">
+        <h3 className="font-manrope text-18 font-semibold text-white_4">Dashboard</h3>
+        <p className="mt-8px font-manrope text-14 text-grey_2">
+          Your main content area lives here, beside the sidebar.
+        </p>
+        <div className="mt-16px grid grid-cols-2 gap-12px">
+          <div className="h-72px rounded-12px bg-black_2" />
+          <div className="h-72px rounded-12px bg-black_2" />
+          <div className="h-72px rounded-12px bg-black_2" />
+          <div className="h-72px rounded-12px bg-black_2" />
+        </div>
+      </div>
     </div>
   );
 }

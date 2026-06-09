@@ -12,8 +12,3 @@ export { default as Globe3D } from "../components/Globe3D/Globe3D";
 export type { Globe3DProps, Globe3DMarker } from "../components/Globe3D/types";
 export { default as Scene3D } from "../components/Scene3D/Scene3D";
 export type { Scene3DProps } from "../components/Scene3D/Scene3D";
-export { default as Mindmap3D } from "../components/Mindmap3D/Mindmap3D";
-export type {
-  Mindmap3DProps,
-  MindmapNode,
-} from "../components/Mindmap3D/types";

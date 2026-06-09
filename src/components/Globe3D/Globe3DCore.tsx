@@ -91,7 +91,7 @@ function GlobeScene({
           </mesh>
           {marker.label && (
             <Html
-              distanceFactor={5}
+              distanceFactor={9}
               style={{ pointerEvents: "none" }}
               transform
               sprite
@@ -99,7 +99,7 @@ function GlobeScene({
               <div
                 style={{
                   fontFamily: "var(--font-manrope), sans-serif",
-                  fontSize: 11,
+                  fontSize: 9,
                   color: tokens.colors.white_4,
                   background: "rgba(7, 7, 21, 0.85)",
                   padding: "2px 6px",

@@ -55,7 +55,7 @@ export default function Network3DCore({
       enableNodeDrag={enableNodeDrag}
       onNodeClick={onNodeClick ? (n) => onNodeClick(n as Network3DNode) : undefined}
       linkOpacity={0.55}
-      nodeRelSize={5}
+      nodeRelSize={9}
       showNavInfo={false}
     />
   );

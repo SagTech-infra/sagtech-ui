@@ -244,17 +244,9 @@ export type {
   TimeValue,
 } from "./components/TimePicker/TimePicker";
 
-/** Simple drag-and-drop file drop zone. For full upload UI with progress use FileDropzone. */
+/** Simple drag-and-drop file drop zone with selected-file list. */
 export { default as Dropzone } from "./components/Dropzone/Dropzone";
 export type { DropzoneProps } from "./components/Dropzone/Dropzone";
-
-/** Full-featured file upload zone with per-file progress, status, and remove. Use instead of building custom upload UI. */
-export { default as FileDropzone } from "./components/FileDropzone/FileDropzone";
-export type {
-  FileDropzoneProps,
-  FileUploadItem,
-  FileUploadStatus,
-} from "./components/FileDropzone/FileDropzone";
 
 /** Click-triggered dropdown menu with items array. Use instead of building custom menus. */
 export { default as DropdownMenu } from "./components/DropdownMenu/DropdownMenu";
@@ -287,8 +279,6 @@ export type { FieldSetProps } from "./components/FieldSet/FieldSet";
 export { default as NumberInput } from "./components/NumberInput/NumberInput";
 export type { NumberInputProps } from "./components/NumberInput/NumberInput";
 
-/** Single FAQ item with expand/collapse. Use FaqList for a full FAQ section. */
-export { default as FaqDropdown } from "./components/FaqDropdown/FaqDropdown";
 /** List of FAQ items with expand/collapse. Use instead of building accordion-style FAQ manually. */
 export { default as FaqList } from "./components/FaqDropdown/FaqList";
 
@@ -398,17 +388,13 @@ export type {
   VariableItem,
 } from "./components/VariablePicker/VariablePicker";
 
-/** Side panel sliding from an edge. Use for filters, settings, or detail views. Lighter alternatives: Drawer (compact) or BottomSheet (mobile). */
+/** Side panel sliding from an edge. Use for filters, settings, or detail views. Lighter alternative: Drawer (compact). */
 export { default as Sheet } from "./components/Sheet/Sheet";
 export type {
   SheetProps,
   SheetSide,
   SheetSize,
 } from "./components/Sheet/Sheet";
-
-/** Mobile-friendly bottom panel. Use instead of Sheet on narrow viewports. */
-export { default as BottomSheet } from "./components/BottomSheet/BottomSheet";
-export type { BottomSheetProps } from "./components/BottomSheet/BottomSheet";
 
 /** Floating action button (fixed-position). Use for a single primary action on a page. */
 export { default as FAB } from "./components/FAB/FAB";
@@ -722,10 +708,6 @@ export type { Globe3DProps, Globe3DMarker } from "./components/Globe3D/types";
 /** Generic Three.js scene wrapper for custom 3D content. */
 export { default as Scene3D } from "./components/Scene3D/Scene3D";
 export type { Scene3DProps } from "./components/Scene3D/Scene3D";
-
-/** 3D mind map with hierarchical node tree. */
-export { default as Mindmap3D } from "./components/Mindmap3D/Mindmap3D";
-export type { Mindmap3DProps, MindmapNode } from "./components/Mindmap3D/types";
 
 // Components — Feedback
 

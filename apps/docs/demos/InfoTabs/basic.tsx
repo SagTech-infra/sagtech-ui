@@ -3,27 +3,27 @@ import { InfoTabs } from '@sagtech-infra/ui';
 
 const tabs = [
   {
-    title: 'Web Development',
+    title: 'Features',
     description:
-      'We build modern, scalable web applications using the latest technologies and best practices.',
-    buttonText: 'Get Started',
-    role: 'web-dev',
+      'Everything you need in one place — composable components, sensible defaults, and full type safety out of the box.',
+    buttonText: 'Explore',
+    role: 'features',
   },
   {
-    title: 'Mobile Development',
+    title: 'Pricing',
     description:
-      'Native and cross-platform mobile apps for iOS and Android with exceptional user experience.',
-    buttonText: 'Learn More',
-    role: 'mobile-dev',
+      'Simple, transparent plans that scale with your team. Start free and upgrade whenever you need more.',
+    buttonText: 'View Plans',
+    role: 'pricing',
   },
   {
-    title: 'Cloud Solutions',
+    title: 'Support',
     description:
-      'Enterprise-grade cloud infrastructure and DevOps services for optimal performance and scalability.',
-    role: 'cloud',
+      'Friendly help when you need it, with detailed docs, examples, and a responsive community.',
+    role: 'support',
   },
 ];
 
 export default function Demo() {
-  return <InfoTabs title="Our Services" list={tabs} />;
+  return <InfoTabs title="Overview" list={tabs} />;
 }

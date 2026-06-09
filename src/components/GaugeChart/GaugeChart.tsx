@@ -53,7 +53,7 @@ function GaugeChart({
     // Track
     ctx.beginPath();
     ctx.arc(cx, cy, radius, startAngle, endAngle);
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
     ctx.lineWidth = ringWidth;
     ctx.lineCap = 'round';
     ctx.stroke();
@@ -119,18 +119,18 @@ function GaugeChart({
       ctx.font = '12px Manrope, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
-      ctx.fillText(label, cx, cy + 4);
+      ctx.fillText(label, cx, cy - 2);
     }
 
     // Min/max ticks
     if (showRange) {
       ctx.fillStyle = tokens.colors.grey_2;
-      ctx.font = '10px Manrope, sans-serif';
+      ctx.font = '12px Manrope, sans-serif';
       ctx.textAlign = 'left';
       ctx.textBaseline = 'top';
-      ctx.fillText(new Intl.NumberFormat(locale).format(min), cx - radius - 4, cy + 6);
+      ctx.fillText(new Intl.NumberFormat(locale).format(min), cx - radius - 4, cy + 4);
       ctx.textAlign = 'right';
-      ctx.fillText(new Intl.NumberFormat(locale).format(max), cx + radius + 4, cy + 6);
+      ctx.fillText(new Intl.NumberFormat(locale).format(max), cx + radius + 4, cy + 4);
     }
   }, [value, min, max, thresholds, label, width, height, showValue, showRange, colors, locale]);
 

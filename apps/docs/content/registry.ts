@@ -36,14 +36,13 @@ const GROUPS: Record<Category, string[]> = {
     'Button', 'Input', 'TextArea', 'Checkbox', 'SearchBar', 'Toggle', 'Switch',
     'Slider', 'ColorPicker', 'Attachment', 'PhoneInput', 'SelectInput', 'Combobox',
     'Form', 'RadioGroup', 'DatePicker', 'DateRangePicker', 'TimePicker', 'Dropzone',
-    'FileDropzone', 'DropdownMenu', 'TagInput', 'SegmentedControl', 'FaqDropdown',
+    'DropdownMenu', 'TagInput', 'SegmentedControl',
     'FaqList', 'InfoTabs', 'Timeline',
   ],
   Layout: [
     'Carousel', 'PanelGroup', 'Modal', 'Confirm', 'CardWrapper', 'Container',
     'SectionTag', 'Sidebar', 'Wizard', 'Breadcrumbs', 'Drawer', 'CommandPalette',
-    'VariablePicker', 'Sheet', 'BottomSheet', 'FAB', 'Toolbar', 'Stack', 'Inline',
-    'PageHeader',
+    'VariablePicker', 'Sheet', 'FAB', 'Toolbar', 'Stack', 'Inline',
   ],
   'Data Display': [
     'Avatar', 'AvatarGroup', 'TreeView', 'Calendar', 'AvatarCard', 'ResultPill',
@@ -57,7 +56,7 @@ const GROUPS: Record<Category, string[]> = {
     'SparklineChart', 'ScatterChart', 'GaugeChart', 'SankeyChart', 'TreemapChart',
     'FunnelChart',
   ],
-  '3D': ['Network3D', 'Globe3D', 'Scene3D', 'Mindmap3D'],
+  '3D': ['Network3D', 'Globe3D', 'Scene3D'],
   Feedback: [
     'EmptyState', 'Alert', 'ProgressBar', 'AnimationButton', 'CookieBanner',
     'NotificationCenter', 'Toast', 'Banner', 'Spotlight', 'NumberTicker',

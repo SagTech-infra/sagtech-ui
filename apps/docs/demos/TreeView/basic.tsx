@@ -28,7 +28,7 @@ const nodes: TreeNode[] = [
 
 export default function Demo() {
   return (
-    <div className="w-full max-w-[360px]">
+    <div className="w-full max-w-[360px] bg-black_2 rounded-16px p-16px">
       <TreeView
         nodes={nodes}
         aria-label="Project files"

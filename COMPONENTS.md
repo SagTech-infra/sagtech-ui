@@ -28,10 +28,8 @@ Start here. Find your task, get the component name, then look it up in the secti
 | Animated counter | `NumberTicker` |
 | Global search / ⌘K palette | `CommandPalette` |
 | Slide-in settings / detail panel | `Sheet` or `Drawer` |
-| Mobile bottom panel | `BottomSheet` |
 | Display JSON data | `JsonView` |
 | Interactive node graph | `VisualGraphEditor` or `Network3D` |
-| File upload with progress | `FileDropzone` |
 | Date selection | `DatePicker` or `DateRangePicker` |
 | International phone input | `PhoneInput` |
 | Confirmation dialog (imperative) | `useConfirm` — no manual modal state needed |
@@ -43,7 +41,6 @@ Start here. Find your task, get the component name, then look it up in the secti
 | Meter / gauge | `GaugeChart` |
 | Project timeline | `GanttTimeline` |
 | 3D globe with markers | `Globe3D` |
-| 3D mind map | `Mindmap3D` |
 
 ---
 
@@ -209,12 +206,6 @@ International phone number input with country selector.
 ### `Dropzone`
 Simple drag-and-drop zone.
 
-### `FileDropzone`
-Full-featured file upload with progress tracking.
-```tsx
-<FileDropzone files={files} onFilesChange={setFiles} maxSize={5 * 1024 * 1024} accept={['image/*']} />
-```
-
 ### `Attachment`
 Chip showing an attached file name with a remove button. Use in comment boxes, message inputs.
 ```tsx
@@ -247,7 +238,7 @@ React Hook Form integration. Use for any form with validation.
 </Form>
 ```
 
-### `FaqDropdown` / `FaqList`
+### `FaqList`
 FAQ items with expand/collapse. Use instead of building accordion-style FAQ manually.
 
 ### `InfoTabs`
@@ -280,12 +271,6 @@ Side panel sliding from edge. Use for settings panels, filters, detail drawers.
 
 ### `Drawer`
 Compact slide-in panel (lighter than Sheet).
-
-### `BottomSheet`
-Mobile-friendly bottom panel.
-```tsx
-<BottomSheet isOpen={open} onClose={() => setOpen(false)}>content</BottomSheet>
-```
 
 ### `ConfirmDialog` / `useConfirm`
 Confirmation dialog without manual state management. **Use instead of `window.confirm`.**
@@ -640,12 +625,6 @@ Interactive 3D force-directed graph.
 3D globe with markers.
 ```tsx
 <Globe3D markers={[{lat:51.5,lng:-0.1,label:'London'}]} />
-```
-
-### `Mindmap3D`
-3D mind map.
-```tsx
-<Mindmap3D root={mindmapTree} />
 ```
 
 ### `Scene3D`
