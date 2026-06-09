@@ -39,7 +39,7 @@ function PaletteProvider({ children }: { children: ReactNode }) {
         id: 'nav-overview',
         label: 'Overview',
         group: 'Navigate',
-        onSelect: () => router.push('/'),
+        onSelect: () => router.push('/overview'),
       },
       {
         id: 'nav-brand',

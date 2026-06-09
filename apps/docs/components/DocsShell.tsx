@@ -10,7 +10,7 @@ import { templates } from '@/content/templates';
 import { ThemeToggle } from './ThemeToggle';
 
 const TOP_LINKS = [
-  { href: '/', label: 'Overview' },
+  { href: '/overview', label: 'Overview' },
   { href: '/templates', label: 'Templates' },
   { href: '/brand', label: 'Brand' },
   { href: '/charts', label: 'Charts gallery' },
