@@ -42,7 +42,7 @@ export default function Divider({
             'border-t border-dashed border-black_3 bg-transparent': variant === 'dashed',
           })}
         />
-        <span className="text-grey_2 text-12 font-manrope whitespace-nowrap">{label}</span>
+        <span className="text-fg-muted text-12 font-manrope whitespace-nowrap">{label}</span>
         <div
           className={classNames('flex-1 h-[1px]', {
             'bg-black_3': variant === 'solid',

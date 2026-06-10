@@ -9,7 +9,7 @@ export default function Demo() {
           {
             label: 'Overview',
             content: (
-              <p className="text-grey_4 font-manrope text-14 leading-28 mt-24px">
+              <p className="text-fg-muted font-manrope text-14 leading-28 mt-24px">
                 A high-level summary of the project scope, timeline, and deliverables.
               </p>
             ),
@@ -17,7 +17,7 @@ export default function Demo() {
           {
             label: 'Details',
             content: (
-              <p className="text-grey_4 font-manrope text-14 leading-28 mt-24px">
+              <p className="text-fg-muted font-manrope text-14 leading-28 mt-24px">
                 Technical stack, architecture decisions, and integration points.
               </p>
             ),
@@ -25,7 +25,7 @@ export default function Demo() {
           {
             label: 'Activity',
             content: (
-              <p className="text-grey_4 font-manrope text-14 leading-28 mt-24px">
+              <p className="text-fg-muted font-manrope text-14 leading-28 mt-24px">
                 Recent changes and a log of who did what and when.
               </p>
             ),

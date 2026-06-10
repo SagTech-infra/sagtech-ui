@@ -43,7 +43,7 @@ export default function ProgressBar({
     <div className={classNames('w-full', className)}>
       {showLabel && (
         <div className="flex justify-end mb-4px">
-          <span className="text-grey_4 text-12 font-manrope">
+          <span className="text-fg-muted text-12 font-manrope">
             {label || `${percentage}%`}
           </span>
         </div>

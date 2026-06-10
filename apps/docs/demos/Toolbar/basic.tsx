@@ -5,7 +5,7 @@ const Btn = ({ children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElemen
   <button
     type="button"
     {...props}
-    className="inline-flex items-center justify-center w-[32px] h-[32px] rounded-[6px] text-grey_4 hover:bg-black_3 hover:text-white_4 cursor-pointer transition-colors"
+    className="inline-flex items-center justify-center w-[32px] h-[32px] rounded-[6px] text-fg-muted hover:bg-black_3 hover:text-fg-primary cursor-pointer transition-colors"
   >
     {children}
   </button>

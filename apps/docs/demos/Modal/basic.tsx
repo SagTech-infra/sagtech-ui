@@ -18,7 +18,7 @@ export default function Demo() {
           </>
         }
       >
-        <p className="font-manrope text-14 text-grey_4">
+        <p className="font-manrope text-14 text-fg-muted">
           This action is irreversible. The campaign and all associated leads will be removed.
         </p>
       </Modal>

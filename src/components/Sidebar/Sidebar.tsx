@@ -106,7 +106,7 @@ function SidebarNavItem({
     'flex items-center gap-12px px-12px py-10px rounded-8px cursor-pointer transition-colors duration-200 font-manrope text-14 leading-24 w-full',
     {
       'bg-pr_purple/10 text-pr_purple border-l-2 border-pr_purple': item.active,
-      'text-grey_4 hover:bg-black_3 hover:text-white_4': !item.active,
+      'text-fg-secondary hover:bg-black_3 hover:text-fg-primary': !item.active,
     },
   );
 
@@ -146,7 +146,7 @@ function SidebarNavItem({
                       'flex items-center gap-12px px-12px py-8px rounded-8px cursor-pointer transition-colors duration-200 font-manrope text-14 leading-24 no-underline',
                       {
                         'text-pr_purple': child.active,
-                        'text-grey_4 hover:bg-black_3 hover:text-white_4': !child.active,
+                        'text-fg-secondary hover:bg-black_3 hover:text-fg-primary': !child.active,
                       },
                     )}
                   >
@@ -220,7 +220,7 @@ export default function Sidebar({
           <button
             type="button"
             onClick={onToggleCollapse}
-            className="mt-auto flex items-center justify-center p-10px rounded-8px cursor-pointer transition-colors duration-200 text-grey_4 hover:bg-black_3 hover:text-white_4"
+            className="mt-auto flex items-center justify-center p-10px rounded-8px cursor-pointer transition-colors duration-200 text-fg-secondary hover:bg-black_3 hover:text-fg-primary"
             aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
             <CollapseIcon collapsed={collapsed} />

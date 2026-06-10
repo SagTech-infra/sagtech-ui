@@ -28,7 +28,7 @@ function UploadCloudIcon() {
       viewBox="0 0 48 48"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="text-grey_2"
+      className="text-fg-muted"
     >
       <path
         d="M16 32L24 24L32 32"
@@ -70,7 +70,7 @@ function FileIcon() {
       viewBox="0 0 16 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="text-grey_2 flex-shrink-0"
+      className="text-fg-muted flex-shrink-0"
     >
       <path
         d="M9.33333 1.33333H4C3.64638 1.33333 3.30724 1.47381 3.05719 1.72386C2.80714 1.9739 2.66667 2.31304 2.66667 2.66667V13.3333C2.66667 13.687 2.80714 14.0261 3.05719 14.2761C3.30724 14.5262 3.64638 14.6667 4 14.6667H12C12.3536 14.6667 12.6928 14.5262 12.9428 14.2761C13.1929 14.0261 13.3333 13.687 13.3333 13.3333V5.33333L9.33333 1.33333Z"
@@ -221,11 +221,11 @@ export default function Dropzone({
       >
         <UploadCloudIcon />
         <div className="flex flex-col items-center gap-4px">
-          <span className="text-14 text-grey_4 font-manrope">Drag & drop files here</span>
-          <span className="text-12 text-grey_2 font-manrope">or click to browse</span>
+          <span className="text-14 text-fg-secondary font-manrope">Drag & drop files here</span>
+          <span className="text-12 text-fg-muted font-manrope">or click to browse</span>
         </div>
         {accept && (
-          <span className="text-10 text-grey_1 font-manrope">
+          <span className="text-10 text-fg-muted font-manrope">
             Accepted: {accept}
           </span>
         )}
@@ -249,16 +249,16 @@ export default function Dropzone({
               className="flex items-center gap-8px py-8px border-b border-black_3"
             >
               <FileIcon />
-              <span className="text-14 text-grey_4 font-manrope flex-1 truncate">
+              <span className="text-14 text-fg-secondary font-manrope flex-1 truncate">
                 {file.name}
               </span>
-              <span className="text-12 text-grey_2 font-manrope flex-shrink-0">
+              <span className="text-12 text-fg-muted font-manrope flex-shrink-0">
                 {formatFileSize(file.size)}
               </span>
               <button
                 type="button"
                 onClick={() => handleRemove(index)}
-                className="flex-shrink-0 text-grey_2 hover:text-error transition-colors cursor-pointer p-4px"
+                className="flex-shrink-0 text-fg-muted hover:text-error transition-colors cursor-pointer p-4px"
               >
                 <RemoveIcon />
               </button>

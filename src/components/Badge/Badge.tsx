@@ -15,7 +15,7 @@ const filledColorMap = {
   success: 'bg-success text-white',
   warning: 'bg-warning text-black_1',
   error: 'bg-error text-white',
-  grey: 'bg-black_3 text-grey_4',
+  grey: 'bg-black_3 text-fg-muted',
 } as const;
 
 const outlinedColorMap = {
@@ -24,7 +24,7 @@ const outlinedColorMap = {
   success: 'border border-success text-success',
   warning: 'border border-warning text-warning',
   error: 'border border-error text-error',
-  grey: 'border border-black_3 text-grey_4',
+  grey: 'border border-black_3 text-fg-muted',
 } as const;
 
 const subtleColorMap = {
@@ -33,7 +33,7 @@ const subtleColorMap = {
   success: 'bg-success/10 text-success',
   warning: 'bg-warning/10 text-warning',
   error: 'bg-error/10 text-error',
-  grey: 'bg-black_3/10 text-grey_4',
+  grey: 'bg-black_3/10 text-fg-muted',
 } as const;
 
 const dotColorMap = {

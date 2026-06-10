@@ -14,7 +14,7 @@ export default function Demo() {
       >
         Delete file
       </button>
-      <span className="text-grey_4 text-14 font-manrope">Result: {result}</span>
+      <span className="text-fg-muted text-14 font-manrope">Result: {result}</span>
       <ConfirmDialog
         open={open}
         onOpenChange={setOpen}

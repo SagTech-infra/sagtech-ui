@@ -227,7 +227,7 @@ export function Spotlight({
             className="rounded-16px bg-black_2 border border-black_3 p-20px shadow-6xl pointer-events-auto"
           >
             {(step || totalSteps) && (
-              <div className="text-12 text-grey_2 font-manrope mb-8px">
+              <div className="text-12 text-fg-muted font-manrope mb-8px">
                 {step ?? '?'}
                 {totalSteps ? ` / ${totalSteps}` : ''}
               </div>
@@ -235,13 +235,13 @@ export function Spotlight({
             {title && (
               <h3
                 id="sagtech-spotlight-title"
-                className="font-manrope text-16 font-semibold text-white_4 mb-8px break-words"
+                className="font-manrope text-16 font-semibold text-fg-primary mb-8px break-words"
               >
                 {title}
               </h3>
             )}
             {description && (
-              <p className="font-manrope text-14 text-grey_4 leading-18 break-words">
+              <p className="font-manrope text-14 text-fg-muted leading-18 break-words">
                 {description}
               </p>
             )}
@@ -249,7 +249,7 @@ export function Spotlight({
               <button
                 type="button"
                 onClick={skip}
-                className="px-12px py-6px rounded-8px text-12 text-grey_4 hover:text-white_4 cursor-pointer font-manrope"
+                className="px-12px py-6px rounded-8px text-12 text-fg-muted hover:text-fg-primary cursor-pointer font-manrope"
               >
                 Skip
               </button>
@@ -257,7 +257,7 @@ export function Spotlight({
                 <button
                   type="button"
                   onClick={onNext}
-                  className="px-16px py-6px rounded-8px bg-pr_purple hover:bg-sec_purple text-12 text-white_4 cursor-pointer font-manrope font-semibold"
+                  className="px-16px py-6px rounded-8px bg-pr_purple hover:bg-sec_purple text-12 text-white cursor-pointer font-manrope font-semibold"
                 >
                   Next
                 </button>

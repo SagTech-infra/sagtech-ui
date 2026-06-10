@@ -86,7 +86,7 @@ function Image({
         <div className="top-0 left-0 absolute z-[10] h-full w-full overflow-hidden" style={{ borderRadius: rounded ? `${rounded}` : undefined }}>
           <div className="h-full w-full bg-gradient-to-r from-black_2 via-black_3 to-black_2 bg-[length:200%_100%]" style={{ animation: 'shimmer 1.5s infinite' }} />
           <div className="absolute inset-0 flex items-center justify-center">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" className="text-grey_1">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" className="text-fg-muted">
               <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.5"/>
               <circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" strokeWidth="1.5"/>
               <path d="M21 15L16 10L5 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -100,7 +100,7 @@ function Image({
             <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.5"/>
             <path d="M3 3L21 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
           </svg>
-          <span className="text-grey_2 font-manrope text-12">Failed to load image</span>
+          <span className="text-fg-muted font-manrope text-12">Failed to load image</span>
         </div>
       )}
 

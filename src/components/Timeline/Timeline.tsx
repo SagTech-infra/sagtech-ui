@@ -124,10 +124,10 @@ export function Timeline({
               </div>
             </div>
             <div className="mt-16px flex flex-col gap-8px">
-              <Typography tag="h3" color="text-white_4">
+              <Typography tag="h3" color="text-current">
                 {text.title}
               </Typography>
-              <Typography type="BodyM" color="text-grey_4">
+              <Typography type="BodyM" color="text-current">
                 {text.text}
               </Typography>
             </div>

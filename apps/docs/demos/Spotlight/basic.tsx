@@ -7,11 +7,11 @@ export default function Demo() {
   const ref = useRef<HTMLButtonElement>(null);
   return (
     <div className="p-40px flex flex-col gap-32px">
-      <h2 className="font-manrope text-18 text-white_4">Welcome tour</h2>
+      <h2 className="font-manrope text-18 text-fg-primary">Welcome tour</h2>
       <button
         ref={ref}
         type="button"
-        className="self-start px-24px py-12px rounded-8px bg-pr_purple text-white_4 font-manrope text-14"
+        className="self-start px-24px py-12px rounded-8px bg-pr_purple text-white font-manrope text-14"
       >
         Click me first
       </button>

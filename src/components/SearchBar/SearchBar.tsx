@@ -45,7 +45,7 @@ export default function SearchBar({
         id={id}
         placeholder={placeholder}
         autoComplete="off"
-        className="bg-transparent font-medium w-full text-16 leading-24 outline-none placeholder:text-grey_2 text-white_4 caret-pr_purple"
+        className="bg-transparent font-medium w-full text-16 leading-24 outline-none placeholder:text-grey_2 text-fg-primary caret-pr_purple"
         {...inputProps}
         {...rest}
       />

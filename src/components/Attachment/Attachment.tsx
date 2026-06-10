@@ -161,7 +161,7 @@ export function Attachment({
           <div className="pointer inline-flex items-center gap-12px" key={file.name}>
             <Icon icon="attach" size={24} color={tokens.colors.white_4} />
             <div className="flex flex-col">
-              <Typography tag="h4" color="text-white_4">
+              <Typography tag="h4" color="text-current">
                 {file.name}
               </Typography>
               <p data-tid="attach-variant" className={variantStyle}>
@@ -175,7 +175,7 @@ export function Attachment({
                 icon="chevrondown"
                 size={20}
                 color="currentColor"
-                className="text-grey_4 hover:text-white_4"
+                className="text-fg-muted hover:text-fg-primary"
               />
             </button>
           </div>

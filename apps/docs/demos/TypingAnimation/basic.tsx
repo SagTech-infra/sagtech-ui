@@ -4,7 +4,7 @@ import { TypingAnimation } from '@sagtech-infra/ui';
 export default function Demo() {
   return (
     <div className="flex flex-col gap-16px">
-      <span className="font-manrope text-24 text-white_4">
+      <span className="font-manrope text-24 text-fg-primary">
         <TypingAnimation>Hello, world!</TypingAnimation>
       </span>
       <span className="font-manrope text-24 text-pr_purple">

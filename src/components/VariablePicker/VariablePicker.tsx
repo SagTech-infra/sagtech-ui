@@ -121,7 +121,7 @@ export default function VariablePicker({
           onChange={(e) => setQuery(e.target.value)}
           placeholder={searchPlaceholder}
           autoFocus
-          className="bg-black_1 border border-solid border-black_3 focus:border-pr_purple rounded-8px h-40px px-12px text-14 text-white_4 font-manrope outline-none transition-colors"
+          className="bg-black_1 border border-solid border-black_3 focus:border-pr_purple rounded-8px h-40px px-12px text-14 text-fg-primary font-manrope outline-none transition-colors"
         />
 
         {sources.length > 0 && (
@@ -133,7 +133,7 @@ export default function VariablePicker({
                 'text-12 px-10px py-4px rounded-circle font-manrope transition-colors cursor-pointer',
                 sourceFilter === null
                   ? 'bg-pr_purple text-white'
-                  : 'border border-solid border-grey_1 text-grey_4 hover:text-white_4 hover:border-white_4',
+                  : 'border border-solid border-grey_1 text-fg-muted hover:text-fg-primary hover:border-white_4',
               )}
             >
               All
@@ -147,7 +147,7 @@ export default function VariablePicker({
                   'text-12 px-10px py-4px rounded-circle font-manrope transition-colors cursor-pointer',
                   sourceFilter === s
                     ? 'bg-pr_purple text-white'
-                    : 'border border-solid border-grey_1 text-grey_4 hover:text-white_4 hover:border-white_4',
+                    : 'border border-solid border-grey_1 text-fg-muted hover:text-fg-primary hover:border-white_4',
                 )}
               >
                 {s}
@@ -159,7 +159,7 @@ export default function VariablePicker({
         <div className="border border-solid border-black_3 rounded-8px overflow-hidden">
           {filtered.length === 0 ? (
             <div className="py-32px text-center">
-              <Typography tag="p" color="text-grey_2" type="BodyS">
+              <Typography tag="p" color="text-current" type="BodyS">
                 No variables match your filters
               </Typography>
             </div>
@@ -191,14 +191,14 @@ export default function VariablePicker({
                           <code className="text-12 font-mono text-pr_purple break-all">{v.token}</code>
                           {v.source && <Badge color="purple" variant="subtle" size="sm">{v.source}</Badge>}
                         </div>
-                        <div className="mt-2px text-14 text-white_4 font-manrope">{v.label}</div>
+                        <div className="mt-2px text-14 text-fg-primary font-manrope">{v.label}</div>
                         {v.description && (
-                          <div className="mt-2px text-12 text-grey_4 font-manrope">
+                          <div className="mt-2px text-12 text-fg-muted font-manrope">
                             {v.description}
                           </div>
                         )}
                         {v.example && (
-                          <div className="mt-4px text-12 text-grey_2 font-manrope italic">
+                          <div className="mt-4px text-12 text-fg-muted font-manrope italic">
                             Example: {v.example}
                           </div>
                         )}
@@ -210,7 +210,7 @@ export default function VariablePicker({
                           e.stopPropagation();
                           handleCopy(v.token);
                         }}
-                        className="text-grey_4 hover:text-white_4 cursor-pointer shrink-0 p-4px"
+                        className="text-fg-muted hover:text-fg-primary cursor-pointer shrink-0 p-4px"
                       >
                         <CopyIcon />
                       </button>

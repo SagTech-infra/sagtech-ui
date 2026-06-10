@@ -38,10 +38,10 @@ export default function AvatarCard({
           <Typography
             text={name}
             tag="h3"
-            color="text-white_4"
+            color="text-current"
             className="!text-[24px] 2xl:!text-32"
           />
-          <Typography text={info} type="LabelsS" color="text-grey_4" />
+          <Typography text={info} type="LabelsS" color="text-current" />
         </div>
       </CardWrapper>
     </div>

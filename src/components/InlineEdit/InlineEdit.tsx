@@ -120,7 +120,7 @@ export default function InlineEdit({
         onClick={() => !disabled && setEditing(true)}
         disabled={disabled}
         className={classNames(
-          'group inline-flex items-center gap-8px rounded-8px px-8px py-4px -mx-8px font-manrope text-14 text-white_4 cursor-text transition-colors',
+          'group inline-flex items-center gap-8px rounded-8px px-8px py-4px -mx-8px font-manrope text-14 text-fg-primary cursor-text transition-colors',
           'disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-transparent',
           {
             'hover:bg-black_2': !disabled,
@@ -131,11 +131,11 @@ export default function InlineEdit({
         {renderDisplay ? (
           renderDisplay(value || '')
         ) : (
-          <span className={value ? '' : 'text-grey_2 italic'}>
+          <span className={value ? '' : 'text-fg-muted italic'}>
             {value || placeholder || 'Click to edit'}
           </span>
         )}
-        <span className="opacity-0 group-hover:opacity-60 text-grey_4 transition-opacity">
+        <span className="opacity-0 group-hover:opacity-60 text-fg-muted transition-opacity">
           <PencilIcon />
         </span>
       </button>
@@ -161,7 +161,7 @@ export default function InlineEdit({
         disabled={saving}
         aria-invalid={Boolean(error) || undefined}
         {...(multiline ? { rows: 3 } : {})}
-        className="bg-black_1 border border-solid border-pr_purple rounded-8px px-8px py-4px text-14 text-white_4 font-manrope outline-none w-full min-w-[120px] resize-y"
+        className="bg-black_1 border border-solid border-pr_purple rounded-8px px-8px py-4px text-14 text-fg-primary font-manrope outline-none w-full min-w-[120px] resize-y"
       />
       {error && (
         <span className="text-12 font-manrope text-error" role="alert">

@@ -80,15 +80,15 @@ export default function CookieBanner({
           <div className="text-center">{children}</div>
         ) : (
           <div className="text-center">
-            <h1 className="text-16 font-semibold leading-24 text-white_4">{title}</h1>
-            <p className="mt-4px text-14 font-medium leading-24 text-grey_4">
+            <h1 className="text-16 font-semibold leading-24 text-white">{title}</h1>
+            <p className="mt-4px text-14 font-medium leading-24 text-white">
               {description}
               {privacyHref && (
                 <>
                   {' '}
                   Read our&nbsp;
                   <a href={privacyHref}>
-                    <span className="underline text-white_4">{privacyLabel}</span>
+                    <span className="underline text-white">{privacyLabel}</span>
                   </a>
                 </>
               )}
@@ -117,7 +117,7 @@ export default function CookieBanner({
             buttonSize="small"
             classes="button h-[32px]"
           >
-            <Typography text={declineText} type="Buttons" className="!text-14" color="text-white_4" />
+            <Typography text={declineText} type="Buttons" className="!text-14" color="text-white" />
           </Button>
         </div>
       </div>

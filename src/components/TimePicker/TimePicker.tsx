@@ -118,7 +118,7 @@ function TimeSelect({
         disabled={disabled}
         onClick={openDropdown}
         className={classNames(
-          "bg-black_1 border border-solid rounded-8px text-white_4 text-14 font-manrope px-8px py-4px cursor-pointer",
+          "bg-black_1 border border-solid rounded-8px text-fg-primary text-14 font-manrope px-8px py-4px cursor-pointer",
           "disabled:cursor-not-allowed disabled:opacity-50",
           open
             ? "border-pr_purple"
@@ -159,8 +159,8 @@ function TimeSelect({
                 className={classNames(
                   "px-8px py-4px text-14 font-manrope cursor-pointer text-center",
                   selected
-                    ? "bg-pr_purple text-white_4"
-                    : "text-white_4 hover:bg-black_3",
+                    ? "bg-pr_purple text-white"
+                    : "text-fg-primary hover:bg-black_3",
                 )}
               >
                 {String(opt).padStart(2, "0")}
@@ -207,7 +207,7 @@ export default function TimePicker({
       )}
     >
       {label && (
-        <span className="font-manrope text-12 font-semibold text-grey_4">
+        <span className="font-manrope text-12 font-semibold text-fg-muted">
           {label}
         </span>
       )}
@@ -219,7 +219,7 @@ export default function TimePicker({
           disabled={disabled}
           onChange={(h) => onChange?.({ hours: h, minutes })}
         />
-        <span className="text-grey_4">:</span>
+        <span className="text-fg-muted">:</span>
         <TimeSelect
           ariaLabel="Minutes"
           value={selectedMinute}

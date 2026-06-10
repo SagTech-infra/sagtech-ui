@@ -2,7 +2,7 @@
 import { Inline } from '@sagtech-infra/ui';
 
 const Chip = ({ label }: { label: string }) => (
-  <div className="bg-black_2 border border-grey_2 rounded-24px px-12px py-4px text-white_4 font-manrope text-14">
+  <div className="bg-black_2 border border-grey_2 rounded-24px px-12px py-4px text-fg-primary font-manrope text-14">
     {label}
   </div>
 );

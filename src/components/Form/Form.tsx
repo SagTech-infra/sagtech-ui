@@ -103,7 +103,7 @@ export function FormLabel({
       htmlFor={formItemId}
       data-error={Boolean(error) || undefined}
       className={classNames(
-        'text-12 font-bold leading-18 text-white_4 data-[error=true]:text-error',
+        'text-12 font-bold leading-18 text-fg-primary data-[error=true]:text-error',
         className,
       )}
       {...rest}
@@ -135,7 +135,7 @@ export function FormHint({
   return (
     <p
       id={formHintId}
-      className={classNames('text-12 text-grey_4 leading-16', className)}
+      className={classNames('text-12 text-fg-muted leading-16', className)}
       {...rest}
     >
       {children}

@@ -4,7 +4,7 @@ import { NumberTicker } from '@sagtech-infra/ui';
 export default function Demo() {
   return (
     <div className="flex flex-wrap items-center gap-32px">
-      <span className="font-orbitron text-48 text-white_4">
+      <span className="font-orbitron text-48 text-fg-primary">
         <NumberTicker value={12345} />
       </span>
       <span className="font-manrope text-32 text-success">

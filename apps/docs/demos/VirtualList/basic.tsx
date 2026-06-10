@@ -15,7 +15,7 @@ export default function Demo() {
         estimateSize={48}
         className="bg-black_1 border border-solid border-black_3 rounded-8px"
         renderItem={(item) => (
-          <div className="px-16px py-12px border-b border-solid border-black_3 text-14 text-white_4 font-manrope">
+          <div className="px-16px py-12px border-b border-solid border-black_3 text-14 text-fg-primary font-manrope">
             {item.text}
           </div>
         )}

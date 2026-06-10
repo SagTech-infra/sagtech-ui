@@ -67,7 +67,7 @@ export default function Steps({ stepsList, isPhases = false }: StepsProps) {
                   className={classNames(
                     `rounded-[5em] ${
                       icon ? 'w-[30px] h-[30px]' : 'size-24px'
-                    } bg-pr_purple text-white_4 transition-all flex justify-center will-change-transform items-center`,
+                    } bg-pr_purple text-white transition-all flex justify-center will-change-transform items-center`,
                     { 'scale-150': isActive },
                   )}
                 >
@@ -81,14 +81,14 @@ export default function Steps({ stepsList, isPhases = false }: StepsProps) {
               <div className={`flex flex-col gap-[${gap}px] h-fit`}>
                 <Typography
                   tag="h4"
-                  className={classNames('transition-all text-[18px] text-grey_4', {
-                    'text-white_4 scale-[1.02] translate-x-6px': isActive,
+                  className={classNames('transition-all text-[18px] text-fg-muted', {
+                    'text-fg-primary scale-[1.02] translate-x-6px': isActive,
                   })}
                   text={title}
                 />
                 <Typography
-                  className={classNames('transition-all text-[14px] text-grey_4', {
-                    'text-white_4 scale-[1.02] translate-x-6px': isActive,
+                  className={classNames('transition-all text-[14px] text-fg-muted', {
+                    'text-fg-primary scale-[1.02] translate-x-6px': isActive,
                   })}
                   type="BodyS"
                   text={description}

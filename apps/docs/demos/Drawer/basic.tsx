@@ -9,7 +9,7 @@ export default function Demo() {
       <Button text="Open Drawer" variant="primary" buttonSize="large" onClick={() => setIsOpen(true)} />
       <Drawer isOpen={isOpen} onClose={() => setIsOpen(false)} title="Drawer Title">
         <div className="flex flex-col gap-16px">
-          <p className="font-manrope text-14 text-grey_4 leading-24">
+          <p className="font-manrope text-14 text-fg-muted leading-24">
             This panel slides in from the side. Close it with the X button, the Escape key, or by
             clicking the overlay.
           </p>

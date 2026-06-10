@@ -17,7 +17,7 @@ export default function ResultPill({ title = 'Some txt', info, classes }: Result
       }`}
     >
       <Typography text={title} tag="h2" color="text-pr_purple" />
-      <Typography text={info} tag="h4" color="text-grey_4" />
+      <Typography text={info} tag="h4" color="text-current" />
     </CardWrapper>
   );
 }

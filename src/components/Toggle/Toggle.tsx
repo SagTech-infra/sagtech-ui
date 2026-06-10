@@ -79,7 +79,7 @@ export default function Toggle({
           )}
         />
       </button>
-      {label && <span className="font-manrope text-14 text-grey_4">{label}</span>}
+      {label && <span className="font-manrope text-14 text-fg-secondary">{label}</span>}
     </label>
   );
 }

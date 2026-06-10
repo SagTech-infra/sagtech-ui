@@ -15,8 +15,8 @@ export default function Demo() {
         <Wizard.Content className="min-h-[160px] bg-black_2 border border-solid border-black_3 rounded-16px p-24px">
           {({ currentStep }) => (
             <div className="flex flex-col gap-8px">
-              <h3 className="text-white_4 font-orbitron">{currentStep.title}</h3>
-              <p className="text-grey_4 font-manrope text-14">{currentStep.description}</p>
+              <h3 className="text-fg-primary font-orbitron">{currentStep.title}</h3>
+              <p className="text-fg-muted font-manrope text-14">{currentStep.description}</p>
             </div>
           )}
         </Wizard.Content>

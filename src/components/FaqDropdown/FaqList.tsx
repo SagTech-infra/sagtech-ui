@@ -21,7 +21,7 @@ function ChevrondownIcon({
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="text-white_4"
+      className="text-fg-primary"
     >
       <path
         d="M6 9L12 15L18 9"
@@ -75,7 +75,7 @@ export default function FaqList({
             >
               <Typography
                 tag={titleTag}
-                color="text-white_4"
+                color="text-current"
                 className={`sm:!text-[24px] sm:leading-[48px] 2xl:!text-24px text-left ${titleClassName}`}
                 text={title}
               />
@@ -101,7 +101,7 @@ export default function FaqList({
               <Typography
                 type="BodyL"
                 className={`xl:pt-[0px] sm:pt-8px pt-16px ${descriptionClassName}`}
-                color="text-white_4"
+                color="text-current"
               >
                 {resolvedRenderDescription(description)}
               </Typography>

@@ -31,7 +31,7 @@ export function KBD({ keys, separator = '+', size = 'sm', className }: KBDProps)
   return (
     <span
       className={classNames(
-        'inline-flex items-center font-manrope text-grey_4 select-none align-middle',
+        'inline-flex items-center font-manrope text-fg-muted select-none align-middle',
         className,
       )}
       aria-label={keys.join(` ${separator === ' ' ? 'then' : separator} `)}
@@ -39,7 +39,7 @@ export function KBD({ keys, separator = '+', size = 'sm', className }: KBDProps)
       {keys.map((key, index) => (
         <React.Fragment key={`${key}-${index}`}>
           {index > 0 && separator !== ' ' && (
-            <span className={classNames('text-grey_2', separatorSizeClasses[size])} aria-hidden="true">
+            <span className={classNames('text-fg-muted', separatorSizeClasses[size])} aria-hidden="true">
               {separator}
             </span>
           )}
@@ -50,7 +50,7 @@ export function KBD({ keys, separator = '+', size = 'sm', className }: KBDProps)
           )}
           <kbd
             className={classNames(
-              'inline-flex items-center justify-center rounded-[4px] border border-black_3 bg-black_2 text-grey_4 font-manrope font-medium leading-none',
+              'inline-flex items-center justify-center rounded-[4px] border border-black_3 bg-black_2 text-fg-muted font-manrope font-medium leading-none',
               sizeClasses[size],
             )}
           >

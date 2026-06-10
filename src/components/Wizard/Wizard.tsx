@@ -68,7 +68,7 @@ function Progress({ className }: { className?: string }) {
                     {
                       'bg-pr_purple text-white': isCurrent,
                       'bg-success text-white': isCompleted && !isCurrent,
-                      'bg-black_3 text-grey_2': !isCurrent && !isCompleted,
+                      'bg-black_3 text-fg-muted': !isCurrent && !isCompleted,
                     },
                   )}
                 >
@@ -88,15 +88,15 @@ function Progress({ className }: { className?: string }) {
                 </span>
                 <span
                   className={classNames('text-14 font-manrope font-semibold truncate', {
-                    'text-white_4': isCurrent,
-                    'text-grey_4': !isCurrent,
+                    'text-fg-primary': isCurrent,
+                    'text-fg-muted': !isCurrent,
                   })}
                 >
                   {step.title}
                 </span>
               </div>
               {step.description && (
-                <span className="text-12 text-grey_2 font-manrope pl-32px truncate hidden sm:inline">
+                <span className="text-12 text-fg-muted font-manrope pl-32px truncate hidden sm:inline">
                   {step.description}
                 </span>
               )}

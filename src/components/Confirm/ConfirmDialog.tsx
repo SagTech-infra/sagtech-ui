@@ -109,7 +109,7 @@ export default function ConfirmDialog({
               )}
               <Typography
                 tag="h3"
-                color="text-white_4"
+                color="text-current"
                 id="sagtech-confirm-title"
               >
                 {title}
@@ -118,7 +118,7 @@ export default function ConfirmDialog({
                 <Typography
                   tag="p"
                   type="BodyM"
-                  color="text-grey_4"
+                  color="text-current"
                   id="sagtech-confirm-desc"
                 >
                   {description}

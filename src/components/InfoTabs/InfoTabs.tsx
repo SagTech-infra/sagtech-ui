@@ -36,7 +36,7 @@ export default function InfoTabs({ title, list, renderModal }: Props) {
 
   return (
     <div className="flex flex-col justify-between gap-40px w-full max-w-300">
-      <Typography tag="h2" color="text-white_4" className="w-full">
+      <Typography tag="h2" color="text-current" className="w-full">
         {title}
       </Typography>
       <div className="grid grid-cols-1 xs:grid-cols-[1fr_1fr] gap-24px w-full">
@@ -56,7 +56,7 @@ export default function InfoTabs({ title, list, renderModal }: Props) {
                   >
                     <Typography
                       tag="h4"
-                      color={activeTab.title === item.title ? 'text-pr_purple' : 'text-white_4'}
+                      color={activeTab.title === item.title ? 'text-pr_purple' : 'text-current'}
                       className="sm:text-[24px]! sm:leading-48px 2xl:text-24px! text-left"
                       text={item.title}
                     />
@@ -88,10 +88,10 @@ export default function InfoTabs({ title, list, renderModal }: Props) {
                   .map((item) => (
                     <Fragment key={item.title}>
                       <div className="mb-30px">
-                        <Typography type="TabInfoTitle" color="text-white_4" className="mb-10px">
+                        <Typography type="TabInfoTitle" color="text-current" className="mb-10px">
                           {item.title}
                         </Typography>
-                        <Typography tag="p" color="text-grey_4">
+                        <Typography tag="p" color="text-current">
                           {item.description}
                         </Typography>
                       </div>

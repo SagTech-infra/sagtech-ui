@@ -44,7 +44,7 @@ function PhoneInput({
   return (
     <div ref={mergeRefs(containerRef, ref)} className="flex flex-col gap-6px">
       {label && (
-        <label htmlFor={props.name} className="text-12 font-bold leading-18 text-white_1">
+        <label htmlFor={props.name} className="text-12 font-bold leading-18 text-fg-secondary">
           {label}
         </label>
       )}
@@ -60,12 +60,12 @@ function PhoneInput({
               width: dropdownWidth ? `${dropdownWidth}px` : undefined,
             },
             listItemClassName:
-              'px-12px! py-8px! text-14! cursor-pointer! hover:bg-black_2! text-white_4!',
-            listItemCountryNameClassName: 'text-white_4!',
-            listItemDialCodeClassName: 'text-grey_4!',
+              'px-12px! py-8px! text-14! cursor-pointer! hover:bg-black_2! text-fg-primary!',
+            listItemCountryNameClassName: 'text-fg-primary!',
+            listItemDialCodeClassName: 'text-fg-muted!',
           },
         }}
-        inputClassName="bg-transparent! border-0! text-white_4! placeholder:text-grey_4 h-full! flex-1! text-14! focus:outline-none! focus:ring-0! px-16px!"
+        inputClassName="bg-transparent! border-0! text-fg-primary! placeholder:text-grey_4 h-full! flex-1! text-14! focus:outline-none! focus:ring-0! px-16px!"
         className={classNames(
           'w-full bg-black_1! border! border-solid! rounded-16px! h-56px!',
           {

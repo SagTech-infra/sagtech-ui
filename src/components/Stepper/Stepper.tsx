@@ -22,16 +22,16 @@ const indicatorBaseClasses =
   'flex-shrink-0 inline-flex items-center justify-center w-[28px] h-[28px] rounded-full font-manrope text-12 font-semibold border-2 transition-colors duration-150 select-none';
 
 const statusClasses: Record<StepperStatus, string> = {
-  pending: 'bg-black_2 border-black_3 text-grey_2',
+  pending: 'bg-black_2 border-black_3 text-fg-muted',
   active: 'bg-pr_purple border-pr_purple text-white',
   complete: 'bg-pr_purple border-pr_purple text-white',
   error: 'bg-error border-error text-white',
 };
 
 const labelStatusClasses: Record<StepperStatus, string> = {
-  pending: 'text-grey_2',
-  active: 'text-white_4',
-  complete: 'text-white_4',
+  pending: 'text-fg-muted',
+  active: 'text-fg-primary',
+  complete: 'text-fg-primary',
   error: 'text-error',
 };
 
@@ -139,7 +139,7 @@ export function Stepper({
               {step.label}
             </div>
             {step.description && (
-              <div className="text-12 text-grey_4 mt-2px leading-16 break-words">
+              <div className="text-12 text-fg-muted mt-2px leading-16 break-words">
                 {step.description}
               </div>
             )}

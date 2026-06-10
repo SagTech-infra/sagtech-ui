@@ -20,7 +20,7 @@ export default function Demo() {
           </>
         }
       >
-        <p className="font-manrope text-14 text-grey_4 leading-24">
+        <p className="font-manrope text-14 text-fg-muted leading-24">
           A Sheet slides in from any edge and uses the shared overlay stack, so multiple sheets can be open at once.
         </p>
       </Sheet>

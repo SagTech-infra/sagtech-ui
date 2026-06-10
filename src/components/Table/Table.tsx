@@ -126,8 +126,8 @@ export default function Table<T extends Record<string, unknown>>({
                     alignClasses[col.align ?? 'left'],
                     {
                       'text-pr_purple': sort?.key === col.key,
-                      'text-grey_2': sort?.key !== col.key,
-                      'cursor-pointer select-none hover:text-white_4 transition-colors': col.sortable,
+                      'text-fg-muted': sort?.key !== col.key,
+                      'cursor-pointer select-none hover:text-fg-primary transition-colors': col.sortable,
                     },
                   )}
                   style={col.width ? { width: col.width } : undefined}
@@ -151,7 +151,7 @@ export default function Table<T extends Record<string, unknown>>({
               <tr>
                 <td
                   colSpan={columns.length}
-                  className="text-center text-grey_2 font-manrope text-14 py-48px"
+                  className="text-center text-fg-muted font-manrope text-14 py-48px"
                 >
                   {emptyText}
                 </td>
@@ -181,8 +181,8 @@ export default function Table<T extends Record<string, unknown>>({
                         {
                           'py-12px px-20px': compact,
                           'py-20px px-24px': !compact,
-                          'text-white_4 font-medium': ci === 0,
-                          'text-grey_4': ci !== 0,
+                          'text-fg-primary font-medium': ci === 0,
+                          'text-fg-muted': ci !== 0,
                         },
                       )}
                       style={col.width ? { width: col.width } : undefined}

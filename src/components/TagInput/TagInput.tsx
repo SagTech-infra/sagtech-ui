@@ -114,7 +114,7 @@ export default function TagInput({
                   e.stopPropagation();
                   removeTag(index);
                 }}
-                className="hover:text-white_4 cursor-pointer transition-colors"
+                className="hover:text-fg-primary cursor-pointer transition-colors"
                 aria-label={`Remove ${tag}`}
               >
                 <svg
@@ -147,12 +147,12 @@ export default function TagInput({
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             placeholder={value.length === 0 ? placeholder : ''}
-            className="bg-transparent outline-none text-14 text-white_4 placeholder:text-grey_2 flex-1 min-w-[80px]"
+            className="bg-transparent outline-none text-14 text-fg-primary placeholder:text-grey_2 flex-1 min-w-[80px]"
           />
         )}
 
         {isMaxReached && !disabled && (
-          <span className="text-grey_2 text-12 font-manrope">
+          <span className="text-fg-muted text-12 font-manrope">
             Max {maxTags} tags
           </span>
         )}

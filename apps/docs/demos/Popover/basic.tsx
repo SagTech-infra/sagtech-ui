@@ -14,8 +14,8 @@ export default function Demo() {
         }
       >
         <div className="flex flex-col gap-12px max-w-[260px]">
-          <h4 className="text-white_4 text-16 font-manrope font-semibold">User Profile</h4>
-          <p className="text-grey_4 text-14 font-manrope">
+          <h4 className="text-fg-primary text-16 font-manrope font-semibold">User Profile</h4>
+          <p className="text-fg-muted text-14 font-manrope">
             Senior developer with 5+ years of experience. Click outside to close.
           </p>
           <button

@@ -264,7 +264,7 @@ export default function DateRangePicker({
       className={classNames("flex flex-col gap-6px", className)}
     >
       {label && (
-        <label className="text-12 font-bold leading-18 text-white_4">
+        <label className="text-12 font-bold leading-18 text-fg-primary">
           {label}
         </label>
       )}
@@ -285,10 +285,10 @@ export default function DateRangePicker({
           },
         )}
       >
-        <span className={value.from ? "text-grey_4" : "text-grey_2"}>
+        <span className={value.from ? "text-fg-secondary" : "text-fg-muted"}>
           {triggerText}
         </span>
-        <span className="text-grey_2">
+        <span className="text-fg-muted">
           <CalendarIcon />
         </span>
       </button>
@@ -324,18 +324,18 @@ export default function DateRangePicker({
                 type="button"
                 onClick={handlePrev}
                 aria-label="Previous month"
-                className="w-7 h-7 flex items-center justify-center rounded-8px text-grey_4 hover:bg-black_3 transition-colors cursor-pointer"
+                className="w-7 h-7 flex items-center justify-center rounded-8px text-fg-muted hover:bg-black_3 transition-colors cursor-pointer"
               >
                 <ChevronLeft />
               </button>
-              <span className="font-manrope text-14 font-semibold text-white_4">
+              <span className="font-manrope text-14 font-semibold text-fg-primary">
                 {monthLabel}
               </span>
               <button
                 type="button"
                 onClick={handleNext}
                 aria-label="Next month"
-                className="w-7 h-7 flex items-center justify-center rounded-8px text-grey_4 hover:bg-black_3 transition-colors cursor-pointer"
+                className="w-7 h-7 flex items-center justify-center rounded-8px text-fg-muted hover:bg-black_3 transition-colors cursor-pointer"
               >
                 <ChevronRight />
               </button>
@@ -345,7 +345,7 @@ export default function DateRangePicker({
               {weekdays.map((d) => (
                 <div
                   key={d}
-                  className="text-10 text-grey_1 uppercase text-center font-manrope py-4px"
+                  className="text-10 text-fg-muted uppercase text-center font-manrope py-4px"
                 >
                   {d}
                 </div>
@@ -378,16 +378,16 @@ export default function DateRangePicker({
                       "w-9 h-9 rounded-8px text-14 font-manrope flex items-center justify-center mx-auto transition-colors duration-100",
                       {
                         "bg-pr_purple text-white": isEndpoint,
-                        "bg-pr_purple/20 text-white_4":
+                        "bg-pr_purple/20 text-fg-primary":
                           !isEndpoint && isInRange,
                         "text-pr_purple font-semibold":
                           todayFlag && !isEndpoint && !isInRange,
-                        "text-grey_4 hover:bg-black_3 cursor-pointer":
+                        "text-fg-secondary hover:bg-black_3 cursor-pointer":
                           day.isCurrentMonth &&
                           !isEndpoint &&
                           !isInRange &&
                           !day.isDisabled,
-                        "text-grey_1":
+                        "text-fg-muted":
                           !day.isCurrentMonth && !isEndpoint && !isInRange,
                         "opacity-50 cursor-not-allowed": day.isDisabled,
                       },
@@ -407,7 +407,7 @@ export default function DateRangePicker({
                     onChange?.({ from: null, to: null });
                     setHoverDate(null);
                   }}
-                  className="text-12 text-grey_4 hover:text-white_4 cursor-pointer"
+                  className="text-12 text-fg-muted hover:text-fg-primary cursor-pointer"
                 >
                   Clear
                 </button>

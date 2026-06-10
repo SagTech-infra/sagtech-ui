@@ -28,11 +28,11 @@ const PageHeader = forwardRef<HTMLElement, PageHeaderProps>(
               {eyebrow}
             </Typography>
           )}
-          <Typography tag="h1" color="text-white_4">
+          <Typography tag="h1" color="text-current">
             {title}
           </Typography>
           {subtitle && (
-            <Typography tag="p" type="BodyM" color="text-grey_4">
+            <Typography tag="p" type="BodyM" color="text-current">
               {subtitle}
             </Typography>
           )}

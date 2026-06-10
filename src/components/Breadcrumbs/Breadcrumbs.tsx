@@ -19,7 +19,7 @@ function DefaultSeparator() {
       height="16"
       viewBox="0 0 16 16"
       fill="none"
-      className="text-grey_1 flex-shrink-0"
+      className="text-fg-muted flex-shrink-0"
     >
       <path
         d="M6 4L10 8L6 12"
@@ -44,7 +44,7 @@ export default function Breadcrumbs({ items, separator, className }: Breadcrumbs
         return (
           <div key={item.label} className="flex items-center gap-8px">
             {index > 0 && (
-              <span className="flex items-center text-grey_1" aria-hidden="true">
+              <span className="flex items-center text-fg-muted" aria-hidden="true">
                 {separator ?? <DefaultSeparator />}
               </span>
             )}
@@ -52,8 +52,8 @@ export default function Breadcrumbs({ items, separator, className }: Breadcrumbs
             {isLast || !item.href ? (
               <span
                 className={classNames('flex items-center gap-4px', {
-                  'text-white_4 font-semibold': isLast,
-                  'text-grey_4': !isLast,
+                  'text-fg-primary font-semibold': isLast,
+                  'text-fg-muted': !isLast,
                 })}
                 aria-current={isLast ? 'page' : undefined}
               >
@@ -67,7 +67,7 @@ export default function Breadcrumbs({ items, separator, className }: Breadcrumbs
             ) : (
               <a
                 href={item.href}
-                className="flex items-center gap-4px text-grey_4 hover:text-pr_purple transition-colors duration-200 cursor-pointer no-underline"
+                className="flex items-center gap-4px text-fg-muted hover:text-pr_purple transition-colors duration-200 cursor-pointer no-underline"
               >
                 {item.icon && (
                   <span className="flex-shrink-0 w-[16px] h-[16px] flex items-center">

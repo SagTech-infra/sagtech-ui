@@ -177,13 +177,13 @@ export default function CodeBlock({
       <style>{codeBlockStyles}</style>
       {(filename || copyable) && (
         <div className="flex items-center justify-between px-16px py-8px border-b border-solid border-black_3 bg-black_2">
-          <span className="text-12 text-grey_4 font-manrope">{filename ?? language}</span>
+          <span className="text-12 text-fg-muted font-manrope">{filename ?? language}</span>
           {copyable && (
             <button
               type="button"
               onClick={handleCopy}
               aria-label={copied ? 'Copied' : 'Copy code'}
-              className="flex items-center gap-6px text-12 text-grey_4 hover:text-white_4 font-manrope cursor-pointer"
+              className="flex items-center gap-6px text-12 text-fg-muted hover:text-fg-primary font-manrope cursor-pointer"
             >
               {copied ? <CheckIcon /> : <CopyIcon />}
               {copied ? 'Copied' : 'Copy'}
@@ -195,13 +195,13 @@ export default function CodeBlock({
         className="overflow-auto custom-scrollbar"
         style={{ maxHeight, margin: 0, padding: '12px 16px' }}
       >
-        <code className="text-white_4 leading-[1.6]">
+        <code className="text-fg-primary leading-[1.6]">
           {showLineNumbers ? (
             <table className="border-collapse">
               <tbody>
                 {lines.map((line, i) => (
                   <tr key={i}>
-                    <td className="text-grey_1 pr-12px select-none text-right align-top">
+                    <td className="text-fg-muted pr-12px select-none text-right align-top">
                       {i + 1}
                     </td>
                     <td

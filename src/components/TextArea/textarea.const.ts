@@ -2,11 +2,11 @@ const textAreaStyles = {
   basicStyles:
     'bg-black_1 border-[1px] resize-none border-solid w-full leading-24 py-16px px-24px font-medium leading-6 outline-none rounded-16px custom-scrollbar',
   defaultBorder: 'border-pr_purple',
-  defaultStyles: 'placeholder:text-grey_4 text-white_4',
+  defaultStyles: 'placeholder:text-grey_4 text-fg-primary',
   disabledArea:
     'disabled:border-grey_2 disabled:placeholder:text-grey_2 disabled:cursor-not-allowed',
-  errorArea: 'border-error text-grey_4',
-  activeArea: 'text-white_4  shadow-5xl  placeholder:text-white_4 border-pr_purple',
+  errorArea: 'border-error text-fg-muted',
+  activeArea: 'text-fg-primary  shadow-5xl  placeholder:text-white_4 border-pr_purple',
 };
 
 export default textAreaStyles;

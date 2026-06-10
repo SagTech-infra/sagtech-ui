@@ -95,13 +95,13 @@ export default function ConfirmWithNoteDialog({
             <div className="flex flex-col gap-16px">
               <Typography
                 tag="h3"
-                color="text-white_4"
+                color="text-current"
                 id="sagtech-confirm-note-title"
               >
                 {title}
               </Typography>
               {description && (
-                <Typography tag="p" type="BodyM" color="text-grey_4">
+                <Typography tag="p" type="BodyM" color="text-current">
                   {description}
                 </Typography>
               )}
@@ -109,7 +109,7 @@ export default function ConfirmWithNoteDialog({
                 <Typography
                   tag="label"
                   type="LabelsS"
-                  color="text-white_1"
+                  color="text-current"
                   htmlFor="sagtech-confirm-note"
                 >
                   {noteLabel}
@@ -129,7 +129,7 @@ export default function ConfirmWithNoteDialog({
                       <Typography
                         tag="span"
                         type="LabelsS"
-                        color={exceedsMax ? "text-error" : "text-grey_4"}
+                        color={exceedsMax ? "text-error" : "text-current"}
                       >
                         {noteHelperText}
                       </Typography>
@@ -140,7 +140,7 @@ export default function ConfirmWithNoteDialog({
                       <Typography
                         tag="span"
                         type="LabelsS"
-                        color={exceedsMax ? "text-error" : "text-grey_4"}
+                        color={exceedsMax ? "text-error" : "text-current"}
                       >
                         {note.length} / {noteMaxLength}
                       </Typography>

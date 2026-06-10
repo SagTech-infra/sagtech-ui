@@ -2,7 +2,7 @@
 import { Stack } from '@sagtech-infra/ui';
 
 const Box = ({ label }: { label: string }) => (
-  <div className="bg-black_2 border border-grey_2 rounded-8px p-12px text-white_4 font-manrope text-14">
+  <div className="bg-black_2 border border-grey_2 rounded-8px p-12px text-fg-primary font-manrope text-14">
     {label}
   </div>
 );

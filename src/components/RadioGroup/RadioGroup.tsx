@@ -110,11 +110,11 @@ export default function RadioGroup({
                 />
               </div>
               <div className="flex flex-col">
-                <span className={classNames('font-manrope text-white_4', labelSizeMap[size])}>
+                <span className={classNames('font-manrope text-fg-primary', labelSizeMap[size])}>
                   {option.label}
                 </span>
                 {option.description && (
-                  <span className="text-12 text-grey_2 mt-2px">{option.description}</span>
+                  <span className="text-12 text-fg-muted mt-2px">{option.description}</span>
                 )}
               </div>
             </label>

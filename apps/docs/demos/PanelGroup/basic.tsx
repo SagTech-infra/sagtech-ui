@@ -2,7 +2,7 @@
 import { PanelGroup, Panel, PanelResizeHandle } from '@sagtech-infra/ui';
 
 const paneClass =
-  'h-full w-full flex items-center justify-center bg-black_2 text-grey_4 font-manrope text-14';
+  'h-full w-full flex items-center justify-center bg-black_2 text-white font-manrope text-14';
 
 export default function Demo() {
   return (

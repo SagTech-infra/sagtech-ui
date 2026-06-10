@@ -113,13 +113,13 @@ export default function Alert({
       <div className={classNames('shrink-0', children ? 'pt-2px' : '')}>
         {icon ?? <DefaultIcon variant={variant} />}
       </div>
-      <div className="flex-1 min-w-0 text-white_4">
+      <div className="flex-1 min-w-0 text-fg-primary">
         {title && (
           <div className="font-semibold text-14 leading-18 wrap-break-word">{title}</div>
         )}
         {children && (
           <div
-            className={classNames('text-14 leading-18 text-grey_4 wrap-break-word', {
+            className={classNames('text-14 leading-18 text-fg-muted wrap-break-word', {
               'mt-4px': title,
             })}
           >
@@ -133,7 +133,7 @@ export default function Alert({
           type="button"
           aria-label="Dismiss alert"
           onClick={onClose}
-          className="shrink-0 text-grey_4 hover:text-white_4 cursor-pointer self-start"
+          className="shrink-0 text-fg-muted hover:text-fg-primary cursor-pointer self-start"
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path d="M12 4L4 12M4 4l8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />

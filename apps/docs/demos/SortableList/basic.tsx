@@ -24,14 +24,14 @@ export default function Demo() {
         className="flex flex-col gap-8px"
         renderItem={(item, { isDragging, dragHandleProps }) => (
           <div
-            className={`flex items-center gap-12px bg-black_2 border border-solid border-black_3 rounded-8px px-12px py-10px font-manrope text-14 text-white_4 ${
+            className={`flex items-center gap-12px bg-black_2 border border-solid border-black_3 rounded-8px px-12px py-10px font-manrope text-14 text-fg-primary ${
               isDragging ? 'shadow-3xl' : ''
             }`}
           >
             <button
               type="button"
               {...(dragHandleProps as Record<string, unknown>)}
-              className="text-grey_4 hover:text-white_4 cursor-grab active:cursor-grabbing"
+              className="text-fg-muted hover:text-fg-primary cursor-grab active:cursor-grabbing"
               aria-label={`Drag ${item.title}`}
             >
               ⠿

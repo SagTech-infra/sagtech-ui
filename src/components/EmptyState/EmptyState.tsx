@@ -57,11 +57,11 @@ export default function EmptyState({
       )}
     >
       {icon || <DefaultIcon />}
-      <h3 className="font-manrope text-18 font-semibold text-white_4 mt-16px">
+      <h3 className="font-manrope text-18 font-semibold text-fg-primary mt-16px">
         {title}
       </h3>
       {description && (
-        <p className="font-manrope text-14 text-grey_2 mt-8px max-w-[360px]">
+        <p className="font-manrope text-14 text-fg-muted mt-8px max-w-[360px]">
           {description}
         </p>
       )}

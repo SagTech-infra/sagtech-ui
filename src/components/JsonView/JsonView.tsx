@@ -100,10 +100,10 @@ function PrimitiveValue({ value }: { value: unknown }) {
     return <span className="text-pr_purple">{String(value)}</span>;
   }
   if (value === null) {
-    return <span className="text-grey_4">null</span>;
+    return <span className="text-fg-muted">null</span>;
   }
   // undefined, symbol, function — show as string
-  return <span className="text-grey_4">{String(value)}</span>;
+  return <span className="text-fg-muted">{String(value)}</span>;
 }
 
 // ─── recursive node renderer ──────────────────────────────────────────────────
@@ -126,7 +126,7 @@ function JsonNode({ value, depth, collapsed, indent, label }: JsonNodeProps) {
 
   const labelEl =
     label !== undefined ? (
-      <span className="text-grey_4">&quot;{label}&quot;: </span>
+      <span className="text-fg-muted">&quot;{label}&quot;: </span>
     ) : null;
 
   // ── Object ──────────────────────────────────────────────────────────────
@@ -144,7 +144,7 @@ function JsonNode({ value, depth, collapsed, indent, label }: JsonNodeProps) {
         >
           <summary className="list-none cursor-pointer select-none hover:opacity-70 outline-none">
             {labelEl}
-            <span className="text-grey_4">{open ? "{" : summary}</span>
+            <span className="text-fg-muted">{open ? "{" : summary}</span>
           </summary>
           <div>
             {entries.map(([k, v]) => (
@@ -157,7 +157,7 @@ function JsonNode({ value, depth, collapsed, indent, label }: JsonNodeProps) {
                 label={k}
               />
             ))}
-            <span className="text-grey_4">{"}"}</span>
+            <span className="text-fg-muted">{"}"}</span>
           </div>
         </details>
       </div>
@@ -178,7 +178,7 @@ function JsonNode({ value, depth, collapsed, indent, label }: JsonNodeProps) {
         >
           <summary className="list-none cursor-pointer select-none hover:opacity-70 outline-none">
             {labelEl}
-            <span className="text-grey_4">{open ? "[" : summary}</span>
+            <span className="text-fg-muted">{open ? "[" : summary}</span>
           </summary>
           <div>
             {value.map((item, i) => (
@@ -191,7 +191,7 @@ function JsonNode({ value, depth, collapsed, indent, label }: JsonNodeProps) {
                 label={String(i)}
               />
             ))}
-            <span className="text-grey_4">{"]"}</span>
+            <span className="text-fg-muted">{"]"}</span>
           </div>
         </details>
       </div>
@@ -229,7 +229,7 @@ const JsonView = forwardRef<HTMLDivElement, JsonViewProps>(function JsonView(
     <div
       ref={ref}
       className={classNames(
-        "relative font-mono text-12 text-white_4 bg-black_2 rounded-12px p-16px overflow-auto",
+        "relative font-mono text-12 text-fg-primary bg-black_2 rounded-12px p-16px overflow-auto",
         className,
       )}
       {...rest}
@@ -239,7 +239,7 @@ const JsonView = forwardRef<HTMLDivElement, JsonViewProps>(function JsonView(
           type="button"
           onClick={handleCopy}
           aria-label={copied ? "Copied" : "Copy JSON"}
-          className="absolute top-12px right-12px flex items-center gap-4px text-11 text-grey_4 hover:text-white_4 cursor-pointer bg-transparent border-0 p-4px rounded-4px"
+          className="absolute top-12px right-12px flex items-center gap-4px text-11 text-fg-muted hover:text-fg-primary cursor-pointer bg-transparent border-0 p-4px rounded-4px"
         >
           {copied ? <CheckIcon /> : <CopyIcon />}
           <span>{copied ? "Copied" : "Copy"}</span>

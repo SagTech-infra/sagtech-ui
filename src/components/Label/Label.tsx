@@ -28,7 +28,7 @@ export default function Label({
       htmlFor={htmlFor}
       data-disabled={disabled || undefined}
       className={classNames(
-        "text-12 font-bold leading-18 text-white_4 data-[disabled=true]:text-fg-muted data-[disabled=true]:cursor-not-allowed",
+        "text-12 font-bold leading-18 text-fg-primary data-[disabled=true]:text-fg-muted data-[disabled=true]:cursor-not-allowed",
         className,
       )}
       {...rest}

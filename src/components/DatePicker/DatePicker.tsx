@@ -189,7 +189,7 @@ export default function DatePicker({
   return (
     <div className={classNames("flex flex-col gap-6px", className)} ref={ref}>
       {label && (
-        <label className="text-12 font-bold leading-18 text-white_4">
+        <label className="text-12 font-bold leading-18 text-fg-primary">
           {label}
         </label>
       )}
@@ -209,14 +209,14 @@ export default function DatePicker({
             },
           )}
         >
-          <span className={value ? "text-grey_4" : "text-grey_2"}>
+          <span className={value ? "text-fg-secondary" : "text-fg-muted"}>
             {value
               ? showTime
                 ? `${formatDisplayDate(value, locale)} ${String(value.getHours()).padStart(2, "0")}:${String(value.getMinutes()).padStart(2, "0")}`
                 : formatDisplayDate(value, locale)
               : placeholder}
           </span>
-          <span className="text-grey_2">
+          <span className="text-fg-muted">
             <CalendarIcon />
           </span>
         </button>

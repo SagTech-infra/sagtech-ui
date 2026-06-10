@@ -51,10 +51,10 @@ export default function StatCard({
       )}
     >
       <div className="flex flex-col gap-8px">
-        <span className="font-manrope text-12 font-semibold text-grey_2 uppercase tracking-wider">
+        <span className="font-manrope text-12 font-semibold text-fg-muted uppercase tracking-wider">
           {label}
         </span>
-        <span className="font-orbitron text-32 font-bold text-white_4">
+        <span className="font-orbitron text-32 font-bold text-fg-primary">
           {value}
         </span>
         {change && (

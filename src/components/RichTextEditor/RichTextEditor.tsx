@@ -49,7 +49,7 @@ function ToolbarButton({
         'w-[28px] h-[28px] flex items-center justify-center rounded-8px font-manrope text-14 transition-colors cursor-pointer',
         {
           'bg-pr_purple text-white': isActive,
-          'text-grey_4 hover:text-white_4 hover:bg-black_3': !isActive && !disabled,
+          'text-fg-muted hover:text-fg-primary hover:bg-black_3': !isActive && !disabled,
           'opacity-40 cursor-not-allowed': disabled,
         },
       )}
@@ -177,7 +177,7 @@ export default function RichTextEditor({
     editorProps: {
       attributes: {
         class:
-          'sagtech-rte-content prose prose-invert max-w-none focus:outline-none p-12px font-manrope text-14 text-white_4',
+          'sagtech-rte-content prose prose-invert max-w-none focus:outline-none p-12px font-manrope text-14 text-fg-primary',
       },
     },
   });

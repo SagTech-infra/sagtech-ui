@@ -134,7 +134,7 @@ export const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps
                 sizeClasses[size],
                 fullWidth && 'flex-1',
                 isDisabled && 'opacity-50 cursor-not-allowed',
-                isSelected ? 'text-white_4' : 'text-grey_4 hover:text-white_4',
+                isSelected ? 'text-white' : 'text-fg-muted hover:text-fg-primary',
               )}
             >
               {isSelected && (

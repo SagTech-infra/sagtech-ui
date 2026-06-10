@@ -157,13 +157,13 @@ export default function Calendar({
           type="button"
           onClick={handlePrevMonth}
           aria-label="Previous month"
-          className="w-[28px] h-[28px] flex items-center justify-center rounded-8px text-grey_4 hover:bg-black_3 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pr_purple"
+          className="w-[28px] h-[28px] flex items-center justify-center rounded-8px text-fg-muted hover:bg-black_3 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pr_purple"
         >
           <ChevronLeft />
         </button>
         <span
           aria-live="polite"
-          className="font-manrope text-14 font-semibold text-white_4"
+          className="font-manrope text-14 font-semibold text-fg-primary"
         >
           {monthLabel}
         </span>
@@ -171,7 +171,7 @@ export default function Calendar({
           type="button"
           onClick={handleNextMonth}
           aria-label="Next month"
-          className="w-[28px] h-[28px] flex items-center justify-center rounded-8px text-grey_4 hover:bg-black_3 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pr_purple"
+          className="w-[28px] h-[28px] flex items-center justify-center rounded-8px text-fg-muted hover:bg-black_3 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pr_purple"
         >
           <ChevronRight />
         </button>
@@ -183,7 +183,7 @@ export default function Calendar({
           <div
             key={day}
             role="columnheader"
-            className="text-10 text-grey_1 uppercase text-center font-manrope py-4px"
+            className="text-10 text-fg-muted uppercase text-center font-manrope py-4px"
           >
             {day}
           </div>
@@ -211,9 +211,9 @@ export default function Calendar({
                 {
                   "bg-pr_purple text-white": isSelected,
                   "text-pr_purple font-semibold": isTodayDay && !isSelected,
-                  "text-grey_4 hover:bg-black_3 cursor-pointer":
+                  "text-fg-muted hover:bg-black_3 cursor-pointer":
                     day.isCurrentMonth && !isSelected && !day.isDisabled,
-                  "text-grey_1": !day.isCurrentMonth && !isSelected,
+                  "text-fg-muted": !day.isCurrentMonth && !isSelected,
                   "opacity-50 cursor-not-allowed": day.isDisabled,
                 },
               )}
