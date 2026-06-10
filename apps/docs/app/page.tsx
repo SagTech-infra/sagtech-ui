@@ -3,15 +3,14 @@ import type { ReactNode } from 'react';
 import NextLink from 'next/link';
 import {
   Container,
-  Hero,
-  StatGrid,
+  AuroraHero,
   FeatureGrid,
   CTASection,
   Accordion,
   AccordionItem,
 } from '@sagtech-infra/ui';
 import { LandingShowcase } from '@/components/LandingShowcase';
-import { templates } from '@/content/templates';
+import { HomeTemplateShowcase } from '@/components/HomeTemplateShowcase';
 
 export const metadata: Metadata = {
   description:
@@ -58,11 +57,12 @@ function LinkButton({
   );
 }
 
+// Folded into the AuroraHero stat strip (AuroraStat.value is a string).
 const STATS = [
-  { value: 107, label: 'Components' },
-  { value: 12, label: 'Chart types' },
-  { value: 4, label: '3D scenes' },
-  { value: 2, label: 'Themes' },
+  { value: '107', label: 'Components' },
+  { value: '12', label: 'Chart types' },
+  { value: '4', label: '3D scenes' },
+  { value: '2', label: 'Themes' },
 ];
 
 const FEATURES = [
@@ -122,9 +122,7 @@ function SectionHeading({ children }: { children: ReactNode }) {
 export default function HomePage() {
   return (
     <main>
-      <Hero
-        align="center"
-        background="glow"
+      <AuroraHero
         eyebrow="SagTech UI"
         title="Components that ship as fast as you do"
         subtitle="107 polished React components — buttons, forms, charts, 3D — plus full-page templates ready to drop into your product. Dark by default, accessible by default."
@@ -137,16 +135,13 @@ export default function HomePage() {
             </LinkButton>
           </>
         }
+        stats={STATS}
       />
 
       <Container size="lg" className="pb-72px">
         <section className="mt-8px">
-          <StatGrid items={STATS} />
-        </section>
-
-        <section className="mt-72px">
           <SectionHeading>Built by SagTech</SectionHeading>
-          <div className="rounded-24px border border-border-default bg-surface-wash p-32px">
+          <div className="border_gradient_24_stroke_2 rounded-24px p-32px shadow-3xl">
             <p className="max-w-[760px] text-18 leading-28 text-fg-secondary">
               SagTech ships prototypes in 48 hours and production-ready code after — no fluff.
               We move that fast because we build on our own reusable foundations. This component
@@ -177,27 +172,11 @@ export default function HomePage() {
 
         <section className="mt-72px">
           <SectionHeading>Start from a template</SectionHeading>
-          <p className="mb-24px max-w-[640px] text-16 text-fg-muted">
-            Full pages assembled entirely from these components — open one, flip to Code, and copy.
+          <p className="mb-24px max-w-[680px] text-16 text-fg-muted">
+            Full pages assembled entirely from these components — flip between dark and the warm
+            light theme, then open one to copy the code.
           </p>
-          <div className="grid grid-cols-1 gap-16px sm:grid-cols-2 lg:grid-cols-3">
-            {templates.map((t) => (
-              <NextLink
-                key={t.slug}
-                href={`/templates/${t.slug}`}
-                className="group flex flex-col rounded-24px border border-border-default bg-bg-secondary p-24px transition-all duration-200 hover:-translate-y-[2px] hover:border-border-strong"
-              >
-                <span className="font-display text-12 uppercase tracking-wider text-grey_2">
-                  {t.kind}
-                </span>
-                <h3 className="mt-12px font-display text-18 text-fg-primary">{t.name}</h3>
-                <p className="mt-8px text-14 text-fg-muted">{t.description}</p>
-                <span className="mt-16px inline-flex items-center text-13 text-sec_purple opacity-0 transition-opacity group-hover:opacity-100">
-                  Open template →
-                </span>
-              </NextLink>
-            ))}
-          </div>
+          <HomeTemplateShowcase />
           <NextLink
             href="/templates"
             className="mt-24px inline-flex items-center font-manrope text-14 text-pr_purple transition-opacity hover:opacity-80"
