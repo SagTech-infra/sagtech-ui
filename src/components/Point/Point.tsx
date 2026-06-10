@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import type { VariantTypoTagsStyles } from '@/components/Typography/types';
 import Typography from '@/components/Typography/Typography';
-import { useImageComponent } from '@/providers';
+import { Icon } from '@/components/Icon/Icon';
 import type { VariantTypoColorsText, VariantTypoColorsCircle, VariantTypoIconName } from './types';
 
 interface PointTypes {
@@ -26,14 +26,15 @@ function Point({
   icon = true,
   iconName = 'users',
 }: PointTypes) {
-  const Image = useImageComponent();
   const stylesTypography = classnames({
     'max-w-[35vw] sm:max-w-[30vw]': isWrapText,
     'max-w-full': isWrapText === false,
   });
   return (
     <div className={classnames('flex items-center gap-8px', styles)} data-tid="point">
-      {icon && <Image width={18} height={18} src={`/svg/icons/${iconName}.svg`} alt={iconName} />}
+      {icon && (
+        <Icon icon={iconName} size={18} color="currentColor" className="text-fg-secondary" />
+      )}
       {!icon && (
         <div
           className={classnames('h-[8px] w-[8px] rounded-circle', circleColor)}

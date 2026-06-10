@@ -9,6 +9,8 @@ import GitIcon from './social/GitIcon';
 import InstIcon from './social/InstIcon';
 import Loading from './ui/Loading';
 import LocationIcon from './ui/LocationIcon';
+import JobIcon from './ui/JobIcon';
+import SalaryIcon from './ui/SalaryIcon';
 import MailIcon from './ui/MailIcon';
 import PgIcon from './ui/PaginationArrow';
 import Project from './ui/Project';
@@ -190,6 +192,8 @@ export const content = {
   document: DocumentIcon,
   users: UsersIcon,
   calendar: CalendarIcon,
+  job: JobIcon,
+  salary: SalaryIcon,
   settings: SettingsIcon,
   loading: Loading,
   paginationArrow: PgIcon,

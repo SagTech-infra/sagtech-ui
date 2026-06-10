@@ -14,14 +14,11 @@ describe('Steps', () => {
     expect(screen.getByText('Analyze requirements')).toBeInTheDocument();
   });
 
-  it('renders an <img> for a step with an icon (default shim)', () => {
-    render(
-      <Steps
-        stepsList={[{ title: 'Setup', description: 'with icon', icon: 'users' }]}
-      />,
+  it('renders a self-contained svg icon (not a hosted <img>) for a step with an icon', () => {
+    const { container } = render(
+      <Steps stepsList={[{ title: 'Setup', description: 'with icon', icon: 'users' }]} />,
     );
-    const img = screen.getByAltText('users');
-    expect(img.tagName).toBe('IMG');
-    expect(img).toHaveAttribute('src', '/svg/icons/users.svg');
+    expect(container.querySelector('svg')).toBeInTheDocument();
+    expect(container.querySelector('img')).toBeNull();
   });
 });

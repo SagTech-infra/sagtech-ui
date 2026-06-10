@@ -1,7 +1,8 @@
 import classNames from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 import Typography from '@/components/Typography/Typography';
-import { useImageComponent } from '@/providers';
+import { Icon } from '@/components/Icon/Icon';
+import type { IAvailableIcons } from '@/icons';
 
 interface StepsProps {
   stepsList: Array<{ title: string; description: string; icon?: string }>;
@@ -9,7 +10,6 @@ interface StepsProps {
 }
 
 export default function Steps({ stepsList, isPhases = false }: StepsProps) {
-  const Image = useImageComponent();
   const [progress, setProgress] = useState(0);
   const [listHeight, setListHeight] = useState(0);
   const [lastStepDescriptionHeight, setLastStepDescriptionHeight] = useState(0);
@@ -72,7 +72,12 @@ export default function Steps({ stepsList, isPhases = false }: StepsProps) {
                   )}
                 >
                   {icon ? (
-                    <Image width="18" height="18" src={`/svg/icons/${icon}.svg`} alt={icon} />
+                    <Icon
+                      icon={icon as IAvailableIcons}
+                      size={18}
+                      color="currentColor"
+                      className="text-white"
+                    />
                   ) : (
                     index + 1
                   )}
