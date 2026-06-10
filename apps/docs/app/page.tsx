@@ -11,6 +11,7 @@ import {
 } from '@sagtech-infra/ui';
 import { LandingShowcase } from '@/components/LandingShowcase';
 import { HomeTemplateShowcase } from '@/components/HomeTemplateShowcase';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 export const metadata: Metadata = {
   description:
@@ -36,15 +37,21 @@ function LinkButton({
 }: {
   href: string;
   children: ReactNode;
-  variant?: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary' | 'onGradientPrimary' | 'onGradientSecondary';
   external?: boolean;
   className?: string;
 }) {
+  // `onGradient*` variants use fixed light-on-purple colors for the always-purple
+  // CTA band, so they stay readable in both the dark and the light theme.
+  const variants: Record<string, string> = {
+    primary: 'bg-pr_purple text-white hover:opacity-90',
+    secondary: 'border border-border-strong text-fg-primary hover:bg-bg-secondary',
+    onGradientPrimary: 'bg-white text-pr_purple hover:opacity-90',
+    onGradientSecondary: 'border border-white/40 text-white hover:bg-white/10',
+  };
   const cls =
     'inline-flex items-center rounded-12px px-20px py-10px font-manrope text-14 transition-colors ' +
-    (variant === 'primary'
-      ? 'bg-pr_purple text-white hover:opacity-90'
-      : 'border border-border-strong text-fg-primary hover:bg-bg-secondary') +
+    variants[variant] +
     (className ? ` ${className}` : '');
   return external ? (
     <a href={href} className={cls} target="_blank" rel="noreferrer">
@@ -122,6 +129,38 @@ function SectionHeading({ children }: { children: ReactNode }) {
 export default function HomePage() {
   return (
     <main>
+      {/* Slim top bar — the homepage lives outside the DocsShell, so it carries
+          its own logo + global light/dark toggle (ThemeProvider writes the
+          choice to <html data-theme> and persists it). */}
+      <header className="sticky top-0 z-30 border-b border-border-default bg-bg-primary/80 backdrop-blur">
+        <Container size="lg" className="flex items-center justify-between py-12px">
+          <NextLink href="/" className="font-display text-16 text-fg-primary">
+            SagTech <span className="text-pr_purple">UI</span>
+          </NextLink>
+          <nav className="flex items-center gap-16px">
+            <NextLink
+              href="/components/button"
+              className="hidden text-14 text-fg-muted transition-colors hover:text-fg-primary sm:inline"
+            >
+              Components
+            </NextLink>
+            <NextLink
+              href="/templates"
+              className="hidden text-14 text-fg-muted transition-colors hover:text-fg-primary sm:inline"
+            >
+              Templates
+            </NextLink>
+            <NextLink
+              href="/overview"
+              className="hidden text-14 text-fg-muted transition-colors hover:text-fg-primary sm:inline"
+            >
+              Docs
+            </NextLink>
+            <ThemeToggle />
+          </nav>
+        </Container>
+      </header>
+
       <AuroraHero
         eyebrow="SagTech UI"
         title="Components that ship as fast as you do"
@@ -202,10 +241,10 @@ export default function HomePage() {
             subtitle="Install from GitHub Packages, import the tokens, and start composing."
             actions={
               <>
-                <LinkButton href="/components/button" variant="secondary">
+                <LinkButton href="/components/button" variant="onGradientPrimary">
                   Get started
                 </LinkButton>
-                <LinkButton href={PACKAGES_URL} variant="secondary" external>
+                <LinkButton href={PACKAGES_URL} variant="onGradientSecondary" external>
                   GitHub Packages
                 </LinkButton>
               </>
