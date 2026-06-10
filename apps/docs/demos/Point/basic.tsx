@@ -7,21 +7,21 @@ export default function Demo() {
       <Point
         text="10+ Team Members"
         type="BodyM"
-        textColor="text-white"
+        textColor="text-white_4"
         icon={false}
         circleColor="bg-pr_purple"
       />
       <Point
         text="Jan 2024 - Present"
         type="BodyM"
-        textColor="text-white"
+        textColor="text-white_4"
         icon={false}
         circleColor="bg-sec_purple"
       />
       <Point
         text="React, TypeScript, Node.js"
         type="BodyS"
-        textColor="text-white"
+        textColor="text-white_4"
         icon={false}
         circleColor="bg-success"
       />

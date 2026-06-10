@@ -12,8 +12,8 @@ export default function Demo() {
         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
       />
       <div className="relative z-1 flex flex-col items-center justify-center h-full text-center">
-        <h2 className="font-orbitron text-32 text-white">SagTech</h2>
-        <p className="font-manrope text-14 text-white mt-8px">
+        <h2 className="font-orbitron text-32 text-fg-primary">SagTech</h2>
+        <p className="font-manrope text-14 text-fg-primary mt-8px">
           Animated particle background
         </p>
       </div>
