@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import InfoTabs from './InfoTabs';
-import { SagtechUIProvider, type UIImageComponent } from '@/providers';
 import type { InfoTab } from './types';
 
 const sampleTabs: InfoTab[] = [
@@ -76,23 +75,4 @@ export const WithoutButtons: Story = {
     title: 'Information',
     list: sampleTabs.map(({ buttonText, ...rest }) => rest),
   },
-};
-
-const OutlinedImage: UIImageComponent = ({ src, alt, width, height }) => (
-  <img
-    src={typeof src === 'string' ? src : ''}
-    alt={alt}
-    width={width as number | undefined}
-    height={height as number | undefined}
-    style={{ outline: '2px dashed #6D3EF1', padding: 2 }}
-  />
-);
-
-export const WithCustomProvider: Story = {
-  name: 'With SagtechUIProvider override',
-  render: () => (
-    <SagtechUIProvider imageComponent={OutlinedImage}>
-      <InfoTabs title="Our Services (custom image)" list={sampleTabs} />
-    </SagtechUIProvider>
-  ),
 };

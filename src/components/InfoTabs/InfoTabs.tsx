@@ -6,7 +6,6 @@ import Typography from '@/components/Typography/Typography';
 import CardWrapper from '@/components/CardWrapper/CardWrapper';
 import Button from '@/components/Button/Button';
 import { Icon } from '@/components/Icon/Icon';
-import { useImageComponent } from '@/providers';
 import * as tokens from '@/tokens/tokens';
 import type { InfoTab } from './types';
 
@@ -17,7 +16,6 @@ interface Props {
 }
 
 export default function InfoTabs({ title, list, renderModal }: Props) {
-  const Image = useImageComponent();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState({
     title: list[0]?.title || '',
@@ -46,7 +44,7 @@ export default function InfoTabs({ title, list, renderModal }: Props) {
               {list.map((item) => (
                 <li
                   key={item.title}
-                  className="h-min flex flex-col py-8px justify-start border-b-1 last:border-transparent border-solid border-b-[#2F1E5E]"
+                  className="h-min flex flex-col py-8px justify-start border-b-1 last:border-transparent border-solid border-b-border-default"
                 >
                   <button
                     type="button"
@@ -60,11 +58,13 @@ export default function InfoTabs({ title, list, renderModal }: Props) {
                       className="sm:text-[24px]! sm:leading-48px 2xl:text-24px! text-left"
                       text={item.title}
                     />
-                    <Image
-                      src="/svg/icons/arrow-right-line.svg"
-                      width={24}
-                      height={24}
-                      alt="arrow"
+                    <Icon
+                      icon="chevronRight"
+                      size={24}
+                      color="currentColor"
+                      className={
+                        activeTab.title === item.title ? 'text-pr_purple' : 'text-fg-muted'
+                      }
                     />
                   </button>
                 </li>

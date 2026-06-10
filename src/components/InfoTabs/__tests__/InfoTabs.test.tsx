@@ -17,11 +17,12 @@ describe('InfoTabs', () => {
     expect(buttons[1]).toHaveTextContent('Tab B');
   });
 
-  it('renders arrow icons via the default <img> shim', () => {
+  it('renders a self-contained chevron icon (svg, not a hosted <img>) per tab', () => {
     render(<InfoTabs title="Section" list={list} />);
-    const arrows = screen.getAllByAltText('arrow');
-    expect(arrows.length).toBeGreaterThan(0);
-    expect(arrows[0].tagName).toBe('IMG');
+    const buttons = screen.getAllByRole('button', { name: 'set tab' });
+    buttons.forEach((btn) => expect(btn.querySelector('svg')).toBeInTheDocument());
+    // The component must not depend on a host-provided static asset.
+    expect(screen.queryByAltText('arrow')).toBeNull();
   });
 
   it('switches active tab highlight when another tab button is clicked', async () => {
@@ -31,12 +32,12 @@ describe('InfoTabs', () => {
     const labelA = tabA.querySelector('h4');
     const labelB = tabB.querySelector('h4');
     expect(labelA?.className).toMatch(/text-pr_purple/);
-    expect(labelB?.className).toMatch(/text-white_4/);
+    expect(labelB?.className).toMatch(/text-current/);
 
     fireEvent.click(tabB);
 
     await waitFor(() => {
-      expect(labelA?.className).toMatch(/text-white_4/);
+      expect(labelA?.className).toMatch(/text-current/);
       expect(labelB?.className).toMatch(/text-pr_purple/);
     });
   });
