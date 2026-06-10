@@ -3,12 +3,10 @@ import React, {
   useState,
   type InputHTMLAttributes,
   type DetailedHTMLProps,
-  useMemo,
   useEffect,
 } from 'react';
 import classNames from 'classnames';
 import { Icon } from '@/components/Icon/Icon';
-import * as tokens from '@/tokens/tokens';
 import attachmentConsts from './attachment.const';
 import Typography from '@/components/Typography/Typography';
 
@@ -65,15 +63,10 @@ export function Attachment({
     [attachmentConsts.defaultAttachmentVariants]: true,
   });
 
-  const iconColors = useMemo(
-    () => `
-    ${hover && state === 'default' ? '#F8F8F8' : ''}
-    ${state !== 'active' && state !== 'disabled' && !hover ? '#B5B5B9' : ''}
-    ${state === 'active' ? '#F8F8F8' : ''}
-    ${state === 'disabled' ? '#83838A' : ''}
-    `,
-    [state, hover],
-  );
+  // Theme-adaptive icon color: primary when active/hovered, muted otherwise.
+  // (Previously hard-coded #F8F8F8 on hover — invisible on the light theme.)
+  const iconIsPrimary = (state === 'default' && hover) || state === 'active';
+  const iconColorClass = iconIsPrimary ? 'text-fg-primary' : 'text-fg-muted';
 
   const handleFileChange = (e: React.ChangeEvent) => {
     const input = e.target as HTMLInputElement;
@@ -116,7 +109,7 @@ export function Attachment({
           onMouseOver={state === 'default' ? mouseHandlerOver : undefined}
           onMouseLeave={state === 'default' ? mouseHandlerLeave : undefined}
         >
-          <Icon icon="attach" size={24} color={iconColors} />
+          <Icon icon="attach" size={24} color="currentColor" className={iconColorClass} />
           <input
             ref={ref}
             id="input-file"
@@ -159,7 +152,7 @@ export function Attachment({
       {files &&
         files.map((file: File) => (
           <div className="pointer inline-flex items-center gap-12px" key={file.name}>
-            <Icon icon="attach" size={24} color={tokens.colors.white_4} />
+            <Icon icon="attach" size={24} color="currentColor" className="text-fg-primary" />
             <div className="flex flex-col">
               <Typography tag="h4" color="text-current">
                 {file.name}
