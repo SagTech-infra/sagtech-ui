@@ -1,13 +1,36 @@
 'use client';
 import { Icon } from '@sagtech-infra/ui';
 
+// A small gallery of the library's icon set. Names map to IAvailableIcons.
+const ICONS = [
+  'search',
+  'mail',
+  'call',
+  'calendar',
+  'settings',
+  'users',
+  'folder',
+  'document',
+  'lock',
+  'eye',
+  'edit',
+  'location',
+] as const;
+
 export default function Demo() {
+  // Icons paint with currentColor, so the gallery inherits the active theme's
+  // foreground (white on dark, near-black on light) — no hard-coded colors.
   return (
-    <div className="flex flex-wrap items-center gap-24px">
-      <Icon icon="arrow" size={32} color="#F8F8F8" />
-      <Icon icon="chevrondown" size={16} color="#F8F8F8" />
-      <Icon icon="call" size={48} color="#6D3EF1" />
-      <Icon icon="attach" size={24} color="#B5B5B9" text="Attach file" />
+    <div className="grid w-full grid-cols-3 gap-12px text-fg-primary sm:grid-cols-4 md:grid-cols-6">
+      {ICONS.map((name) => (
+        <div
+          key={name}
+          className="flex flex-col items-center gap-8px rounded-12px border border-border-default bg-bg-secondary p-16px transition-colors hover:border-border-strong"
+        >
+          <Icon icon={name} size={24} color="currentColor" />
+          <span className="text-12 text-fg-muted">{name}</span>
+        </div>
+      ))}
     </div>
   );
 }

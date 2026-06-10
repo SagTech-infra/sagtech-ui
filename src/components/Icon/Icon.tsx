@@ -49,7 +49,7 @@ export function Icon(props: IIconProps) {
       />
       {text && (
         <div className="mt-4px 2xl:mt-0px">
-          <Typography type="BodyS" color="text-grey_4">
+          <Typography type="BodyS" color="text-current">
             {text}
           </Typography>
         </div>

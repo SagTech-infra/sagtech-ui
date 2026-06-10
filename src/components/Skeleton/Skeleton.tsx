@@ -21,8 +21,11 @@ export default function Skeleton({
   count = 1,
   className,
 }: SkeletonProps) {
+  // Tint from the muted foreground (a mid-grey in BOTH themes) so the skeleton
+  // stays visible on light surfaces too — `black_2/black_3` flip to near-white
+  // under the light theme, which made it invisible.
   const baseClasses = classNames(
-    'animate-pulse bg-gradient-to-r from-black_2 to-black_3',
+    'animate-pulse bg-gradient-to-r from-fg-muted/15 to-fg-muted/30',
     roundedMap[rounded],
     className,
   );

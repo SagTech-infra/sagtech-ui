@@ -3,7 +3,7 @@ import { Skeleton } from '@sagtech-infra/ui';
 
 export default function Demo() {
   return (
-    <div className="flex flex-col gap-16px p-24px bg-black_1 rounded-16px w-full max-w-[320px]">
+    <div className="flex flex-col gap-16px p-24px bg-bg-secondary border border-border-default rounded-16px w-full max-w-[320px]">
       <div className="flex items-center gap-12px">
         <Skeleton width={40} height={40} rounded="circle" />
         <div className="flex flex-col gap-4px flex-1">
