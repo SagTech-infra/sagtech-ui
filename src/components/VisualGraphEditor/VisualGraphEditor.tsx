@@ -2,7 +2,6 @@
 
 import { useCallback } from 'react';
 import classNames from 'classnames';
-import * as tokens from '@/tokens/tokens';
 import {
   ReactFlow,
   ReactFlowProvider,
@@ -85,22 +84,26 @@ function VisualGraphEditorInner<NData extends Record<string, unknown>, EData ext
       )}
       style={{ height }}
     >
+      {/* Theme-adaptive styling for the @xyflow/react surface. Uses the
+          semantic CSS custom properties so nodes, handles, edges and controls
+          recolor with the active theme instead of staying dark-only. */}
       <style>{`
-        .sagtech-graph .react-flow__node { color: #F8F8F8; font-family: var(--font-manrope), sans-serif; }
+        .sagtech-graph .react-flow__node { color: var(--color-fg-primary); font-family: var(--font-manrope), sans-serif; }
         .sagtech-graph .react-flow__node-default,
         .sagtech-graph .react-flow__node-input,
         .sagtech-graph .react-flow__node-output {
-          background: #20202D; border-color: #393944; color: #F8F8F8; border-radius: 8px;
+          background: var(--color-bg-tertiary); border-color: var(--color-border-default); color: var(--color-fg-primary); border-radius: 8px;
         }
         .sagtech-graph .react-flow__node-default.selected,
         .sagtech-graph .react-flow__node-input.selected,
-        .sagtech-graph .react-flow__node-output.selected { border-color: #6D3EF1; box-shadow: 0 0 0 1px #6D3EF1; }
-        .sagtech-graph .react-flow__handle { background: #6D3EF1; border-color: #070715; }
-        .sagtech-graph .react-flow__edge-path { stroke: #6D3EF1; }
-        .sagtech-graph .react-flow__controls { background: #20202D; border-radius: 8px; overflow: hidden; border: 1px solid #393944; }
-        .sagtech-graph .react-flow__controls-button { background: #20202D; color: #CDCDD0; border-color: #393944; }
-        .sagtech-graph .react-flow__controls-button:hover { background: #393944; }
-        .sagtech-graph .react-flow__minimap { background: #20202D; }
+        .sagtech-graph .react-flow__node-output.selected { border-color: var(--color-pr_purple); box-shadow: 0 0 0 1px var(--color-pr_purple); }
+        .sagtech-graph .react-flow__handle { background: var(--color-pr_purple); border-color: var(--color-bg-primary); }
+        .sagtech-graph .react-flow__edge-path { stroke: var(--color-pr_purple); }
+        .sagtech-graph .react-flow__controls { background: var(--color-bg-secondary); border-radius: 8px; overflow: hidden; border: 1px solid var(--color-border-default); }
+        .sagtech-graph .react-flow__controls-button { background: var(--color-bg-secondary); color: var(--color-fg-secondary); border-color: var(--color-border-default); }
+        .sagtech-graph .react-flow__controls-button:hover { background: var(--color-bg-tertiary); }
+        .sagtech-graph .react-flow__controls-button svg { fill: currentColor; }
+        .sagtech-graph .react-flow__minimap { background: var(--color-bg-secondary); }
       `}</style>
       <ReactFlow
         nodes={nodes}
@@ -117,9 +120,16 @@ function VisualGraphEditorInner<NData extends Record<string, unknown>, EData ext
         fitView
         proOptions={{ hideAttribution: true }}
       >
-        {showBackground && <Background color={tokens.colors.black_3} gap={16} />}
+        {showBackground && <Background color="var(--color-border-default)" gap={16} />}
         <Controls />
-        {showMiniMap && <MiniMap pannable zoomable nodeColor={tokens.colors.pr_purple} />}
+        {showMiniMap && (
+          <MiniMap
+            pannable
+            zoomable
+            nodeColor="var(--color-pr_purple)"
+            maskColor="var(--color-surface-wash)"
+          />
+        )}
       </ReactFlow>
     </div>
   );

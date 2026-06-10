@@ -36,15 +36,6 @@ const subtleColorMap = {
   grey: 'bg-black_3/10 text-fg-muted',
 } as const;
 
-const dotColorMap = {
-  purple: 'bg-pr_purple',
-  blue: 'bg-pr_blue',
-  success: 'bg-success',
-  warning: 'bg-warning',
-  error: 'bg-error',
-  grey: 'bg-grey_2',
-} as const;
-
 const sizeMap = {
   sm: 'text-12 py-[3px] px-10px',
   md: 'text-14 py-4px px-12px',
@@ -74,7 +65,10 @@ export default function Badge({
         className,
       )}
     >
-      {dot && <span className={classNames('w-[6px] h-[6px] rounded-[50%]', dotColorMap[color])} />}
+      {/* The dot inherits the badge's text color (bg-current) so it always
+          contrasts with the variant's background — on a filled badge a same-
+          color dot would be invisible (e.g. amber dot on an amber fill). */}
+      {dot && <span className="w-[6px] h-[6px] rounded-[50%] bg-current" />}
       {children}
     </span>
   );
