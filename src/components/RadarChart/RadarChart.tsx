@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef, useEffect, useCallback, useState } from 'react';
-import * as tokens from '@/tokens/tokens';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import type { RadarChartProps } from './types';
 
@@ -27,7 +26,11 @@ function RadarChart({
 }: RadarChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hover, setHover] = useState<HoverState | null>(null);
-  const { palette: COLORS } = useThemeColors();
+  const { palette: COLORS, ui } = useThemeColors();
+  const webColor = ui['border-default'];
+  const axisColor = ui['fg-muted'];
+  const axisActiveColor = ui['fg-primary'];
+  const mutedColor = ui['fg-secondary'];
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
@@ -68,7 +71,7 @@ function RadarChart({
       const rings = 5;
       for (let r = 1; r <= rings; r++) {
         const rr = (radius / rings) * r;
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+        ctx.strokeStyle = webColor;
         ctx.lineWidth = 1;
         ctx.beginPath();
         for (let i = 0; i < axisCount; i++) {
@@ -85,7 +88,7 @@ function RadarChart({
       // Spokes
       for (let i = 0; i < axisCount; i++) {
         const ang = angleFor(i);
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+        ctx.strokeStyle = webColor;
         ctx.beginPath();
         ctx.moveTo(cx, cy);
         ctx.lineTo(cx + Math.cos(ang) * radius, cy + Math.sin(ang) * radius);
@@ -101,7 +104,7 @@ function RadarChart({
       const lx = cx + Math.cos(ang) * (radius + 18);
       const ly = cy + Math.sin(ang) * (radius + 18);
       const isHovered = hover?.axisIndex === i;
-      ctx.fillStyle = isHovered ? tokens.colors.white_4 : tokens.colors.grey_2;
+      ctx.fillStyle = isHovered ? axisActiveColor : axisColor;
       // Smart alignment based on quadrant
       const dx = Math.cos(ang);
       if (Math.abs(dx) < 0.2) ctx.textAlign = 'center';
@@ -175,14 +178,14 @@ function RadarChart({
         ctx.arc(lx + 5, ly, 5, 0, Math.PI * 2);
         ctx.fillStyle = color;
         ctx.fill();
-        ctx.fillStyle = tokens.colors.grey_3;
+        ctx.fillStyle = mutedColor;
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
         ctx.fillText(s.name, lx + 14, ly);
         lx += 14 + ctx.measureText(s.name).width + 28;
       });
     }
-  }, [series, axes, hover, showGrid, fill, COLORS]);
+  }, [series, axes, hover, showGrid, fill, COLORS, webColor, axisColor, axisActiveColor, mutedColor]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -241,7 +244,7 @@ function RadarChart({
             left: hover.x,
             top: hover.y - 60,
             transform: 'translateX(-50%)',
-            background: tokens.colors.black_2,
+            background: 'var(--color-bg-secondary)',
             border: '1px solid rgba(109, 62, 241, 0.3)',
             borderRadius: '10px',
             padding: '8px 14px',
@@ -252,7 +255,7 @@ function RadarChart({
             fontFamily: 'Manrope, sans-serif',
           }}
         >
-          <div style={{ fontSize: '12px', color: tokens.colors.grey_3, fontWeight: 600 }}>
+          <div style={{ fontSize: '12px', color: 'var(--color-fg-secondary)', fontWeight: 600 }}>
             {axes[hover.axisIndex]}
           </div>
           {series.map((s, si) => (
@@ -263,7 +266,7 @@ function RadarChart({
                 alignItems: 'center',
                 gap: '8px',
                 fontSize: '13px',
-                color: tokens.colors.white_4,
+                color: 'var(--color-fg-primary)',
                 fontWeight: 500,
                 marginTop: '3px',
               }}
@@ -276,7 +279,7 @@ function RadarChart({
                   background: COLORS[si % COLORS.length],
                 }}
               />
-              <span style={{ color: tokens.colors.grey_3 }}>{s.name}:</span>
+              <span style={{ color: 'var(--color-fg-secondary)' }}>{s.name}:</span>
               <span style={{ fontWeight: 700 }}>{s.values[hover.axisIndex] ?? 0}</span>
             </div>
           ))}

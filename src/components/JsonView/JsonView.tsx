@@ -229,7 +229,7 @@ const JsonView = forwardRef<HTMLDivElement, JsonViewProps>(function JsonView(
     <div
       ref={ref}
       className={classNames(
-        "relative font-mono text-12 text-fg-primary bg-black_2 rounded-12px p-16px overflow-auto",
+        "relative font-mono text-12 text-fg-primary bg-black_2 border border-solid border-border-default rounded-12px p-16px overflow-auto",
         className,
       )}
       {...rest}

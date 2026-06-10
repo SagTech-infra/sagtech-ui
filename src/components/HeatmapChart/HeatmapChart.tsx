@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef, useEffect, useCallback, useState } from 'react';
-import * as tokens from '@/tokens/tokens';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import type { HeatmapChartProps } from './types';
 
@@ -61,7 +60,11 @@ function HeatmapChart({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hover, setHover] = useState<HoverState | null>(null);
   const cellsRef = useRef<CellRect[]>([]);
-  const { colors } = useThemeColors();
+  const { colors, ui } = useThemeColors();
+
+  const groutColor = ui['bg-primary'];
+  const axisColor = ui['fg-muted'];
+  const axisActiveColor = ui['fg-primary'];
 
   const fromColor = colorScale?.[0] ?? colors.pr_blue;
   const toColor = colorScale?.[1] ?? colors.pr_purple;
@@ -144,7 +147,7 @@ function HeatmapChart({
         ctx.fill();
 
         if (isHovered) {
-          ctx.strokeStyle = tokens.colors.white_4;
+          ctx.strokeStyle = groutColor;
           ctx.lineWidth = 2;
           ctx.stroke();
         }
@@ -157,13 +160,13 @@ function HeatmapChart({
 
     // X labels (top? bottom). Use bottom.
     ctx.font = '11px Manrope, sans-serif';
-    ctx.fillStyle = tokens.colors.grey_2;
+    ctx.fillStyle = axisColor;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
     xLabels.forEach((label, i) => {
       const cx = padding.left + cellW * (i + 0.5);
       ctx.fillStyle =
-        hover?.xi === i ? tokens.colors.white_4 : tokens.colors.grey_2;
+        hover?.xi === i ? axisActiveColor : axisColor;
       ctx.fillText(label, cx, padding.top + chartH + 8);
     });
 
@@ -173,10 +176,10 @@ function HeatmapChart({
     yLabels.forEach((label, i) => {
       const cy = padding.top + cellH * (i + 0.5);
       ctx.fillStyle =
-        hover?.yi === i ? tokens.colors.white_4 : tokens.colors.grey_2;
+        hover?.yi === i ? axisActiveColor : axisColor;
       ctx.fillText(label, padding.left - 12, cy);
     });
-  }, [data, xLabels, yLabels, hover, fromColor, toColor]);
+  }, [data, xLabels, yLabels, hover, fromColor, toColor, groutColor, axisColor, axisActiveColor]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -228,7 +231,7 @@ function HeatmapChart({
             left: hover.x,
             top: hover.y - 56,
             transform: 'translateX(-50%)',
-            background: tokens.colors.black_2,
+            background: 'var(--color-bg-secondary)',
             border: `1px solid ${toColor}80`,
             borderRadius: '10px',
             padding: '8px 14px',
@@ -239,13 +242,13 @@ function HeatmapChart({
             fontFamily: 'Manrope, sans-serif',
           }}
         >
-          <div style={{ fontSize: '11px', color: tokens.colors.grey_3, fontWeight: 600 }}>
+          <div style={{ fontSize: '11px', color: 'var(--color-fg-secondary)', fontWeight: 600 }}>
             {xLabels[hover.xi]} / {yLabels[hover.yi]}
           </div>
           <div
             style={{
               fontSize: '14px',
-              color: tokens.colors.white_4,
+              color: 'var(--color-fg-primary)',
               fontWeight: 700,
               marginTop: '2px',
             }}

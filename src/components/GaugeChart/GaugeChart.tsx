@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef, useEffect, useCallback } from 'react';
-import * as tokens from '@/tokens/tokens';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { useLocale } from '@/providers/LocaleContext';
 import type { GaugeChartProps } from './types';
@@ -18,8 +17,13 @@ function GaugeChart({
   showRange = true,
 }: GaugeChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { colors } = useThemeColors();
+  const { colors, ui } = useThemeColors();
   const { locale } = useLocale();
+
+  const trackColor = ui['border-default'];
+  const valueColor = ui['fg-primary'];
+  const labelColor = ui['fg-secondary'];
+  const tickColor = ui['fg-muted'];
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
@@ -53,7 +57,7 @@ function GaugeChart({
     // Track
     ctx.beginPath();
     ctx.arc(cx, cy, radius, startAngle, endAngle);
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+    ctx.strokeStyle = trackColor;
     ctx.lineWidth = ringWidth;
     ctx.lineCap = 'round';
     ctx.stroke();
@@ -107,7 +111,7 @@ function GaugeChart({
 
     // Center text
     if (showValue) {
-      ctx.fillStyle = tokens.colors.white_4;
+      ctx.fillStyle = valueColor;
       ctx.font = 'bold 28px Orbitron, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -115,7 +119,7 @@ function GaugeChart({
     }
 
     if (label) {
-      ctx.fillStyle = tokens.colors.grey_3;
+      ctx.fillStyle = labelColor;
       ctx.font = '12px Manrope, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
@@ -124,7 +128,7 @@ function GaugeChart({
 
     // Min/max ticks
     if (showRange) {
-      ctx.fillStyle = tokens.colors.grey_2;
+      ctx.fillStyle = tickColor;
       ctx.font = '12px Manrope, sans-serif';
       ctx.textAlign = 'left';
       ctx.textBaseline = 'top';
@@ -132,7 +136,7 @@ function GaugeChart({
       ctx.textAlign = 'right';
       ctx.fillText(new Intl.NumberFormat(locale).format(max), cx + radius + 4, cy + 4);
     }
-  }, [value, min, max, thresholds, label, width, height, showValue, showRange, colors, locale]);
+  }, [value, min, max, thresholds, label, width, height, showValue, showRange, colors, locale, trackColor, valueColor, labelColor, tickColor]);
 
   useEffect(() => {
     draw();

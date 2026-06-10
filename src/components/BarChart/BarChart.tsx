@@ -32,7 +32,12 @@ function BarChart({
 }: BarChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hover, setHover] = useState<HoverState | null>(null);
-  const { palette: COLORS } = useThemeColors();
+  const { palette: COLORS, ui } = useThemeColors();
+  // Per-theme structural colors, read as primitives so draw deps stay stable.
+  const gridColor = ui['border-default'];
+  const axisColor = ui['fg-muted'];
+  const axisActiveColor = ui['fg-primary'];
+  const mutedColor = ui['fg-secondary'];
   const { locale } = useLocale();
   const barsRef = useRef<BarRect[]>([]);
 
@@ -85,7 +90,7 @@ function BarChart({
     if (isVertical) {
       for (let i = 0; i <= gridLines; i++) {
         const y = padding.top + (chartH / gridLines) * i;
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+        ctx.strokeStyle = gridColor;
         ctx.lineWidth = 1;
         ctx.setLineDash([4, 4]);
         ctx.beginPath();
@@ -94,7 +99,7 @@ function BarChart({
         ctx.stroke();
         ctx.setLineDash([]);
         const val = Math.round(maxY - maxY * (i / gridLines));
-        ctx.fillStyle = tokens.colors.grey_1;
+        ctx.fillStyle = axisColor;
         ctx.font = '11px Manrope, sans-serif';
         ctx.textAlign = 'right';
         ctx.textBaseline = 'middle';
@@ -103,7 +108,7 @@ function BarChart({
     } else {
       for (let i = 0; i <= gridLines; i++) {
         const x = padding.left + (chartW / gridLines) * i;
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+        ctx.strokeStyle = gridColor;
         ctx.lineWidth = 1;
         ctx.setLineDash([4, 4]);
         ctx.beginPath();
@@ -112,7 +117,7 @@ function BarChart({
         ctx.stroke();
         ctx.setLineDash([]);
         const val = Math.round(maxY * (i / gridLines));
-        ctx.fillStyle = tokens.colors.grey_1;
+        ctx.fillStyle = axisColor;
         ctx.font = '11px Manrope, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
@@ -138,7 +143,7 @@ function BarChart({
       if (isVertical) {
         const cx = padding.left + categoryStride * (ci + 0.5);
         ctx.fillStyle =
-          hover?.categoryIndex === ci ? tokens.colors.white_4 : tokens.colors.grey_1;
+          hover?.categoryIndex === ci ? axisActiveColor : axisColor;
         ctx.font = '11px Manrope, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
@@ -146,7 +151,7 @@ function BarChart({
       } else {
         const cy = padding.top + categoryStride * (ci + 0.5);
         ctx.fillStyle =
-          hover?.categoryIndex === ci ? tokens.colors.white_4 : tokens.colors.grey_1;
+          hover?.categoryIndex === ci ? axisActiveColor : axisColor;
         ctx.font = '11px Manrope, sans-serif';
         ctx.textAlign = 'right';
         ctx.textBaseline = 'middle';
@@ -270,14 +275,26 @@ function BarChart({
         ctx.arc(lx + 5, ly, 5, 0, Math.PI * 2);
         ctx.fillStyle = color;
         ctx.fill();
-        ctx.fillStyle = tokens.colors.grey_3;
+        ctx.fillStyle = mutedColor;
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
         ctx.fillText(s.name, lx + 14, ly);
         lx += 14 + ctx.measureText(s.name).width + 28;
       });
     }
-  }, [series, hover, orientation, stacked, grouped, COLORS, locale]);
+  }, [
+    series,
+    hover,
+    orientation,
+    stacked,
+    grouped,
+    COLORS,
+    locale,
+    gridColor,
+    axisColor,
+    axisActiveColor,
+    mutedColor,
+  ]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -345,7 +362,7 @@ function BarChart({
             left: hover.x,
             top: hover.y - 60,
             transform: 'translateX(-50%)',
-            background: tokens.colors.black_2,
+            background: 'var(--color-bg-secondary)',
             border: `1px solid ${tooltipColor}80`,
             borderRadius: '10px',
             padding: '8px 14px',
@@ -356,7 +373,7 @@ function BarChart({
             fontFamily: 'Manrope, sans-serif',
           }}
         >
-          <div style={{ fontSize: '12px', color: tokens.colors.grey_3, fontWeight: 600 }}>
+          <div style={{ fontSize: '12px', color: 'var(--color-fg-secondary)', fontWeight: 600 }}>
             {tooltipLabel}
           </div>
           <div
@@ -365,7 +382,7 @@ function BarChart({
               alignItems: 'center',
               gap: '8px',
               fontSize: '13px',
-              color: tokens.colors.white_4,
+              color: 'var(--color-fg-primary)',
               fontWeight: 700,
               marginTop: '4px',
             }}
@@ -378,7 +395,7 @@ function BarChart({
                 background: tooltipColor,
               }}
             />
-            {tooltipSeries && <span style={{ color: tokens.colors.grey_3 }}>{tooltipSeries.name}:</span>}
+            {tooltipSeries && <span style={{ color: 'var(--color-fg-secondary)' }}>{tooltipSeries.name}:</span>}
             <span>{tooltipValue}</span>
           </div>
         </div>

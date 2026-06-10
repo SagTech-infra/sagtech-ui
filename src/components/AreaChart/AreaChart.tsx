@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef, useEffect, useCallback, useState } from 'react';
-import * as tokens from '@/tokens/tokens';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { useLocale } from '@/providers/LocaleContext';
 import { catmullRomSpline } from '../LineChart/spline';
@@ -22,7 +21,15 @@ function AreaChart({
 }: AreaChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hover, setHover] = useState<HoverState | null>(null);
-  const { palette: COLORS } = useThemeColors();
+  const { palette: COLORS, ui } = useThemeColors();
+  // Structural colors resolved per-theme; read as primitives so the draw
+  // effect's deps stay stable until the theme actually changes.
+  const gridColor = ui['border-default'];
+  const guideColor = ui['border-strong'];
+  const axisColor = ui['fg-muted'];
+  const axisActiveColor = ui['fg-primary'];
+  const mutedColor = ui['fg-secondary'];
+  const holeColor = ui['bg-primary'];
   const { locale } = useLocale();
   const layoutRef = useRef<{
     padding: { top: number; right: number; bottom: number; left: number };
@@ -78,7 +85,7 @@ function AreaChart({
     const gridLines = 5;
     for (let i = 0; i <= gridLines; i++) {
       const y = padding.top + (chartH / gridLines) * i;
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+      ctx.strokeStyle = gridColor;
       ctx.lineWidth = 1;
       ctx.setLineDash([4, 4]);
       ctx.beginPath();
@@ -88,7 +95,7 @@ function AreaChart({
       ctx.setLineDash([]);
 
       const val = Math.round(maxY - (maxY - minY) * (i / gridLines));
-      ctx.fillStyle = tokens.colors.grey_1;
+      ctx.fillStyle = axisColor;
       ctx.font = '11px Manrope, sans-serif';
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
@@ -101,14 +108,14 @@ function AreaChart({
     ctx.font = '11px Manrope, sans-serif';
     labels.forEach((label, i) => {
       const x = padding.left + (chartW / stepCount) * i;
-      ctx.fillStyle = hover?.dataIndex === i ? tokens.colors.white_4 : tokens.colors.grey_1;
+      ctx.fillStyle = hover?.dataIndex === i ? axisActiveColor : axisColor;
       ctx.fillText(label, x, padding.top + chartH + 12);
     });
 
     // Hover line
     if (hover !== null) {
       const hoverX = padding.left + (chartW / stepCount) * hover.dataIndex;
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+      ctx.strokeStyle = guideColor;
       ctx.lineWidth = 1;
       ctx.setLineDash([4, 4]);
       ctx.beginPath();
@@ -180,7 +187,7 @@ function AreaChart({
         if (p) {
           ctx.beginPath();
           ctx.arc(p.x, p.y, 6, 0, Math.PI * 2);
-          ctx.fillStyle = tokens.colors.black_1;
+          ctx.fillStyle = holeColor;
           ctx.fill();
           ctx.beginPath();
           ctx.arc(p.x, p.y, 6, 0, Math.PI * 2);
@@ -208,13 +215,26 @@ function AreaChart({
       ctx.fillStyle = color;
       ctx.fill();
 
-      ctx.fillStyle = tokens.colors.grey_3;
+      ctx.fillStyle = mutedColor;
       ctx.textAlign = 'left';
       ctx.textBaseline = 'middle';
       ctx.fillText(s.name, legendX + 14, legendY);
       legendX += 14 + ctx.measureText(s.name).width + 28;
     });
-  }, [series, hover, stacked, gradient, COLORS, locale]);
+  }, [
+    series,
+    hover,
+    stacked,
+    gradient,
+    COLORS,
+    locale,
+    gridColor,
+    guideColor,
+    axisColor,
+    axisActiveColor,
+    mutedColor,
+    holeColor,
+  ]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -291,7 +311,7 @@ function AreaChart({
             left: hover.x,
             top: (layoutRef.current?.padding.top ?? 24) - 8,
             transform: 'translateX(-50%)',
-            background: tokens.colors.black_2,
+            background: 'var(--color-bg-secondary)',
             border: '1px solid rgba(109, 62, 241, 0.3)',
             borderRadius: '10px',
             padding: '10px 16px',
@@ -305,7 +325,7 @@ function AreaChart({
           <div
             style={{
               fontSize: '12px',
-              color: tokens.colors.grey_3,
+              color: 'var(--color-fg-secondary)',
               marginBottom: '6px',
               fontWeight: 600,
             }}
@@ -320,7 +340,7 @@ function AreaChart({
                 alignItems: 'center',
                 gap: '8px',
                 fontSize: '13px',
-                color: tokens.colors.white_4,
+                color: 'var(--color-fg-primary)',
                 fontWeight: 500,
                 marginTop: '3px',
               }}
@@ -334,7 +354,7 @@ function AreaChart({
                   flexShrink: 0,
                 }}
               />
-              <span style={{ color: tokens.colors.grey_3 }}>{d.name}:</span>
+              <span style={{ color: 'var(--color-fg-secondary)' }}>{d.name}:</span>
               <span style={{ fontWeight: 700 }}>{d.value}</span>
             </div>
           ))}

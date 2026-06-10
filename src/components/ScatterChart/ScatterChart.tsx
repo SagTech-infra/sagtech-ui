@@ -24,9 +24,13 @@ interface PointRect {
 function ScatterChart({ series, width = '100%', height = 350, xLabel, yLabel }: ScatterChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hover, setHover] = useState<HoverState | null>(null);
-  const { palette: COLORS } = useThemeColors();
+  const { palette: COLORS, ui } = useThemeColors();
   const { locale } = useLocale();
   const pointsRef = useRef<PointRect[]>([]);
+
+  const gridColor = ui['border-default'];
+  const axisColor = ui['fg-muted'];
+  const titleColor = ui['fg-secondary'];
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
@@ -82,7 +86,7 @@ function ScatterChart({ series, width = '100%', height = 350, xLabel, yLabel }: 
     const gridLines = 5;
     for (let i = 0; i <= gridLines; i++) {
       const y = padding.top + (chartH / gridLines) * i;
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+      ctx.strokeStyle = gridColor;
       ctx.setLineDash([4, 4]);
       ctx.beginPath();
       ctx.moveTo(padding.left, y);
@@ -90,7 +94,7 @@ function ScatterChart({ series, width = '100%', height = 350, xLabel, yLabel }: 
       ctx.stroke();
       ctx.setLineDash([]);
       const val = maxY - (maxY - minY) * (i / gridLines);
-      ctx.fillStyle = tokens.colors.grey_1;
+      ctx.fillStyle = axisColor;
       ctx.font = '11px Manrope, sans-serif';
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
@@ -106,7 +110,7 @@ function ScatterChart({ series, width = '100%', height = 350, xLabel, yLabel }: 
     for (let i = 0; i <= gridLines; i++) {
       const x = padding.left + (chartW / gridLines) * i;
       const val = minX + (maxX - minX) * (i / gridLines);
-      ctx.fillStyle = tokens.colors.grey_1;
+      ctx.fillStyle = axisColor;
       ctx.font = '11px Manrope, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
@@ -122,7 +126,7 @@ function ScatterChart({ series, width = '100%', height = 350, xLabel, yLabel }: 
 
     // Axis labels
     if (xLabel) {
-      ctx.fillStyle = tokens.colors.grey_3;
+      ctx.fillStyle = titleColor;
       ctx.font = '12px Manrope, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'bottom';
@@ -132,7 +136,7 @@ function ScatterChart({ series, width = '100%', height = 350, xLabel, yLabel }: 
       ctx.save();
       ctx.translate(14, padding.top + chartH / 2);
       ctx.rotate(-Math.PI / 2);
-      ctx.fillStyle = tokens.colors.grey_3;
+      ctx.fillStyle = titleColor;
       ctx.font = '12px Manrope, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -189,14 +193,14 @@ function ScatterChart({ series, width = '100%', height = 350, xLabel, yLabel }: 
         ctx.arc(lx + 5, ly, 5, 0, Math.PI * 2);
         ctx.fillStyle = color;
         ctx.fill();
-        ctx.fillStyle = tokens.colors.grey_3;
+        ctx.fillStyle = titleColor;
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
         ctx.fillText(s.name, lx + 14, ly);
         lx += 14 + ctx.measureText(s.name).width + 28;
       });
     }
-  }, [series, hover, xLabel, yLabel, COLORS, locale]);
+  }, [series, hover, xLabel, yLabel, COLORS, locale, gridColor, axisColor, titleColor]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -271,7 +275,7 @@ function ScatterChart({ series, width = '100%', height = 350, xLabel, yLabel }: 
             left: hover.x,
             top: hover.y - 60,
             transform: 'translateX(-50%)',
-            background: tokens.colors.black_2,
+            background: 'var(--color-bg-secondary)',
             border: `1px solid ${tooltipColor}80`,
             borderRadius: '10px',
             padding: '8px 14px',
@@ -282,13 +286,13 @@ function ScatterChart({ series, width = '100%', height = 350, xLabel, yLabel }: 
             fontFamily: 'Manrope, sans-serif',
           }}
         >
-          <div style={{ fontSize: '11px', color: tokens.colors.grey_3, fontWeight: 600 }}>
+          <div style={{ fontSize: '11px', color: 'var(--color-fg-secondary)', fontWeight: 600 }}>
             {series[hover.seriesIndex].name}
           </div>
           <div
             style={{
               fontSize: '13px',
-              color: tokens.colors.white_4,
+              color: 'var(--color-fg-primary)',
               fontWeight: 700,
               marginTop: '2px',
             }}

@@ -278,7 +278,7 @@ function TreemapChart({ data, width = '100%', height = 400, padding = 2 }: Treem
             left: hover.x,
             top: hover.y - 56,
             transform: 'translateX(-50%)',
-            background: tokens.colors.black_2,
+            background: 'var(--color-bg-secondary)',
             border: `1px solid ${hovered.color}80`,
             borderRadius: '10px',
             padding: '8px 14px',
@@ -289,13 +289,13 @@ function TreemapChart({ data, width = '100%', height = 400, padding = 2 }: Treem
             fontFamily: 'Manrope, sans-serif',
           }}
         >
-          <div style={{ fontSize: '12px', color: tokens.colors.grey_3, fontWeight: 600 }}>
+          <div style={{ fontSize: '12px', color: 'var(--color-fg-secondary)', fontWeight: 600 }}>
             {hovered.node.label}
           </div>
           <div
             style={{
               fontSize: '14px',
-              color: tokens.colors.white_4,
+              color: 'var(--color-fg-primary)',
               fontWeight: 700,
               marginTop: '2px',
             }}

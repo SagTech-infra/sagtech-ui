@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef, useEffect, useCallback, useState } from 'react';
-import * as tokens from '@/tokens/tokens';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import type { SankeyChartProps, SankeyLink } from './types';
 
@@ -83,7 +82,9 @@ function assignColumns(nodes: { id: string }[], links: SankeyLink[]): Record<str
 function SankeyChart({ nodes, links, width = '100%', height = 400 }: SankeyChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hover, setHover] = useState<HoverState | null>(null);
-  const { palette: PALETTE } = useThemeColors();
+  const { palette: PALETTE, ui } = useThemeColors();
+  const labelActive = ui['fg-primary'];
+  const labelIdle = ui['fg-secondary'];
   const layoutRef = useRef<{ nodes: NodeLayout[]; links: LinkLayout[] } | null>(null);
 
   const draw = useCallback(() => {
@@ -259,7 +260,7 @@ function SankeyChart({ nodes, links, width = '100%', height = 400 }: SankeyChart
 
       // Label — left of column 0, right otherwise (use column index again)
       const labelLeft = n.column === 0;
-      ctx.fillStyle = isHovered ? tokens.colors.white_4 : tokens.colors.grey_3;
+      ctx.fillStyle = isHovered ? labelActive : labelIdle;
       ctx.font = '11px Manrope, sans-serif';
       ctx.textAlign = labelLeft ? 'right' : 'left';
       ctx.textBaseline = 'middle';
@@ -269,7 +270,7 @@ function SankeyChart({ nodes, links, width = '100%', height = 400 }: SankeyChart
     });
 
     layoutRef.current = { nodes: Object.values(nodeMap), links: linkLayouts };
-  }, [nodes, links, hover, PALETTE]);
+  }, [nodes, links, hover, PALETTE, labelActive, labelIdle]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -350,7 +351,7 @@ function SankeyChart({ nodes, links, width = '100%', height = 400 }: SankeyChart
             left: hover.x,
             top: hover.y - 36,
             transform: 'translateX(-50%)',
-            background: tokens.colors.black_2,
+            background: 'var(--color-bg-secondary)',
             border: '1px solid rgba(109, 62, 241, 0.3)',
             borderRadius: '8px',
             padding: '6px 10px',
@@ -360,7 +361,7 @@ function SankeyChart({ nodes, links, width = '100%', height = 400 }: SankeyChart
             zIndex: 10,
             fontFamily: 'Manrope, sans-serif',
             fontSize: '12px',
-            color: tokens.colors.white_4,
+            color: 'var(--color-fg-primary)',
             fontWeight: 600,
           }}
         >

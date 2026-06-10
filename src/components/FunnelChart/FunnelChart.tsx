@@ -42,7 +42,10 @@ function FunnelChart({
 }: FunnelChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hover, setHover] = useState<HoverState | null>(null);
-  const { palette: PALETTE } = useThemeColors();
+  const { palette: PALETTE, ui } = useThemeColors();
+  // Percent annotations sit on the chart background (not on a segment fill),
+  // so they must follow the theme. Read as a primitive for stable draw deps.
+  const pctColor = ui['fg-muted'];
   const { locale } = useLocale();
   const stageRectsRef = useRef<StageRect[]>([]);
 
@@ -127,7 +130,7 @@ function FunnelChart({
         if (showPercents && i < stages.length - 1) {
           const nextV = stages[i + 1].value;
           const pct = Math.round((nextV / fromV) * 100);
-          ctx.fillStyle = tokens.colors.grey_3;
+          ctx.fillStyle = pctColor;
           ctx.font = '11px Manrope, sans-serif';
           ctx.textAlign = 'left';
           ctx.fillText(`${pct}%`, cx + fromW / 2 + 8, bottom);
@@ -194,7 +197,7 @@ function FunnelChart({
 
         if (showPercents && i < stages.length - 1) {
           const pct = Math.round((stages[i + 1].value / fromV) * 100);
-          ctx.fillStyle = tokens.colors.grey_3;
+          ctx.fillStyle = pctColor;
           ctx.font = '11px Manrope, sans-serif';
           ctx.textAlign = 'center';
           ctx.fillText(`${pct}%`, right, cy + fromH / 2 + 14);
@@ -205,7 +208,7 @@ function FunnelChart({
     }
 
     stageRectsRef.current = stageRects;
-  }, [stages, hover, orientation, showPercents, PALETTE, locale]);
+  }, [stages, hover, orientation, showPercents, PALETTE, locale, pctColor]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -259,7 +262,7 @@ function FunnelChart({
             left: hover.x,
             top: hover.y - 60,
             transform: 'translateX(-50%)',
-            background: tokens.colors.black_2,
+            background: 'var(--color-bg-secondary)',
             border: `1px solid ${tooltipColor}80`,
             borderRadius: '10px',
             padding: '8px 14px',
@@ -270,13 +273,13 @@ function FunnelChart({
             fontFamily: 'Manrope, sans-serif',
           }}
         >
-          <div style={{ fontSize: '12px', color: tokens.colors.grey_3, fontWeight: 600 }}>
+          <div style={{ fontSize: '12px', color: 'var(--color-fg-secondary)', fontWeight: 600 }}>
             {tooltipStage.label}
           </div>
           <div
             style={{
               fontSize: '14px',
-              color: tokens.colors.white_4,
+              color: 'var(--color-fg-primary)',
               fontWeight: 700,
               marginTop: '2px',
             }}
