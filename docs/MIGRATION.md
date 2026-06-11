@@ -10,12 +10,12 @@ boundary shifted by 1px. New additive tokens: `--font-display/body/mono`,
 
 ## Package name — `@sagtech-infra/ui` (final)
 
-Пакет опубликован в GitHub Packages как **`@sagtech-infra/ui`**. Некоторые потребители исторически импортируют его как `@sagtech/ui` через локальный `file:`-alias в их `package.json` / `tsconfig.json`. **Для новых проектов используйте официальное имя.**
+The package is published to GitHub Packages as **`@sagtech-infra/ui`**. Some consumers historically import it as `@sagtech/ui` through a local `file:` alias in their `package.json` / `tsconfig.json`. **For new projects, use the official name.**
 
-Существующим потребителям (`admin-fe`, `customer-fe`, `posting-hub`, `lead-gen-tool/fe-next`, `smg-frontend-new`, `landing-*`):
+For existing consumers (`admin-fe`, `customer-fe`, `posting-hub`, `lead-gen-tool/fe-next`, `smg-frontend-new`, `landing-*`):
 
-- Пока проект установлен через `file:../sagtech-ui` или `workspace:*` — alias `@sagtech/ui` работает.
-- При первом публичном релизе (bump до `1.0.0`+ и публикация на `npm.pkg.github.com`) потребителям нужно:
+- As long as the project is installed via `file:../sagtech-ui` or `workspace:*`, the `@sagtech/ui` alias keeps working.
+- On the first public release (bump to `1.0.0`+ and publish to `npm.pkg.github.com`), consumers need to:
 
 ```diff
  // package.json
@@ -25,7 +25,7 @@ boundary shifted by 1px. New additive tokens: `--font-display/body/mono`,
  }
 ```
 
-и глобальный search-and-replace `@sagtech/ui` → `@sagtech-infra/ui` в импортах. Alternatively, keep `@sagtech/ui` as `tsconfig.json paths` alias to the real `@sagtech-infra/ui` package:
+plus a global search-and-replace of `@sagtech/ui` → `@sagtech-infra/ui` in imports. Alternatively, keep `@sagtech/ui` as a `tsconfig.json paths` alias to the real `@sagtech-infra/ui` package:
 
 ```json
 {
@@ -38,29 +38,29 @@ boundary shifted by 1px. New additive tokens: `--font-display/body/mono`,
 }
 ```
 
-Второй вариант проще для миграции (одна правка в tsconfig), но тянет за собой alias навсегда. Длительная перспектива — переход на официальное имя.
+The second option is simpler to migrate (a single tsconfig edit) but carries the alias along forever. The long-term path is to move to the official name.
 
 ## Breaking changes
 
 ### 1.0.0 (upcoming)
 
-- `Modal`: убран `isPartnershipForm: boolean` → заменён на `size: 'sm' | 'md'`. Миграция: `isPartnershipForm` → `size="md"`; отсутствие → `size="sm"` (default).
-- `TextArea`: убран `export default TextArea`. Импортируйте named: `import { TextArea } from '@sagtech-infra/ui'`.
-- `Button`: добавлен `variant="danger"`. Существующий workaround `classes="!text-error !border-error"` следует удалить.
-- `Attachment.accept`: тип расширен с literal-union до `string`. Старый cast `as never` можно удалять.
-- `SelectInput`: `onSelect` помечен `@deprecated`, используйте `onChange`. Оба всё ещё работают.
-- `Typography`: `tag` теперь принимает `'label'` + добавлен `htmlFor`. Локальные `FieldLabel`-клоны можно заменить на `<Typography tag="label" htmlFor={...} type="LabelsS">…</Typography>`.
-- `NotificationContextProvider`: теперь экспортируется из root. Локальные провайдеры можно удалять.
-- `ConfirmDialog` + `useConfirm`: `variant="danger"` теперь использует нативный `Button variant="danger"` (раньше `!important`-override). Визуально эквивалентно, но внутренний CSS отличается — проверьте кастомизации classes.
+- `Modal`: removed `isPartnershipForm: boolean` → replaced with `size: 'sm' | 'md'`. Migration: `isPartnershipForm` → `size="md"`; absence → `size="sm"` (default).
+- `TextArea`: removed `export default TextArea`. Use the named import: `import { TextArea } from '@sagtech-infra/ui'`.
+- `Button`: added `variant="danger"`. The existing workaround `classes="!text-error !border-error"` should be removed.
+- `Attachment.accept`: type widened from a literal union to `string`. The old `as never` cast can be removed.
+- `SelectInput`: `onSelect` is marked `@deprecated`; use `onChange`. Both still work.
+- `Typography`: `tag` now accepts `'label'` and adds `htmlFor`. Local `FieldLabel` clones can be replaced with `<Typography tag="label" htmlFor={...} type="LabelsS">…</Typography>`.
+- `NotificationContextProvider`: now exported from the root. Local providers can be removed.
+- `ConfirmDialog` + `useConfirm`: `variant="danger"` now uses the native `Button variant="danger"` (previously an `!important` override). Visually equivalent, but the internal CSS differs — check any `classes` customizations.
 
-### Новые peer-dependencies (все optional)
+### New peer dependencies (all optional)
 
-- `@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities` — для `SortableList`
-- `@tanstack/react-virtual` — для `VirtualList`
-- `@tiptap/react`, `@tiptap/core`, `@tiptap/starter-kit` — для `RichTextEditor`
-- `@xyflow/react` — для `VisualGraphEditor`
+- `@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities` — for `SortableList`
+- `@tanstack/react-virtual` — for `VirtualList`
+- `@tiptap/react`, `@tiptap/core`, `@tiptap/starter-kit` — for `RichTextEditor`
+- `@xyflow/react` — for `VisualGraphEditor`
 
-Устанавливайте только если используете соответствующий компонент.
+Install only if you use the corresponding component.
 
 ### 1.0 → 1.1
 

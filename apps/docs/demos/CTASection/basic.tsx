@@ -7,7 +7,11 @@ export default function Demo() {
     <CTASection
       title="Build on it"
       subtitle="Install from GitHub Packages and compose."
-      actions={<Button variant="secondary">Get started</Button>}
+      actions={
+        <Button variant="primary" classes="!bg-white !text-pr_purple hover:!opacity-90">
+          Get started
+        </Button>
+      }
     />
   );
 }

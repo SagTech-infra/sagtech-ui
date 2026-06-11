@@ -32,8 +32,8 @@ const thumbSizeMap = {
 } as const;
 
 const thumbTranslateMap = {
-  sm: "translate-x-[18px]",
-  md: "translate-x-[22px]",
+  sm: "translate-x-[16px]",
+  md: "translate-x-[20px]",
 } as const;
 
 export default function Switch({

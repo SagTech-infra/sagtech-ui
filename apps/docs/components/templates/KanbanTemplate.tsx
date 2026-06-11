@@ -216,7 +216,7 @@ function BoardColumn({ column, onReorder }: { column: Column; onReorder: (tasks:
           direction="vertical"
           className="min-h-[80px] rounded-12px bg-bg-primary/40 p-8px"
           renderItem={(task, ctx) => (
-            <div className="mb-12px last:mb-0">
+            <div className="mb-10px">
               <TaskCard task={task} dragHandleProps={ctx.dragHandleProps} />
             </div>
           )}

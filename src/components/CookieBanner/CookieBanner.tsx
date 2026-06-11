@@ -104,7 +104,7 @@ export default function CookieBanner({
             buttonSize="small"
             loadingType={false}
             onClick={acceptConsent}
-            classes="bg-white_4 button"
+            classes="bg-white button"
             changeColor
           >
             <Typography text={acceptText} type="Buttons" className="!text-14" color="text-pr_purple" />

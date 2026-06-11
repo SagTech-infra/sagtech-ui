@@ -266,8 +266,18 @@ export default function LandingTemplate() {
           subtitle="Install from npm, import a component, and watch your roadmap move faster."
           actions={
             <>
-              <Button text="Get the package" variant="primary" buttonSize="large" />
-              <Button text="Read the docs" variant="secondary" buttonSize="large" />
+              <Button
+                text="Get the package"
+                variant="secondary"
+                buttonSize="large"
+                classes="!bg-white !text-pr_purple !border-white hover:!opacity-90"
+              />
+              <Button
+                text="Read the docs"
+                variant="secondary"
+                buttonSize="large"
+                classes="!bg-transparent !text-white !border-white hover:!bg-white/10"
+              />
             </>
           }
         />

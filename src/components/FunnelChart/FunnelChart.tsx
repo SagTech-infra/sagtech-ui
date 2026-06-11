@@ -45,7 +45,7 @@ function FunnelChart({
   const { palette: PALETTE, ui } = useThemeColors();
   // Percent annotations sit on the chart background (not on a segment fill),
   // so they must follow the theme. Read as a primitive for stable draw deps.
-  const pctColor = ui['fg-muted'];
+  const pctColor = ui['fg-secondary'];
   const { locale } = useLocale();
   const stageRectsRef = useRef<StageRect[]>([]);
 
@@ -68,7 +68,7 @@ function FunnelChart({
 
     const maxV = Math.max(...stages.map((s) => s.value)) || 1;
     const isVertical = orientation === 'vertical';
-    const padding = isVertical ? { top: 16, right: 16, bottom: 16, left: 16 } : { top: 24, right: 120, bottom: 24, left: 120 };
+    const padding = isVertical ? { top: 16, right: 52, bottom: 16, left: 52 } : { top: 24, right: 120, bottom: 24, left: 120 };
     const stageRects: StageRect[] = [];
 
     if (isVertical) {
@@ -130,10 +130,13 @@ function FunnelChart({
         if (showPercents && i < stages.length - 1) {
           const nextV = stages[i + 1].value;
           const pct = Math.round((nextV / fromV) * 100);
+          // Right-aligned column inside the gutter, vertically on the boundary
+          // between this stage and the next — always within canvas bounds.
           ctx.fillStyle = pctColor;
-          ctx.font = '11px Manrope, sans-serif';
-          ctx.textAlign = 'left';
-          ctx.fillText(`${pct}%`, cx + fromW / 2 + 8, bottom);
+          ctx.font = '600 11px Manrope, sans-serif';
+          ctx.textAlign = 'right';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(`${pct}%`, w - 14, bottom);
         }
 
         stageRects.push({ poly, index: i });

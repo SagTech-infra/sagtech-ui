@@ -208,13 +208,15 @@ export default function DashboardTemplate() {
               <h2 className="font-orbitron text-18 font-semibold text-fg-primary mb-16px">
                 Traffic Source
               </h2>
-              <DonutChart
-                value={[38, 27, 22, 13]}
-                colors={donutColors}
-                labels={['Search', 'Social', 'Direct', 'Email']}
-                size={62}
-                width={260}
-              />
+              <div className="flex justify-center">
+                <DonutChart
+                  value={[38, 27, 22, 13]}
+                  colors={donutColors}
+                  labels={['Search', 'Social', 'Direct', 'Email']}
+                  size={62}
+                  width={260}
+                />
+              </div>
             </CardWrapper>
           </section>
 
